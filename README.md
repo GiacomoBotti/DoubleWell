@@ -17,6 +17,7 @@ The idea is to represent the double well mode with two Hermite-Gauss basis funct
 
 ## TO DO
 - [ ] Copy relevant files from Multicon_Fortran repository
+   - [ ] Clean `Makefile`
 - [ ] Write the effective potential terms subroutines
 - [ ] Write the time derivative subroutines
 - [ ] Update the basis set module
