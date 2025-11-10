@@ -6,6 +6,8 @@
       module diagonal_module
 
       implicit none
+
+      integer,public :: maxorder = 6
       private
       public :: diagonalization
 
@@ -43,5 +45,40 @@
        end do
       
       end subroutine
+
+!.....Momenta of a factorized central normal distribution...............
+
+      function momenta(nd,LambdaMat) result(MomMat)
+      ! nd: dimension of the matrices
+      ! LambdaMat: diagonal matrix
+      ! MomMat: matrix of the momenta
+
+      integer, intent(in) :: nd
+
+      integer :: i,j
+      real*8, dimension(nd,nd), intent(in) :: LambdaMat 
+      real*8, dimension(nd,maxorder), intent(out) :: MomMat 
+
+      real*8, dimension(1,8) :: momcoeff
+
+      if(size(momcoeff).lt.maxorder) then
+        write(*,*) "I don't have enough coefficients to"
+        write(*,*) "generate the momenta"
+        write(*,*) "please check momcoeff in diagonal_mod.f90"
+        stop
+      end if
+
+      momcoeff = [0.d0,1.d0,0.d0,3.d0,0.d0,15.d0,0.d0,105.d0 ]
+
+      write(*,*) "Coefficients for the momenta"
+      write(*,*) momcoeff
+
+      do i = 1,nd
+         do j = 1,maxorder,2
+            MomMat(i,j) = 0.d0
+            write(*,*) = j+1
+            MomMat(i,j+1) = momcoeff(j)*(2*LambdaMat(i,i))**(-j-1) 
+         end do
+      end do      
 
       end module 

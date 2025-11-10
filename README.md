@@ -22,6 +22,11 @@ The idea is to represent the double well mode with two Hermite-Gauss basis funct
    - [x] check Diagonalization subroutine
 - [ ] Momenta subroutine
    - [ ] check Momenta subroutine
+   - [ ] check `momcoeff` error
+- [ ] $V_{0}$ polynomials subroutines
+   - [ ] $\mathcal{Y_{0}}$ integrals
+   - [ ] $\mathcal{Y_{1}}$ integrals
+   - [ ] $\mathcal{Y_{2}}$ integrals
 - [ ] Write the effective potential terms subroutines
 - [ ] Write the time derivative subroutines
 - [ ] Update the basis set module
