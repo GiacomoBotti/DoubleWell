@@ -16,8 +16,19 @@ $$V_{c} = \frac{\gamma}{2}\sum_{i=1}^{F_{B}} xy_{i}^{2}$$
 The idea is to represent the double well mode with two Hermite-Gauss basis functions and the bath with a single multidimensional Gaussian. The evolution will be performed with the Heller-Karplus equations of motions. More informations of the Report USC, Chapt. V.
 
 ## TO DO
-- [ ] Copy relevant files from Multicon_Fortran repository
-   - [ ] Clean `Makefile`
+- [ ] $V_{0}$ polynomials subroutines
+   - [ ] $\mathcal{Y_{0}}$ integrals
+   - [ ] $\mathcal{Y_{1}}$ integrals
+   - [ ] $\mathcal{Y_{2}}$ integrals
 - [ ] Write the effective potential terms subroutines
 - [ ] Write the time derivative subroutines
 - [ ] Update the basis set module
+
+## DONE
+- [x] Copy relevant files from `Multicon_Fortran` repository
+   - [x] Clean `Makefile`
+- [x] Diagonalization subroutine
+   - [x] check Diagonalization subroutine
+- [x] Momenta subroutine
+   - [x] check Momenta subroutine
+   - [x] check `momcoeff` error
