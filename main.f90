@@ -11,8 +11,9 @@
       implicit none
 
 !.....Check Diagonalization.............................................
-
-      call check_diagonalization(5)
+!      call check_diagonalization(5)
+!.....Check Momenta Matrix..............................................
+      call check_momenta(5)
 
       end program
 

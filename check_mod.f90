@@ -63,4 +63,37 @@
 
       end subroutine
 
+!.....Check Momenta.....................................................
+
+      subroutine check_momenta(nd)
+      ! nd: dimensions of the matrix
+
+       integer :: i,nd
+       real*8, dimension(nd,nd) :: DiagMat
+       real*8, dimension(maxorder,nd) :: OutMat
+
+       DiagMat(:,:) = 0.d0
+
+       write(*,*) "Diagonal Matrix"
+       do i = 1,nd
+          DiagMat(i,i) = 5.d0*i
+          write(*,*) DiagMat(i,:)
+       end do
+
+       OutMat = momenta(nd,DiagMat)
+
+       write(*,*) "Matrix of the Momenta"
+
+       do i = 1,maxorder
+          write(*,*) Outmat(i,:)
+       end do
+       
+
+        
+
+      
+      
+
+      end subroutine
+
       end module
