@@ -15,7 +15,9 @@
 !.....Check Momenta Matrix..............................................
 !      call check_momenta(5)
 !.....Check Matrix Potential............................................
-      call check_vmat()
+!      call check_vmat()
+!.....Check Quadratic Forms.............................................
+      call check_quad(nv)
 
       end program
 
