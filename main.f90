@@ -13,7 +13,9 @@
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(5)
 !.....Check Momenta Matrix..............................................
-      call check_momenta(5)
+!      call check_momenta(5)
+!.....Check Matrix Potential............................................
+      call check_vmat()
 
       end program
 

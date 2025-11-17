@@ -16,9 +16,19 @@ $$V_{c} = \frac{\gamma}{2}\sum_{i=1}^{F_{B}} xy_{i}^{2}$$
 The idea is to represent the double well mode with two Hermite-Gauss basis functions and the bath with a single multidimensional Gaussian. The evolution will be performed with the Heller-Karplus equations of motions. More informations of the Report USC, Chapt. V.
 
 ## TO DO
-- [ ] Check every polynomial and generating sum in 3D w/ MAPLE
 - [ ] $V_{0}$ polynomials subroutines
    - [ ] $\mathcal{Y_{0}}$ integrals
+      - [ ] (MAPLE) check $uWu$ sommation vs matrix moltiplication 
+      - [ ] (MAPLE) check $uZQ$ sommation vs matrix moltiplication 
+      - [ ] (MAPLE) check $QRu$ sommation vs matrix moltiplication 
+      - [ ] function for $y_{1}^{4}$
+      - [ ] function for $\tilde{\mathcal{P}}_{0}^{M}$, containing:
+         - [ ] function for $uWu$
+         - [x] function for $QVQ$
+      - [ ] (MAPLE) check $uWu$ w/ subs vs Fortran 
+      - [ ] (MAPLE) check $uZQ$ w/ subs vs Fortran 
+      - [ ] (MAPLE) check $QRu$ w/ subs vs Fortran 
+      - [ ] (MAPLE) check $QVQ$ w/ subs vs Fortran 
    - [ ] $\mathcal{Y_{1}}$ integrals
    - [ ] $\mathcal{Y_{2}}$ integrals
 - [ ] Write the effective potential terms subroutines
@@ -33,3 +43,5 @@ The idea is to represent the double well mode with two Hermite-Gauss basis funct
 - [x] Momenta subroutine
    - [x] check Momenta subroutine
    - [x] check `momcoeff` error
+- [x] Matrix potential function
+   - [x] check

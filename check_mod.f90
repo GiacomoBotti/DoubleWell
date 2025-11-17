@@ -5,6 +5,7 @@
       module check_module
 
       use diagonal_module 
+      use potential_module
 
       implicit none
 
@@ -87,13 +88,23 @@
        do i = 1,maxorder
           write(*,*) Outmat(i,:)
        end do
-       
-
-        
-
-      
-      
 
       end subroutine
+
+!.....Check Vmat........................................................
+
+      subroutine check_vmat()
+      
+       integer :: i
+
+       call matrix_pot()
+
+       write(*,*) "Potential matrix"
+       do i = 1,nv
+         write(*,*) Vmat(i,:)
+       end do
+
+      end subroutine  
+
 
       end module
