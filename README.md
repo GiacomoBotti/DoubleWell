@@ -31,12 +31,17 @@ make compile
 - [ ] `quadratic_mod.f90` at Report
 - [ ] `polynomials_mod.f90` at Report
 - [ ] `ypowers_mod.f90` at Report
+- [ ] `tupowers_mod.f90` at Report
 - [ ] $V_{0}$ polynomials subroutines
    - [ ] $\mathcal{Y_{0}}$ integrals
       - [x] (MAPLE) check $uWu$ sommation vs matrix moltiplication 
       - [x] (MAPLE) check $uZQ$ sommation vs matrix moltiplication 
       - [x] (MAPLE) check $QRu$ sommation vs matrix moltiplication 
       - [ ] function for $y_{1}^{4}$ in `ypowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})$ in `tupowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{2}$ in `tupowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{3}$ in `tupowers_mod.f90`
+         - [ ] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{4}$ in `tupowers_mod.f90`
       - [x] function for $\tilde{\mathcal{P}}_{0}^{M}$ in `polynomials_mod.f90`
       - [x] (MAPLE) check $uWu$ w/ subs vs Fortran 
       - [x] (MAPLE) check $uZQ$ w/ subs vs Fortran 
@@ -44,9 +49,8 @@ make compile
       - [x] (MAPLE) check $QVQ$ w/ subs vs Fortran 
    - [ ] $\mathcal{Y_{1}}$ integrals
    - [ ] $\mathcal{Y_{2}}$ integrals
-- [ ] Write the effective potential terms subroutines
-- [ ] Write the time derivative subroutines
-- [ ] Update the basis set module
+- [ ] $\mathbf{V}_{1}$ polynomials subroutines
+- [ ] $\mathbb{V}_{2}$ polynomials subroutines
 
 ## DONE
 - [x] Copy relevant files from `Multicon_Fortran` repository

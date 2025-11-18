@@ -17,7 +17,9 @@
 !.....Check Matrix Potential............................................
 !      call check_vmat()
 !.....Check Quadratic Forms.............................................
-      call check_quad(nv)
+!      call check_quad(nv)
+!.....Check Tu powers...................................................
+      call check_Tupow(nv)
 
       end program
 

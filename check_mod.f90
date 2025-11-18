@@ -8,6 +8,7 @@
       use potential_module
       use quadratic_module
       use polynomials_module
+      use tupowers_module
 
       implicit none
 
@@ -176,6 +177,49 @@
 
        write(*,*) "-------------------"
        write(*,*) "tP00M - sum:", tP00M - int_uWu - int_QVQ
+
+      end subroutine
+
+!.....Check Tu powers...................................................
+
+      subroutine check_Tupow(nd)
+      ! nd : dimension
+
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: k 
+       real*8 :: Tu1,Tu2,Tu3
+       real*8, dimension(nd,nd) :: DiagMat,Trial
+       real*8, dimension(maxorder,nd) :: OutMat
+
+       write(*,*) "# HELLO I'M CHECK_TUPOW"
+       DiagMat(:,:) = 0.d0
+       k=0.d0
+
+       do i = 1,nd
+          DiagMat(i,i) = 5.d0
+          do j = 1,nd
+            k = k + 1.25d0
+            Trial(i,j) = k
+          end do
+          !write(*,*) Trial(i,:)
+       end do
+
+       OutMat = momenta(nd,DiagMat)
+
+       write(*,*) "Dimensions: ", nd
+       write(*,*) "-------------------"
+       Tu1 = fun_Tu1(nd,Trial,OutMat)
+       write(*,*) "Tu1: ", Tu1
+       
+       write(*,*) "-------------------"
+       Tu2 = fun_Tu2(nd,Trial,OutMat)
+       write(*,*) "Tu2: ", Tu2
+
+       write(*,*) "-------------------"
+       Tu3 = fun_Tu3(nd,Trial,OutMat)
+       write(*,*) "Tu3: ", Tu3
 
       end subroutine
 

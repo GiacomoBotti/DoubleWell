@@ -1,0 +1,101 @@
+!**********************************************************************!
+! Module that contains the functions to compute the powers if Tu,      !
+! needed for the powers of y1                                          !
+!**********************************************************************!
+
+      module tupowers_module
+
+      use diagonal_module
+
+      implicit none
+
+      private
+      public :: fun_Tu1,fun_Tu2,fun_Tu3
+
+      contains
+
+!.....Tu................................................................
+
+      function fun_Tu1(nd,Tmat,MomMat) result(Tu1)
+      ! nd: dimension of the system
+      ! Tmat: eigenvector matrix
+      ! MomMat: momenta matrix
+
+       integer,intent(in) :: nd
+       real*8, dimension(nd,nd), intent(in) :: Tmat
+       real*8, dimension(maxorder,nd), intent(in) :: MomMat 
+      
+       integer :: i
+       real*8 :: Tu1
+
+       Tu1 = 0.d0
+
+       do i = 1,nd
+         Tu1 = Tu1 + Tmat(1,i)*MomMat(1,i)
+       end do
+
+      end function
+
+!.....Tu^2..............................................................
+
+      function fun_Tu2(nd,Tmat,MomMat) result(Tu2)
+      ! nd: dimension of the system
+      ! Tmat: eigenvector matrix
+      ! MomMat: momenta matrix
+
+       integer,intent(in) :: nd
+       real*8, dimension(nd,nd), intent(in) :: Tmat
+       real*8, dimension(maxorder,nd), intent(in) :: MomMat 
+      
+       integer :: i,j
+       real*8 :: Tu2,Tu1
+
+       Tu2=0.d0
+       Tu1=0.d0
+
+       do i = 1,nd
+         do j = i+1,nd
+           Tu1 = Tu1 + Tmat(1,j)*MomMat(1,j)
+         end do
+         Tu2=Tu2+(Tmat(1,i)**2.d0)*MomMat(2,i)&
+             &+2.d0*Tmat(1,i)*MomMat(1,i)*Tu1
+         !write(*,*) Tmat(1,i), Tmat(1,i)**2.d0
+         Tu1=0.d0
+       end do
+
+      end function 
+
+!.....Tu^3..............................................................
+
+      function fun_Tu3(nd,Tmat,MomMat) result(Tu3)
+      ! nd: dimension of the system
+      ! Tmat: eigenvector matrix
+      ! MomMat: momenta matrix
+
+       integer,intent(in) :: nd
+       real*8, dimension(nd,nd), intent(in) :: Tmat
+       real*8, dimension(maxorder,nd), intent(in) :: MomMat 
+      
+       integer :: i,j,k
+       real*8 :: Tu3,Tu2,Tu1
+
+       Tu3=0.d0
+       Tu2=0.d0
+       Tu1=0.d0
+
+       do i = 1,nd
+         do j = i+1,nd
+           do k = j+1,nd
+             Tu1 = Tu1 + Tmat(1,i)*Tmat(1,j)*Tmat(1,k)&
+                   &*MomMat(1,i)*MomMat(1,j)*MomMat(1,k)
+           end do
+           Tu2 = Tu2 + Tmat(1,j)*MomMat(1,j)*MomMat(2,i)*(Tmat(1,i)**2)&
+                 &+ Tmat(1,i)*MomMat(1,i)*MomMat(2,j)*(Tmat(1,j)**2)
+         end do
+         Tu3 = Tu3 + MomMat(3,i)*(Tmat(1,i)**3) +3.d0*Tu2+6.d0*Tu3
+       end do
+
+      end function
+
+      end module
+       
