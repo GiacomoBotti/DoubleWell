@@ -116,7 +116,8 @@
       ! nd : dimensions
 
        integer :: nd,i,j
-       real*8 :: int_qVq,int_uWu,k
+       real*8 :: k
+       real*8 :: int_qVq,int_uWu,int_uZQ,int_QRu
        real*8, dimension(nd) :: qvec
        real*8, dimension(nd,nd) :: DiagMat,Trial
        real*8, dimension(maxorder,nd) :: OutMat
@@ -141,7 +142,7 @@
        do i = 1,nd
           DiagMat(i,i) = 5.d0
           do j = 1,nd
-            k=k+1.d0
+            k=k+1.25d0
             Trial(i,j) = k
           end do
           !write(*,*) Trial(i,:)
@@ -159,6 +160,16 @@
    
        write(*,*) "-------------------"
        write(*,*) "uWu:", int_uWu
+
+       int_uZQ = fun_uZQ(nd,qvec,Trial,OutMat)
+   
+       write(*,*) "-------------------"
+       write(*,*) "uZQ:", int_uZQ
+
+       int_QRu = fun_QRu(nd,qvec,Trial,OutMat)
+   
+       write(*,*) "-------------------"
+       write(*,*) "QRu:", int_QRu
 
       end subroutine
 

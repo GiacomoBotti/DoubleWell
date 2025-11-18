@@ -11,7 +11,7 @@
       implicit none
  
       private
-      public :: fun_qVq,fun_uWu
+      public :: fun_qVq,fun_uWu,fun_uZQ,fun_QRu
 
       contains
 
@@ -58,6 +58,66 @@
        do i = 1,nd
          uWu=uWu + W2(i,i)*MomMat(2,i)
        end do
+
+      end function
+
+!.....uZQ=uTVQ..........................................................
+
+      function fun_uZQ(nd,q,Tmat,MomMat) result(uZQ)
+      ! nd: dimensions
+      ! q: gaussian variational center vector
+      ! Tmat: eigenvector matrix
+      ! MomMat: matrix of the momenta
+      ! uZQ: polynomial of the momenta
+       
+       integer,intent(in) :: nd
+       real*8, dimension(nd), intent(in) :: q
+       real*8, dimension(nd,nd), intent(in) :: Tmat
+       real*8, dimension(maxorder,nd), intent(in) :: MomMat 
+ 
+       integer :: i,j
+       real*8 :: uZQ
+       real*8, dimension(nd,nd) :: Z
+
+       !Z = matmul(transpose(Tmat),Vmat)
+
+       uZQ=0.d0
+
+       !do i = 1,nd
+       !  do j =1,nd
+       !    uZQ=uZQ + MomMat(1,i)*Z(i,j)*q(j)
+       !  end do
+       !end do
+
+      end function
+
+!.....QRu=QVTu..........................................................
+
+      function fun_QRu(nd,q,Tmat,MomMat) result(QRu)
+      ! nd: dimensions
+      ! q: gaussian variational center vector
+      ! Tmat: eigenvector matrix
+      ! MomMat: matrix of the momenta
+      ! QRu: polynomial of the momenta
+       
+       integer,intent(in) :: nd
+       real*8, dimension(nd), intent(in) :: q
+       real*8, dimension(nd,nd), intent(in) :: Tmat
+       real*8, dimension(maxorder,nd), intent(in) :: MomMat 
+ 
+       integer :: i,j
+       real*8 :: QRu
+       real*8, dimension(nd,nd) :: R
+
+       !R = matmul(Vmat,Tmat)
+
+       QRu=0.d0
+
+       !do i = 1,nd
+       !  do j =1,nd
+       !    QRu=QRu + q(i)*R(i,j)*MomMat(1,j)
+       !  end do
+       !end do
 
       end function
 

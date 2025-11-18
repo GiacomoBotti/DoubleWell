@@ -27,21 +27,20 @@ make compile
 ```
 
 ## TO DO
-- [ ] `potential_mod.f90` at Report
 - [ ] `check_mod.f90` at Report
 - [ ] `quadratic_mod.f90` at Report
+- [ ] `polynomials_mod.f90` at Report
+- [ ] `ypowers_mod.f90` at Report
 - [ ] $V_{0}$ polynomials subroutines
    - [ ] $\mathcal{Y_{0}}$ integrals
       - [x] (MAPLE) check $uWu$ sommation vs matrix moltiplication 
-      - [ ] (MAPLE) check $uZQ$ sommation vs matrix moltiplication 
-      - [ ] (MAPLE) check $QRu$ sommation vs matrix moltiplication 
-      - [ ] function for $y_{1}^{4}$
-      - [ ] function for $\tilde{\mathcal{P}}_{0}^{M}$, containing:
-         - [x] function for $uWu$
-         - [x] function for $QVQ$
+      - [x] (MAPLE) check $uZQ$ sommation vs matrix moltiplication 
+      - [x] (MAPLE) check $QRu$ sommation vs matrix moltiplication 
+      - [ ] function for $y_{1}^{4}$ in `ypowers_mod.f90`
+      - [ ] function for $\tilde{\mathcal{P}}_{0}^{M}$ in `polynomials_mod.f90`
       - [x] (MAPLE) check $uWu$ w/ subs vs Fortran 
-      - [ ] (MAPLE) check $uZQ$ w/ subs vs Fortran 
-      - [ ] (MAPLE) check $QRu$ w/ subs vs Fortran 
+      - [x] (MAPLE) check $uZQ$ w/ subs vs Fortran 
+      - [x] (MAPLE) check $QRu$ w/ subs vs Fortran 
       - [x] (MAPLE) check $QVQ$ w/ subs vs Fortran 
    - [ ] $\mathcal{Y_{1}}$ integrals
    - [ ] $\mathcal{Y_{2}}$ integrals
@@ -59,3 +58,4 @@ make compile
    - [x] check `momcoeff` error
 - [x] Matrix potential function
    - [x] check
+- [x] `potential_mod.f90` at Report
