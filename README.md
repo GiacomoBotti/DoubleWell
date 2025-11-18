@@ -37,7 +37,7 @@ make compile
       - [x] (MAPLE) check $uZQ$ sommation vs matrix moltiplication 
       - [x] (MAPLE) check $QRu$ sommation vs matrix moltiplication 
       - [ ] function for $y_{1}^{4}$ in `ypowers_mod.f90`
-      - [ ] function for $\tilde{\mathcal{P}}_{0}^{M}$ in `polynomials_mod.f90`
+      - [x] function for $\tilde{\mathcal{P}}_{0}^{M}$ in `polynomials_mod.f90`
       - [x] (MAPLE) check $uWu$ w/ subs vs Fortran 
       - [x] (MAPLE) check $uZQ$ w/ subs vs Fortran 
       - [x] (MAPLE) check $QRu$ w/ subs vs Fortran 

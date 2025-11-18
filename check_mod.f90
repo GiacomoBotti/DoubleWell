@@ -7,6 +7,7 @@
       use diagonal_module 
       use potential_module
       use quadratic_module
+      use polynomials_module
 
       implicit none
 
@@ -117,7 +118,7 @@
 
        integer :: nd,i,j
        real*8 :: k
-       real*8 :: int_qVq,int_uWu,int_uZQ,int_QRu
+       real*8 :: int_qVq,int_uWu,int_uZQ,int_QRu,tP00M
        real*8, dimension(nd) :: qvec
        real*8, dimension(nd,nd) :: DiagMat,Trial
        real*8, dimension(maxorder,nd) :: OutMat
@@ -170,6 +171,11 @@
    
        write(*,*) "-------------------"
        write(*,*) "QRu:", int_QRu
+
+       tP00M = tildeP00M(nd,qvec,Trial,OutMat)
+
+       write(*,*) "-------------------"
+       write(*,*) "tP00M - sum:", tP00M - int_uWu - int_QVQ
 
       end subroutine
 
