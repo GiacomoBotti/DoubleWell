@@ -189,7 +189,7 @@
 
        integer :: i,j
        real*8 :: k 
-       real*8 :: Tu1,Tu2,Tu3
+       real*8 :: Tu1,Tu2,Tu3,Tu4,Tu5,Tu6
        real*8, dimension(nd,nd) :: DiagMat,Trial
        real*8, dimension(maxorder,nd) :: OutMat
 
@@ -198,7 +198,7 @@
        k=0.d0
 
        do i = 1,nd
-          DiagMat(i,i) = 5.d0
+          DiagMat(i,i) = i 
           do j = 1,nd
             k = k + 1.25d0
             Trial(i,j) = k
@@ -220,6 +220,18 @@
        write(*,*) "-------------------"
        Tu3 = fun_Tu3(nd,Trial,OutMat)
        write(*,*) "Tu3: ", Tu3
+
+       write(*,*) "-------------------"
+       Tu4 = fun_Tu4(nd,Trial,OutMat)
+       write(*,*) "Tu4: ", Tu4
+
+       write(*,*) "-------------------"
+       Tu5 = fun_Tu5(nd,Trial,OutMat)
+       write(*,*) "Tu5: ", Tu5
+
+       write(*,*) "-------------------"
+       Tu6 = fun_Tu6(nd,Trial,OutMat)
+       write(*,*) "Tu6: ", Tu6
 
       end subroutine
 

@@ -48,7 +48,11 @@ make compile
       - [x] (MAPLE) check $QRu$ w/ subs vs Fortran 
       - [x] (MAPLE) check $QVQ$ w/ subs vs Fortran 
    - [ ] $\mathcal{Y_{1}}$ integrals
+      - [ ] function for $y_{1}^{5}$ in `ypowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^5$ in `tupowers_mod.f90`
    - [ ] $\mathcal{Y_{2}}$ integrals
+      - [ ] function for $y_{1}^{6}$ in `ypowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^6$ in `tupowers_mod.f90`
 - [ ] $\mathbf{V}_{1}$ polynomials subroutines
 - [ ] $\mathbb{V}_{2}$ polynomials subroutines
 
