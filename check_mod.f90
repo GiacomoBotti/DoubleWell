@@ -143,7 +143,7 @@
        k=0.d0
 
        do i = 1,nd
-          DiagMat(i,i) = 5.d0
+          DiagMat(i,i) = i 
           do j = 1,nd
             k=k+1.25d0
             Trial(i,j) = k
