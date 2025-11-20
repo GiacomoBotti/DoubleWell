@@ -19,7 +19,9 @@
 !.....Check Quadratic Forms.............................................
 !      call check_quad(nv)
 !.....Check Tu powers...................................................
-      call check_Tupow(nv)
+!      call check_Tupow(nv)
+!.....Check y1 powers...................................................
+      call check_ypow(nv)
 
       end program
 

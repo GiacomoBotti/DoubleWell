@@ -31,17 +31,17 @@ make compile
 - [ ] `quadratic_mod.f90` at Report
 - [ ] `polynomials_mod.f90` at Report
 - [ ] `ypowers_mod.f90` at Report
-- [ ] `tupowers_mod.f90` at Report
+- [x] `tupowers_mod.f90` at Report
 - [ ] $V_{0}$ polynomials subroutines
    - [ ] $\mathcal{Y_{0}}$ integrals
       - [x] (MAPLE) check $uWu$ sommation vs matrix moltiplication 
       - [x] (MAPLE) check $uZQ$ sommation vs matrix moltiplication 
       - [x] (MAPLE) check $QRu$ sommation vs matrix moltiplication 
-      - [ ] function for $y_{1}^{4}$ in `ypowers_mod.f90`
+      - [x] function for $y_{1}^{4}$ in `ypowers_mod.f90`
          - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})$ in `tupowers_mod.f90`
          - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{2}$ in `tupowers_mod.f90`
          - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{3}$ in `tupowers_mod.f90`
-         - [ ] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{4}$ in `tupowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{4}$ in `tupowers_mod.f90`
       - [x] function for $\tilde{\mathcal{P}}_{0}^{M}$ in `polynomials_mod.f90`
       - [x] (MAPLE) check $uWu$ w/ subs vs Fortran 
       - [x] (MAPLE) check $uZQ$ w/ subs vs Fortran 
@@ -54,7 +54,15 @@ make compile
       - [ ] function for $y_{1}^{6}$ in `ypowers_mod.f90`
          - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^6$ in `tupowers_mod.f90`
 - [ ] $\mathbf{V}_{1}$ polynomials subroutines
+   - [ ] $\mathcal{Y_{0}}$ integrals
+      - [x] function for $y_{1}^{3}$ in `ypowers_mod.f90`
+   - [ ] $\mathcal{Y_{1}}$ integrals
+   - [ ] $\mathcal{Y_{2}}$ integrals
 - [ ] $\mathbb{V}_{2}$ polynomials subroutines
+   - [ ] $\mathcal{Y_{0}}$ integrals
+      - [x] function for $y_{1}^{2}$ in `ypowers_mod.f90`
+   - [ ] $\mathcal{Y_{1}}$ integrals
+   - [ ] $\mathcal{Y_{2}}$ integrals
 
 ## DONE
 - [x] Copy relevant files from `Multicon_Fortran` repository

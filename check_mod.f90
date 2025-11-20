@@ -9,6 +9,7 @@
       use quadratic_module
       use polynomials_module
       use tupowers_module
+      use ypowers_module
 
       implicit none
 
@@ -235,5 +236,63 @@
 
       end subroutine
 
+!.....Check y powers...................................................
+
+      subroutine check_ypow(nd)
+      ! nd : dimension
+
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: k 
+       real*8 :: y2,y3,y4,y5,y6
+       real*8, dimension(nd) :: qvec
+       real*8, dimension(nd,nd) :: DiagMat,Trial
+       real*8, dimension(maxorder,nd) :: OutMat
+
+       write(*,*) "# HELLO I'M CHECK_YPOW"
+       DiagMat(:,:) = 0.d0
+       k=0.d0
+
+       do i = 1,nd
+          DiagMat(i,i) = i 
+          do j = 1,nd
+            k = k + 1.25d0
+            Trial(i,j) = k
+          end do
+          !write(*,*) Trial(i,:)
+       end do
+
+       OutMat = momenta(nd,DiagMat)
+
+       qvec(:) = 2.d0
+
+       write(*,*) "Dimensions: ", nd
+       write(*,*) "-------------------"
+       write(*,*) "qvec:"
+       write(*,*) qvec(:)
+       write(*,*) "-------------------"
+       y2 = fun_y2(nd,qvec,Trial,OutMat)
+       write(*,*) "y2: ", y2
+       
+       write(*,*) "-------------------"
+       y3 = fun_y3(nd,qvec,Trial,OutMat)
+       write(*,*) "y3: ", y3
+       
+       write(*,*) "-------------------"
+       y4 = fun_y4(nd,qvec,Trial,OutMat)
+       write(*,*) "y4: ", y4
+       
+       write(*,*) "-------------------"
+       y5 = fun_y5(nd,qvec,Trial,OutMat)
+       write(*,*) "y5: ", y5
+       
+       write(*,*) "-------------------"
+       y6 = fun_y6(nd,qvec,Trial,OutMat)
+       write(*,*) "y6: ", y6
+       
+      end subroutine
+
 
       end module
+

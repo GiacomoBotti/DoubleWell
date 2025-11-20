@@ -7,7 +7,7 @@ lib = -llapack -lblas
      timedev_mod.o dtmatrix_mod.o observable_mod.o BOT_mod.o evolution_mod.o check_mod.o main.o
 
 obj= constants.o potential_mod.o diagonal_mod.o quadratic_mod.o polynomials_mod.o tupowers_mod.o\
-     check_mod.o main.o
+     ypowers_mod.o check_mod.o main.o
 
 compile: $(obj)
 	$(fc) $(myflgs) $(obj) -o doublewell.x $(lib)
