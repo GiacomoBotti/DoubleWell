@@ -103,8 +103,6 @@
       
        integer :: i
 
-       call matrix_pot()
-
        write(*,*) "# HELLO I'M CHECK_VMAT"
        write(*,*) "Potential matrix"
        do i = 1,nv
@@ -125,8 +123,6 @@
        real*8, dimension(nd,nd) :: DiagMat,Trial
        real*8, dimension(maxorder,nd) :: OutMat
        
-       call matrix_pot()
-
        qvec(:) = 2.d0
 
        int_qVq = fun_qVq(nd,qvec)
@@ -293,6 +289,47 @@
        
       end subroutine
 
+!.....Check V0 polynomials..............................................
+
+      subroutine check_V0pol(nd)
+      ! nd : dimension
+
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: k 
+       real*8 :: Y00,Y10,Y20 
+       real*8, dimension(nd) :: qvec
+       real*8, dimension(nd,nd) :: DiagMat,Trial
+       real*8, dimension(maxorder,nd) :: OutMat
+
+       write(*,*) "# HELLO I'M CHECK_V0POL"
+       DiagMat(:,:) = 0.d0
+       k=0.d0
+
+       do i = 1,nd
+          DiagMat(i,i) = i 
+          do j = 1,nd
+            k = k + 1.25d0
+            Trial(i,j) = k
+          end do
+          !write(*,*) Trial(i,:)
+       end do
+
+       OutMat = momenta(nd,DiagMat)
+
+       qvec(:) = 2.d0
+
+       write(*,*) "Dimensions: ", nd
+       write(*,*) "-------------------"
+       write(*,*) "qvec:"
+       write(*,*) qvec(:)
+
+       write(*,*) "-------------------"
+       Y00 = fun_Y00(nd,qvec,Trial,OutMat)
+       write(*,*) "tP00: ", Y00
+       
+      end subroutine
 
       end module
 

@@ -17,6 +17,10 @@ The idea is to represent the double well mode with two Hermite-Gauss basis funct
 
 ## NOTICE!
 
+Actually, two Hermite-Gauss basis functions are not enough. This requires a change of framework, in which the integral in $dx$ must be computed numerically. For this reason, I moved everything I did with two Hermite-Gauss basis function in a dead branch named `OLD_two_hermite`.
+
+## NOTICE!
+
 Since the matrix potential is initialized with the public parameter `nv`, if this parameter is changed a
 ```
 make .clean
@@ -26,14 +30,23 @@ is required before recompiling with
 make compile
 ```
 
-## TO DO
+## NEW FRAMEWORK
+
+### TO DO
+- [ ] Work out the integrals
+- [ ] Sketch the code
+- [ ] ?
+
+## OLD FRAMEWORK (TWO HERMITE)
+
+### TO DO
 - [ ] `check_mod.f90` at Report
 - [ ] `quadratic_mod.f90` at Report
 - [ ] `polynomials_mod.f90` at Report
 - [ ] `ypowers_mod.f90` at Report
 - [x] `tupowers_mod.f90` at Report
 - [ ] $V_{0}$ polynomials subroutines
-   - [ ] $\mathcal{Y_{0}}$ integrals
+   - [x] $\mathcal{Y_{0}}$ integrals
       - [x] (MAPLE) check $uWu$ sommation vs matrix moltiplication 
       - [x] (MAPLE) check $uZQ$ sommation vs matrix moltiplication 
       - [x] (MAPLE) check $QRu$ sommation vs matrix moltiplication 
@@ -48,6 +61,12 @@ make compile
       - [x] (MAPLE) check $QRu$ w/ subs vs Fortran 
       - [x] (MAPLE) check $QVQ$ w/ subs vs Fortran 
    - [ ] $\mathcal{Y_{1}}$ integrals
+      - [ ] dummy function for $\mathbb{T}_{1,\cdot}\mathbf{u} \cdot QVQ$
+      - [ ] dummy function for $\mathbb{T}_{1,\cdot}\mathbf{u} \cdot uWu$
+      - [ ] function for $\mathbb{T}_{1,\cdot}\mathbf{u} \cdot uZQ$
+         - [ ] check with MAPLE
+      - [ ] function for $\mathbb{T}_{1,\cdot}\mathbf{u} \cdot QRu$
+         - [ ] check with MAPLE
       - [x] function for $y_{1}^{5}$ in `ypowers_mod.f90`
          - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^5$ in `tupowers_mod.f90`
    - [ ] $\mathcal{Y_{2}}$ integrals
@@ -64,7 +83,7 @@ make compile
    - [ ] $\mathcal{Y_{1}}$ integrals
    - [ ] $\mathcal{Y_{2}}$ integrals
 
-## DONE
+### DONE
 - [x] Copy relevant files from `Multicon_Fortran` repository
    - [x] Clean `Makefile`
 - [x] Diagonalization subroutine
