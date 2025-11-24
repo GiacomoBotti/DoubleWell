@@ -17,6 +17,10 @@ The idea is to represent the double well mode with two Hermite-Gauss basis funct
 
 ## NOTICE!
 
+Actually, two Hermite-Gauss basis functions are not enough. This requires a change of framework, in which the integral in $dx$ must be computed numerically. For this reason, I moved everything I did with two Hermite-Gauss basis function in a dead branch named `OLD_two_hermite`.
+
+## NOTICE!
+
 Since the matrix potential is initialized with the public parameter `nv`, if this parameter is changed a
 ```
 make .clean
@@ -26,29 +30,60 @@ is required before recompiling with
 make compile
 ```
 
-## TO DO
+## NEW FRAMEWORK
+
+### TO DO
+- [ ] Work out the integrals
+- [ ] Sketch the code
+- [ ] ?
+
+## OLD FRAMEWORK (TWO HERMITE)
+
+### TO DO
 - [ ] `check_mod.f90` at Report
 - [ ] `quadratic_mod.f90` at Report
 - [ ] `polynomials_mod.f90` at Report
 - [ ] `ypowers_mod.f90` at Report
+- [x] `tupowers_mod.f90` at Report
 - [ ] $V_{0}$ polynomials subroutines
-   - [ ] $\mathcal{Y_{0}}$ integrals
+   - [x] $\mathcal{Y_{0}}$ integrals
       - [x] (MAPLE) check $uWu$ sommation vs matrix moltiplication 
       - [x] (MAPLE) check $uZQ$ sommation vs matrix moltiplication 
       - [x] (MAPLE) check $QRu$ sommation vs matrix moltiplication 
-      - [ ] function for $y_{1}^{4}$ in `ypowers_mod.f90`
+      - [x] function for $y_{1}^{4}$ in `ypowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})$ in `tupowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{2}$ in `tupowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{3}$ in `tupowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^{4}$ in `tupowers_mod.f90`
       - [x] function for $\tilde{\mathcal{P}}_{0}^{M}$ in `polynomials_mod.f90`
       - [x] (MAPLE) check $uWu$ w/ subs vs Fortran 
       - [x] (MAPLE) check $uZQ$ w/ subs vs Fortran 
       - [x] (MAPLE) check $QRu$ w/ subs vs Fortran 
       - [x] (MAPLE) check $QVQ$ w/ subs vs Fortran 
    - [ ] $\mathcal{Y_{1}}$ integrals
+      - [ ] dummy function for $\mathbb{T}_{1,\cdot}\mathbf{u} \cdot QVQ$
+      - [ ] dummy function for $\mathbb{T}_{1,\cdot}\mathbf{u} \cdot uWu$
+      - [ ] function for $\mathbb{T}_{1,\cdot}\mathbf{u} \cdot uZQ$
+         - [ ] check with MAPLE
+      - [ ] function for $\mathbb{T}_{1,\cdot}\mathbf{u} \cdot QRu$
+         - [ ] check with MAPLE
+      - [x] function for $y_{1}^{5}$ in `ypowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^5$ in `tupowers_mod.f90`
    - [ ] $\mathcal{Y_{2}}$ integrals
-- [ ] Write the effective potential terms subroutines
-- [ ] Write the time derivative subroutines
-- [ ] Update the basis set module
+      - [x] function for $y_{1}^{6}$ in `ypowers_mod.f90`
+         - [x] function for $(\mathbb{T}_{1,\cdot}\mathbf{u})^6$ in `tupowers_mod.f90`
+- [ ] $\mathbf{V}_{1}$ polynomials subroutines
+   - [ ] $\mathcal{Y_{0}}$ integrals
+      - [x] function for $y_{1}^{3}$ in `ypowers_mod.f90`
+   - [ ] $\mathcal{Y_{1}}$ integrals
+   - [ ] $\mathcal{Y_{2}}$ integrals
+- [ ] $\mathbb{V}_{2}$ polynomials subroutines
+   - [ ] $\mathcal{Y_{0}}$ integrals
+      - [x] function for $y_{1}^{2}$ in `ypowers_mod.f90`
+   - [ ] $\mathcal{Y_{1}}$ integrals
+   - [ ] $\mathcal{Y_{2}}$ integrals
 
-## DONE
+### DONE
 - [x] Copy relevant files from `Multicon_Fortran` repository
    - [x] Clean `Makefile`
 - [x] Diagonalization subroutine

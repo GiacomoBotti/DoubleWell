@@ -8,6 +8,7 @@
       implicit none
 
       real*8, parameter  :: gamma_const = 0.25d0
+      real*8, parameter,public  :: eta_const = 0.25d0
   
       integer,parameter,public :: nv = 5
       real*8, dimension(nv,nv),public :: Vmat 
