@@ -33,14 +33,21 @@ make compile
 ## NEW FRAMEWORK
 
 ### TO DO
+- [ ] `Makefile` at Report
+- [ ] `check_module.f90` at Report
+- [ ] `basisset_module.f90` at Report
+- [ ] `integrals_module.f90` at Report
 - [x] Work out the integrals
 - [x] Sketch the code
-- [ ] Hermite coefficient matrix
-   - [ ] Some smart way to code it
-- [ ] Hermite product matrix
+- [x] Hermite coefficient matrix
+   - [x] Some smart way to code it
+- [x] Check Hermite polynomials with MAPLE (`dw_check.mw`)
+- [x] Hermite product matrix
+- [x] Check Hermite product matrix with MAPLE (`dw_check.mw`)
 - [ ] Y0 integral
-   - [ ] subroutine
-   - [ ] check with MAPLE
+   - [x] subroutine
+   - [ ] check with MAPLE: determinant
+   - [ ] check with MAPLE: integral 
 - [ ] X integrals
    - [ ] X0 
    - [ ] check with MAPLE

@@ -26,8 +26,6 @@
       call check_vmat()
 !.....Check Hermite Matrix..............................................
       call check_hermmat()
-!.....Check Quadratic Forms.............................................
-!      call check_quad(nv)
 
       end program
 
