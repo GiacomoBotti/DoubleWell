@@ -5,7 +5,7 @@
 
       module quadratic_module
       
-      use diagonal_module
+      use matrix_module
       use potential_module
 
       implicit none

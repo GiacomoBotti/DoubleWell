@@ -4,8 +4,9 @@
 
       module check_module
 
-      use diagonal_module 
+      use matrix_module 
       use potential_module
+      use basisset_module
       use quadratic_module
       use polynomials_module
       use tupowers_module
@@ -97,6 +98,49 @@
 
       end subroutine
 
+!.....Check extractA....................................................
+
+      subroutine check_Amat(nd)
+      ! nd : dimension of the matrix
+
+       integer :: i,j,nd
+       real*8 :: harvest
+       real*8, dimension(nd+1,nd+1) :: RndMat
+
+       real*8, dimension(nd) :: avec 
+       real*8, dimension(nd,nd) :: Amat
+
+       do i = 1,nd+1
+          call RANDOM_NUMBER(harvest)
+          RndMat(i,i) = harvest
+          do j = i+1,nd+1
+             call RANDOM_NUMBER(harvest)
+             RndMat(i,j) = harvest
+             RndMat(j,i) = RndMat(i,j)
+          end do
+       end do
+
+       write(*,*) "# HELLO I'M CHECK_AMAT"
+       write(*,*) "Starting matrix"
+     
+       do i = 1,nd+1
+          write(*,*) RndMat(i,:)
+       end do
+
+       call extractA(nd,RndMat,Amat,avec)
+
+       write(*,*) "A matrix"
+
+       do i = 1,nd
+          write(*,*) Amat(i,:)
+       end do
+
+       write(*,*) "a vector"
+       
+       write(*,*) avec(:)
+
+      end subroutine
+
 !.....Check Vmat........................................................
 
       subroutine check_vmat()
@@ -107,6 +151,20 @@
        write(*,*) "Potential matrix"
        do i = 1,nv
          write(*,*) Vmat(i,:)
+       end do
+
+      end subroutine  
+
+!.....Check HermMat.....................................................
+
+      subroutine check_hermmat()
+      
+       integer :: i
+
+       write(*,*) "# HELLO I'M CHECK_HERMMAT"
+       write(*,*) "Hermite Coefficients matrix"
+       do i = 1,nh
+         write(*,*) Mherm(i,:)
        end do
 
       end subroutine  

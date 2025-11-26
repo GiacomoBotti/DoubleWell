@@ -7,14 +7,14 @@
       module polynomials_module
 
       use quadratic_module
-      use diagonal_module 
+      use matrix_module 
       use potential_module 
       use ypowers_module 
 
       implicit none
 
       private
-      public :: tildeP00M,Y00
+      public :: tildeP00M,fun_Y00
 
       contains
 
@@ -63,8 +63,8 @@
  
        real*8 :: y4,tP00M
 
-       write(*,*) Tmat
-       write(*,*) MomMat
+       !write(*,*) Tmat
+       !write(*,*) MomMat
 
        y4=fun_y4(nd,q,Tmat,MomMat)
        tP00M=tildeP00M(nd,q,Tmat,MomMat)

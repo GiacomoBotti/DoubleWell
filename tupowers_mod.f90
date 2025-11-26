@@ -5,7 +5,7 @@
 
       module tupowers_module
 
-      use diagonal_module
+      use matrix_module
 
       implicit none
 

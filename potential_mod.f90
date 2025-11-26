@@ -10,7 +10,8 @@
       real*8, parameter  :: gamma_const = 0.25d0
       real*8, parameter,public  :: eta_const = 0.25d0
   
-      integer,parameter,public :: nv = 5
+      ! Bath potential matrix dimensions
+      integer,parameter,public :: nv = 4
       real*8, dimension(nv,nv),public :: Vmat 
 
       private
@@ -29,7 +30,7 @@
        Vharm(:,:) = 0.d0
        Vcoupl(:,:) = 0.d0
 
-       Vharm(1,1) = -1.d0 !y1^2
+       Vharm(1,1) = 1.d0
     
        do i = 2,nv
          Vharm(i,i) = 1.d0

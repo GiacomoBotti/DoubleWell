@@ -6,7 +6,7 @@
       module ypowers_module
 
       use tupowers_module
-      use diagonal_module
+      use matrix_module
 
       implicit none
 

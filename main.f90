@@ -6,27 +6,28 @@
       program doublewell
 
       use constants
+      use potential_module
+      use basisset_module
       use check_module
 
       implicit none
 
 ! TO BE SURE: GENERATE POTENTIAL MATRIX HERE
       call matrix_pot() 
-
+! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
+      call GenHermMat()
 !.....Check Diagonalization.............................................
-!      call check_diagonalization(5)
+      call check_diagonalization(nv)
 !.....Check Momenta Matrix..............................................
-!      call check_momenta(5)
+      call check_momenta(nv)
+!.....Check A matrix extraction.........................................
+      call check_Amat(nv)
 !.....Check Matrix Potential............................................
-!      call check_vmat()
+      call check_vmat()
+!.....Check Hermite Matrix..............................................
+      call check_hermmat()
 !.....Check Quadratic Forms.............................................
 !      call check_quad(nv)
-!.....Check Tu powers...................................................
-!      call check_Tupow(nv)
-!.....Check y1 powers...................................................
-!      call check_ypow(nv)
-!.....Check V0 polynomials..............................................
-      call check_V0pol(nv)
 
       end program
 
