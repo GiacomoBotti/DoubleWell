@@ -29,32 +29,40 @@ is required before recompiling with
 ```
 make compile
 ```
+The same goes for the Hermite polynomials basis set.
 
 ## NEW FRAMEWORK
 
 ### TO DO
-- [x] Work out the integrals
-- [x] Sketch the code
-- [ ] Hermite coefficient matrix
-   - [ ] Some smart way to code it
-- [ ] Hermite product matrix
-- [ ] Y0 integral
-   - [ ] subroutine
-   - [ ] check with MAPLE
-- [ ] X integrals
-   - [ ] X0 
-   - [ ] check with MAPLE
-   - [ ] X1 
-   - [ ] check with MAPLE
-   - [ ] X2 
-   - [ ] check with MAPLE
-   - [ ] X3 
-   - [ ] check with MAPLE
-   - [ ] X4 
-   - [ ] check with MAPLE
+- [ ] `Makefile` at Report
+- [ ] `check_module.f90` at Report
+- [ ] `basisset_module.f90` at Report
+- [ ] `integrals_module.f90` at Report
+- [ ] vector of coefficients
 - [ ] $[ V_{0}]_{ij}$
 - [ ] $[ \mathbf{V}_{1}]_{ij}$
 - [ ] $[ \mathbb{V}_{2}]_{ij}$
+- [ ] Equations of motion
+- [ ] $\mathbb{H}^{(00)}$, $\mathbb{S}^{(00)}$
+
+### DONE
+
+- [x] Work out the integrals
+- [x] Sketch the code
+- [x] Hermite coefficient matrix
+   - [x] Some smart way to code it
+- [x] Check Hermite polynomials with MAPLE (`dw_check.mw`)
+- [x] Hermite product matrix
+- [x] Check Hermite product matrix with MAPLE (`dw_check.mw`)
+- [x] Y0 integral
+   - [x] subroutine
+   - [x] check with MAPLE: determinant
+   - [x] check with MAPLE: integral 
+- [x] X integrals
+   - [x] Gx
+   - [x] check with MAPLE
+   - [x] Xn 
+   - [x] check with MAPLE
 
 ## OLD FRAMEWORK (TWO HERMITE)
 

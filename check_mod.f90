@@ -7,10 +7,7 @@
       use matrix_module 
       use potential_module
       use basisset_module
-      use quadratic_module
-      use polynomials_module
-      use tupowers_module
-      use ypowers_module
+      use integrals_module
 
       implicit none
 
@@ -36,6 +33,7 @@
           end do
        end do
 
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_DIAGONALIZATION"
        write(*,*) "Starting matrix"
      
@@ -81,6 +79,7 @@
 
        DiagMat(:,:) = 0.d0
 
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_MOMENTA"
        write(*,*) "Diagonal Matrix"
        do i = 1,nd
@@ -107,6 +106,7 @@
        real*8 :: harvest
        real*8, dimension(nd+1,nd+1) :: RndMat
 
+       real*8 :: a
        real*8, dimension(nd) :: avec 
        real*8, dimension(nd,nd) :: Amat
 
@@ -120,6 +120,7 @@
           end do
        end do
 
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_AMAT"
        write(*,*) "Starting matrix"
      
@@ -127,7 +128,7 @@
           write(*,*) RndMat(i,:)
        end do
 
-       call extractA(nd,RndMat,Amat,avec)
+       call extractA(nd,RndMat,Amat,avec,a)
 
        write(*,*) "A matrix"
 
@@ -138,6 +139,8 @@
        write(*,*) "a vector"
        
        write(*,*) avec(:)
+
+       write(*,*) "a: ", a
 
       end subroutine
 
@@ -159,235 +162,126 @@
 
       subroutine check_hermmat()
       
-       integer :: i
+       integer :: i,j,k,l
+       real*8 :: H
+       real*8,dimension(nh,nh) :: Hmat
 
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_HERMMAT"
        write(*,*) "Hermite Coefficients matrix"
        do i = 1,nh
          write(*,*) Mherm(i,:)
        end do
+       
+       write(*,*) "------------------------------"
+       write(*,*) "The values of some polynomials"
+       write(*,*) "------------------------------"
+       do i = 1,3
+         do j = 1,3
+           do l = 1,nh
+             H = herm_pol(l,dfloat(i),dfloat(j))
+             write(*,*) "npol: ",l,"x: ",i,"q: ",j,"H: ",H
+           end do 
+         end do
+       end do
+
+       write(*,*) "------------------------------"
+       write(*,*) "The values of Hmat"
+       write(*,*) "------------------------------"
+
+       do i = 1,3
+         do j =1,3
+           write(*,*) "x: ",i,"q: ",j
+           Hmat = fun_Hmat(dfloat(i),dfloat(j))
+           do k = 1,nh
+             write(*,*) Hmat(k,:)
+           end do
+         end do
+       end do
 
       end subroutine  
 
-!.....Check quadratic forms.............................................
+!.....Check Y0..........................................................
 
-      subroutine check_quad(nd)
-      ! nd : dimensions
+      subroutine check_Y0(nd)
+      ! nd: dimensions of the matrix
 
-       integer :: nd,i,j
-       real*8 :: k
-       real*8 :: int_qVq,int_uWu,int_uZQ,int_QRu,tP00M
-       real*8, dimension(nd) :: qvec
-       real*8, dimension(nd,nd) :: DiagMat,Trial
-       real*8, dimension(maxorder,nd) :: OutMat
-       
-       qvec(:) = 2.d0
+       integer :: i,nd
+       real*8 :: Y0
+       real*8, dimension(nd,nd) :: DiagMat
 
-       int_qVq = fun_qVq(nd,qvec)
+       DiagMat(:,:) = 0.d0
 
-       write(*,*) "# HELLO I'M CHECK_QUAD"
-       write(*,*) "Dimensions: ", nd
-       write(*,*) "-------------------"
-       write(*,*) "qvec:"
-       write(*,*) qvec(:)
-       write(*,*) "-------------------"
-       write(*,*) "qVq:", int_qVq
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+       write(*,*) "# HELLO I'M CHECK_Y0"
+       write(*,*) "------------------------------"
+       write(*,*) "Diagonal Matrix"
+       do i = 1,nd
+          DiagMat(i,i) = 5.d0*i
+          write(*,*) DiagMat(i,:)
+       end do
+
+       Y0 = int_Y0(nd,DiagMat)
+
+       write(*,*) "------------------------------"
+       write(*,*) "Y0: ", Y0
+
+      end subroutine
+
+!.....Check XnMat.......................................................
+
+      subroutine check_XnMat(nd)
+      !nd: dimensions of the matrix
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: a,q
+       real*8, dimension(nd) :: avec 
+       real*8, dimension(nd,nd) :: Amat
+       real*8, dimension(nd+1,nd+1) :: Bmat
+       real*8, dimension(nh,nh) :: XnMat
+
+       Bmat(:,:) = 0.1d0
+       Bmat(1,:) = 0.5d0
+       Bmat(:,1) = 0.5d0
+       Bmat(1,1) = 1.d0
+
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+       write(*,*) "# HELLO I'M CHECK_XNMAT"
+       write(*,*) "B matrix"
      
-       DiagMat(:,:) = 0.d0
-       k=0.d0
-
-       do i = 1,nd
-          DiagMat(i,i) = i 
-          do j = 1,nd
-            k=k+1.25d0
-            Trial(i,j) = k
-          end do
-          !write(*,*) Trial(i,:)
+       do i = 1,nd+1
+          write(*,*) Bmat(i,:)
        end do
 
-       OutMat = momenta(nd,DiagMat)
+       call extractA(nd,Bmat,Amat,avec,a)
 
-       !write(*,*) "Matrix of the Momenta"
+       write(*,*) "------------------------------"
+       write(*,*) "A matrix"
 
-       !do i = 1,maxorder
-       !   write(*,*) Outmat(i,:)
-       !end do
+       do i = 1,nd
+          write(*,*) Amat(i,:)
+       end do
 
-       int_uWu = fun_uWu(nd,Trial,OutMat)
-   
-       write(*,*) "-------------------"
-       write(*,*) "uWu:", int_uWu
+       write(*,*) "------------------------------"
+       write(*,*) "a vector"
+       
+       write(*,*) avec(:)
 
-       int_uZQ = fun_uZQ(nd,qvec,Trial,OutMat)
-   
-       write(*,*) "-------------------"
-       write(*,*) "uZQ:", int_uZQ
-
-       int_QRu = fun_QRu(nd,qvec,Trial,OutMat)
-   
-       write(*,*) "-------------------"
-       write(*,*) "QRu:", int_QRu
-
-       tP00M = tildeP00M(nd,qvec,Trial,OutMat)
-
-       write(*,*) "-------------------"
-       write(*,*) "tP00M - sum:", tP00M - int_uWu - int_QVQ
+       write(*,*) "------------------------------"
+       write(*,*) "a: ", a
+         
+       do i = 1,4
+         q = dfloat(i)/2.d0
+         write(*,*) "------------------------------"
+         write(*,*) "q: ", q
+         XnMat = int_XnMat(nd,4,a,avec,Amat,q)
+         do j = 1,nh
+           write(*,*) XnMat(j,:)
+         end do
+       end do
 
       end subroutine
 
-!.....Check Tu powers...................................................
-
-      subroutine check_Tupow(nd)
-      ! nd : dimension
-
-       integer, intent(in) :: nd
-
-       integer :: i,j
-       real*8 :: k 
-       real*8 :: Tu1,Tu2,Tu3,Tu4,Tu5,Tu6
-       real*8, dimension(nd,nd) :: DiagMat,Trial
-       real*8, dimension(maxorder,nd) :: OutMat
-
-       write(*,*) "# HELLO I'M CHECK_TUPOW"
-       DiagMat(:,:) = 0.d0
-       k=0.d0
-
-       do i = 1,nd
-          DiagMat(i,i) = i 
-          do j = 1,nd
-            k = k + 1.25d0
-            Trial(i,j) = k
-          end do
-          !write(*,*) Trial(i,:)
-       end do
-
-       OutMat = momenta(nd,DiagMat)
-
-       write(*,*) "Dimensions: ", nd
-       write(*,*) "-------------------"
-       Tu1 = fun_Tu1(nd,Trial,OutMat)
-       write(*,*) "Tu1: ", Tu1
-       
-       write(*,*) "-------------------"
-       Tu2 = fun_Tu2(nd,Trial,OutMat)
-       write(*,*) "Tu2: ", Tu2
-
-       write(*,*) "-------------------"
-       Tu3 = fun_Tu3(nd,Trial,OutMat)
-       write(*,*) "Tu3: ", Tu3
-
-       write(*,*) "-------------------"
-       Tu4 = fun_Tu4(nd,Trial,OutMat)
-       write(*,*) "Tu4: ", Tu4
-
-       write(*,*) "-------------------"
-       Tu5 = fun_Tu5(nd,Trial,OutMat)
-       write(*,*) "Tu5: ", Tu5
-
-       write(*,*) "-------------------"
-       Tu6 = fun_Tu6(nd,Trial,OutMat)
-       write(*,*) "Tu6: ", Tu6
-
-      end subroutine
-
-!.....Check y powers...................................................
-
-      subroutine check_ypow(nd)
-      ! nd : dimension
-
-       integer, intent(in) :: nd
-
-       integer :: i,j
-       real*8 :: k 
-       real*8 :: y2,y3,y4,y5,y6
-       real*8, dimension(nd) :: qvec
-       real*8, dimension(nd,nd) :: DiagMat,Trial
-       real*8, dimension(maxorder,nd) :: OutMat
-
-       write(*,*) "# HELLO I'M CHECK_YPOW"
-       DiagMat(:,:) = 0.d0
-       k=0.d0
-
-       do i = 1,nd
-          DiagMat(i,i) = i 
-          do j = 1,nd
-            k = k + 1.25d0
-            Trial(i,j) = k
-          end do
-          !write(*,*) Trial(i,:)
-       end do
-
-       OutMat = momenta(nd,DiagMat)
-
-       qvec(:) = 2.d0
-
-       write(*,*) "Dimensions: ", nd
-       write(*,*) "-------------------"
-       write(*,*) "qvec:"
-       write(*,*) qvec(:)
-       write(*,*) "-------------------"
-       y2 = fun_y2(nd,qvec,Trial,OutMat)
-       write(*,*) "y2: ", y2
-       
-       write(*,*) "-------------------"
-       y3 = fun_y3(nd,qvec,Trial,OutMat)
-       write(*,*) "y3: ", y3
-       
-       write(*,*) "-------------------"
-       y4 = fun_y4(nd,qvec,Trial,OutMat)
-       write(*,*) "y4: ", y4
-       
-       write(*,*) "-------------------"
-       y5 = fun_y5(nd,qvec,Trial,OutMat)
-       write(*,*) "y5: ", y5
-       
-       write(*,*) "-------------------"
-       y6 = fun_y6(nd,qvec,Trial,OutMat)
-       write(*,*) "y6: ", y6
-       
-      end subroutine
-
-!.....Check V0 polynomials..............................................
-
-      subroutine check_V0pol(nd)
-      ! nd : dimension
-
-       integer, intent(in) :: nd
-
-       integer :: i,j
-       real*8 :: k 
-       real*8 :: Y00,Y10,Y20 
-       real*8, dimension(nd) :: qvec
-       real*8, dimension(nd,nd) :: DiagMat,Trial
-       real*8, dimension(maxorder,nd) :: OutMat
-
-       write(*,*) "# HELLO I'M CHECK_V0POL"
-       DiagMat(:,:) = 0.d0
-       k=0.d0
-
-       do i = 1,nd
-          DiagMat(i,i) = i 
-          do j = 1,nd
-            k = k + 1.25d0
-            Trial(i,j) = k
-          end do
-          !write(*,*) Trial(i,:)
-       end do
-
-       OutMat = momenta(nd,DiagMat)
-
-       qvec(:) = 2.d0
-
-       write(*,*) "Dimensions: ", nd
-       write(*,*) "-------------------"
-       write(*,*) "qvec:"
-       write(*,*) qvec(:)
-
-       write(*,*) "-------------------"
-       Y00 = fun_Y00(nd,qvec,Trial,OutMat)
-       write(*,*) "tP00: ", Y00
-       
-      end subroutine
 
       end module
-

@@ -89,7 +89,7 @@
 
 !.....Extract Amat and avec.............................................
 
-      subroutine extractA(nd,Bmat,Amat,avec)
+      subroutine extractA(nd,Bmat,Amat,avec,a)
       ! nd: dimension of the matrices
       ! Bmat: total gaussian width matrix
       ! Amat: bath gaussian width matrix
@@ -98,10 +98,13 @@
        integer, intent(in) :: nd
        real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
 
+       real*8, intent(out) ::  a
        real*8, dimension(nd), intent(out) ::  avec
        real*8, dimension(nd,nd), intent(out) :: Amat 
 
        integer :: i,j
+
+       a = Bmat(1,1) 
 
        do i = 1,nd
          avec(i) = Bmat(1,i+1)

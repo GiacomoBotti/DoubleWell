@@ -17,7 +17,7 @@
       real*8, dimension(nh,max_x), public :: Mherm
 
       private
-      public :: GenHermMat
+      public :: GenHermMat,herm_pol,fun_Hmat
 
       contains
 
@@ -25,7 +25,6 @@
   
       subroutine GenHermMat()
       ! Mherm: matrix of hermite polynomials coefficients
-
        integer :: i,j
 
        Mherm(:,:) = 0.d0
@@ -43,6 +42,52 @@
        end do
 
       end subroutine
+
+!.....Hermite Polynomial................................................
+     
+      function herm_pol(npol,x,q) result(Hofx)
+      ! npol: order of the polynomial, from 1 to nh
+      ! x: variable of the polynomial
+      ! q: variable of the polynomial
+      ! Hofx: value of the polynomial in x-q
+       integer, intent(in) :: npol
+       real*8, intent(in) :: x,q
+       
+       integer :: i
+       real*8 :: Hofx
+
+       Hofx = 0.d0
+       do i = 1,max_x
+         Hofx = Hofx + Mherm(npol,i)*(x-q)**(i-1)
+       end do
+
+      end function
+
+!.....Matrix of Hermite Polynomial Products.............................
+     
+      function fun_Hmat(x,q) result(Hmat)
+      ! x: variable of the polynomial
+      ! q: variable of the polynomial
+      ! Hmat: matrix of the polynomial products in x-q
+       real*8, intent(in) :: x,q
+       
+       integer :: i,j
+       real*8 :: H1,H2
+       real*8, dimension(nh,nh) :: Hmat
+
+       Hmat(:,:) = 0.d0
+
+       do i =1,nh
+         do j =1,nh
+           H1 = herm_pol(i,x,q)
+           H2 = herm_pol(j,x,q)
+           Hmat(i,j) = H1*H2
+         end do
+       end do
+ 
+      end function 
+
+       
 
 
 
