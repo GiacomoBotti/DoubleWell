@@ -38,6 +38,15 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `check_module.f90` at Report
 - [ ] `basisset_module.f90` at Report
 - [ ] `integrals_module.f90` at Report
+- [ ] vector of coefficients
+- [ ] $[ V_{0}]_{ij}$
+- [ ] $[ \mathbf{V}_{1}]_{ij}$
+- [ ] $[ \mathbb{V}_{2}]_{ij}$
+- [ ] Equations of motion
+- [ ] $\mathbb{H}^{(00)}$, $\mathbb{S}^{(00)}$
+
+### DONE
+
 - [x] Work out the integrals
 - [x] Sketch the code
 - [x] Hermite coefficient matrix
@@ -49,17 +58,11 @@ The same goes for the Hermite polynomials basis set.
    - [x] subroutine
    - [x] check with MAPLE: determinant
    - [x] check with MAPLE: integral 
-- [ ] X integrals
-   - [ ] Gx
-   - [ ] check with MAPLE
-   - [ ] Xn 
-   - [ ] check with MAPLE
-- [ ] vector of coefficients
-- [ ] $[ V_{0}]_{ij}$
-- [ ] $[ \mathbf{V}_{1}]_{ij}$
-- [ ] $[ \mathbb{V}_{2}]_{ij}$
-- [ ] Equations of motion
-- [ ] $\mathbb{H}^{(00)}$, $\mathbb{S}^{(00)}$
+- [x] X integrals
+   - [x] Gx
+   - [x] check with MAPLE
+   - [x] Xn 
+   - [x] check with MAPLE
 
 ## OLD FRAMEWORK (TWO HERMITE)
 

@@ -14,7 +14,7 @@
        integer*8, parameter :: nstep=100
 
        private
-       public :: int_Y0
+       public :: int_Y0,int_XnMat
 
        contains
 

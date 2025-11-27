@@ -228,4 +228,60 @@
 
       end subroutine
 
+!.....Check XnMat.......................................................
+
+      subroutine check_XnMat(nd)
+      !nd: dimensions of the matrix
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: a,q
+       real*8, dimension(nd) :: avec 
+       real*8, dimension(nd,nd) :: Amat
+       real*8, dimension(nd+1,nd+1) :: Bmat
+       real*8, dimension(nh,nh) :: XnMat
+
+       Bmat(:,:) = 0.1d0
+       Bmat(1,:) = 0.5d0
+       Bmat(:,1) = 0.5d0
+       Bmat(1,1) = 1.d0
+
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+       write(*,*) "# HELLO I'M CHECK_XNMAT"
+       write(*,*) "B matrix"
+     
+       do i = 1,nd+1
+          write(*,*) Bmat(i,:)
+       end do
+
+       call extractA(nd,Bmat,Amat,avec,a)
+
+       write(*,*) "------------------------------"
+       write(*,*) "A matrix"
+
+       do i = 1,nd
+          write(*,*) Amat(i,:)
+       end do
+
+       write(*,*) "------------------------------"
+       write(*,*) "a vector"
+       
+       write(*,*) avec(:)
+
+       write(*,*) "------------------------------"
+       write(*,*) "a: ", a
+         
+       do i = 1,4
+         q = dfloat(i)/2.d0
+         write(*,*) "------------------------------"
+         write(*,*) "q: ", q
+         XnMat = int_XnMat(nd,4,a,avec,Amat,q)
+         do j = 1,nh
+           write(*,*) XnMat(j,:)
+         end do
+       end do
+
+      end subroutine
+
+
       end module

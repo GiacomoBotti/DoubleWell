@@ -28,6 +28,8 @@
       call check_hermmat()
 !.....Check Y0..........................................................
       call check_Y0(nv)
+!.....Check XnMat..........................................................
+      call check_XnMat(nv)
 
       end program
 
