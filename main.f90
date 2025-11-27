@@ -26,6 +26,8 @@
       call check_vmat()
 !.....Check Hermite Matrix..............................................
       call check_hermmat()
+!.....Check Y0..........................................................
+      call check_Y0(nv)
 
       end program
 

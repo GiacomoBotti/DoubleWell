@@ -7,6 +7,7 @@
       use matrix_module 
       use potential_module
       use basisset_module
+      use integrals_module
 
       implicit none
 
@@ -32,6 +33,7 @@
           end do
        end do
 
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_DIAGONALIZATION"
        write(*,*) "Starting matrix"
      
@@ -77,6 +79,7 @@
 
        DiagMat(:,:) = 0.d0
 
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_MOMENTA"
        write(*,*) "Diagonal Matrix"
        do i = 1,nd
@@ -103,6 +106,7 @@
        real*8 :: harvest
        real*8, dimension(nd+1,nd+1) :: RndMat
 
+       real*8 :: a
        real*8, dimension(nd) :: avec 
        real*8, dimension(nd,nd) :: Amat
 
@@ -116,6 +120,7 @@
           end do
        end do
 
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_AMAT"
        write(*,*) "Starting matrix"
      
@@ -123,7 +128,7 @@
           write(*,*) RndMat(i,:)
        end do
 
-       call extractA(nd,RndMat,Amat,avec)
+       call extractA(nd,RndMat,Amat,avec,a)
 
        write(*,*) "A matrix"
 
@@ -134,6 +139,8 @@
        write(*,*) "a vector"
        
        write(*,*) avec(:)
+
+       write(*,*) "a: ", a
 
       end subroutine
 
@@ -159,6 +166,7 @@
        real*8 :: H
        real*8,dimension(nh,nh) :: Hmat
 
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_HERMMAT"
        write(*,*) "Hermite Coefficients matrix"
        do i = 1,nh
@@ -192,5 +200,32 @@
        end do
 
       end subroutine  
+
+!.....Check Y0..........................................................
+
+      subroutine check_Y0(nd)
+      ! nd: dimensions of the matrix
+
+       integer :: i,nd
+       real*8 :: Y0
+       real*8, dimension(nd,nd) :: DiagMat
+
+       DiagMat(:,:) = 0.d0
+
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+       write(*,*) "# HELLO I'M CHECK_Y0"
+       write(*,*) "------------------------------"
+       write(*,*) "Diagonal Matrix"
+       do i = 1,nd
+          DiagMat(i,i) = 5.d0*i
+          write(*,*) DiagMat(i,:)
+       end do
+
+       Y0 = int_Y0(nd,DiagMat)
+
+       write(*,*) "------------------------------"
+       write(*,*) "Y0: ", Y0
+
+      end subroutine
 
       end module

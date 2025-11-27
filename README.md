@@ -29,6 +29,7 @@ is required before recompiling with
 ```
 make compile
 ```
+The same goes for the Hermite polynomials basis set.
 
 ## NEW FRAMEWORK
 
@@ -44,24 +45,21 @@ make compile
 - [x] Check Hermite polynomials with MAPLE (`dw_check.mw`)
 - [x] Hermite product matrix
 - [x] Check Hermite product matrix with MAPLE (`dw_check.mw`)
-- [ ] Y0 integral
+- [x] Y0 integral
    - [x] subroutine
-   - [ ] check with MAPLE: determinant
-   - [ ] check with MAPLE: integral 
+   - [x] check with MAPLE: determinant
+   - [x] check with MAPLE: integral 
 - [ ] X integrals
-   - [ ] X0 
+   - [ ] Gx
    - [ ] check with MAPLE
-   - [ ] X1 
+   - [ ] Xn 
    - [ ] check with MAPLE
-   - [ ] X2 
-   - [ ] check with MAPLE
-   - [ ] X3 
-   - [ ] check with MAPLE
-   - [ ] X4 
-   - [ ] check with MAPLE
+- [ ] vector of coefficients
 - [ ] $[ V_{0}]_{ij}$
 - [ ] $[ \mathbf{V}_{1}]_{ij}$
 - [ ] $[ \mathbb{V}_{2}]_{ij}$
+- [ ] Equations of motion
+- [ ] $\mathbb{H}^{(00)}$, $\mathbb{S}^{(00)}$
 
 ## OLD FRAMEWORK (TWO HERMITE)
 
