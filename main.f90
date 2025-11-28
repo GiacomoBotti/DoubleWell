@@ -12,7 +12,12 @@
 
       implicit none
 
+      integer :: i
       complex*16,dimension(nh) :: c0 !Initial coefficient vector
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "|               MAIN CODE EXECUTION                 |"
+      write(*,*) "+---------------------------------------------------+"
 
 ! TO BE SURE: GENERATE POTENTIAL MATRIX HERE
       call matrix_pot() 
@@ -21,28 +26,35 @@
 
 !.....Define initial conditions.........................................
 
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Initial coefficients:"
+
+      c0(:) = 0.d0
+      c0(3) = 1.d0
+    
       do i = 1,nh
-        c0(i) = 1.d0/nh
+!        c0(i) = 1.d0/nh
+        write(*,*) c0(i) 
       end do
 
-    
+      write(*,*) "+---------------------------------------------------+"
 
 !.....Check Diagonalization.............................................
-      call check_diagonalization(nv)
+!      call check_diagonalization(nv)
 !.....Check Momenta Matrix..............................................
-      call check_momenta(nv)
+!      call check_momenta(nv)
 !.....Check A matrix extraction.........................................
-      call check_Amat(nv)
+!      call check_Amat(nv)
 !.....Check Matrix Potential............................................
-      call check_vmat()
+!      call check_vmat()
 !.....Check Hermite Matrix..............................................
-      call check_hermmat()
+!      call check_hermmat()
 !.....Check Y0..........................................................
-      call check_Y0(nv)
+!      call check_Y0(nv)
 !.....Check XnMat.......................................................
       call check_XnMat(nv)
 !.....Check V0..........................................................
-      call check_V0(nv)
+      call check_V0(nv,c0)
 
       end program
 

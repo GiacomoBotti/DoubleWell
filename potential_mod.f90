@@ -39,6 +39,8 @@
        end do
 
        Vmat = 0.5d0*Vharm + 0.5d0*gamma_const*Vcoupl
+
+       write(*,*) "Matrix potential generated"
  
       end subroutine
 

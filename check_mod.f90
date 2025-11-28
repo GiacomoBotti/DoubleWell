@@ -8,6 +8,7 @@
       use potential_module
       use basisset_module
       use integrals_module
+      use effectivepot_module
 
       implicit none
 
@@ -283,14 +284,16 @@
 
 !.....Check V0..........................................................
 
-      subroutine check_V0(nd)
+      subroutine check_V0(nd,cvec)
       ! nd: dimensions of the bath 
        integer, intent(in) :: nd
+       complex*16, dimension(nh),intent(in) :: cvec
 
        integer :: i,j
        real*8 :: Nsq
        real*8, dimension(nd+1,nd+1) :: Bmat,RndMat
        real*8 :: harvest
+       real*8 :: V0 
 
        do i = 1,nd+1
           call RANDOM_NUMBER(harvest)
@@ -305,7 +308,7 @@
        do i = 1,nd+1
           Bmat(i,i) = i
           do j = i+1,nd+1
-             Bmat(i,j) = j
+             Bmat(i,j) = j/20.d0 !Gershgoring circle theorem
              Bmat(j,i) = Bmat(i,j)
           end do
        end do
@@ -328,6 +331,11 @@
        write(*,*) "------------------------------"
        Nsq = fun_Nsq(nd+1,Bmat)
        write(*,*) "N squared: ", Nsq
+
+       write(*,*) "------------------------------"
+       V0 = fun_V0(nd,1.d0,cvec,Bmat)
+       write(*,*) "V0 ", V0
+       
 
       end subroutine
 

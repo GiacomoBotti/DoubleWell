@@ -35,16 +35,22 @@ The same goes for the Hermite polynomials basis set.
 
 ### TO DO
 - [ ] `Makefile` at Report
-- [ ] `check_module.f90` at Report
+- [ ] `constants.f90` at Report
 - [ ] `basisset_module.f90` at Report
+- [ ] `potential_module.f90` at Report
+- [ ] `matrix_module.f90` at Report
 - [ ] `integrals_module.f90` at Report
-- [ ] vector of coefficients
+- [ ] `effectivepot_module.f90` at Report
+- [ ] `check_module.f90` at Report
+- [ ] `main.f90` at Report
+- [x] vector of coefficients
 - [ ] $[ V_{0}]_{ij}$
-   - [ ] $<V_{x}>$ portion
+   - [x] $<V_{x}>$ portion
       - [x] $N^{2}$
       - [x] Coefficient Vector
-      - [ ] $\mathbf{c}^{T} X^{(0)} \mathbf{c}$
-      - [ ] compute 
+      - [x] $\mathbf{c}^{T} X^{(0)} \mathbf{c}$
+      - [x] compute 
+      - [x] Test with MAPLE
    - [ ] $<V_{xy}>$ portion 
       - [ ] $\mathbb{A}^{-1}$
       - [ ] $\mathbb{A}^{-1} \mathbf{a}$

@@ -41,6 +41,8 @@
          end do
        end do
 
+       write(*,*) "Matrix of the Hermite coefficients generated"
+
       end subroutine
 
 !.....Hermite Polynomial................................................

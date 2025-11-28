@@ -131,11 +131,11 @@
        call diagonalization(ndim,Bmat,DiagMat,Tmat)
         
        Bdet=DiagMat(1,1)
-       write(*,*) DiagMat(1,:)
+!       write(*,*) DiagMat(1,:)
 
        do i = 2,ndim
          Bdet = Bdet*DiagMat(i,i)
-       write(*,*) DiagMat(i,:)
+!       write(*,*) DiagMat(i,:)
        end do
   
       end function
