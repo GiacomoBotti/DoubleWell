@@ -7,7 +7,7 @@
       implicit none
 
       private
-      public :: inv2D,invgen,linsys
+      public :: inv2D,invgen,linsys,invgen_real
 
       contains
 
@@ -36,7 +36,7 @@
 
       end function
 
-!.....Inversion for a general matrix....................................
+!.....Inversion for a general COMPLEX matrix............................
 ! Returns the inverse of a matrix calculated by finding the LU
 ! decomposition.  Depends on LAPACK.
       function invgen(npar,A) result(Ainv)
@@ -118,4 +118,45 @@
           stop 'Linsys Matrix inversion failed!'
         end if
       end function 
+
+!.....Inversion for a general REAL matrix..............................
+! Returns the inverse of a matrix calculated by finding the LU
+! decomposition.  Depends on LAPACK.
+      function invgen_real(npar,A) result(Ainv)
+        implicit none
+        integer, intent(in) :: npar
+        real*8, dimension(npar,npar), intent(in) :: A
+        real*8, dimension(npar,npar) :: Ainv
+
+        real*8, dimension(npar) :: work  ! work array for LAPACK
+        integer, dimension(npar) :: ipiv   ! pivot indices
+        integer :: n, info
+
+        ! External procedures defined in LAPACK
+        external DGETRF
+        external DGETRI
+
+        ! Store A in Ainv to prevent it from being overwritten by LAPACK
+        Ainv = A
+        n = npar
+
+        ! DGETRF computes an LU factorization of a general M-by-N matrix A
+        ! using partial pivoting with row interchanges.
+        call DGETRF(n, n, Ainv, n, ipiv, info)
+
+        if (info /= 0) then
+          !write(*,*) "DGETRF info : ",info
+          stop 'Invgen_real Matrix is numerically singular!'
+        end if
+
+        ! DGETRI computes the inverse of a matrix using the LU factorization
+        ! computed by DGETRF.
+        call DGETRI(n, Ainv, n, ipiv, work, n, info)
+
+        if (info /= 0) then
+          !write(*,*) "DGETRI info : ",info
+          stop 'Invgen_real Matrix inversion failed!'
+        end if
+      end function 
+
       end module

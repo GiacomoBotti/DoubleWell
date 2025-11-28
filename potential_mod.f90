@@ -7,7 +7,7 @@
 
       implicit none
 
-      real*8, parameter  :: gamma_const = 0.25d0
+      real*8, parameter,public  :: gamma_const = 0.25d0
       real*8, parameter,public  :: eta_const = 0.25d0
   
       ! Bath potential matrix dimensions

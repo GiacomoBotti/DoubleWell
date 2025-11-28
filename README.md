@@ -52,9 +52,12 @@ The same goes for the Hermite polynomials basis set.
       - [x] compute 
       - [x] Test with MAPLE
    - [ ] $<V_{xy}>$ portion 
-      - [ ] $\mathbb{A}^{-1}$
-      - [ ] $\mathbb{A}^{-1} \mathbf{a}$
-      - [ ] compute 
+      - [x] $\mathbb{A}^{-1}$
+      - [ ] Check w/ MAPLE
+      - [x] $\mathbb{A}^{-1} \mathbf{a}$
+      - [ ] Check w/ MAPLE
+      - [x] compute 
+      - [ ] Check w/ MAPLE
    - [ ] $<V_{y}>$ portion
       - [ ] update $\mathbf{u}^{T} \mathbb{W} \mathbf{u}$
       - [ ] update $\mathbf{q}^{T} \mathbb{V} \mathbf{q}$

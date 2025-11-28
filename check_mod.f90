@@ -291,19 +291,10 @@
 
        integer :: i,j
        real*8 :: Nsq
+       real*8, dimension(nd+1) :: qtot 
        real*8, dimension(nd+1,nd+1) :: Bmat,RndMat
        real*8 :: harvest
        real*8 :: V0 
-
-       do i = 1,nd+1
-          call RANDOM_NUMBER(harvest)
-          RndMat(i,i) = harvest
-          do j = i+1,nd+1
-             call RANDOM_NUMBER(harvest)
-             RndMat(i,j) = harvest
-             RndMat(j,i) = RndMat(i,j)
-          end do
-       end do
 
        do i = 1,nd+1
           Bmat(i,i) = i
@@ -313,11 +304,10 @@
           end do
        end do
 
-       !Bmat(:,:) = 0.1d0
-       !Bmat(1,:) = 0.0d0
-       !Bmat(:,1) = 0.0d0
-       !Bmat(1,1) = 1.d0
-       !Bmat=RndMat
+       qtot(1) = 1.d0
+       qtot(2) = 2.d0
+       qtot(3:nd+1) = 10000.d0 !This way I know if something is wrong
+
 
        write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_V0"
@@ -333,7 +323,7 @@
        write(*,*) "N squared: ", Nsq
 
        write(*,*) "------------------------------"
-       V0 = fun_V0(nd,1.d0,cvec,Bmat)
+       V0 = fun_V0(nd,qtot,cvec,Bmat)
        write(*,*) "V0 ", V0
        
 
