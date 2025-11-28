@@ -9,7 +9,7 @@
 
       integer,public :: maxorder = 8
       private
-      public :: diagonalization,momenta,extractA
+      public :: diagonalization,momenta,extractA,determinant
 
       contains
 
@@ -22,7 +22,7 @@
       ! Tmat: eigenvector matrix
 
        integer, intent(in) :: nd
-       complex*16, dimension(nd,nd), intent(in) :: Amat
+       real*8, dimension(nd,nd), intent(in) :: Amat
  
        real*8, dimension(nd,nd), intent(out) :: LambdaMat,Tmat
 
@@ -115,4 +115,29 @@
 
       end subroutine
 
+!.....Determinant of a matrix...........................................
+ 
+      function determinant(ndim,Bmat) result(Bdet)
+      ! nd: dimension of the Bmat matrix CAREFUL!
+      ! Bmat: matrix
+      ! Bidet: I miss it
+       integer, intent(in) :: ndim
+       real*8, dimension(ndim,ndim), intent(out) :: Bmat
+
+       integer :: i
+       real*8 :: Bdet
+       real*8, dimension(ndim,ndim) :: DiagMat,Tmat 
+
+       call diagonalization(ndim,Bmat,DiagMat,Tmat)
+        
+       Bdet=DiagMat(1,1)
+       write(*,*) DiagMat(1,:)
+
+       do i = 2,ndim
+         Bdet = Bdet*DiagMat(i,i)
+       write(*,*) DiagMat(i,:)
+       end do
+  
+      end function
+           
       end module 

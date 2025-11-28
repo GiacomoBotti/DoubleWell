@@ -12,10 +12,21 @@
 
       implicit none
 
+      complex*16,dimension(nh) :: c0 !Initial coefficient vector
+
 ! TO BE SURE: GENERATE POTENTIAL MATRIX HERE
       call matrix_pot() 
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
+
+!.....Define initial conditions.........................................
+
+      do i = 1,nh
+        c0(i) = 1.d0/nh
+      end do
+
+    
+
 !.....Check Diagonalization.............................................
       call check_diagonalization(nv)
 !.....Check Momenta Matrix..............................................
@@ -28,8 +39,10 @@
       call check_hermmat()
 !.....Check Y0..........................................................
       call check_Y0(nv)
-!.....Check XnMat..........................................................
+!.....Check XnMat.......................................................
       call check_XnMat(nv)
+!.....Check V0..........................................................
+      call check_V0(nv)
 
       end program
 

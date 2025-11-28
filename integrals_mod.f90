@@ -6,6 +6,7 @@
 
        use constants
        use basisset_module
+       use matrix_module
 
        implicit none
 
@@ -14,7 +15,7 @@
        integer*8, parameter :: nstep=100
 
        private
-       public :: int_Y0,int_XnMat
+       public :: int_Y0,int_XnMat,fun_Nsq
 
        contains
 
@@ -125,6 +126,24 @@
  
         XnMat = integral
      
+       end function
+
+!......N^2 factor.......................................................
+
+       function fun_Nsq(ndim,Bmat) result(Nsq)
+       ! ndim: dimension of the Bmat
+       ! Bmat: fullD Gaussian width matrix (x & y)
+       ! Nsq: square of the normalization factor
+        integer, intent(in) :: ndim
+        real*8, dimension(ndim,ndim), intent(in) :: Bmat
+
+        real*8 :: Nsq,Bdet
+        real*8, dimension(ndim,ndim) :: Support
+
+        Support = Bmat
+        Bdet = determinant(ndim,Support)
+        Nsq = dsqrt(Bdet/(pi**ndim))
+
        end function
 
        end module

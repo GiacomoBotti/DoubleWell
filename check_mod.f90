@@ -19,9 +19,7 @@
 
        integer :: i,j,nd
        real*8 :: harvest
-       real*8, dimension(nd,nd) :: LambdaMat,Tmat,RndMat,RecMat
-
-       complex*16, dimension(nd,nd) :: Amat
+       real*8, dimension(nd,nd) :: LambdaMat,Tmat,RndMat,RecMat,Amat
 
        do i = 1,nd
           call RANDOM_NUMBER(harvest)
@@ -41,7 +39,7 @@
           write(*,*) RndMat(i,:)
        end do
 
-       Amat = cmplx(RndMat) 
+       Amat = RndMat 
  
        call diagonalization(nd,Amat,LambdaMat,Tmat)
 
@@ -231,7 +229,7 @@
 !.....Check XnMat.......................................................
 
       subroutine check_XnMat(nd)
-      !nd: dimensions of the matrix
+      !nd: dimensions of the bath matrix
        integer, intent(in) :: nd
 
        integer :: i,j
@@ -282,6 +280,58 @@
        end do
 
       end subroutine
+
+!.....Check V0..........................................................
+
+      subroutine check_V0(nd)
+      ! nd: dimensions of the bath 
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: Nsq
+       real*8, dimension(nd+1,nd+1) :: Bmat,RndMat
+       real*8 :: harvest
+
+       do i = 1,nd+1
+          call RANDOM_NUMBER(harvest)
+          RndMat(i,i) = harvest
+          do j = i+1,nd+1
+             call RANDOM_NUMBER(harvest)
+             RndMat(i,j) = harvest
+             RndMat(j,i) = RndMat(i,j)
+          end do
+       end do
+
+       do i = 1,nd+1
+          Bmat(i,i) = i
+          do j = i+1,nd+1
+             Bmat(i,j) = j
+             Bmat(j,i) = Bmat(i,j)
+          end do
+       end do
+
+       !Bmat(:,:) = 0.1d0
+       !Bmat(1,:) = 0.0d0
+       !Bmat(:,1) = 0.0d0
+       !Bmat(1,1) = 1.d0
+       !Bmat=RndMat
+
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+       write(*,*) "# HELLO I'M CHECK_V0"
+       write(*,*) "B matrix"
+     
+       do i = 1,nd+1
+       
+          write(*,*) Bmat(i,:)
+       end do
+
+       write(*,*) "------------------------------"
+       Nsq = fun_Nsq(nd+1,Bmat)
+       write(*,*) "N squared: ", Nsq
+
+      end subroutine
+
+        
 
 
       end module

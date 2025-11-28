@@ -40,6 +40,23 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `integrals_module.f90` at Report
 - [ ] vector of coefficients
 - [ ] $[ V_{0}]_{ij}$
+   - [ ] $<V_{x}>$ portion
+      - [x] $N^{2}$
+      - [x] Coefficient Vector
+      - [ ] $\mathbf{c}^{T} X^{(0)} \mathbf{c}$
+      - [ ] compute 
+   - [ ] $<V_{xy}>$ portion 
+      - [ ] $\mathbb{A}^{-1}$
+      - [ ] $\mathbb{A}^{-1} \mathbf{a}$
+      - [ ] compute 
+   - [ ] $<V_{y}>$ portion
+      - [ ] update $\mathbf{u}^{T} \mathbb{W} \mathbf{u}$
+      - [ ] update $\mathbf{q}^{T} \mathbb{V} \mathbf{q}$
+      - [ ] compute $\mathbb{V} \mathbb{A}^{-1} \mathbf{a}$
+      - [ ] compute $(\mathbb{A}^{-1} \mathbf{a})^{T} \mathbb{V} \mathbb{A}^{-1} \mathbf{a}$
+      - [ ] compute $\mathbf{q}^{T} \mathbb{V} \mathbb{A}^{-1} \mathbf{a}$
+      - [ ] compute 
+   - [ ] compute
 - [ ] $[ \mathbf{V}_{1}]_{ij}$
 - [ ] $[ \mathbb{V}_{2}]_{ij}$
 - [ ] Equations of motion
