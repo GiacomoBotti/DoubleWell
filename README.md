@@ -43,10 +43,14 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `effectivepot_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
-- [x] $[ \mathbf{V}_{1}]_{ij}$
-- [ ] $[ \mathbb{V}_{2}]_{ij}$
-- [ ] Equations of motion
-- [ ] $\mathbb{H}^{(00)}$, $\mathbb{S}^{(00)}$
+- [ ] Masses Matrix
+- [ ] Equations of motion in subroutine
+- [ ] $\mathbb{S}^{(00)}$
+- [ ] Adapt `normalization`
+- [ ] Adapt `total_normalization`
+- [ ] Minimal test: No hermite?
+- [ ] Adapt `bot_evo`
+- [ ] $\mathbb{H}^{(00)}$
 
 ### DONE
 
@@ -94,6 +98,8 @@ The same goes for the Hermite polynomials basis set.
          - [x] check?
       - [x] compute 
    - [x] compute
+- [x] $[ \mathbf{V}_{1}]_{ij}$
+- [x] $[ \mathbb{V}_{2}]_{ij}$
 
 ## OLD FRAMEWORK (TWO HERMITE)
 

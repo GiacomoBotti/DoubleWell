@@ -292,7 +292,7 @@
        integer :: i,j
        real*8 :: Nsq
        real*8, dimension(nd+1) :: qtot, V1
-       real*8, dimension(nd+1,nd+1) :: Bmat,RndMat
+       real*8, dimension(nd+1,nd+1) :: Bmat,RndMat,V2
        real*8 :: harvest
        real*8 :: V0 
 
@@ -330,6 +330,13 @@
        V1 = fun_V1(nd,qtot,cvec,Bmat)
        write(*,*) "V1: "
        write(*,*) V1
+
+       write(*,*) "------------------------------"
+       V2 = fun_V2(nd,qtot,cvec,Bmat)
+       write(*,*) "V2: "
+       do i = 1,nd+1
+         write(*,*) V2(i,:)
+       end do
 
       end subroutine
 
