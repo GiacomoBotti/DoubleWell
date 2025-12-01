@@ -43,7 +43,7 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `effectivepot_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
-- [ ] $[ \mathbf{V}_{1}]_{ij}$
+- [x] $[ \mathbf{V}_{1}]_{ij}$
 - [ ] $[ \mathbb{V}_{2}]_{ij}$
 - [ ] Equations of motion
 - [ ] $\mathbb{H}^{(00)}$, $\mathbb{S}^{(00)}$
