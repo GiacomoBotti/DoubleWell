@@ -81,7 +81,7 @@
        do i = 1,nd
           do j = 1,maxorder,2
              MomMat(j,i) = 0.d0
-             MomMat(j+1,i) = momcoeff(j+1)/(2*LambdaMat(i,i))**(j+1) 
+             MomMat(j+1,i) = momcoeff(j+1)/(2*LambdaMat(i,i))**((j+1)/2) 
           end do
        end do      
  

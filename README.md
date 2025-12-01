@@ -43,29 +43,6 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `effectivepot_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
-- [x] vector of coefficients
-- [ ] $[ V_{0}]_{ij}$
-   - [x] $<V_{x}>$ portion
-      - [x] $N^{2}$
-      - [x] Coefficient Vector
-      - [x] $\mathbf{c}^{T} X^{(0)} \mathbf{c}$
-      - [x] compute 
-      - [x] Test with MAPLE
-   - [ ] $<V_{xy}>$ portion 
-      - [x] $\mathbb{A}^{-1}$
-      - [ ] Check w/ MAPLE
-      - [x] $\mathbb{A}^{-1} \mathbf{a}$
-      - [ ] Check w/ MAPLE
-      - [x] compute 
-      - [ ] Check w/ MAPLE
-   - [ ] $<V_{y}>$ portion
-      - [ ] update $\mathbf{u}^{T} \mathbb{W} \mathbf{u}$
-      - [ ] update $\mathbf{q}^{T} \mathbb{V} \mathbf{q}$
-      - [ ] compute $\mathbb{V} \mathbb{A}^{-1} \mathbf{a}$
-      - [ ] compute $(\mathbb{A}^{-1} \mathbf{a})^{T} \mathbb{V} \mathbb{A}^{-1} \mathbf{a}$
-      - [ ] compute $\mathbf{q}^{T} \mathbb{V} \mathbb{A}^{-1} \mathbf{a}$
-      - [ ] compute 
-   - [ ] compute
 - [ ] $[ \mathbf{V}_{1}]_{ij}$
 - [ ] $[ \mathbb{V}_{2}]_{ij}$
 - [ ] Equations of motion
@@ -89,6 +66,34 @@ The same goes for the Hermite polynomials basis set.
    - [x] check with MAPLE
    - [x] Xn 
    - [x] check with MAPLE
+- [x] vector of coefficients
+- [x] $[ V_{0}]_{ij}$
+   - [x] $<V_{x}>$ portion
+      - [x] $N^{2}$
+      - [x] Coefficient Vector
+      - [x] $\mathbf{c}^{T} X^{(0)} \mathbf{c}$
+      - [x] compute 
+      - [x] Test with MAPLE
+   - [x] $<V_{xy}>$ portion 
+      - [x] $\mathbb{A}^{-1}$
+      - [x] Check w/ $\mathbb{A}^{-1}\mathbb{A} = \mathbb{I}$ 
+      - [x] $\mathbb{A}^{-1} \mathbf{a}$
+      - [x] Check $\mathbb{A}\mathbb{A}^{-1} \mathbf{a} =\mathbf{a}$
+      - [x] compute 
+      - [x] Check w/ MAPLE
+   - [ ] $<V_{y}>$ portion
+      - [x] update $\mathbf{u}^{T} \mathbb{W} \mathbf{u}$
+         - [x] check?
+      - [x] update $\mathbf{q}^{T} \mathbb{V} \mathbf{q}$
+         - [x] check?
+      - [x] compute $\mathbb{V} \mathbb{A}^{-1} \mathbf{a}$
+         - [x] check?
+      - [x] compute $(\mathbb{A}^{-1} \mathbf{a})^{T} \mathbb{V} \mathbb{A}^{-1} \mathbf{a}$
+         - [x] check?
+      - [x] compute $\mathbf{q}^{T} \mathbb{V} \mathbb{A}^{-1} \mathbf{a}$
+         - [x] check?
+      - [x] compute 
+   - [x] compute
 
 ## OLD FRAMEWORK (TWO HERMITE)
 
