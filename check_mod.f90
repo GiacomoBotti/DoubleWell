@@ -8,6 +8,7 @@
       use potential_module
       use basisset_module
       use integrals_module
+      use effectivepot_module
 
       implicit none
 
@@ -19,9 +20,7 @@
 
        integer :: i,j,nd
        real*8 :: harvest
-       real*8, dimension(nd,nd) :: LambdaMat,Tmat,RndMat,RecMat
-
-       complex*16, dimension(nd,nd) :: Amat
+       real*8, dimension(nd,nd) :: LambdaMat,Tmat,RndMat,RecMat,Amat
 
        do i = 1,nd
           call RANDOM_NUMBER(harvest)
@@ -41,7 +40,7 @@
           write(*,*) RndMat(i,:)
        end do
 
-       Amat = cmplx(RndMat) 
+       Amat = RndMat 
  
        call diagonalization(nd,Amat,LambdaMat,Tmat)
 
@@ -231,7 +230,7 @@
 !.....Check XnMat.......................................................
 
       subroutine check_XnMat(nd)
-      !nd: dimensions of the matrix
+      !nd: dimensions of the bath matrix
        integer, intent(in) :: nd
 
        integer :: i,j
@@ -282,6 +281,66 @@
        end do
 
       end subroutine
+
+!.....Check V0..........................................................
+
+      subroutine check_V0(nd,cvec)
+      ! nd: dimensions of the bath 
+       integer, intent(in) :: nd
+       complex*16, dimension(nh),intent(in) :: cvec
+
+       integer :: i,j
+       real*8 :: Nsq
+       real*8, dimension(nd+1) :: qtot, V1
+       real*8, dimension(nd+1,nd+1) :: Bmat,RndMat,V2
+       real*8 :: harvest
+       real*8 :: V0 
+
+       do i = 1,nd+1
+          Bmat(i,i) = i
+          do j = i+1,nd+1
+             Bmat(i,j) = j/20.d0 !Gershgoring circle theorem
+             Bmat(j,i) = Bmat(i,j)
+          end do
+       end do
+
+       qtot(1) = 1.d0
+       qtot(2) = 2.d0
+       qtot(3:nd+1) = 10000.d0 !This way I know if something is wrong
+
+
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+       write(*,*) "# HELLO I'M CHECK_V0"
+       write(*,*) "B matrix"
+     
+       do i = 1,nd+1
+       
+          write(*,*) Bmat(i,:)
+       end do
+
+       write(*,*) "------------------------------"
+       Nsq = fun_Nsq(nd+1,Bmat)
+       write(*,*) "N squared: ", Nsq
+
+       write(*,*) "------------------------------"
+       V0 = fun_V0(nd,qtot,cvec,Bmat)
+       write(*,*) "V0 ", V0
+       
+       write(*,*) "------------------------------"
+       V1 = fun_V1(nd,qtot,cvec,Bmat)
+       write(*,*) "V1: "
+       write(*,*) V1
+
+       write(*,*) "------------------------------"
+       V2 = fun_V2(nd,qtot,cvec,Bmat)
+       write(*,*) "V2: "
+       do i = 1,nd+1
+         write(*,*) V2(i,:)
+       end do
+
+      end subroutine
+
+        
 
 
       end module

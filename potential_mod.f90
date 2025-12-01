@@ -7,7 +7,7 @@
 
       implicit none
 
-      real*8, parameter  :: gamma_const = 0.25d0
+      real*8, parameter,public  :: gamma_const = 0.25d0
       real*8, parameter,public  :: eta_const = 0.25d0
   
       ! Bath potential matrix dimensions
@@ -39,6 +39,8 @@
        end do
 
        Vmat = 0.5d0*Vharm + 0.5d0*gamma_const*Vcoupl
+
+       write(*,*) "Matrix potential generated"
  
       end subroutine
 

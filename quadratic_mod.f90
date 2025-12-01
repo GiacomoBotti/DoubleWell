@@ -53,6 +53,14 @@
        W1 = matmul(Vmat,Tmat)
        W2 = matmul(transpose(Tmat),W1)
 
+!       write(*,*) "W Matrix"
+!       do i = 1,nd
+!         write(*,*) W2(i,:)
+!       end do
+
+!       write(*,*) "W Determinant"
+!       write(*,*) determinant(nd,W2) 
+
        uWu=0.d0
 
        do i = 1,nd
