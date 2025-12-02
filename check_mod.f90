@@ -377,6 +377,26 @@
        write(*,*) "Norm at q = ", 1.d0
        write(*,*) Nout
 
+       Nout = normalization(nd,2.d0,cvec,Bmat)
+
+       write(*,*) "Norm at q = ", 2.d0
+       write(*,*) Nout
+
+       Nout = normalization(nd,3.d0,cvec,Bmat)
+
+       write(*,*) "Norm at q = ", 3.d0
+       write(*,*) Nout
+
+       Nout = normalization(nd,4.d0,cvec,Bmat)
+
+       write(*,*) "Norm at q = ", 4.d0
+       write(*,*) Nout
+
+       Nout = normalization(nd,5.d0,cvec,Bmat)
+
+       write(*,*) "Norm at q = ", 5.d0
+       write(*,*) Nout
+
       end subroutine
 
 

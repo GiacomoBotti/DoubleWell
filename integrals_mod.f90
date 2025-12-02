@@ -7,6 +7,7 @@
        use constants
        use basisset_module
        use matrix_module
+       use inversion_module
 
        implicit none
 
@@ -94,29 +95,29 @@
         integral(:,:) = 0.d0
         ! Lower bound
         x = lwb
-        Gx=fun_Gx(nd,a,avec,Amat,x,q)
+        Gx=fun_Gx2(nd,a,avec,Amat,x,q)
         Hmat=fun_Hmat(x,q)
         integral=Gx*Hmat*x**pow
         ! Higher bound
         x = hgb
-        Gx=fun_Gx(nd,a,avec,Amat,x,q)
+        Gx=fun_Gx2(nd,a,avec,Amat,x,q)
         Hmat=fun_Hmat(x,q)
         integral=integral+Gx*Hmat*x**pow
         ! First step
         x = lwb+h
-        Gx=fun_Gx(nd,a,avec,Amat,x,q)
+        Gx=fun_Gx2(nd,a,avec,Amat,x,q)
         Hmat=fun_Hmat(x,q)
         integral=integral+Gx*Hmat*x**pow
 
         s(:,:) = 0.d0
         do i = 2, nstep-2, 2 !only even
            x = lwb + i*h
-           Gx=fun_Gx(nd,a,avec,Amat,x,q)
+           Gx=fun_Gx2(nd,a,avec,Amat,x,q)
            Hmat=fun_Hmat(x,q)
            integrand = Gx*Hmat*x**pow 
            s = s + 2.d0*integrand ! even
            x = x + h
-           Gx=fun_Gx(nd,a,avec,Amat,x,q)
+           Gx=fun_Gx2(nd,a,avec,Amat,x,q)
            Hmat=fun_Hmat(x,q)
            integrand = Gx*Hmat*x**pow
            s = s + 4.d0*integrand ! odd
@@ -146,5 +147,40 @@
 
        end function
 
+!......Gx function......................................................
+
+       function fun_Gx2(nd,a,avec,Amat,x,q) result(Gx)
+       ! nd: dimension of y
+       ! a: x gaussian width
+       ! avec: xy gaussian width vector
+       ! Amat: y gaussian width matrix
+       ! x: x coordinate value
+       ! q: x variational parameter
+       ! Gx: Gx(x-q)
+        integer, intent(in) :: nd
+        real*8, intent(in) :: a,x,q
+        real*8, dimension(nd), intent(in) :: avec
+        real*8, dimension(nd,nd), intent(in) :: Amat
+
+        integer :: i
+        real*8 :: Gx,aLa
+        real*8, dimension(nd) :: vec1 
+        real*8, dimension(nd,nd) :: LambdaMat,Tmat,invLambda
+
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+        
+        invLambda(:,:) = 0.d0
+
+        do i = 1,nd
+          invLambda(i,i) = 1.d0/LambdaMat(i,i)
+        end do
+
+        vec1=matmul(invLambda,avec)
+
+        aLa=dot_product(avec,vec1)
+
+        Gx=dexp(-(a-aLa)*(x-q)**2)
+
+       end function
        end module
      

@@ -45,10 +45,13 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `eofmotion_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
-- [ ] Masses Matrix
+- [x] Masses Matrix
 - [x] Equations of motion in subroutine
 - [x] $\mathbb{S}^{(00)}$
 - [x] Adapt `normalization`
+- [ ] URGENT: check `fun_Gx2`
+- [ ] URGENT: turn `fun_Gx2` into `fun_Gx`
+- [ ] URGENT: correct all the integrals
 - [ ] Adapt `total_normalization`
 - [ ] Adapt `bot_evo`
 - [ ] Minimal test: No hermite?
