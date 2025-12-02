@@ -40,16 +40,18 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `potential_module.f90` at Report
 - [ ] `matrix_module.f90` at Report
 - [ ] `integrals_module.f90` at Report
+- [ ] `normalization_module.f90` at Report
 - [ ] `effectivepot_module.f90` at Report
+- [ ] `eofmotion_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
 - [ ] Masses Matrix
-- [ ] Equations of motion in subroutine
-- [ ] $\mathbb{S}^{(00)}$
-- [ ] Adapt `normalization`
+- [x] Equations of motion in subroutine
+- [x] $\mathbb{S}^{(00)}$
+- [x] Adapt `normalization`
 - [ ] Adapt `total_normalization`
-- [ ] Minimal test: No hermite?
 - [ ] Adapt `bot_evo`
+- [ ] Minimal test: No hermite?
 - [ ] $\mathbb{H}^{(00)}$
 
 ### DONE

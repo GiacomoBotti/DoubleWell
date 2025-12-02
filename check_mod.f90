@@ -9,6 +9,7 @@
       use basisset_module
       use integrals_module
       use effectivepot_module
+      use normalization_module
 
       implicit none
 
@@ -286,13 +287,14 @@
 
       subroutine check_V0(nd,cvec)
       ! nd: dimensions of the bath 
+      ! cvec: vector of the coefficients
        integer, intent(in) :: nd
        complex*16, dimension(nh),intent(in) :: cvec
 
        integer :: i,j
        real*8 :: Nsq
        real*8, dimension(nd+1) :: qtot, V1
-       real*8, dimension(nd+1,nd+1) :: Bmat,RndMat,V2
+       real*8, dimension(nd+1,nd+1) :: Bmat,V2
        real*8 :: harvest
        real*8 :: V0 
 
@@ -340,7 +342,42 @@
 
       end subroutine
 
-        
+!.....Check Normalization...............................................
+
+      subroutine check_norm(nd,cvec)
+      ! nd: bath dimensions
+      ! cvec: vector of the coefficients
+       integer :: nd
+       complex*16, dimension(nh),intent(in) :: cvec
+
+       integer :: i,j
+       real*8 :: Nout
+       real*8, dimension(nd+1,nd+1) :: Bmat
+
+       do i = 1,nd+1
+          Bmat(i,i) = i
+          do j = i+1,nd+1
+             Bmat(i,j) = j/20.d0 !Gershgoring circle theorem
+             Bmat(j,i) = Bmat(i,j)
+          end do
+       end do
+
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+       write(*,*) "# HELLO I'M CHECK_NORM"
+       write(*,*) "B matrix"
+     
+       do i = 1,nd+1
+          write(*,*) Bmat(i,:)
+       end do
+
+       write(*,*) "------------------------------"
+
+       Nout = normalization(nd,1.d0,cvec,Bmat)
+
+       write(*,*) "Norm at q = ", 1.d0
+       write(*,*) Nout
+
+      end subroutine
 
 
       end module
