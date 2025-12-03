@@ -3,134 +3,56 @@
 ! analytical and numerical                                             !
 !**********************************************************************!
 
-       module normalization_module
+      module normalization_module
 
-       use overlap_module
-       use smatrix_module
-       use integral_module
+      use integrals_module
+      use basisset_module
+      use matrix_module
 
+      implicit none
+      private
+      public :: normalization
+
+      contains
+
+!.....Normalization.....................................................
+
+      function normalization(nd,q,cvec,Bmat) result(Nout)
+      ! nd: dimension of the bath
+      ! q: center of the well gaussian
+      ! cvec: vector of the coefficients
+      ! work: work array for I/O
        implicit none
-       private
-       public :: normalization,normnum,normnumtot
+       integer, intent(in) :: nd
+       real*8, intent(in) :: q
+       complex*16, dimension(nh), intent(in) :: cvec
+       real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
 
-       contains
+       real*8 :: Nout
 
-!......Analitical Total Normalization...................................
+       integer :: i,j
+       real*8 :: Nsq,Y0,cX0c,a,qq
+       real*8, dimension(nh) :: X0c
+       real*8, dimension(nd) :: avec
+       real*8, dimension(nh,nh) :: X0Mat
+       real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
 
-       function normalization(nd,npar,y,work) result(Nout)
-       ! nd: basis set dimension
-       ! npar: parameter space dimension
-       ! y: runge-kutta function - [parameters - coefficients]
-       ! work: work array for I/O
-         implicit none
-         integer*8, intent(in) :: nd,npar
-         complex*16, dimension(npar+nd), intent(in) :: y
-         real*8, dimension(4), intent(in) :: work
+       qq=q
 
-         integer*8 :: i,j
-         real*8 :: q,p,a,alpha,xi,zeta,Nout
-         complex*16, dimension(nd) :: c, Sc
-         complex*16, dimension(nd,nd) :: S00M
+       Nsq=fun_Nsq(nd+1,Bmat)
 
-         ! extract work
-         a = work(1)
-         alpha = work(2)
-         xi = work(3)
-         zeta = work(4)
+       call extractA(nd,Bmat,Amat,avec,a)
+       call diagonalization(nd,Amat,LambdaMat,Tmat)
+     
+       Y0=int_Y0(nd,LambdaMat)
 
-         ! extract y
-         q = dreal(y(1))
-         p = dreal(y(2))
-         c(:) = y(npar+1:npar+nd)
+       X0Mat=int_XnMat(nd,0,a,avec,Amat,qq)
+       X0c=matmul(X0Mat,cvec)
+       cX0c=dot_product(cvec,X0c)
 
-         S00M = S00maple(alpha,q,p,xi,zeta)
-   
-         Sc = matmul(S00M,c)
-         Nout = dreal(dot_product(c,Sc))
-         
-       end function
+       Nout = Nsq*Y0*cX0c
 
-!......Numerical Electronic Normalization...............................
-
-       function normnum(nd,npar,y,work) result(Nout)
-       ! nd: basis set dimension
-       ! npar: parameter space dimension
-       ! y: runge-kutta function - [parameters - coefficients]
-       ! work: work array for I/O
-         implicit none
-         integer*8, intent(in) :: nd,npar
-         complex*16, dimension(npar+nd), intent(in) :: y
-         real*8, dimension(4), intent(in) :: work
-
-         integer*8 :: i,j
-         real*8 :: q,p,a,alpha,xi,zeta,Nout
-         !real*8, dimension(nd) :: vecxi,veczeta
-         !real*8, dimension(nd) :: veczeta
-         complex*16, dimension(nd) :: c,Sc 
-         complex*16, dimension(nd,nd) :: S00mat
-
-         ! extract work
-         a = work(1)
-         alpha = work(2)
-         xi = work(3)
-         zeta = work(4)
-
-         ! extract y
-         q = dreal(y(1))
-         p = dreal(y(2))
-         c(:) = y(npar+1:npar+nd)
-         
-         ! build vecxi and veczeta
-         !vecxi(1) = xi
-         !vecxi(2) = -1.d0*xi
-         !veczeta(1) = zeta
-         !veczeta(2) = -1.d0*zeta
-         
-         S00mat = S00(nd,q,p,alpha,vecxi,veczeta)
+      end function
  
-         Sc = matmul(S00mat,c)
-         Nout = dreal(dot_product(c,Sc))
+      end module
 
-       end function
-
-!......Numerical Total Normalization....................................
-
-       function normnumtot(nd,npar,y,work) result(Nout)
-       ! nd: basis set dimension
-       ! npar: parameter space dimension
-       ! y: runge-kutta function - [parameters - coefficients]
-       ! work: work array for I/O
-         implicit none
-         integer*8, intent(in) :: nd,npar
-         complex*16, dimension(npar+nd), intent(in) :: y
-         real*8, dimension(4), intent(in) :: work
-
-         integer*8 :: i,j
-         real*8 :: q,p,a,alpha,xi,zeta,Nout,Nel,Nnucl
-         real*8,dimension(3) :: cond,nparam
-         complex*16, dimension(nd) :: c
-         complex*16, dimension(nd,nd) :: S00mat
-
-         ! extract work
-         a = work(1)
-         alpha = work(2)
-         xi = work(3)
-         zeta = work(4)
-
-         ! extract y
-         q = dreal(y(1))
-         p = dreal(y(2))
-         c(:) = y(npar+1:npar+nd)
-
-         Nel = normnum(nd,npar,y,work)
-
-         cond = [-10.d0,10.d0,1000.d0]
-         nparam = [a,q,p]
-
-         Nnucl = nbraket1D(nwfn,nwfn,cond,nparam)
- 
-         Nout = Nnucl*Nel
-
-       end function
-       
-       end module

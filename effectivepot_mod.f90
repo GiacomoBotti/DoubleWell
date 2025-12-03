@@ -187,6 +187,11 @@
        V1(2) = dy1V
        V1(3:nd+1) = V1prime(2:nd)
 
+!       write(*,*) "V1", V1(:)
+!       write(*,*) "Aa", Aa(:)
+!       write(*,*) "VAa", VAa(:)
+!       write(*,*) "Nsq", Nsq
+
       end function
 
 !.....EFFECTIVE POTENTIAL V2= <nabla otimes nabla V>....................
@@ -253,6 +258,11 @@
        V2(1,2) = gamma_const*Nsq*Y0*cX0c
        V2(2,1) = V2(1,2) 
        V2(2:nd+1,2:nd+1) = 2.d0*Nsq*Y0*cX0c*Vmat
+
+!       write(*,*) "V2"
+!       do i = 1,nd+1
+!          write(*,*) V2(i,:)
+!       end do
 
       end function
      
