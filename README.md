@@ -49,12 +49,10 @@ The same goes for the Hermite polynomials basis set.
 - [x] Equations of motion in subroutine
 - [x] $\mathbb{S}^{(00)}$
 - [x] Adapt `normalization`
-- [ ] URGENT: check `fun_Gx2`
-- [ ] URGENT: turn `fun_Gx2` into `fun_Gx`
-- [ ] URGENT: correct all the integrals
-- [ ] Adapt `total_normalization`
-- [ ] Adapt `bot_evo`
-- [ ] Minimal test: No hermite?
+- [x] Adapt `total_normalization`
+- [x] Adapt `bot_evo`
+- [x] Minimal test: No hermite?
+- [ ] Adapt `bot`
 - [ ] $\mathbb{H}^{(00)}$
 
 ### DONE

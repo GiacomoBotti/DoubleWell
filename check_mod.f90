@@ -371,31 +371,13 @@
        end do
 
        write(*,*) "------------------------------"
+  
+       do i = 1,10
+         Nout = normalization(nd,dfloat(i),cvec,Bmat)
 
-       Nout = normalization(nd,1.d0,cvec,Bmat)
-
-       write(*,*) "Norm at q = ", 1.d0
-       write(*,*) Nout
-
-       Nout = normalization(nd,2.d0,cvec,Bmat)
-
-       write(*,*) "Norm at q = ", 2.d0
-       write(*,*) Nout
-
-       Nout = normalization(nd,3.d0,cvec,Bmat)
-
-       write(*,*) "Norm at q = ", 3.d0
-       write(*,*) Nout
-
-       Nout = normalization(nd,4.d0,cvec,Bmat)
-
-       write(*,*) "Norm at q = ", 4.d0
-       write(*,*) Nout
-
-       Nout = normalization(nd,5.d0,cvec,Bmat)
-
-       write(*,*) "Norm at q = ", 5.d0
-       write(*,*) Nout
+         write(*,*) "Norm at q = ", dfloat(i)
+         write(*,*) Nout
+       end do
 
       end subroutine
 

@@ -14,7 +14,7 @@
       real*8, dimension(nv+1,nv+1), public :: invMassMat
 
       private
-      public :: MassesMat 
+      public :: MassesMat,KarplusTimeDer 
 
       contains
 
@@ -40,7 +40,7 @@
 
 !.....C&K equations of motion...........................................
 
-      subroutine KarplusTimeDer(nd,cvec,qtot,ptot,Bmat,dotq,dotp,dotB)
+      subroutine KarplusTimeDer(nd,cvec,qtot,ptot,Bcmplx,dotq,dotp,dotB)
       ! nd: dimension of bath
       ! cvec: vector of the basis coefficients
       ! qtot: gaussian center position vector (x&y)
@@ -52,13 +52,16 @@
        integer, intent(in) :: nd
        complex*16, dimension(nh), intent(in) :: cvec
        real*8, dimension(nd+1), intent(in) :: qtot,ptot
-       real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
+       complex*16, dimension(nd+1,nd+1), intent(in) :: Bcmplx
      
        real*8, dimension(nd+1), intent(out) :: dotq, dotp
        real*8, dimension(nd+1,nd+1), intent(out) :: dotB
 
        real*8, dimension(nd+1) :: V1
-       real*8, dimension(nd+1,nd+1) :: V2, MB
+       real*8, dimension(nd+1,nd+1) :: V2,Bmat
+       complex*16, dimension(nd+1,nd+1) :: MB
+ 
+       Bmat = dreal(Bcmplx)
  
        dotq = matmul(invMassMat,ptot)
 
@@ -66,8 +69,11 @@
        dotp = - V1
 
        V2 = fun_V2(nd,qtot,cvec,Bmat)
-       MB=matmul(invMassMat,Bmat)              
-       dotB = -2*matmul(Bmat,MB) - V2/2.d0
+       MB=matmul(invMassMat,Bcmplx)              
+!       dotB = -2*matmul(Bcmplx,MB) - V2/2.d0
+       dotB = -(0.d0,1.d0)*matmul(Bcmplx,MB) + (0.d0,1.d0)*V2
+
+       !write(*,*) dotq(1), dotp(1), dotB(1,1)
 
       end subroutine
 

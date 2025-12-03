@@ -10,12 +10,17 @@
       use basisset_module
       use eofmotion_module
       use check_module
+      use evolution_module
 
       implicit none
 
-      integer :: i
+      integer :: i,j
       real*8,dimension(nv+1) :: masses !Masses vector
+      real*8,dimension(nv+1) :: q0 !inital centers vector
+      real*8,dimension(nv+1) :: p0 !initial momenta vector
       complex*16,dimension(nh) :: c0 !Initial coefficient vector
+      complex*16,dimension(nv+1,nv+1) :: Bcmplx !Initial width matrix
+      integer*8,dimension(3) :: trj
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "|               MAIN CODE EXECUTION                 |"
@@ -39,7 +44,26 @@
         write(*,*) c0(i) 
       end do
 
+      q0(:)=0.d0
+      p0(:)=0.5d0
+
+      q0(1) = -1.d0
+      p0(1) = 0.5d0
+
       write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Initial Gaussian Width Matrix:"
+
+      do i = 1,nv+1
+         Bcmplx(i,i) = i
+         do j = i+1,nv+1
+            Bcmplx(i,j) = j/20.d0 !Gershgoring circle theorem
+            Bcmplx(j,i) = Bcmplx(i,j)
+         end do
+         write(*,*) Bcmplx(i,:)
+      end do
+
+
+      
 
 !.....Define masses vector..............................................
 
@@ -71,7 +95,20 @@
 !.....Check V0..........................................................
 !      call check_V0(nv,c0)
 !.....Check Norm........................................................
-      call check_norm(nv,c0)
+!      call check_norm(nv,c0)
+!.....Evolution.........................................................
+
+      write(*,*) "WE ARE RUNNING"
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Start       ", "Stop       ", "Lenght     "  
+      trj = [0,1,500]
+      write(*,*) trj
+
+      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
+
+      write(*,*) "End of a successful run"
+      write(*,*) "Have a nice day"
+      write(*,*) "+---------------------------------------------------+"
 
       end program
 

@@ -60,8 +60,11 @@
 
         real*8 :: Gx,aAa
         real*8, dimension(nd) :: vec1 
+        real*8, dimension(nd,nd) :: invA
 
-        vec1=matmul(Amat,avec)
+        invA=invgen_real(nd,Amat)
+
+        vec1=matmul(invA,avec)
 
         aAa=dot_product(avec,vec1)
 
@@ -95,29 +98,29 @@
         integral(:,:) = 0.d0
         ! Lower bound
         x = lwb
-        Gx=fun_Gx2(nd,a,avec,Amat,x,q)
+        Gx=fun_Gx(nd,a,avec,Amat,x,q)
         Hmat=fun_Hmat(x,q)
         integral=Gx*Hmat*x**pow
         ! Higher bound
         x = hgb
-        Gx=fun_Gx2(nd,a,avec,Amat,x,q)
+        Gx=fun_Gx(nd,a,avec,Amat,x,q)
         Hmat=fun_Hmat(x,q)
         integral=integral+Gx*Hmat*x**pow
         ! First step
         x = lwb+h
-        Gx=fun_Gx2(nd,a,avec,Amat,x,q)
+        Gx=fun_Gx(nd,a,avec,Amat,x,q)
         Hmat=fun_Hmat(x,q)
         integral=integral+Gx*Hmat*x**pow
 
         s(:,:) = 0.d0
         do i = 2, nstep-2, 2 !only even
            x = lwb + i*h
-           Gx=fun_Gx2(nd,a,avec,Amat,x,q)
+           Gx=fun_Gx(nd,a,avec,Amat,x,q)
            Hmat=fun_Hmat(x,q)
            integrand = Gx*Hmat*x**pow 
            s = s + 2.d0*integrand ! even
            x = x + h
-           Gx=fun_Gx2(nd,a,avec,Amat,x,q)
+           Gx=fun_Gx(nd,a,avec,Amat,x,q)
            Hmat=fun_Hmat(x,q)
            integrand = Gx*Hmat*x**pow
            s = s + 4.d0*integrand ! odd
@@ -126,6 +129,9 @@
         integral = (integral + s)*h/3.d0
  
         XnMat = integral
+
+!        write(*,*) "power:", pow
+!        write(*,*) "Xn11:", XnMat(1,1)
      
        end function
 
@@ -143,7 +149,9 @@
 
         Support = Bmat
         Bdet = determinant(ndim,Support)
+        !write(*,*) "Bdet", Bdet
         Nsq = dsqrt(Bdet/(pi**ndim))
+        !write(*,*) "Nsq", Nsq
 
        end function
 
