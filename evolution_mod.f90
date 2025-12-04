@@ -43,7 +43,7 @@
        complex*16,dimension(nh) :: cvec,cj 
 
        real*8,dimension(nd+1,4) :: kq,kp
-       real*8,dimension(nd+1,nd+1,4) :: kb
+       complex*16,dimension(nd+1,nd+1,4) :: kb
 
        ! trajectory parameters
        first = trj(1)
@@ -58,7 +58,7 @@
 
       write(*,*) "+---------------------------------------------------+"
        write(*,*) "Initial conditions"
-       write(*,*) "q","p"
+       write(*,*) "q          ","p"
        write(*,*) q,p
        do i = 1,nd
          write(*,*) qvec(i), pvec(i)
@@ -92,8 +92,8 @@
        N = normalization(nd,q,cvec,dreal(Bcmplx))
        E = 0.d0!energy(nd,npar,yj,work)
 
-       write(321,*) "#Time ","N","E","qtot","ptot","B(1,1)"
-       write(321,*) 0.d0, N, E, q0(:), p0(:), Bcmplx(1,1)
+       write(321,*) "#Time ","N","E","qtot","ptot","B(2,2)"
+       write(321,*) 0.d0, N, E, q0(:), p0(:), Bcmplx(2,2)
 
        write(322,*) "#Time ","Real c", "Immaginary c"
        write(322,*) 0.d0, dreal(c0), dimag(c0)
@@ -135,7 +135,7 @@
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
           E = 0.d0!energy(nd,npar,yj,work)
 
-          write(321,*) time, N, E, qtotj(:), ptotj(:), Bcmplxj(1,1)
+          write(321,*) time, N, E, qtotj(:), ptotj(:), Bcmplxj(2,2)
           write(322,*) time, dreal(cj), dimag(cj)
 
           qtoti = qtotj  
@@ -144,7 +144,7 @@
        end do
 
        write(*,*) "Last step:"
-       write(*,*) time, N, E, qtotj(:), ptotj(:), Bcmplxj(1,1)
+       write(*,*) time, N, E, qtotj(:), ptotj(:), Bcmplxj(2,2)
        write(*,*) time, dreal(cj), dimag(cj)
 
        close(321)

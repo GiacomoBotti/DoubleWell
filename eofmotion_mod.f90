@@ -55,11 +55,11 @@
        complex*16, dimension(nd+1,nd+1), intent(in) :: Bcmplx
      
        real*8, dimension(nd+1), intent(out) :: dotq, dotp
-       real*8, dimension(nd+1,nd+1), intent(out) :: dotB
+       complex*16, dimension(nd+1,nd+1), intent(out) :: dotB
 
        real*8, dimension(nd+1) :: V1
        real*8, dimension(nd+1,nd+1) :: V2,Bmat
-       complex*16, dimension(nd+1,nd+1) :: MB
+       complex*16, dimension(nd+1,nd+1) :: MB,prova
  
        Bmat = dreal(Bcmplx)
  
@@ -71,9 +71,10 @@
        V2 = fun_V2(nd,qtot,cvec,Bmat)
        MB=matmul(invMassMat,Bcmplx)              
 !       dotB = -2*matmul(Bcmplx,MB) - V2/2.d0
+       prova=matmul(Bcmplx,MB)
        dotB = -(0.d0,1.d0)*matmul(Bcmplx,MB) + (0.d0,1.d0)*V2
 
-       !write(*,*) dotq(1), dotp(1), dotB(1,1)
+!       write(*,*) dotB(1,1), V2(1,1), prova(1,1)
 
       end subroutine
 
