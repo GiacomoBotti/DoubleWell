@@ -53,7 +53,14 @@ The same goes for the Hermite polynomials basis set.
 - [x] Adapt `bot_evo`
 - [x] Minimal test: No hermite?
 - [ ] Adapt `bot`
+   - [ ] $\mathbb{T}(\tau,0)$ from S.G. docs
 - [ ] $\mathbb{H}^{(00)}$
+   - [ ] $\mathbb{T}^{(00)}$
+      - [ ] $d_{x} H_{i} d_{x} H_{j}$ integral
+      - [ ] $\partial_{x} \ln G d_{x} H_{i}$ integral
+      - [ ] $\vert \partial_{x} \ln G \vert^{2}$ integral
+      - [ ] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
+   
 
 ### DONE
 
