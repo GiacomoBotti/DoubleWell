@@ -40,6 +40,7 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `potential_module.f90` at Report
 - [ ] `matrix_module.f90` at Report
 - [ ] `integrals_module.f90` at Report
+- [ ] `kinetic_module.f90` at Report
 - [ ] `normalization_module.f90` at Report
 - [ ] `effectivepot_module.f90` at Report
 - [ ] `eofmotion_module.f90` at Report
@@ -56,7 +57,8 @@ The same goes for the Hermite polynomials basis set.
    - [ ] $\mathbb{T}(\tau,0)$ from S.G. docs
 - [ ] $\mathbb{H}^{(00)}$
    - [ ] $\mathbb{T}^{(00)}$
-      - [ ] $d_{x} H_{i} d_{x} H_{j}$ integral
+      - [x] $d_{x} H_{i} d_{x} H_{j}$ integral
+      - [ ] check $d_{x} H_{i} d_{x} H_{j}$ integral
       - [ ] $\partial_{x} \ln G d_{x} H_{i}$ integral
       - [ ] $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [ ] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
