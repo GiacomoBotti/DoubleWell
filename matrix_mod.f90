@@ -9,7 +9,7 @@
 
       integer,public :: maxorder = 8
       private
-      public :: diagonalization,momenta,extractA,determinant
+      public :: diagonalization,momenta,extractA,determinant,trace
 
       contains
 
@@ -167,5 +167,26 @@
        end do
 
       end subroutine
+
+!.....Compute the trace of a generic matrix.............................
+
+      function trace(nd,Mat) result(traceMat)
+      ! nd: matrix dimension
+      ! Mat: matrix
+      ! traceMat: trace of the matrix
+       integer, intent(in) :: nd
+       complex*16, dimension(nd,nd), intent(in) :: Mat
+
+       complex*16 :: traceMat
+
+       integer :: i
+
+       traceMat = (0.d0,0.d0)
+
+       do i=1,nd
+         traceMat = traceMat + Mat(i,i)
+       end do
+
+      end function
 
       end module 

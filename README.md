@@ -61,7 +61,7 @@ The same goes for the Hermite polynomials basis set.
       - [ ] check $d_{x} H_{i} d_{x} H_{j}$ integral
       - [x] $\partial_{x} \ln G d_{x} H_{i}$ integral
       - [ ] check $\partial_{x} \ln G d_{x} H_{i}$ integral
-      - [ ] $\vert \partial_{x} \ln G \vert^{2}$ integral
+      - [x] $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [ ] check $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [ ] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
       - [ ] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
