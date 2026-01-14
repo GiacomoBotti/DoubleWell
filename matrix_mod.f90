@@ -10,6 +10,7 @@
       integer,public :: maxorder = 8
       private
       public :: diagonalization,momenta,extractA,determinant,trace
+      public :: extracttildeA
 
       contains
 

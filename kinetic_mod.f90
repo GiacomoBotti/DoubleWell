@@ -5,6 +5,7 @@
        module kinetic_module
 
        use constants
+       use eofmotion_module
        use integrals_module
        use basisset_module
        use matrix_module
@@ -13,7 +14,7 @@
        implicit none
 
        private  
-!       public  
+       public :: kin_energy 
 
        contains
 
@@ -229,7 +230,7 @@
         real*8 :: Y0
         real*8, dimension(nh,nh) :: X0mat,X1mat,X2mat
 
-        real*8 :: a,p
+        real*8 :: a,pMp
         real*8, dimension(nd) :: avec,invAa,kvec,Mp
         real*8, dimension(nd,nd) :: Amat,invA,LambdaMat,Tmat,invMy
         real*8, dimension(nd,nd) :: qqMat,invAainvAaMat,qinvAa
@@ -251,7 +252,7 @@
 
         invA = invgen_real(nd,Amat)
 
-        invMy = invMassMat(2:nd,2:nd)
+        invMy = invMassMat(2:nd+1,2:nd+1)
 
         Y0 = int_Y0(nd,LambdaMat)
         X0mat = int_XnMat(nd,0,a,avec,Amat,q)
@@ -260,10 +261,10 @@
 
         Mp = matmul(invMy,pvec)
         pMp = dot_product(pvec,Mp)
-        MtA = matmul(invMy,tildeA)
+        MtA = matmul(invMy,tildeAmat)
         MtAq = matmul(MtA,qvec)
         aMtAq = dot_product(tildeavec,MtAq)
-        tAMtA = matmul(tildeA,MtA)
+        tAMtA = matmul(tildeAmat,MtA)
         tAMtAq = matmul(tAMtA,qvec)
         qtAMtAq = dot_product(qvec,tAMtAq)        
         tAMtAinvA = matmul(transpose(tAMtA),invA)
@@ -310,7 +311,37 @@
 
         intdyln = intdyln*Y0
 
+       end function
 
 !......Kinetic energy...................................................
 
+       function kin_energy(nd,q,p,qvec,pvec,tildeBmat) result(K00)
+       ! nd : dimensions of the bath
+       ! q : active mode position
+       ! p : active mode momentum
+       ! qvec : bath position vector
+       ! pvec : bath momentum vector
+       ! tildeBmat : complex total gaussian width
+        integer, intent(in) :: nd
+        real*8, intent(in) :: q,p
+        real*8, dimension(nd), intent(in) :: qvec,pvec
+        complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
+
+        complex*16, dimension(nh,nh) :: K00 !Complex for debugging
+
+        real*8 :: mx
+        complex*16, dimension(nh,nh) :: intdHdH,intdlnG
+        complex*16, dimension(nh,nh) :: intdlnGsq,intdyln
+
+        intdHdH = dxHdxH(nd,real(tildeBmat),q) 
+        intdlnG = dxlnGdxHi(nd,q,p,qvec,tildeBmat)
+        intdlnGsq = dxlnGsq(nd,q,p,qvec,tildeBmat)  
+        intdyln = dylnGdylnG(nd,q,p,qvec,pvec,tildeBmat)  
+
+        mx = invMassMat(1,1)
+
+        K00 = mx*(intdlnGsq+intdHdH+transpose(dconjg(intdlnG))+&
+              &intdlnG) + intdyln
+
+       end function
        end module

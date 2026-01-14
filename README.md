@@ -44,6 +44,8 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `normalization_module.f90` at Report
 - [ ] `effectivepot_module.f90` at Report
 - [ ] `eofmotion_module.f90` at Report
+- [ ] `kinetic_module.f90` at Report
+- [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
 - [ ] Adapt `bot`
@@ -56,10 +58,10 @@ The same goes for the Hermite polynomials basis set.
       - [ ] check $\partial_{x} \ln G d_{x} H_{i}$ integral
       - [x] $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [ ] check $\vert \partial_{x} \ln G \vert^{2}$ integral
-      - [ ] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
+      - [x] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
       - [ ] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
-      - [ ] assemble everything
-    - [ ] assemble $\mathbb{H}^{(00)}$
+      - [x] assemble everything
+    - [x] assemble $\mathbb{H}^{(00)}$
     - [ ] test $\mathbb{H}^{(00)}$
  - [ ] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
    
