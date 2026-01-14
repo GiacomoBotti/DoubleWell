@@ -46,13 +46,6 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `eofmotion_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
-- [x] Masses Matrix
-- [x] Equations of motion in subroutine
-- [x] $\mathbb{S}^{(00)}$
-- [x] Adapt `normalization`
-- [x] Adapt `total_normalization`
-- [x] Adapt `bot_evo`
-- [x] Minimal test: No hermite?
 - [ ] Adapt `bot`
    - [ ] $\mathbb{T}(\tau,0)$ from S.G. docs
 - [ ] $\mathbb{H}^{(00)}$
@@ -65,6 +58,10 @@ The same goes for the Hermite polynomials basis set.
       - [ ] check $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [ ] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
       - [ ] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
+      - [ ] assemble everything
+    - [ ] assemble $\mathbb{H}^{(00)}$
+    - [ ] test $\mathbb{H}^{(00)}$
+ - [ ] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
    
 
 ### DONE
@@ -115,6 +112,13 @@ The same goes for the Hermite polynomials basis set.
    - [x] compute
 - [x] $[ \mathbf{V}_{1}]_{ij}$
 - [x] $[ \mathbb{V}_{2}]_{ij}$
+- [x] Masses Matrix
+- [x] Equations of motion in subroutine
+- [x] $\mathbb{S}^{(00)}$
+- [x] Adapt `normalization`
+- [x] Adapt `total_normalization`
+- [x] Adapt `bot_evo`
+- [x] Minimal test: No hermite?
 
 ## OLD FRAMEWORK (TWO HERMITE)
 
