@@ -211,6 +211,106 @@
 
 !......dy ln G dy ln G integral.........................................
 
+       function dylnGdylnG(nd,q,p,qvec,pvec,tildeBmat) result(intdyln) 
+       ! nd : dimensions of the bath
+       ! q : active mode position
+       ! p : active mode momentum
+       ! qvec : bath position vector
+       ! pvec : bath momentum vector
+       ! tildeBmat : complex total gaussian width
+        integer, intent(in) :: nd
+        real*8, intent(in) :: q,p
+        real*8, dimension(nd), intent(in) :: qvec,pvec
+        complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
+
+        complex*16, dimension(nh,nh) :: intdyln
+
+        integer :: i,j
+        real*8 :: Y0
+        real*8, dimension(nh,nh) :: X0mat,X1mat,X2mat
+
+        real*8 :: a,p
+        real*8, dimension(nd) :: avec,invAa,kvec,Mp
+        real*8, dimension(nd,nd) :: Amat,invA,LambdaMat,Tmat,invMy
+        real*8, dimension(nd,nd) :: qqMat,invAainvAaMat,qinvAa
+        real*8, dimension(nd+1,nd+1) :: Bmat
+
+        complex*16 :: tildea,TtAMtAinvA,TtAMtAqq,TtAMtAiAaiAa
+        complex*16 :: TtAMtAqiAa,aMtAq,qtAMtAiAa,qtAMtAq,aMtAiAa
+        complex*16 :: qtAMa,iAaAMa,aMa,pMa 
+        complex*16, dimension(nd) :: tildeavec,MtAq,tAMtAiAa,tAMtAq
+        complex*16, dimension(nd) :: MtAiAa,Ma,tAMa 
+        complex*16, dimension(nd,nd) :: tildeAmat,MtA,tAMtA,tAMtAinvA
+        complex*16, dimension(nd,nd) :: tAMtAqq,tAMtAiAaiAa,tAMtAqiAa
+
+        Bmat = real(tildeBmat)
+
+        call extractA(nd,Bmat,Amat,avec,a)
+        call extracttildeA(nd,tildeBmat,tildeAmat,tildeavec,tildea)
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+
+        invA = invgen_real(nd,Amat)
+
+        invMy = invMassMat(2:nd,2:nd)
+
+        Y0 = int_Y0(nd,LambdaMat)
+        X0mat = int_XnMat(nd,0,a,avec,Amat,q)
+        X1mat = int_XnMat(nd,1,a,avec,Amat,q)
+        X2mat = int_XnMat(nd,2,a,avec,Amat,q)
+
+        Mp = matmul(invMy,pvec)
+        pMp = dot_product(pvec,Mp)
+        MtA = matmul(invMy,tildeA)
+        MtAq = matmul(MtA,qvec)
+        aMtAq = dot_product(tildeavec,MtAq)
+        tAMtA = matmul(tildeA,MtA)
+        tAMtAq = matmul(tAMtA,qvec)
+        qtAMtAq = dot_product(qvec,tAMtAq)        
+        tAMtAinvA = matmul(transpose(tAMtA),invA)
+
+        TtAMtAinvA = trace(nd,tAMtAinvA)
+
+        invAa = matmul(invA,avec)
+        MtAiAa = matmul(MtA,invAa)
+        aMtAiAa = dot_product(tildeavec,MtAiAa)
+        tAMtAiAa = matmul(tAMtA,invAa)
+        qtAMtAiAa = dot_product(qvec,tAMtAiAa)
+ 
+        do i =1,nd
+          do j = 1,nd
+            qqMat(i,j) = qvec(i)*qvec(j)
+            invAainvAaMat(i,j) = invAa(i)*invAa(j)
+            qinvAa(i,j) = qvec(i)*invAa(j)
+          end do
+        end do
+
+        tAMtAqq = matmul(transpose(tAMtA),qqMat)
+        tAMtAiAaiAa = matmul(transpose(tAMtA),invAainvAaMat)
+        tAMtAqiAa = matmul(transpose(tAMtA),qinvAa)
+
+        TtAMtAqq = trace(nd,tAMtAqq)
+        TtAMtAiAaiAa = trace(nd,tAMtAiAaiAa)
+        TtAMtAqiAa = trace(nd,tAMtAqiAa)
+
+        Ma = matmul(invMy,tildeavec)
+        aMa = dot_product(tildeavec,Ma)
+        pMa = dot_product(pvec,Ma)
+        tAMa = matmul(tildeAmat,Ma)
+        qtAMa = dot_product(qvec,tAMa)
+        iAaAMa = dot_product(invAa,tAMa)
+
+        intdyln = (0.5d0*TtAMtAinvA +TtAMtAqq)*X0mat&
+             &+TtAMtAiAaiAa*(X2mat-2*q*X1mat+q*q*X0mat)&
+             &-2*TtAMtAqiAa*(X1mat-q*X0mat)&
+             &+(aMtAq + 2*qtAMtAiAa)*(X1mat - q*X0mat)&
+             &-2*qtAMtAq*X0mat-aMtAiAa*(X2mat-2*q*X1mat+q*q*X0mat)&
+             &+qtAMa*(X1mat-q*X0mat)-iAaAMa*(X2mat-2*q*X1mat+q*q*X0mat)&
+             &+aMa*X2mat+X1mat*(-qtAMa-aMtAq-2*q*aMa-dimag(pMa))&
+             &-X0mat*(qtAMtAq+qtAMa*q+q*aMtAq+q*q*aMa+2*dimag(pMa)+pMp)
+
+        intdyln = intdyln*Y0
+
+
 !......Kinetic energy...................................................
 
        end module
