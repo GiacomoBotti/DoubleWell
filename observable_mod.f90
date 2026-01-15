@@ -6,11 +6,12 @@
 
        use kinetic_module
        use effectivepot_module
+       use basisset_module
 
        implicit none
 
        private
-       public :: energynum
+       public :: energy
 
        contains
 
@@ -24,19 +25,28 @@
        ! tildeBmat: total complex gaussian width
          integer, intent(in) :: nd
          real*8, dimension(nd+1), intent(in) :: qtot,ptot
-         real*8, dimension(nh), intent(in) :: cvec
+         complex*16, dimension(nh), intent(in) :: cvec
          complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
-         real*8 :: V0,Hout
-         complex*16, dimension(nh) :: c, Hc
+         real*8 :: V0,T0,Hout,q,p
+         real*8, dimension(nd) :: qvec,pvec
+         complex*16, dimension(nh) :: Tc
          complex*16, dimension(nh,nh) :: H00M,T00M
+
+         q=qtot(1)
+         p=ptot(1)
+         qvec=qtot(2:nd+1)
+         pvec=ptot(2:nd+1)
 
          T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat)
          V0 = fun_V0(nd,qtot,cvec,real(tildeBmat)) 
-         H00M = T00M 
    
-         Hc = matmul(H00M,c)
-         Hout = dreal(dot_product(c,Hc)) + V0
+         Tc = matmul(T00M,cvec)
+         T0 = dreal(dot_product(cvec,Tc))
+
+         Hout = T0 + V0
+
+         write(324,*) Hout, T0, V0
          
        end function
        end module

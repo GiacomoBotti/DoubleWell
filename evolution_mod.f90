@@ -7,7 +7,7 @@
 
        use basisset_module
        use normalization_module
-!       use observable_module
+       use observable_module
 !       use BOT_module
        use eofmotion_module
 
@@ -67,10 +67,12 @@
        open(unit=321,file="trajectory_BOT.dat",status="unknown")
        open(unit=322,file="coefficients_BOT.dat",status="unknown")
        open(unit=323,file="bath_BOT.dat",status="unknown")
+       open(unit=324,file="energy_BOT.dat",status="unknown")
       write(*,*) "+---------------------------------------------------+"
        write(*,*) "Writing trajectory output on trajectory_BOT.dat"
        write(*,*) "Writing coefficients output on coefficients_BOT.dat"
        write(*,*) "Writing bath positions on bath_BOT.dat"
+       write(*,*) "Writing energy components on enegy_BOT.dat"
       write(*,*) "+---------------------------------------------------+"
        h = dfloat(last-first)/dfloat(nstep)
        hvec = hvec*h
@@ -95,10 +97,16 @@
        write(323,*) "#Timestep: ",h
        write(323,*) "#Normalization constant: ",N
   
+       write(324,*) "#Evolution parameters:"
+       write(324,*) "#Range: ",first,last
+       write(324,*) "#Steps: ",nstep
+       write(324,*) "#Timestep: ",h
+       write(324,*) "#Normalization constant: ",N
+  
        cvec= c0/dsqrt(N)
 
        N = normalization(nd,q,cvec,dreal(Bcmplx))
-       E = 0.d0!energy(nd,npar,yj,work)
+       E = energy(nd,q0,p0,c0,Bcmplx)
 
        write(321,*) "#Time ","N ","E ","q ","p ","B(1,1) ",&
                     &"B(3,3) ", "B(1,3)"
@@ -110,6 +118,8 @@
 
        write(323,*) "#Time ","qbath"
        write(323,*) 0.d0, q0(2:nd+1) 
+
+       write(324,*) "#H ", "T ", "V "
 
        qtoti = q0
        ptoti = p0
@@ -146,7 +156,7 @@
 !          cj = c_update(nd,npar,lambdaj,lambdaold,cj,work)
 
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
-          E = 0.d0!energy(nd,npar,yj,work)
+          E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
 
           write(321,*) time, N, E,qtotj(1),ptotj(1),real(Bcmplxj(1,1)),&
                        &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
@@ -167,6 +177,7 @@
        close(321)
        close(322)
        close(323)
+       close(324)
 
        end subroutine
 

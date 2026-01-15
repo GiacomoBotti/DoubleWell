@@ -338,6 +338,9 @@
         intdlnGsq = dxlnGsq(nd,q,p,qvec,tildeBmat)  
         intdyln = dylnGdylnG(nd,q,p,qvec,pvec,tildeBmat)  
 
+        write(*,*) real(intdHdH(1,1)),real(intdlnG(1,1)),&
+                   &real(intdlnGsq(1,1)),real(intdyln(1,1))
+
         mx = invMassMat(1,1)
 
         K00 = mx*(intdlnGsq+intdHdH+transpose(dconjg(intdlnG))+&
