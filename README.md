@@ -54,12 +54,16 @@ The same goes for the Hermite polynomials basis set.
    - [ ] $\mathbb{T}^{(00)}$
       - [x] $d_{x} H_{i} d_{x} H_{j}$ integral
       - [ ] check $d_{x} H_{i} d_{x} H_{j}$ integral
+      - [ ] check $d_{x} H_{i} d_{x} H_{j}$ vs MAPLE 
       - [x] $\partial_{x} \ln G d_{x} H_{i}$ integral
       - [ ] check $\partial_{x} \ln G d_{x} H_{i}$ integral
+      - [ ] check $\partial_{x} \ln G d_{x} H_{i}$ vs MAPLE 
       - [x] $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [ ] check $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [x] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
-      - [ ] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
+      - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
+      - [x] make $\nabla_{y} \ln G \nabla_{y} \ln G$ real again 
+      - [ ] check $\nabla_{y} \ln G \nabla_{y} \ln G$ vs MAPLE 
       - [x] assemble everything
     - [x] assemble $\mathbb{H}^{(00)}$
     - [ ] test $\mathbb{H}^{(00)}$

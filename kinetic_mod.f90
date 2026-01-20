@@ -53,6 +53,8 @@
            end do
         end do
        
+       !write(111,*) "intdHdH: ", intdHdH(1,1)        
+
        end function
 
 !......dx ln G dx Hi integral...........................................
@@ -115,7 +117,9 @@
               intdlnG(i,j) = 2.d0*i*Y0*part(i,j)
            end do
         end do
-        
+
+       !write(111,*) "intdlnG: ", intdlnG(1,1)        
+
        end function 
 
 !......|dx ln G |^2 integral............................................
@@ -137,7 +141,7 @@
         real*8 :: Y0
         real*8, dimension(nh,nh) :: X0mat,X1mat,X2mat
 
-        real*8 :: a,qk,tildeasq,kinvAa
+        real*8 :: a,qk,tildeasq,kinvAa,Nsq
         real*8, dimension(nd) :: avec,invAa,kvec
         real*8, dimension(nd,nd) :: Amat,invA,LambdaMat,Tmat,qqMat
         real*8, dimension(nd,nd) :: invAainvAaMat,qinvAa 
@@ -151,6 +155,7 @@
         complex*16, dimension(nd,nd) :: alphaqinvAa
 
         Bmat = real(tildeBmat)
+        Nsq=fun_Nsq(nd+1,Bmat)
 
         call extractA(nd,Bmat,Amat,avec,a)
         call extracttildeA(nd,tildeBmat,tildeAmat,tildeavec,tildea)
@@ -206,7 +211,9 @@
                   &(X2mat-2*q*X1mat + X0mat*q**2)&
                   &-2*TalphaqinvAa*(X1mat-q*X0mat)
 
-        intdlnGsq=Y0*intdlnGsq
+        intdlnGsq=Y0*intdlnGsq*Nsq
+
+        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
 
        end function
 
@@ -230,27 +237,30 @@
         real*8 :: Y0
         real*8, dimension(nh,nh) :: X0mat,X1mat,X2mat
 
-        real*8 :: a,pMp
+        real*8 :: a,pMp,Nsq
         real*8, dimension(nd) :: avec,invAa,kvec,Mp
         real*8, dimension(nd,nd) :: Amat,invA,LambdaMat,Tmat,invMy
         real*8, dimension(nd,nd) :: qqMat,invAainvAaMat,qinvAa
         real*8, dimension(nd+1,nd+1) :: Bmat
 
-        complex*16 :: tildea,TtAMtAinvA,TtAMtAqq,TtAMtAiAaiAa
-        complex*16 :: TtAMtAqiAa,aMtAq,qtAMtAiAa,qtAMtAq,aMtAiAa
-        complex*16 :: qtAMa,iAaAMa,aMa,pMa 
-        complex*16, dimension(nd) :: tildeavec,MtAq,tAMtAiAa,tAMtAq
-        complex*16, dimension(nd) :: MtAiAa,Ma,tAMa 
-        complex*16, dimension(nd,nd) :: tildeAmat,MtA,tAMtA,tAMtAinvA
-        complex*16, dimension(nd,nd) :: tAMtAqq,tAMtAiAaiAa,tAMtAqiAa
+        complex*16 :: tildea,aMa,qtAMtAq,iAatAMtAq,qtAMtAiAa,pMa,aMtAq
+        complex*16 :: aMtAiAa,Tr1,Tr2,Tr3,Tr4
+        complex*16, dimension(nd) :: Ma,tAMtAq,tAMtAiAa,aMtA 
+        complex*16, dimension(nd,nd) :: MtA,tAMtA,tAMtAqq,tAMtAiAaiAa 
+        complex*16, dimension(nd,nd) :: tAMtAqiAa,tAMtAiA
+
+        complex*16, dimension(nd) :: tildeavec 
+        complex*16, dimension(nd,nd) :: tildeAmat 
 
         Bmat = real(tildeBmat)
+        Nsq=fun_Nsq(nd+1,Bmat)
 
         call extractA(nd,Bmat,Amat,avec,a)
         call extracttildeA(nd,tildeBmat,tildeAmat,tildeavec,tildea)
         call diagonalization(nd,Amat,LambdaMat,Tmat)
 
         invA = invgen_real(nd,Amat)
+        invAa = matmul(invA,avec)
 
         invMy = invMassMat(2:nd+1,2:nd+1)
 
@@ -259,23 +269,31 @@
         X1mat = int_XnMat(nd,1,a,avec,Amat,q)
         X2mat = int_XnMat(nd,2,a,avec,Amat,q)
 
+        !\mathbf{p}^{T}\mathbb{M}_{y}^{-1}\mathbf{p}
         Mp = matmul(invMy,pvec)
         pMp = dot_product(pvec,Mp)
+        !\tilde{\mathbf{a}}^{\dagger}\mathbb{M}_{y}^{-1}\tilde{\mathbf{a}}
+        Ma = matmul(invMy,tildeavec)
+        aMa = dot_product(tildeavec,Ma)
+        !\tilde{\mathbb{A}}^{\dagger}\mathbb{M}_{y}^{-1}\tilde{\mathbb{A}}
         MtA = matmul(invMy,tildeAmat)
-        MtAq = matmul(MtA,qvec)
-        aMtAq = dot_product(tildeavec,MtAq)
-        tAMtA = matmul(tildeAmat,MtA)
+        tAMtA = matmul(dconjg(tildeAmat),MtA)
+        !\mathbf{q}^{T} (above) \mathbf{q}
         tAMtAq = matmul(tAMtA,qvec)
         qtAMtAq = dot_product(qvec,tAMtAq)        
-        tAMtAinvA = matmul(transpose(tAMtA),invA)
-
-        TtAMtAinvA = trace(nd,tAMtAinvA)
-
-        invAa = matmul(invA,avec)
-        MtAiAa = matmul(MtA,invAa)
-        aMtAiAa = dot_product(tildeavec,MtAiAa)
+        !(\mathbb{A}^{-1}\mathbf{a})^{T} (AMA) \mathbf{q}
+        iAatAMtAq = dot_product(invAa,tAMtAq)
+        !\mathbf{q}^{T} (above) \mathbb{A}^{-1}\mathbf{a}
         tAMtAiAa = matmul(tAMtA,invAa)
         qtAMtAiAa = dot_product(qvec,tAMtAiAa)
+        !\mathbf{p}^{T}\mathbb{M}_{y}^{-1}\Im(\tilde{\mathbf{a}})
+        pMa = dot_product(pvec,dimag(Ma))
+        !\Re(\tilde{\mathbf{a}}^{\dagger}\mathbb{M}_{y}^{-1}\tilde{\mathbb{A}})
+        aMtA = real(matmul(tildeavec,MtA))       
+        ! (above)\mathbf{q}
+        aMtAq = dot_product(aMtA,qvec)
+        ! (above)\mathbb{A}^{-1}\mathbf{a}
+        aMtAiAa = dot_product(aMtA,invAa)
  
         do i =1,nd
           do j = 1,nd
@@ -285,31 +303,35 @@
           end do
         end do
 
+        ! Tr[AMA qq]
         tAMtAqq = matmul(transpose(tAMtA),qqMat)
+        Tr1 = trace(nd,tAMtAqq)
+        ! Tr[AMA AaAa]
         tAMtAiAaiAa = matmul(transpose(tAMtA),invAainvAaMat)
+        Tr2 = trace(nd,tAMtAiAaiAa)
+        ! Tr[AMA qAa]
         tAMtAqiAa = matmul(transpose(tAMtA),qinvAa)
+        Tr3 = trace(nd,tAMtAqiAa)
+        ! Tr[AMA A-1]
+        tAMtAiA = matmul(transpose(tAMtA),invA)
+        Tr4 = trace(nd,tAMtAiA)
 
-        TtAMtAqq = trace(nd,tAMtAqq)
-        TtAMtAiAaiAa = trace(nd,tAMtAiAaiAa)
-        TtAMtAqiAa = trace(nd,tAMtAqiAa)
+       ! No y terms
+        intdyln=(X2mat-2*q*X1mat+q*q*X0mat)*aMa+X0mat*pMp+X0mat*qtAMtAq&
+               &-(2*pMa +2*aMtAq)*(X1mat-q*X0mat)
 
-        Ma = matmul(invMy,tildeavec)
-        aMa = dot_product(tildeavec,Ma)
-        pMa = dot_product(pvec,Ma)
-        tAMa = matmul(tildeAmat,Ma)
-        qtAMa = dot_product(qvec,tAMa)
-        iAaAMa = dot_product(invAa,tAMa)
+       ! y1 terms
+        intdyln=intdyln-qtAMtAq*X0mat+iAatAMtAq*(X1mat-q*X0mat)&
+               &-X0mat*qtAMtAq+(X1mat-q*X0mat)*(2*aMtAq+qtAMtAiAa)&
+               &-2*(X2mat-2*X1mat+q*q*X0mat)*aMtAiAa
+ 
+       ! y2 terms
+        intdyln=intdyln+0.5d0*Tr4*X0mat+Tr1*X0mat-2*Tr3*(X1mat-q*X0mat)&
+               &+Tr2*(X2mat-2*q*X1mat+q*q*X0mat)
 
-        intdyln = (0.5d0*TtAMtAinvA +TtAMtAqq)*X0mat&
-             &+TtAMtAiAaiAa*(X2mat-2*q*X1mat+q*q*X0mat)&
-             &-2*TtAMtAqiAa*(X1mat-q*X0mat)&
-             &+(aMtAq + 2*qtAMtAiAa)*(X1mat - q*X0mat)&
-             &-2*qtAMtAq*X0mat-aMtAiAa*(X2mat-2*q*X1mat+q*q*X0mat)&
-             &+qtAMa*(X1mat-q*X0mat)-iAaAMa*(X2mat-2*q*X1mat+q*q*X0mat)&
-             &+aMa*X2mat+X1mat*(-qtAMa-aMtAq-2*q*aMa-dimag(pMa))&
-             &-X0mat*(qtAMtAq+qtAMa*q+q*aMtAq+q*q*aMa+2*dimag(pMa)+pMp)
+        intdyln = intdyln*Y0*Nsq
 
-        intdyln = intdyln*Y0
+        write(111,*) "intdyln: ", intdyln(1,1)
 
        end function
 
@@ -338,13 +360,13 @@
         intdlnGsq = dxlnGsq(nd,q,p,qvec,tildeBmat)  
         intdyln = dylnGdylnG(nd,q,p,qvec,pvec,tildeBmat)  
 
-        write(*,*) real(intdHdH(1,1)),real(intdlnG(1,1)),&
+        write(111,*) real(intdHdH(1,1)),real(intdlnG(1,1)),&
                    &real(intdlnGsq(1,1)),real(intdyln(1,1))
 
         mx = invMassMat(1,1)
 
-        K00 = mx*(intdlnGsq+intdHdH+transpose(dconjg(intdlnG))+&
-              &intdlnG) + intdyln
+        K00 = (mx*(intdlnGsq+intdHdH+transpose(dconjg(intdlnG))+&
+              &intdlnG) + intdyln)/2.d0
 
        end function
        end module
