@@ -63,11 +63,12 @@ The same goes for the Hermite polynomials basis set.
       - [x] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
       - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
       - [x] make $\nabla_{y} \ln G \nabla_{y} \ln G$ real again 
-      - [ ] check $\nabla_{y} \ln G \nabla_{y} \ln G$ vs MAPLE 
+      - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ vs MAPLE 
       - [x] assemble everything
     - [x] assemble $\mathbb{H}^{(00)}$
     - [ ] test $\mathbb{H}^{(00)}$
  - [ ] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
+ - [ ] Debug *everything* with $\tilde{\mathbb{B}}$ complex
    
 
 ### DONE
