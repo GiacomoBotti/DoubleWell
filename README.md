@@ -59,7 +59,7 @@ The same goes for the Hermite polynomials basis set.
       - [ ] check $\partial_{x} \ln G d_{x} H_{i}$ integral
       - [ ] check $\partial_{x} \ln G d_{x} H_{i}$ vs MAPLE 
       - [x] $\vert \partial_{x} \ln G \vert^{2}$ integral
-      - [ ] check $\vert \partial_{x} \ln G \vert^{2}$ integral
+      - [x] check $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [x] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
       - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
       - [x] make $\nabla_{y} \ln G \nabla_{y} \ln G$ real again 

@@ -167,28 +167,30 @@
         X0mat = int_XnMat(nd,0,a,avec,Amat,q)
         X1mat = int_XnMat(nd,1,a,avec,Amat,q)
         X2mat = int_XnMat(nd,2,a,avec,Amat,q)
-        write(111,*) "Y0: ", Y0
-        write(111,*) "X0: ", X0mat(1,1)
-        write(111,*) "X1: ", X1mat(1,1)
-        write(111,*) "X2: ", X2mat(1,1)
+!        write(111,*) "Y0: ", Y0
+!        write(111,*) "X0: ", X0mat(1,1)
+!        write(111,*) "X1: ", X1mat(1,1)
+!        write(111,*) "X2: ", X2mat(1,1)
 
         lin = X1mat -q*X0mat
-        write(111,*) "lin: ", lin(1,1)
+!        write(111,*) "lin: ", lin(1,1)
         sqr = X2mat -2*q*X1mat +q*q*X0mat
-        write(111,*) "sqr: ", sqr(1,1)
+!        write(111,*) "sqr: ", sqr(1,1)
 
         tildeaq=dot_product(qvec,tildeavec)
         tildeacq=dot_product(tildeavec,qvec)
         invAa = matmul(invA,avec)
         tildeAinvAa= dot_product(invAa,tildeavec)
 
-        kvec=real(tildea)*real(tildeavec)+aimag(tildea)*aimag(tildeavec)
-        write(111,*) "kvec: ", kvec
+        !kvec=real(tildea)*real(tildeavec)+aimag(tildea)*aimag(tildeavec)
+        kvec=conjg(tildea)*tildeavec+tildea*conjg(tildeavec)
+!        write(111,*) "kvec: ", kvec
  
-        l=real(tildeaq)*real(tildeAinvAa)&
-         &+aimag(tildeaq)*aimag(tildeAinvAa)
+        !l=real(tildeaq)*real(tildeAinvAa)&
+        ! &+aimag(tildeaq)*aimag(tildeAinvAa)
+        l=conjg(tildeaq)*tildeAinvAa+tildeaq*conjg(tildeAinvAa)
 
-        write(111,*) "l: ", l
+!        write(111,*) "l: ", l
 
         kq=dot_product(kvec,qvec)
         kinvAa=dot_product(kvec,invAa)
@@ -206,48 +208,45 @@
         !Tr[alpha A]
         alphainvA = matmul(transpose(alpha),invA)
         TalphainvA = trace(nd,alphainvA)
-        write(111,*) "Trace 1: ", TalphainvA
+        !write(111,*) "Trace 1: ", TalphainvA
         !Tr[alpha qq]
         alphaqq = matmul(transpose(alpha),qqMat)
         Talphaqq = trace(nd,alphaqq)
-        write(111,*) "Trace 2: ", Talphaqq
+        !write(111,*) "Trace 2: ", Talphaqq
         !Tr[alpha InvAa InvAa]
         alphaInvAaInvAa = matmul(transpose(alpha),invAainvAaMat)
         TalphaInvAaInvAa = trace(nd,alphaInvAaInvAa)
-        write(111,*) "Trace 3: ", TalphaInvAaInvAa
+        !write(111,*) "Trace 3: ", TalphaInvAaInvAa
         !Tr[alpha q invAa]
         alphaqinvAa = matmul(transpose(alpha),qinvAa)
         TalphaqinvAa = trace(nd,alphaqinvAa)
-        write(111,*) "Trace 4: ", TalphaqinvAa
+        !write(111,*) "Trace 4: ", TalphaqinvAa
 
-        intdlnGsq=tildeasq*sqr+p*p*X0mat-2*p*aimag(tildea)*lin
-        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
-        intdlnGsq=+4*p*aimag(tildeaq)*X0mat-lin*kq
-        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
-        intdlnGsq=+3*tildeacq*tildeaq*X0mat-lin*l-2*p*lin*tildeAinvAa
-        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
-        intdlnGsq=lin*kq-sqr*kinvAa+0.5d0*TalphainvA*X0mat
-        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
-        intdlnGsq=+Talphaqq*X0mat+TalphaInvAaInvAa*sqr
-        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
-        intdlnGsq=-2*TalphaqinvAa*lin
-        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
+!        intdlnGsq=tildeasq*sqr+p*p*X0mat-2*p*aimag(tildea)*lin
+!        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
+!        intdlnGsq=+4*p*aimag(tildeaq)*X0mat-lin*kq
+!        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
+!        intdlnGsq=+3*tildeacq*tildeaq*X0mat-lin*l&
+!                 &-2*p*lin*aimag(tildeAinvAa)
+!        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
+!        intdlnGsq=lin*kq-sqr*kinvAa+0.5d0*TalphainvA*X0mat
+!        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
+!        intdlnGsq=+Talphaqq*X0mat+TalphaInvAaInvAa*sqr
+!        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
+!        intdlnGsq=-2*TalphaqinvAa*lin
+!        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
 
-!        intdlnGsq=tildeasq*X0mat&
-!                  &-(2*tildeasq*q+2*p*aimag(tildea)+2*qk)*X1mat&
-!                  &+(tildeasq*q*q+p*p+2*p*aimag(tildea)*q&
-!                  &+2*p*aimag(tildeaq)+tildeacq*tildeaq+2*q*qk)*X0mat&
-!                  &-(2*p*aimag(tildeaq)+tildeacq*tildeaq+2*q*qk)*X0mat&
-!                  &-(2*p*aimag(tildeAinvAa)+tildeacq*tildeAinvAa&
-!                  &+2*q*kinvAa)*(-X1mat+q*X0mat)-2*kinvAa*X2mat&
-!                  &+(2*qk+kinvAa*q)*X1mat + 0.5d0*TalphainvA*X0mat&
-!                  &+Talphaqq*X0mat+TalphaInvAaInvAa*&
-!                  &(X2mat-2*q*X1mat + X0mat*q**2)&
-!                  &-2*TalphaqinvAa*(X1mat-q*X0mat)
+        intdlnGsq=tildeasq*sqr+p*p*X0mat-2*p*aimag(tildea)*lin&
+                 &+4*p*aimag(tildeaq)*X0mat&
+                 &+lin*l&!-tildeacq*tildeaq*X0mat+
+                 &-2*p*lin*aimag(tildeAinvAa)&
+                 &-sqr*kinvAa+0.5d0*TalphainvA*X0mat&
+                 &+TalphaInvAaInvAa*sqr&!+Talphaqq*X0mat
+                 &-2*TalphaqinvAa*lin
 
         intdlnGsq=Y0*intdlnGsq*Nsq
 
-        !write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
+!        write(111,*) "intdlnGsq: ", intdlnGsq(1,1)
 
        end function
 
@@ -365,7 +364,7 @@
 
         intdyln = intdyln*Y0*Nsq
 
-        write(111,*) "intdyln: ", intdyln(1,1)
+!        write(111,*) "intdyln: ", intdyln(1,1)
 
        end function
 
