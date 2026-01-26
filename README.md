@@ -53,11 +53,11 @@ The same goes for the Hermite polynomials basis set.
 - [ ] $\mathbb{H}^{(00)}$
    - [ ] $\mathbb{T}^{(00)}$
       - [x] $d_{x} H_{i} d_{x} H_{j}$ integral
-      - [ ] check $d_{x} H_{i} d_{x} H_{j}$ integral
-      - [ ] check $d_{x} H_{i} d_{x} H_{j}$ vs MAPLE 
+      - [x] check $d_{x} H_{i} d_{x} H_{j}$ integral
+      - [x] check $d_{x} H_{i} d_{x} H_{j}$ vs MAPLE 
       - [x] $\partial_{x} \ln G d_{x} H_{i}$ integral
-      - [ ] check $\partial_{x} \ln G d_{x} H_{i}$ integral
-      - [ ] check $\partial_{x} \ln G d_{x} H_{i}$ vs MAPLE 
+      - [x] check $\partial_{x} \ln G d_{x} H_{i}$ integral
+      - [x] check $\partial_{x} \ln G d_{x} H_{i}$ vs MAPLE 
       - [x] $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [x] check $\vert \partial_{x} \ln G \vert^{2}$ integral
       - [x] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
@@ -66,8 +66,8 @@ The same goes for the Hermite polynomials basis set.
       - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ vs MAPLE 
       - [x] assemble everything
     - [x] assemble $\mathbb{H}^{(00)}$
-    - [ ] test $\mathbb{H}^{(00)}$
- - [ ] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
+    - [x] test $\mathbb{H}^{(00)}$
+ - [x] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
  - [ ] Debug *everything* with $\tilde{\mathbb{B}}$ complex
    
 

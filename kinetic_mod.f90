@@ -29,7 +29,7 @@
         real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
         real*8, intent(in) :: q
 
-        real*8 :: a
+        real*8 :: a,Nsq
         real*8, dimension(nd) :: avec
         real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
         
@@ -42,6 +42,8 @@
         call extractA(nd,Bmat,Amat,avec,a)
         call diagonalization(nd,Amat,LambdaMat,Tmat)
 
+        Nsq=fun_Nsq(nd+1,Bmat)
+
         Y0 = int_Y0(nd,LambdaMat)
         X0mat = int_XnMat(nd,0,a,avec,Amat,q)
         
@@ -49,11 +51,11 @@
 
         do i = 2,nh
            do j = 2,nh
-              intdHdH(i,j) = 4.d0*i*j*Y0*X0mat(i-1,j-1)
+              intdHdH(i,j) = 4.d0*(i-1)*(j-1)*Y0*X0mat(i-1,j-1)*Nsq
            end do
         end do
        
-       !write(111,*) "intdHdH: ", intdHdH(1,1)        
+       !write(111,*) "intdHdH: ", intdHdH(5,3)        
 
        end function
 
@@ -76,7 +78,7 @@
         real*8 :: Y0
         real*8, dimension(nh,nh) :: X0mat,X1mat
 
-        real*8 :: a
+        real*8 :: a,Nsq
         real*8, dimension(nd) :: avec,invAa
         real*8, dimension(nd,nd) :: Amat,invA,LambdaMat,Tmat
         real*8, dimension(nd+1,nd+1) :: Bmat
@@ -86,6 +88,7 @@
         complex*16, dimension(nd,nd) :: tildeAmat
 
         Bmat = real(tildeBmat)
+        Nsq=fun_Nsq(nd+1,Bmat)
 
         call extractA(nd,Bmat,Amat,avec,a)
         call extracttildeA(nd,tildeBmat,tildeAmat,tildeavec,tildea)
@@ -114,11 +117,11 @@
                        &-tildeainvAa*q*X0mat(i-1,j)&
                        &+tildeaq*X0mat(i-1,j)&
                        &+(0.d0,1.d0)*p*X0mat(i-1,j)
-              intdlnG(i,j) = 2.d0*i*Y0*part(i,j)
+              intdlnG(i,j) = 2.d0*(i-1)*Y0*part(i,j)*Nsq
            end do
         end do
 
-       !write(111,*) "intdlnG: ", intdlnG(1,1)        
+       !write(111,*) "intdlnG: ", intdlnG(5,5)        
 
        end function 
 
@@ -400,6 +403,9 @@
 
         K00 = (mx*(intdlnGsq+intdHdH+transpose(dconjg(intdlnG))+&
               &intdlnG) + intdyln)/2.d0
+
+        !write(111,*) "K00: ", K00(2,3)
+        !write(111,*) "K00: ", K00(3,2)
 
        end function
        end module
