@@ -49,9 +49,9 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
 - [ ] Adapt `bot`
-   - [ ] $\mathbb{T}(\tau,0)$ from S.G. docs
+   - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
 - [ ] $\mathbb{H}^{(00)}$
-   - [ ] $\mathbb{T}^{(00)}$
+   - [x] $\mathbb{T}^{(00)}$
       - [x] $d_{x} H_{i} d_{x} H_{j}$ integral
       - [x] check $d_{x} H_{i} d_{x} H_{j}$ integral
       - [x] check $d_{x} H_{i} d_{x} H_{j}$ vs MAPLE 
@@ -68,6 +68,12 @@ The same goes for the Hermite polynomials basis set.
     - [x] assemble $\mathbb{H}^{(00)}$
     - [x] test $\mathbb{H}^{(00)}$
  - [x] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
+ - [ ] Time shifted overlap matrix $\mathscr{S}_{mn} (t_{i},t_{j})$:
+    - [x] Time shifted Hermite polynomials product function
+    - [ ] Debug w/ MAPLE using `check_module.f90`
+    - [ ] $S_{b}$ function
+    - [ ] Adapt Cavalieri-Simpson
+    - [ ] Debug w/ MAPLE
  - [ ] Debug *everything* with $\tilde{\mathbb{B}}$ complex
    
 
