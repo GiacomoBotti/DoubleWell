@@ -73,6 +73,7 @@
 !       dotB = -2*matmul(Bcmplx,MB) - V2/2.d0
        prova=matmul(Bcmplx,MB)
        dotB = -(0.d0,1.d0)*matmul(Bcmplx,MB) + (0.d0,1.d0)*V2
+!       dotB =0.d0
 
 !       write(*,*) dotB(1,1), V2(1,1), prova(1,1)
 

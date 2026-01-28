@@ -13,6 +13,8 @@ MODULE constants
      real*8, parameter :: Ha2eV = 27.2114d0
      real*8, parameter :: toautime = 4.1341d4
      real*8, parameter :: toauvel = 1.d0!/21.87676d0
+
+     complex*16,parameter :: iu = complex(0.d0,1.d0)
      
      logical, parameter :: cnorm_tascivr = .true.
 
