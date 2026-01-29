@@ -44,11 +44,11 @@
         write(*,*) c0(i) 
       end do
 
-      q0(:)=0.d0
-      p0(:)=0.d0
+      q0(:)=1.d0
+      p0(:)=1.d0
 
-      q0(1) = 0.d0
-      p0(1) = 0.d0
+      q0(1) = 1.d0
+      p0(1) = 1.d0
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
@@ -98,7 +98,7 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,1,1000]
+      trj = [0,1,2]
       write(*,*) trj
 
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
