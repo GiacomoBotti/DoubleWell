@@ -44,11 +44,11 @@
         write(*,*) c0(i) 
       end do
 
-      q0(:)=1.d0
-      p0(:)=1.d0
+      q0(:)=0.d0
+      p0(:)=0.d0
 
-      q0(1) = 1.d0
-      p0(1) = 1.d0
+      q0(1) = 0.d0
+      p0(1) = 0.d0
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
@@ -61,6 +61,8 @@
          end do
          write(*,*) Bcmplx(i,:)
       end do
+
+      Bcmplx(1,1) = complex(1.d0,100.d0)
 
 !.....Define masses vector..............................................
 
@@ -98,7 +100,7 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,1,2]
+      trj = [0,1,1]
       write(*,*) trj
 
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
