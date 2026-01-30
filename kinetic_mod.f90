@@ -120,30 +120,30 @@
 
         ! Tr[ MA ]
         Tr0 = trace(nd,MtA)
-        !write(111,*) "Tr0: ", Tr0
+        write(111,*) "Tr0: ", Tr0
         ! Tr[AMA qq]
         tAMtAqq = matmul(transpose(tAMtA),qqMat)
         Tr1 = trace(nd,tAMtAqq)
-        !write(111,*) "Tr1: ", Tr1
+        write(111,*) "Tr1: ", Tr1
         ! Tr[AMA AaAa]
         tAMtAiAaiAa = matmul(transpose(tAMtA),invAainvAaMat)
         Tr2 = trace(nd,tAMtAiAaiAa)
-        !write(111,*) "Tr2: ", Tr2
+        write(111,*) "Tr2: ", Tr2
         ! Tr[AMA qAa]
         tAMtAqiAa = matmul(transpose(tAMtA),qinvAa)
         Tr3 = trace(nd,tAMtAqiAa)
-        !write(111,*) "Tr3: ", Tr3
+        write(111,*) "Tr3: ", Tr3
         ! Tr[AMA A-1]
         tAMtAiA = matmul(transpose(tAMtA),invA)
         Tr4 = trace(nd,tAMtAiA)
-        !write(111,*) "Tr4: ", Tr4
+        write(111,*) "Tr4: ", Tr4
 
         coeff0=-Tr0+0.5*Tr4+Tr1-qtAMtAq-pMp
-        !write(111,*) "coeff0: ", coeff0
+        write(111,*) "coeff0: ", coeff0
         coeff1=-2*Tr3+2*qtAMtAiAa-2*pMtAa+2*pMa
-        !write(111,*) "coeff1: ", coeff1
+        write(111,*) "coeff1: ", coeff1
         coeff2=Tr2-2*aMtAiAa+aMa
-        !write(111,*) "coeff2: ", coeff2
+        write(111,*) "coeff2: ", coeff2
  
         intKb = coeff0*X0mat+coeff1*lin+coeff2*sqr
 
@@ -206,7 +206,10 @@
         sqr = X2mat -2*q*X1mat +q*q*X0mat
 
         invAa = matmul(invA,avec)
+        write(111,*) invAa
         tildeAinvAa= dot_product(invAa,tildeavec)
+        !tildeAinvAa= dot_product(tildeavec,invAa)
+        write(111,*) tildeAinvAa, tildea, tildeavec 
 
         ! |G|^2 Hi dxdxHj
 
@@ -223,7 +226,9 @@
         intKa2(:,:) = (0.d0,0.d0) 
 
         Ka2c0=iu*p
+        write(111,*) Ka2c0
         Ka2c1=-tildea+tildeAinvAa
+        write(111,*) Ka2c1
 
         do i = 1,nh
            do j = 2,nh
@@ -265,17 +270,17 @@
         !write(111,*) "Trace 3: ", Tr3
 
         Ka3c0=-tildea-p*p-tildeaq*tildeaq+0.5*Tr0+Tr1
-        !write(111,*) "Ka3c0: ", Ka3c0
+        write(111,*) "Ka3c0: ", Ka3c0
         Ka3c1=-2*iu*p*tildea+2*iu*p*tildeainvAa-2*Tr3&
              &+2*tildeaq*tildeainvAa
-        !write(111,*) "Ka3c1: ", Ka3c1
+        write(111,*) "Ka3c1: ", Ka3c1
         Ka3c2=+tildeasq-2*tildea*tildeainvAa+Tr2
-        !write(111,*) "Ka3c2: ", Ka3c2
+        write(111,*) "Ka3c2: ", Ka3c2
  
         intKa3=(Ka3c0*X0mat+Ka3c1*lin+Ka3c2*sqr)*Y0*Nsq
 
-        write(111,*) "intKa1: ", intKa1(1,1)
-        write(111,*) "intKa2: ", intKa2(1,1)
+        write(111,*) "intKa1: ", intKa1(5,3)
+        write(111,*) "intKa2: ", intKa2(5,3)
         write(111,*) "intKa3: ", intKa3(1,1)
 
         intKa=intKa1 + 2*intKa2 + intKa3
