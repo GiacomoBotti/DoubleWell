@@ -74,19 +74,19 @@
         lin = X1mat -q*X0mat
         sqr = X2mat -2*q*X1mat +q*q*X0mat
 
-        write(111,*) "X0mat(1,1): ", X0mat(1,1)
-        write(111,*) "X1mat(1,1): ", X1mat(1,1)
-        write(111,*) "X2mat(1,1): ", X2mat(1,1)
+        !write(111,*) "X0mat(1,1): ", X0mat(1,1)
+        !write(111,*) "X1mat(1,1): ", X1mat(1,1)
+        !write(111,*) "X2mat(1,1): ", X2mat(1,1)
 
         !\mathbf{p}^{T}\mathbb{M}_{y}^{-1}\mathbf{p}
         Mp = matmul(invMy,pvec)
         pMp = dot_product(pvec,Mp)
         !\tilde{\mathbf{a}}^{\dagger}\mathbb{M}_{y}^{-1}\tilde{\mathbf{a}}
         Ma = matmul(invMy,tildeavec)
-        aMa = dot_product(tildeavec,Ma)
+        aMa = dot_product(conjg(tildeavec),Ma)
         !\tilde{\mathbb{A}}^{\dagger}\mathbb{M}_{y}^{-1}\tilde{\mathbb{A}}
         MtA = matmul(invMy,tildeAmat)
-        tAMtA = matmul(dconjg(tildeAmat),MtA)
+        tAMtA = matmul(tildeAmat,MtA)
         !\mathbf{q}^{T} (above) \mathbf{q}
         tAMtAq = matmul(tAMtA,qvec)
         qtAMtAq = dot_product(qvec,tAMtAq)        
@@ -99,11 +99,13 @@
         !pMa = dot_product(pvec,aimag(Ma))
         pMa = dot_product(pvec,Ma)
         !\Re(\tilde{\mathbf{a}}^{\dagger}\mathbb{M}_{y}^{-1}\tilde{\mathbb{A}})
-        aMtA = real(matmul(tildeavec,MtA))       
+        aMtA = matmul(tildeavec,MtA)       
         ! (above)\mathbf{q}
-        aMtAq = dot_product(aMtA,qvec)
+        !aMtAq = dot_product(aMtA,qvec)
+        aMtAq = dot_product(qvec,aMtA)
         ! (above)\mathbb{A}^{-1}\mathbf{a}
-        aMtAiAa = dot_product(aMtA,invAa)
+        !aMtAiAa = dot_product(aMtA,invAa)
+        aMtAiAa = dot_product(invAa,aMtA)
         ! \mathbf{p} \mathbb{M}^{-1}\tilde{\mathbb{A}}\mathbb{A}^{-1}\mathbf{a}
         MtAa = matmul(MtA,avec)
         pMtAa = dot_product(pvec,MtAa)
@@ -147,7 +149,7 @@
 
         intKb = intKb*Y0*Nsq
 
-        write(111,*) "intKb: ", intKb(1,1)
+        !write(111,*) "intKb: ", intKb(1,1)
 
        end function
 
@@ -239,7 +241,7 @@
 
         do i =1,nd
           do j = 1,nd
-            alpha(i,j) = dconjg(tildeavec(i))*tildeavec(j)
+            alpha(i,j) = tildeavec(i)*tildeavec(j)
             qqMat(i,j) = qvec(i)*qvec(j)
             invAainvAaMat(i,j) = invAa(i)*invAa(j)
             qinvAa(i,j) = qvec(i)*invAa(j)
@@ -248,27 +250,27 @@
         !Tr[alpha A]
         alphainvA = matmul(transpose(alpha),invA)
         Tr0 = trace(nd,alphainvA)
-        write(111,*) "Trace 0: ", Tr0
+        !write(111,*) "Trace 0: ", Tr0
         !Tr[alpha qq]
         alphaqq = matmul(transpose(alpha),qqMat)
         Tr1 = trace(nd,alphaqq)
-        write(111,*) "Trace 1: ", Tr1
+        !write(111,*) "Trace 1: ", Tr1
         !Tr[alpha InvAa InvAa]
         alphaInvAaInvAa = matmul(transpose(alpha),invAainvAaMat)
         Tr2 = trace(nd,alphaInvAaInvAa)
-        write(111,*) "Trace 2: ", Tr2
+        !write(111,*) "Trace 2: ", Tr2
         !Tr[alpha q invAa]
         alphaqinvAa = matmul(transpose(alpha),qinvAa)
         Tr3 = trace(nd,alphaqinvAa)
-        write(111,*) "Trace 3: ", Tr3
+        !write(111,*) "Trace 3: ", Tr3
 
         Ka3c0=-tildea-p*p-tildeaq*tildeaq+0.5*Tr0+Tr1
-        write(111,*) "Ka3c0: ", Ka3c0
+        !write(111,*) "Ka3c0: ", Ka3c0
         Ka3c1=-2*iu*p*tildea+2*iu*p*tildeainvAa-2*Tr3&
              &+2*tildeaq*tildeainvAa
-        write(111,*) "Ka3c1: ", Ka3c1
+        !write(111,*) "Ka3c1: ", Ka3c1
         Ka3c2=+tildeasq-2*tildea*tildeainvAa+Tr2
-        write(111,*) "Ka3c2: ", Ka3c2
+        !write(111,*) "Ka3c2: ", Ka3c2
  
         intKa3=(Ka3c0*X0mat+Ka3c1*lin+Ka3c2*sqr)*Y0*Nsq
 
@@ -314,7 +316,9 @@
         !      &intdlnG) + intdyln)/2.d0
         K00 = -0.5d0*(mx*intKa+intKb)
 
-        write(111,*) "K00: ", K00(1,1)
+        write(111,*) "Ka: ", real(intKa(1,1)), aimag(intKa(1,1))
+        write(111,*) "Kb: ", real(intKb(1,1)), aimag(intKb(1,1))
+        write(111,*) "K00: ", real(K00(1,1)), aimag(K00(1,1))
         !write(111,*) "K00: ", K00(3,2)
 
        end function
