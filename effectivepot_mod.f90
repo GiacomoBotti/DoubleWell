@@ -32,15 +32,19 @@
        complex*16, dimension(nh), intent(in) :: cvec
        real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
 
-       integer :: i
+       integer :: i,j
        real*8 :: Nsq,Y0,a,q,aAVAa,qVAa,qVq,uWu
-       real*8 :: V0,Vx,Vxy,Vy
+       real*8 :: V0,Vx,Vxy,Vy,Tr0,Tr1,Tr2,Tr3
        real*8, dimension(nd) :: avec, qvec, Aa, VAa
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat,invA
+       complex*16, dimension(nd,nd) :: VA,ViAaiAa,Vqq,VqiAa 
+       real*8, dimension(nd,nd) :: invAainvAaMat,qqMat,qinvAa 
        real*8, dimension(maxorder,nd) :: MomMat
        real*8, dimension(nh) :: Xcvec, XYcvec, Ycvec
        real*8, dimension(nh,nh) :: X4mat,X2mat,X1mat,X0mat
-       real*8, dimension(nh,nh) :: Xtot,XYtot,Ytot
+       real*8, dimension(nh,nh) :: Xtot,XYtot,Ytot,lin,sqr
+
+       write(111,*) "POTENTIAL"
 
        ! Unreavel qtot
        q = qtot(1)
@@ -63,24 +67,35 @@
        qVq = fun_qVq(nd,qvec)
        uWu = fun_uWu(nd,Tmat,MomMat)
 
-!       do i = 1,nd
-!         write(*,*) invA(i,:) !matmul(invA(i,:),Amat)
-!       end do
+        do i =1,nd
+          do j = 1,nd
+            qqMat(i,j) = qvec(i)*qvec(j)
+            invAainvAaMat(i,j) = Aa(i)*Aa(j)
+            qinvAa(i,j) = qvec(i)*Aa(j)
+          end do
+        end do
 
-!       write(*,*) "Matrix of the Momenta:"
-!       do i = 1,maxorder
-!         write(*,*) MomMat(i,:) 
-!       end do
+        ! Tr[ VA ]
+        VA = matmul(transpose(Vmat),invA)
+        Tr0 = trace(nd,VA)
+!        write(111,*) "Tr0: ", Tr0
+        ! Tr[AMA qq]
+        Vqq = matmul(transpose(Vmat),qqMat)
+        Tr1 = trace(nd,Vqq)
+!        write(111,*) "Tr1: ", Tr1
+        ! Tr[AMA AaAa]
+        ViAaiAa = matmul(transpose(Vmat),invAainvAaMat)
+        Tr2 = trace(nd,ViAaiAa)
+!        write(111,*) "Tr2: ", Tr2
+        ! Tr[AMA qAa]
+        VqiAa = matmul(transpose(Vmat),qinvAa)
+        Tr3 = trace(nd,VqiAa)
+!        write(111,*) "Tr3: ", Tr3
+        ! Tr[AMA A-1]
+!        tAMtAiA = matmul(transpose(tAMtA),invA)
+!        Tr4 = trace(nd,tAMtAiA)
+!        write(111,*) "Tr4: ", Tr4
 
-!       write(*,*) uWu,qVq!qVAa!aAVAa
-!       write(*,*) avec 
-!       write(*,*) VAa(:) !Aa(:) !matmul(Amat,Aa(:))
-
-!       write(*,*) "Diagonal Matrix"
-!       do i = 1,nd
-!         write(*,*) LambdaMat(i,:)
-!       end do
- 
        ! Integrals
        Y0=int_Y0(nd,LambdaMat)
 !       write(*,*) "Y0:", Y0
@@ -92,26 +107,31 @@
 !       write(*,*) "X1mat(3,3)", X1mat(3,3)
        X0mat=int_XnMat(nd,0,a,avec,Amat,q)
 !       write(*,*) "X0mat(3,3)", X0mat(3,3)
+       lin=X1mat-q*X0mat
+       sqr=X2mat-2*q*X1mat+q*q*X0mat
 
        ! Total Hermite Matrices
        Xtot=(X4mat/(16.d0*eta_const)) - X2mat/2.d0      
        Xcvec=matmul(Xtot,cvec)
        XYtot=(qvec(1) +q*Aa(1))*X1mat - Aa(1)*X2mat
        XYcvec=matmul(XYtot,cvec)
-       Ytot=X0mat*(uWu+qVq+aAVAa*q**2-q*qVAa)+&
-           &X1mat*(2*qVAa+2*q*aAVAa)+&
-           &X2mat*aAVAa
+       Ytot=(0.5*Tr0+Tr1)*X0mat&
+           &-2*Tr3*lin+Tr2*sqr
        Ycvec=matmul(Ytot,cvec)
 
        ! V elements
        Vx=Nsq*Y0*dot_product(cvec,Xcvec)
+       write(111,*) "Vx: ", Vx
        Vxy=Nsq*Y0*gamma_const*dot_product(cvec,XYcvec)
+       write(111,*) "Vxy: ", Vxy
        Vy=Nsq*Y0*dot_product(cvec,Ycvec)
+       write(111,*) "Vy: ", Vy
              
 !       Vx=0.d0
 !       Vxy=0.d0
 !       Vy=0.d0
        V0 = Vx+Vxy+Vy
+       write(111,*) "V0", V0
         
       end function
 

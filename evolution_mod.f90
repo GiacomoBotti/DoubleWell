@@ -164,7 +164,7 @@
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
           E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
 
-          write(321,*) time, N, E,qtotj(1),ptotj(1),real(Bcmplxj(1,1)),&
+          write(321,*) time,N,E/N,qtotj(1),ptotj(1),real(Bcmplxj(1,1)),&
                        &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
           write(322,*) time, dreal(cj), dimag(cj)
           write(323,*) time, qtotj(2:nd+1) 
@@ -179,6 +179,12 @@
                   &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
        write(*,*) time, dreal(cj), dimag(cj)
        write(*,*) time, qtotj(2:nd+1) 
+
+       write(222,*) qtotj
+       write(222,*) ptotj
+       do i = 1,nd+1
+         write(222,*) Bcmplxj(i,:)
+       end do
 
        close(321)
        close(322)
