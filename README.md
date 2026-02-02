@@ -48,33 +48,16 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
-- [ ] Adapt `bot`
-   - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
-- [ ] $\mathbb{H}^{(00)}$
-   - [x] $\mathbb{T}^{(00)}$
-      - [x] $d_{x} H_{i} d_{x} H_{j}$ integral
-      - [x] check $d_{x} H_{i} d_{x} H_{j}$ integral
-      - [x] check $d_{x} H_{i} d_{x} H_{j}$ vs MAPLE 
-      - [x] $\partial_{x} \ln G d_{x} H_{i}$ integral
-      - [x] check $\partial_{x} \ln G d_{x} H_{i}$ integral
-      - [x] check $\partial_{x} \ln G d_{x} H_{i}$ vs MAPLE 
-      - [x] $\vert \partial_{x} \ln G \vert^{2}$ integral
-      - [x] check $\vert \partial_{x} \ln G \vert^{2}$ integral
-      - [x] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
-      - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
-      - [x] make $\nabla_{y} \ln G \nabla_{y} \ln G$ real again 
-      - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ vs MAPLE 
-      - [x] assemble everything
-    - [x] assemble $\mathbb{H}^{(00)}$
-    - [x] test $\mathbb{H}^{(00)}$
- - [x] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
- - [ ] Time shifted overlap matrix $\mathscr{S}_{mn} (t_{i},t_{j})$:
+ - [ ] Debug *dynamics* with $\tilde{\mathbb{B}}$ complex
+- [ ] Time shifted overlap matrix $\mathscr{S}_{mn} (t_{i},t_{j})$:
     - [x] Time shifted Hermite polynomials product function
     - [ ] Debug w/ MAPLE using `check_module.f90`
     - [ ] $S_{b}$ function
     - [ ] Adapt Cavalieri-Simpson
     - [ ] Debug w/ MAPLE
- - [ ] Debug *everything* with $\tilde{\mathbb{B}}$ complex
+- [ ] Adapt `bot`
+   - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
+   - [ ] Implement algorithm
    
 
 ### DONE
@@ -132,6 +115,24 @@ The same goes for the Hermite polynomials basis set.
 - [x] Adapt `total_normalization`
 - [x] Adapt `bot_evo`
 - [x] Minimal test: No hermite?
+- [x] $\mathbb{H}^{(00)}$
+   - [x] $\mathbb{T}^{(00)}$
+      - [x] $d_{x} H_{i} d_{x} H_{j}$ integral
+      - [x] check $d_{x} H_{i} d_{x} H_{j}$ integral
+      - [x] check $d_{x} H_{i} d_{x} H_{j}$ vs MAPLE 
+      - [x] $\partial_{x} \ln G d_{x} H_{i}$ integral
+      - [x] check $\partial_{x} \ln G d_{x} H_{i}$ integral
+      - [x] check $\partial_{x} \ln G d_{x} H_{i}$ vs MAPLE 
+      - [x] $\vert \partial_{x} \ln G \vert^{2}$ integral
+      - [x] check $\vert \partial_{x} \ln G \vert^{2}$ integral
+      - [x] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
+      - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
+      - [x] make $\nabla_{y} \ln G \nabla_{y} \ln G$ real again 
+      - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ vs MAPLE 
+      - [x] assemble everything
+    - [x] assemble $\mathbb{H}^{(00)}$
+    - [x] test $\mathbb{H}^{(00)}$
+ - [x] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
 
 ## OLD FRAMEWORK (TWO HERMITE)
 

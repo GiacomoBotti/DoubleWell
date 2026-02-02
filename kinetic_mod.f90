@@ -55,7 +55,7 @@
         complex*16, dimension(nd) :: tildeavec 
         complex*16, dimension(nd,nd) :: tildeAmat 
 
-        write(111,*) "BATH"
+        write(111,*) "KINETIC BATH"
         Bmat = real(tildeBmat)
         Nsq=fun_Nsq(nd+1,Bmat)
 
@@ -188,7 +188,7 @@
         complex*16, dimension(nd,nd) :: alphaqq,alphaInvAaInvAa
         complex*16, dimension(nd,nd) :: alphaqinvAa,alphainvA
 
-        write(111,*) "ACTIVE"
+        write(111,*) "KINETIC ACTIVE"
         Bmat = real(tildeBmat)
         Nsq=fun_Nsq(nd+1,Bmat)
 

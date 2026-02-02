@@ -157,6 +157,8 @@
        real*8, dimension(nh) :: X3c, X1c, X0c 
        real*8, dimension(nh,nh) :: X3mat,X2mat,X1mat,X0mat
 
+       write(111,*) "GRADIENT"
+       write(111,*) "qtot:", qtot
        ! Unreavel qtot
        q = qtot(1)
        qvec(:) = qtot(2:nd+1)
@@ -174,10 +176,6 @@
        VVAa = matmul(Vmat,VAa)
 
        Vq = matmul(Vmat,qvec)
-
-!       write(*,*) Aa(:) 
-!       write(*,*) Vq(:)
-!       write(*,*) VVAa(:)
 
        ! Integrals
        Y0=int_Y0(nd,LambdaMat)
@@ -207,10 +205,7 @@
        V1(2) = dy1V
        V1(3:nd+1) = V1prime(2:nd)
 
-!       write(*,*) "V1", V1(:)
-!       write(*,*) "Aa", Aa(:)
-!       write(*,*) "VAa", VAa(:)
-!       write(*,*) "Nsq", Nsq
+       write(111,*) "V1", V1(:)
 
       end function
 
