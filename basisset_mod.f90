@@ -89,4 +89,29 @@
  
       end function 
 
+!.....Matrix of Hermite Polynomial Products (Shifted)...................
+     
+      function fun_HmatShift(x,q1,q2) result(HmatS)
+      ! x: variable of the polynomial
+      ! q1: variable of the polynomial
+      ! q2: variable of the polynomial
+      ! Hmat: matrix of the polynomial products in x-q1 and x-q2
+       real*8, intent(in) :: x,q1,q2
+       
+       integer :: i,j
+       real*8 :: H1,H2
+       real*8, dimension(nh,nh) :: HmatS
+
+       HmatS(:,:) = 0.d0
+
+       do i =1,nh
+         do j =1,nh
+           H1 = herm_pol(i,x,q1)
+           H2 = herm_pol(j,x,q2)
+           HmatS(i,j) = H1*H2
+         end do
+       end do
+ 
+      end function 
+
       end module

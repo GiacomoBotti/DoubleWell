@@ -9,7 +9,8 @@
 
       integer,public :: maxorder = 8
       private
-      public :: diagonalization,momenta,extractA,determinant
+      public :: diagonalization,momenta,extractA,determinant,trace
+      public :: extracttildeA
 
       contains
 
@@ -140,4 +141,53 @@
   
       end function
            
+!.....Extract complex Amat and avec.....................................
+
+      subroutine extracttildeA(nd,tildeBmat,tildeAmat,tildeavec,tildea)
+      ! nd: dimension of the matrices
+      ! tildeBmat: total gaussian width matrix (COMPLEX)
+      ! tildeAmat: bath gaussian width matrix (COMPLEX)
+      ! tildeavec: system-bath gaussian width vector (COMPLEX)
+      
+       integer, intent(in) :: nd
+       complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
+
+       complex*16, intent(out) ::  tildea
+       complex*16, dimension(nd), intent(out) ::  tildeavec
+       complex*16, dimension(nd,nd), intent(out) :: tildeAmat 
+
+       integer :: i,j
+
+       tildea = tildeBmat(1,1) 
+
+       do i = 1,nd
+         tildeavec(i) = tildeBmat(1,i+1)
+         do j = 1,nd
+           tildeAmat(i,j) = tildeBmat(i+1,j+1)
+         end do
+       end do
+
+      end subroutine
+
+!.....Compute the trace of a generic matrix.............................
+
+      function trace(nd,Mat) result(traceMat)
+      ! nd: matrix dimension
+      ! Mat: matrix
+      ! traceMat: trace of the matrix
+       integer, intent(in) :: nd
+       complex*16, dimension(nd,nd), intent(in) :: Mat
+
+       complex*16 :: traceMat
+
+       integer :: i
+
+       traceMat = (0.d0,0.d0)
+
+       do i=1,nd
+         traceMat = traceMat + Mat(i,i)
+       end do
+
+      end function
+
       end module 

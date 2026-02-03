@@ -40,20 +40,25 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `potential_module.f90` at Report
 - [ ] `matrix_module.f90` at Report
 - [ ] `integrals_module.f90` at Report
+- [ ] `kinetic_module.f90` at Report
 - [ ] `normalization_module.f90` at Report
 - [ ] `effectivepot_module.f90` at Report
 - [ ] `eofmotion_module.f90` at Report
+- [ ] `kinetic_module.f90` at Report
+- [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
-- [x] Masses Matrix
-- [x] Equations of motion in subroutine
-- [x] $\mathbb{S}^{(00)}$
-- [x] Adapt `normalization`
-- [x] Adapt `total_normalization`
-- [x] Adapt `bot_evo`
-- [x] Minimal test: No hermite?
+ - [ ] Debug *dynamics* with $\tilde{\mathbb{B}}$ complex
+- [ ] Time shifted overlap matrix $\mathscr{S}_{mn} (t_{i},t_{j})$:
+    - [x] Time shifted Hermite polynomials product function
+    - [ ] Debug w/ MAPLE using `check_module.f90`
+    - [ ] $S_{b}$ function
+    - [ ] Adapt Cavalieri-Simpson
+    - [ ] Debug w/ MAPLE
 - [ ] Adapt `bot`
-- [ ] $\mathbb{H}^{(00)}$
+   - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
+   - [ ] Implement algorithm
+   
 
 ### DONE
 
@@ -103,6 +108,31 @@ The same goes for the Hermite polynomials basis set.
    - [x] compute
 - [x] $[ \mathbf{V}_{1}]_{ij}$
 - [x] $[ \mathbb{V}_{2}]_{ij}$
+- [x] Masses Matrix
+- [x] Equations of motion in subroutine
+- [x] $\mathbb{S}^{(00)}$
+- [x] Adapt `normalization`
+- [x] Adapt `total_normalization`
+- [x] Adapt `bot_evo`
+- [x] Minimal test: No hermite?
+- [x] $\mathbb{H}^{(00)}$
+   - [x] $\mathbb{T}^{(00)}$
+      - [x] $d_{x} H_{i} d_{x} H_{j}$ integral
+      - [x] check $d_{x} H_{i} d_{x} H_{j}$ integral
+      - [x] check $d_{x} H_{i} d_{x} H_{j}$ vs MAPLE 
+      - [x] $\partial_{x} \ln G d_{x} H_{i}$ integral
+      - [x] check $\partial_{x} \ln G d_{x} H_{i}$ integral
+      - [x] check $\partial_{x} \ln G d_{x} H_{i}$ vs MAPLE 
+      - [x] $\vert \partial_{x} \ln G \vert^{2}$ integral
+      - [x] check $\vert \partial_{x} \ln G \vert^{2}$ integral
+      - [x] $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
+      - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ integral 
+      - [x] make $\nabla_{y} \ln G \nabla_{y} \ln G$ real again 
+      - [x] check $\nabla_{y} \ln G \nabla_{y} \ln G$ vs MAPLE 
+      - [x] assemble everything
+    - [x] assemble $\mathbb{H}^{(00)}$
+    - [x] test $\mathbb{H}^{(00)}$
+ - [x] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
 
 ## OLD FRAMEWORK (TWO HERMITE)
 

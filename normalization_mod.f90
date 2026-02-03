@@ -45,6 +45,8 @@
        call diagonalization(nd,Amat,LambdaMat,Tmat)
      
        Y0=int_Y0(nd,LambdaMat)
+!       write(111,*) "Y0: ", Y0
+!       write(111,*) "Nsq: ", Nsq
 
        X0Mat=int_XnMat(nd,0,a,avec,Amat,qq)
        X0c=matmul(X0Mat,cvec)

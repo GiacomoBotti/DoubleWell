@@ -44,26 +44,25 @@
         write(*,*) c0(i) 
       end do
 
-      q0(:)=0.d0
-      p0(:)=0.5d0
+      q0(:)=0.3d0
+      p0(:)=0.3d0
 
-      q0(1) = -1.d0
-      p0(1) = 0.5d0
+      q0(1) = 1.0d0
+      p0(1) = 1.0d0
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
 
       do i = 1,nv+1
-         Bcmplx(i,i) = i
+         Bcmplx(i,i) = i+iu*i
          do j = i+1,nv+1
-            Bcmplx(i,j) = j/20.d0 !Gershgoring circle theorem
+            Bcmplx(i,j) = (j+iu*j)/20.d0 !Gershgoring circle theorem
             Bcmplx(j,i) = Bcmplx(i,j)
          end do
          write(*,*) Bcmplx(i,:)
       end do
 
-
-      
+!      Bcmplx(1,1) = complex(1.d0,1.d0)
 
 !.....Define masses vector..............................................
 
@@ -101,7 +100,7 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,1,500]
+      trj = [0,5,10000]
       write(*,*) trj
 
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
