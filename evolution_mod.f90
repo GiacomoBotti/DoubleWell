@@ -34,7 +34,7 @@
        complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx 
 
        integer*8 :: i,j,first,last,nstep
-       real*8 :: h,time,N,E,q,p
+       real*8 :: h,time,N,E,q,p,E0
        real*8,dimension(nd) :: qvec,pvec 
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold 
        real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
@@ -107,17 +107,18 @@
        cvec= c0/dsqrt(N)
 
        N = normalization(nd,q,cvec,dreal(Bcmplx))
-       E = energy(nd,q0,p0,c0,Bcmplx)
+       E0 = energy(nd,q0,p0,c0,Bcmplx)
+       E=E0
 
        write(*,*) "First step:"
-       write(*,*) N, E, q0(1), p0(1), real(Bcmplx(1,1)),&
+       write(*,*) N, E/E0, q0(1), p0(1), real(Bcmplx(1,1)),&
                   &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
        write(*,*) time, dreal(cvec), dimag(cvec)
        write(*,*) time, q0(2:nd+1) 
 
        write(321,*) "#Time ","N ","E ","q ","p ","B(1,1) ",&
                     &"B(3,3) ", "B(1,3)"
-       write(321,*) 0.d0, N, E, q0(1), p0(1), real(Bcmplx(1,1)),&
+       write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
                     &real(Bcmplx(3,3)),real(Bcmplx(1,3))
 
        write(322,*) "#Time ","Real c", "Immaginary c"
@@ -164,8 +165,8 @@
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
           E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
 
-          write(321,*) time,N,E/N,qtotj(1),ptotj(1),real(Bcmplxj(1,1)),&
-                       &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+          write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
+                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
           write(322,*) time, dreal(cj), dimag(cj)
           write(323,*) time, qtotj(2:nd+1) 
 
@@ -175,7 +176,7 @@
        end do
 
        write(*,*) "Last step:"
-       write(*,*) N, E, qtotj(1), ptotj(1),real(Bcmplxj(1,1)),&  
+       write(*,*) N,E/E0, qtotj(1), ptotj(1),real(Bcmplxj(1,1)),&  
                   &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
        write(*,*) time, dreal(cj), dimag(cj)
        write(*,*) time, qtotj(2:nd+1) 

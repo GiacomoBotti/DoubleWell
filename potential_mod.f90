@@ -11,7 +11,7 @@
       real*8, parameter,public  :: eta_const = 0.25d0
   
       ! Bath potential matrix dimensions
-      integer,parameter,public :: nv = 2 
+      integer,parameter,public :: nv = 5 
       real*8, dimension(nv,nv),public :: Vmat 
 
       private

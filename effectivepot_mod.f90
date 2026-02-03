@@ -173,7 +173,6 @@
 
        Aa = matmul(invA,avec)
        VAa = matmul(Vmat,Aa)
-       VVAa = matmul(Vmat,VAa)
 
        Vq = matmul(Vmat,qvec)
 
@@ -197,7 +196,6 @@
        dxV=(cX3c/(4.d0*eta_const) - (1+gamma_const*Aa(1))*cX1c+&
              &gamma_const*(qvec(1)+Aa(1)*q)*cX0c)*Nsq*Y0
 
-       !V1prime=2*Nsq*Y0*(cX0c*(Vq+q*VAa)-cX1c*VVAa)
        V1prime=2*Nsq*Y0*(cX0c*(Vq+q*VAa)-cX1c*VAa)
 
        dy1V=gamma_const*Nsq*Y0*cX1c + V1prime(1)
