@@ -33,7 +33,7 @@
        complex*16,dimension(nh), intent(in) :: c0 
        complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx 
 
-       integer*8 :: i,j,first,last,nstep
+       integer*8 :: i,j,first,last,nstep,k
        real*8 :: h,time,N,E,q,p,E0
        real*8,dimension(nd) :: qvec,pvec 
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold 
@@ -169,6 +169,11 @@
                        &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
           write(322,*) time, dreal(cj), dimag(cj)
           write(323,*) time, qtotj(2:nd+1) 
+
+          write(444,*) "Time: ", time
+          do k = 1,nd+1
+             write(444,*) Bcmplx(k,:)
+          end do
 
           qtoti = qtotj  
           ptoti = ptotj

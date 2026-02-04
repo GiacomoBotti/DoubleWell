@@ -55,7 +55,7 @@
         complex*16, dimension(nd) :: tildeavec 
         complex*16, dimension(nd,nd) :: tildeAmat 
 
-        write(111,*) "KINETIC BATH"
+        !write(111,*) "KINETIC BATH"
         Bmat = real(tildeBmat)
         Nsq=fun_Nsq(nd+1,Bmat)
 
@@ -150,7 +150,7 @@
 
         intKb = intKb*Y0*Nsq
 
-        write(111,*) "intKb: ", intKb(1,1)
+!        write(111,*) "intKb: ", intKb(1,1)
 
        end function
 
@@ -188,7 +188,7 @@
         complex*16, dimension(nd,nd) :: alphaqq,alphaInvAaInvAa
         complex*16, dimension(nd,nd) :: alphaqinvAa,alphainvA
 
-        write(111,*) "KINETIC ACTIVE"
+!        write(111,*) "KINETIC ACTIVE"
         Bmat = real(tildeBmat)
         Nsq=fun_Nsq(nd+1,Bmat)
 
@@ -281,9 +281,9 @@
  
         intKa3=(Ka3c0*X0mat+Ka3c1*lin+Ka3c2*sqr)*Y0*Nsq
 
-        write(111,*) "intKa1(5,3): ", intKa1(5,3)
-        write(111,*) "intKa2(5,3): ", intKa2(5,3)
-        write(111,*) "intKa3: ", intKa3(1,1)
+!        write(111,*) "intKa1(5,3): ", intKa1(5,3)
+!        write(111,*) "intKa2(5,3): ", intKa2(5,3)
+!        write(111,*) "intKa3: ", intKa3(1,1)
 
         intKa=intKa1 + 2*intKa2 + intKa3
        

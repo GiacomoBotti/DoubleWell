@@ -44,7 +44,7 @@
        real*8, dimension(nh,nh) :: X4mat,X2mat,X1mat,X0mat
        real*8, dimension(nh,nh) :: Xtot,XYtot,Ytot,lin,sqr
 
-       write(111,*) "POTENTIAL"
+!       write(111,*) "POTENTIAL"
 
        ! Unreavel qtot
        q = qtot(1)
@@ -121,17 +121,17 @@
 
        ! V elements
        Vx=Nsq*Y0*dot_product(cvec,Xcvec)
-       write(111,*) "Vx: ", Vx
+!       write(111,*) "Vx: ", Vx
        Vxy=Nsq*Y0*gamma_const*dot_product(cvec,XYcvec)
-       write(111,*) "Vxy: ", Vxy
+!       write(111,*) "Vxy: ", Vxy
        Vy=Nsq*Y0*dot_product(cvec,Ycvec)
-       write(111,*) "Vy: ", Vy
+!       write(111,*) "Vy: ", Vy
              
 !       Vx=0.d0
 !       Vxy=0.d0
 !       Vy=0.d0
        V0 = Vx+Vxy+Vy
-       write(111,*) "V0", V0
+!       write(111,*) "V0", V0
         
       end function
 
@@ -157,7 +157,7 @@
        real*8, dimension(nh) :: X3c, X1c, X0c 
        real*8, dimension(nh,nh) :: X3mat,X2mat,X1mat,X0mat
 
-       write(111,*) "GRADIENT"
+!       write(111,*) "GRADIENT"
        write(111,*) "qtot:", qtot
        ! Unreavel qtot
        q = qtot(1)
@@ -204,7 +204,7 @@
        V1(2) = dy1V
        V1(3:nd+1) = V1prime(2:nd)
 
-       write(111,*) "V1", V1(:)
+!       write(111,*) "V1", V1(:)
 
       end function
 
