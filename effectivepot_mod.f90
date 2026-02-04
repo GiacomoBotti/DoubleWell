@@ -158,7 +158,7 @@
        real*8, dimension(nh,nh) :: X3mat,X2mat,X1mat,X0mat
 
 !       write(111,*) "GRADIENT"
-       write(111,*) "qtot:", qtot
+!       write(111,*) "qtot:", qtot
        ! Unreavel qtot
        q = qtot(1)
        qvec(:) = qtot(2:nd+1)
