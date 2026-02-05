@@ -48,7 +48,6 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
- - [ ] Debug *dynamics* with $\tilde{\mathbb{B}}$ complex
 - [ ] Time shifted overlap matrix $\mathscr{S}_{mn} (t_{i},t_{j})$:
     - [x] Time shifted Hermite polynomials product function
     - [ ] Debug w/ MAPLE using `check_module.f90`
@@ -132,7 +131,8 @@ The same goes for the Hermite polynomials basis set.
       - [x] assemble everything
     - [x] assemble $\mathbb{H}^{(00)}$
     - [x] test $\mathbb{H}^{(00)}$
- - [x] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
+- [x] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
+- [x] Debug *dynamics* with $\tilde{\mathbb{B}}$ complex
 
 ## OLD FRAMEWORK (TWO HERMITE)
 

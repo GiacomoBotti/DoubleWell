@@ -184,10 +184,11 @@
         
           Nsq=fun_Nsq(nd+1,real(Bcmplxj))
 
-          write(444,*) "Time: ", time, "Nsq: ", Nsq
-          do k = 1,nd+1
-             write(444,*) Bcmplxj(k,:)
-          end do
+          ! DEBUG: prints tildeB at each step
+          !write(444,*) "Time: ", time, "Nsq: ", Nsq
+          !do k = 1,nd+1
+          !   write(444,*) Bcmplxj(k,:)
+          !end do
 
           qtoti = qtotj  
           ptoti = ptotj
@@ -200,11 +201,11 @@
        write(*,*) time, dreal(cj), dimag(cj)
        write(*,*) time, qtotj(2:nd+1) 
 
-       write(222,*) qtotj
-       write(222,*) ptotj
-       do i = 1,nd+1
-         write(222,*) Bcmplxj(i,:)
-       end do
+       !write(222,*) qtotj
+       !write(222,*) ptotj
+       !do i = 1,nd+1
+       !  write(222,*) Bcmplxj(i,:)
+       !end do
 
        close(321)
        close(322)
