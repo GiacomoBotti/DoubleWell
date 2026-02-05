@@ -10,6 +10,7 @@
        use observable_module
 !       use BOT_module
        use eofmotion_module
+       use integrals_module
 
        implicit none
 
@@ -34,7 +35,7 @@
        complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx 
 
        integer*8 :: i,j,first,last,nstep,k
-       real*8 :: h,time,N,E,q,p,E0
+       real*8 :: h,time,N,E,q,p,E0,Nsq
        real*8,dimension(nd) :: qvec,pvec 
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold 
        real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
@@ -66,8 +67,9 @@
 
        open(unit=321,file="trajectory_BOT.dat",status="unknown")
        open(unit=322,file="coefficients_BOT.dat",status="unknown")
-       open(unit=323,file="bath_BOT.dat",status="unknown")
+       open(unit=323,file="qbath_BOT.dat",status="unknown")
        open(unit=324,file="energy_BOT.dat",status="unknown")
+       open(unit=325,file="pbath_BOT.dat",status="unknown")
       write(*,*) "+---------------------------------------------------+"
        write(*,*) "Writing trajectory output on trajectory_BOT.dat"
        write(*,*) "Writing coefficients output on coefficients_BOT.dat"
@@ -103,6 +105,13 @@
        write(324,*) "#Timestep: ",h
        write(324,*) "#Normalization constant: ",N
        write(324,*) "#H ", "T ", "V "
+  
+       write(325,*) "#Evolution parameters:"
+       write(325,*) "#Range: ",first,last
+       write(325,*) "#Steps: ",nstep
+       write(325,*) "#Timestep: ",h
+       write(325,*) "#Normalization constant: ",N
+       write(325,*) "#H ", "T ", "V "
 
        cvec= c0/dsqrt(N)
 
@@ -127,6 +136,8 @@
        write(323,*) "#Time ","qbath"
        write(323,*) 0.d0, q0(2:nd+1) 
 
+       write(323,*) "#Time ","pbath"
+       write(323,*) 0.d0, p0(2:nd+1) 
 
        qtoti = q0
        ptoti = p0
@@ -169,11 +180,15 @@
                        &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
           write(322,*) time, dreal(cj), dimag(cj)
           write(323,*) time, qtotj(2:nd+1) 
+          write(325,*) time, ptotj(2:nd+1) 
+        
+          Nsq=fun_Nsq(nd+1,real(Bcmplxj))
 
-          write(444,*) "Time: ", time
-          do k = 1,nd+1
-             write(444,*) Bcmplx(k,:)
-          end do
+          ! DEBUG: prints tildeB at each step
+          !write(444,*) "Time: ", time, "Nsq: ", Nsq
+          !do k = 1,nd+1
+          !   write(444,*) Bcmplxj(k,:)
+          !end do
 
           qtoti = qtotj  
           ptoti = ptotj
@@ -186,11 +201,11 @@
        write(*,*) time, dreal(cj), dimag(cj)
        write(*,*) time, qtotj(2:nd+1) 
 
-       write(222,*) qtotj
-       write(222,*) ptotj
-       do i = 1,nd+1
-         write(222,*) Bcmplxj(i,:)
-       end do
+       !write(222,*) qtotj
+       !write(222,*) ptotj
+       !do i = 1,nd+1
+       !  write(222,*) Bcmplxj(i,:)
+       !end do
 
        close(321)
        close(322)

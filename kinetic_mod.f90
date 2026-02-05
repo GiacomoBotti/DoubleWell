@@ -323,9 +323,9 @@
         !      &intdlnG) + intdyln)/2.d0
         K00 = -0.5d0*(mx*intKa+intKb)
 
-        write(111,*) "Ka: ", real(intKa(1,1)), aimag(intKa(1,1))
-        write(111,*) "Kb: ", real(intKb(1,1)), aimag(intKb(1,1))
-        write(111,*) "K00: ", real(K00(1,1)), aimag(K00(1,1))
+!        write(111,*) "Ka: ", real(intKa(1,1)), aimag(intKa(1,1))
+!        write(111,*) "Kb: ", real(intKb(1,1)), aimag(intKb(1,1))
+!        write(111,*) "K00: ", real(K00(1,1)), aimag(K00(1,1))
         !write(111,*) "K00: ", K00(3,2)
 
        end function
