@@ -22,6 +22,9 @@
       complex*16,dimension(nv+1,nv+1) :: Bcmplx !Initial width matrix
       integer*8,dimension(3) :: trj
 
+!      call print_double_well_banner()
+      call execute_command_line('cat banner.txt')
+
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "|               MAIN CODE EXECUTION                 |"
       write(*,*) "+---------------------------------------------------+"
