@@ -51,6 +51,7 @@ The same goes for the Hermite polynomials basis set.
 - [ ] Time shifted overlap matrix $\mathscr{S}_{mn} (t_{i},t_{j})$:
     - [ ] Test in MAPLE
     - [x] Time shifted Hermite polynomials product function
+    - [ ] Time shifted $N^{2} = N_{i} \times N_{j}$
     - [ ] Debug w/ MAPLE using `check_module.f90`
     - [ ] $S_{b}$ function
     - [ ] Adapt Cavalieri-Simpson
