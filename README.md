@@ -49,8 +49,9 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
 - [ ] Time shifted overlap matrix $\mathscr{S}_{mn} (t_{i},t_{j})$:
-    - [ ] Test in MAPLE
+    - [x] Test in MAPLE
     - [x] Time shifted Hermite polynomials product function
+    - [x] Debug w/ MAPLE
     - [ ] Time shifted $N^{2} = N_{i} \times N_{j}$
     - [ ] Debug w/ MAPLE using `check_module.f90`
     - [ ] $S_{b}$ function

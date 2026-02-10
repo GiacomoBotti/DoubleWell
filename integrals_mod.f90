@@ -16,7 +16,7 @@
        integer*8, parameter :: nstep=500
 
        private
-       public :: int_Y0,int_XnMat,fun_Nsq
+       public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj
 
        contains
 
@@ -189,6 +189,29 @@
 
         Gx=dexp(-(a-aLa)*(x-q)**2)
 
+       end function
+
+!......NiNj factor......................................................
+
+       function fun_NiNj(ndim,Bimat,Bjmat) result(NiNj)
+       ! ndim: dimension of the Bmat
+       ! Bimat: fullD Gaussian width matrix (x & y) BRA
+       ! Bjmat: fullD Gaussian width matrix (x & y) KET
+       ! NiNj: square of the normalization factor
+        integer, intent(in) :: ndim
+        real*8, dimension(ndim,ndim), intent(in) :: Bimat
+        real*8, dimension(ndim,ndim), intent(in) :: Bjmat
+
+        real*8 :: NiNj,Bidet,Bjdet
+        real*8, dimension(ndim,ndim) :: Supporti,Supportj
+
+        Supporti = Bimat
+        Bidet = determinant(ndim,Supporti)
+        Supportj = Bjmat
+        Bjdet = determinant(ndim,Supportj)
+        !write(*,*) "Bdet", Bdet
+        NiNj = (Bidet*Bjdet)/(pi**(2*ndim))**(1/4)
+        write(*,*) "NiNj", NiNj
        end function
        end module
      

@@ -199,6 +199,20 @@
          end do
        end do
 
+       write(*,*) "------------------------------"
+       write(*,*) "The values of Hmat Shifted"
+       write(*,*) "------------------------------"
+
+       do i = 1,3
+         do j =1,3
+           write(*,*) "x: ",1.d0,"qi: ",i,"qj: ",j
+           Hmat = fun_HmatShift(1.d0,dfloat(i),dfloat(j))
+           do k = 1,nh
+             write(*,*) Hmat(k,:)
+           end do
+         end do
+       end do
+
       end subroutine  
 
 !.....Check Y0..........................................................
@@ -380,6 +394,5 @@
        end do
 
       end subroutine
-
 
       end module
