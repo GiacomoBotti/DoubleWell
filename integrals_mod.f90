@@ -210,8 +210,8 @@
         Supportj = Bjmat
         Bjdet = determinant(ndim,Supportj)
         !write(*,*) "Bdet", Bdet
-        NiNj = (Bidet*Bjdet)/(pi**(2*ndim))**(1/4)
-        write(*,*) "NiNj", NiNj
+        NiNj =((Bjdet/pi**ndim)*(Bidet/pi**ndim))**(1.d0/4.d0) 
+        !write(*,*) "NiNj", NiNj
        end function
        end module
      

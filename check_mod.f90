@@ -395,4 +395,53 @@
 
       end subroutine
 
+!.....Check normalization factor........................................
+
+      subroutine check_NN(nd)
+      ! nd: dimension of y
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: Nsq,NiNj
+       real*8,dimension(nd+1,nd+1) :: Bimat,Bjmat
+
+       do i = 1,nd+1
+          Bimat(i,i) = i
+          do j = i+1,nd+1
+             Bimat(i,j) = j/20.d0 !Gershgoring circle theorem
+             Bimat(j,i) = Bimat(i,j)
+          end do
+       end do
+
+       do i = 1,nd+1
+          Bjmat(i,i) = i+2
+          do j = i+1,nd+1
+             Bjmat(i,j) = j/5.d0 !Gershgoring circle theorem
+             Bjmat(j,i) = Bjmat(i,j)
+          end do
+       end do
+
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+       write(*,*) "# HELLO I'M CHECK_NORM"
+       write(*,*) "Bi matrix"
+     
+       do i = 1,nd+1
+          write(*,*) Bimat(i,:)
+       end do
+
+       write(*,*) "Bj matrix"
+     
+       do i = 1,nd+1
+          write(*,*) Bjmat(i,:)
+       end do
+
+       write(*,*) "------------------------------"
+
+       Nsq = fun_Nsq(nd+1,Bimat)
+       NiNj = fun_NiNj(nd+1,Bimat,Bimat)
+       write(*,*) "Nsq: ",Nsq,"NiNj: ",NiNj
+       NiNj = fun_NiNj(nd+1,Bimat,Bjmat)
+       write(*,*) "Nsq: ",Nsq,"NiNj: ",NiNj
+      end subroutine
+  
       end module

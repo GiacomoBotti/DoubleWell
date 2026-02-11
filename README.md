@@ -52,8 +52,8 @@ The same goes for the Hermite polynomials basis set.
     - [x] Test in MAPLE
     - [x] Time shifted Hermite polynomials product function
     - [x] Debug w/ MAPLE
-    - [ ] Time shifted $N^{2} = N_{i} \times N_{j}$
-    - [ ] Debug w/ MAPLE using `check_module.f90`
+    - [x] Time shifted $N^{2} = N_{i} \times N_{j}$
+    - [x] Debug w/ MAPLE using `check_module.f90`
     - [ ] $S_{b}$ function
     - [ ] Adapt Cavalieri-Simpson
     - [ ] Debug w/ MAPLE
