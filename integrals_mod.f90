@@ -16,7 +16,7 @@
        integer*8, parameter :: nstep=500
 
        private
-       public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj
+       public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb
 
        contains
 
@@ -213,5 +213,72 @@
         NiNj =((Bjdet/pi**ndim)*(Bidet/pi**ndim))**(1.d0/4.d0) 
         !write(*,*) "NiNj", NiNj
        end function
+
+!......Sb function......................................................
+
+       function fun_Sb(nd,x,qi,qj,pi,pj,Bimat,Bjmat) result(Sb)
+       ! nd: bath dimensions
+       ! x: active mode coordinate
+       ! qi: total gaussian center vector (bra)
+       ! qj: total gaussian center vector (ket)
+       ! pi: total gaussian momenta vector (bra)
+       ! pj: total gaussian momenta vector (ket)
+       ! Bimat: complex gaussian width matrix (bra)
+       ! Bjmat: complex gaussian width matrix (ket)
+        integer, intent(in) :: nd
+        real*8, intent(in) :: x
+        real*8, dimension(nd+1), intent(in) :: qi,qj,pi,pj
+        complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
+
+        integer :: i,j
+        integer*8 :: ndouble
+        real*8 :: q,p
+        real*8, dimension(nd) :: pbi,pbj,qbi,qbj
+        complex*16 :: alphai,alphaj,Sb,gAg,qiAiqi,qjAjqj,prodi,prodj
+        complex*16 :: h0i, h0j
+        complex*16, dimension(nd) :: aveci,avecj,gveci,gvecj,gtot,qiAi
+        complex*16, dimension(nd) :: qjAj,Ag,veci,vecj
+        complex*16, dimension(nd,nd) :: Ai,Aj,Atot,invAtot
+
+        pbi=pi(2:nd+1)
+        pbj=pj(2:nd+1)
+        qbi=qi(2:nd+1)
+        qbj=qj(2:nd+1)
+
+        call extracttildeA(nd,Bimat,Ai,aveci,alphai) 
+        call extracttildeA(nd,Bjmat,Aj,avecj,alphaj) 
+
+        Atot = Aj + transpose(dconjg(Ai))
+        ndouble=nd
+        invAtot = invgen(ndouble,Atot)
+         
+        qiAi=matmul(transpose(dconjg(Ai)),qbi)
+        qiAiqi = dot_product(qbi,qiAi)
+        qjAj=matmul(Aj,qbj)
+        qjAjqj = dot_product(qbj,qjAj)
+
+        gveci=-(x-qi(1))*dconjg(aveci)-iu*pbi+qiAi
+        gvecj=-(x-qj(1))*avecj+iu*pbj+qjAj
+        gtot=gveci+gvecj
+
+        Ag = matmul(invAtot,gtot)
+        gAg = dot_product(dconjg(gtot),Ag)
+
+        veci = (x-qi(1))*dconjg(aveci) + iu*pbi
+        prodi = dot_product(qbi,veci)
+
+        h0i=-0.5d0*dconjg(alphai)*(x-qi(1))**2-iu*pi(1)*(x-qi(1))&
+            -0.5d0*qiAiqi+prodi
+
+        vecj = (x-qj(1))*avecj - iu*pbj
+        prodj = dot_product(qbj,vecj)
+
+        h0j=-0.5d0*alphaj*(x-qj(1))**2+iu*pj(1)*(x-qj(1))&
+            -0.5d0*qjAjqj+prodj
+
+        Sb=exp(-0.5d0*gAg+h0i+h0j)
+
+       end function
+
        end module
      

@@ -4,6 +4,7 @@
 
       module check_module
 
+      use constants
       use matrix_module 
       use potential_module
       use basisset_module
@@ -395,28 +396,31 @@
 
       end subroutine
 
-!.....Check normalization factor........................................
+!.....Check shifted overlap.............................................
 
-      subroutine check_NN(nd)
+      subroutine check_shiftedoverlap(nd)
       ! nd: dimension of y
        integer, intent(in) :: nd
 
        integer :: i,j
        real*8 :: Nsq,NiNj
-       real*8,dimension(nd+1,nd+1) :: Bimat,Bjmat
+       real*8,dimension(nd+1) :: qi,qj,pi,pj 
+       complex*16,dimension(nd+1,nd+1) :: Bimat,Bjmat
+
+       complex*16 :: Sb
 
        do i = 1,nd+1
-          Bimat(i,i) = i
+          Bimat(i,i) = i+iu*i
           do j = i+1,nd+1
-             Bimat(i,j) = j/20.d0 !Gershgoring circle theorem
+             Bimat(i,j) = (j+iu*j)/20.d0 !Gershgoring circle theorem
              Bimat(j,i) = Bimat(i,j)
           end do
        end do
 
        do i = 1,nd+1
-          Bjmat(i,i) = i+2
+          Bjmat(i,i) = (i+2)*(1+iu)
           do j = i+1,nd+1
-             Bjmat(i,j) = j/5.d0 !Gershgoring circle theorem
+             Bjmat(i,j) = (j+iu*j)/5.d0 !Gershgoring circle theorem
              Bjmat(j,i) = Bjmat(i,j)
           end do
        end do
@@ -437,11 +441,23 @@
 
        write(*,*) "------------------------------"
 
-       Nsq = fun_Nsq(nd+1,Bimat)
-       NiNj = fun_NiNj(nd+1,Bimat,Bimat)
+       Nsq = fun_Nsq(nd+1,real(Bimat))
+       NiNj = fun_NiNj(nd+1,real(Bimat),real(Bimat))
        write(*,*) "Nsq: ",Nsq,"NiNj: ",NiNj
-       NiNj = fun_NiNj(nd+1,Bimat,Bjmat)
+       NiNj = fun_NiNj(nd+1,real(Bimat),real(Bjmat))
        write(*,*) "Nsq: ",Nsq,"NiNj: ",NiNj
+
+       qj(:) = 1.d0
+       pj(:) = 2.d0
+       qi(:) = 3.d0
+       pi(:) = 4.d0
+
+       write(*,*) "------------------------------"
+       
+       Sb = fun_Sb(nd,10.d0,qi,qj,pi,pj,Bimat,Bjmat)
+
+       write(*,*) "Sb: ", Sb
+
       end subroutine
   
       end module
