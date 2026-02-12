@@ -16,7 +16,7 @@
        integer*8, parameter :: nstep=500
 
        private
-       public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb
+       public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat
 
        contains
 
@@ -211,7 +211,8 @@
         Bjdet = determinant(ndim,Supportj)
         !write(*,*) "Bdet", Bdet
         NiNj =((Bjdet/pi**ndim)*(Bidet/pi**ndim))**(1.d0/4.d0) 
-        !write(*,*) "NiNj", NiNj
+        write(*,*) "NiNj", NiNj
+
        end function
 
 !......Sb function......................................................
@@ -276,8 +277,83 @@
         h0j=-0.5d0*alphaj*(x-qj(1))**2+iu*pj(1)*(x-qj(1))&
             -0.5d0*qjAjqj+prodj
 
-        Sb=exp(-0.5d0*gAg+h0i+h0j)
+        Sb=exp(+0.5d0*gAg+h0i+h0j)
 
+       end function
+
+!......Time-shifted overlap.............................................
+
+       function int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat) result(TauMat)
+       ! nd: bath dimensions
+       ! x: active mode coordinate
+       ! qi: total gaussian center vector (bra)
+       ! qj: total gaussian center vector (ket)
+       ! ppi: total gaussian momenta vector (bra)
+       ! pj: total gaussian momenta vector (ket)
+       ! Bimat: complex gaussian width matrix (bra)
+       ! Bjmat: complex gaussian width matrix (ket)
+        integer, intent(in) :: nd
+        real*8, dimension(nd+1), intent(in) :: qi,qj,ppi,pj
+        complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
+
+        integer :: i
+        real*8 :: x,h,NiNj
+        complex*16 :: Sb,norm,alphai,alphaj,detAtot
+        real*8, dimension(nh,nh) :: HiHjmat
+        complex*16, dimension(nh,nh) :: integral,integrand,s,TauMat
+        complex*16, dimension(nd) :: aveci,avecj 
+        complex*16, dimension(nd,nd) :: Atot,Ai,Aj 
+
+        NiNj = fun_NiNj(nd+1,real(Bimat),real(Bjmat))
+
+        call extracttildeA(nd,Bimat,Ai,aveci,alphai) 
+        call extracttildeA(nd,Bjmat,Aj,avecj,alphaj) 
+        Atot = Aj + transpose(dconjg(Ai))
+        detAtot = det_cmplx(nd,Atot)
+        write(*,*) "detAtot: ", detAtot
+        norm = zsqrt(((2*pi)**nd)/detAtot)
+
+        h = (hgb-lwb)/dfloat(nstep)
+ 
+        ! Compute integral in boundaries
+        integral(:,:) = 0.d0
+        ! Lower bound
+        x = lwb
+        Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+        HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+        integral=Sb*HiHjmat
+        ! Higher bound
+        x = hgb
+        Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+        HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+        integral=integral+Sb*HiHjmat
+        ! First step
+        x = lwb+h
+        Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+        HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+        integral=integral+Sb*HiHjmat
+
+        s(:,:) = 0.d0
+        do i = 2, nstep-2, 2 !only even
+           x = lwb + i*h
+           Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+           HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+           integrand=Sb*HiHjmat
+           s = s + 2.d0*integrand ! even
+           x = x + h
+           Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+           HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+           integrand=Sb*HiHjmat
+           s = s + 4.d0*integrand ! odd
+        end do
+
+        integral = (integral + s)*h/3.d0
+ 
+        TauMat = integral*NiNj*norm
+
+!        write(*,*) "power:", pow
+!        write(*,*) "Xn11:", XnMat(1,1)
+     
        end function
 
        end module

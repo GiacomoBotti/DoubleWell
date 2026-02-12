@@ -404,8 +404,9 @@
 
        integer :: i,j
        real*8 :: Nsq,NiNj
-       real*8,dimension(nd+1) :: qi,qj,pi,pj 
+       real*8,dimension(nd+1) :: qi,qj,ppi,pj 
        complex*16,dimension(nd+1,nd+1) :: Bimat,Bjmat
+       complex*16,dimension(nh,nh) :: TauMat
 
        complex*16 :: Sb
 
@@ -447,16 +448,26 @@
        NiNj = fun_NiNj(nd+1,real(Bimat),real(Bjmat))
        write(*,*) "Nsq: ",Nsq,"NiNj: ",NiNj
 
-       qj(:) = 1.d0
+       qj(:) = 1.5d0
        pj(:) = 2.d0
-       qi(:) = 3.d0
-       pi(:) = 4.d0
+       qi(:) = 1.d0
+       ppi(:) = 1.d0
 
        write(*,*) "------------------------------"
        
-       Sb = fun_Sb(nd,10.d0,qi,qj,pi,pj,Bimat,Bjmat)
-
+       Sb = fun_Sb(nd,1.5d0,qi,qj,ppi,pj,Bimat,Bjmat)
        write(*,*) "Sb: ", Sb
+
+       write(*,*) "------------------------------"
+
+       TauMat = int_TauMat(nd,qi,qi,ppi,ppi,Bimat,Bimat)
+ 
+       write(*,*) "TauMat(1,1): ", TauMat(1,1)
+
+       TauMat = int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat)
+ 
+       write(*,*) "TauMat(1,1): ", TauMat(3,5)
+    
 
       end subroutine
   
