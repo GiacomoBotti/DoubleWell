@@ -10,7 +10,7 @@
       integer,public :: maxorder = 8
       private
       public :: diagonalization,momenta,extractA,determinant,trace
-      public :: extracttildeA
+      public :: extracttildeA,det_cmplx
 
       contains
 
@@ -190,4 +190,54 @@
 
       end function
 
+!.....Diagonalization with LAPACK (complex).............................
+
+      function det_cmplx(nd,Amat) result(detAmat) 
+      ! nd: dimension of the matrices
+      ! Amat: complex matrix matrix (precision)
+      ! detAmat: determinant
+
+       integer, intent(in) :: nd
+       complex*16, dimension(nd,nd), intent(in) :: Amat
+ 
+       complex*16 :: detAmat 
+
+
+       integer, dimension(nd) :: ipiv   ! pivot indices
+       real*8 :: detL,detP
+       complex*16 :: detU
+       complex*16, dimension(nd) :: work  ! work array for LAPACK
+       complex*16, dimension(nd,nd) :: Awork
+       integer :: i,n, info
+
+       external ZGETRF
+
+       n = nd
+       ! Store A in Ainv to prevent it from being overwritten by LAPACK
+       Awork = Amat
+
+       call ZGETRF(n,n,Awork,n,ipiv,info) 
+
+       if (info /= 0) then
+         !write(*,*) "DGETRF info : ",info
+         stop 'diag_complx Matrix is numerically singular!'
+       end if
+
+       ! Determinants of the decomposition 
+       detU = complex(1.d0,0.d0)
+       detL = 1.d0
+       detP = 1.d0
+
+       do i = 1,nd
+         detU = detU*Awork(i,i)
+         if(ipiv(i).ne.i) then
+            detP = - detP
+         end if
+       end do
+ 
+       ! Total determinant
+
+       detAmat = detP*detU*detL
+
+      end function
       end module 

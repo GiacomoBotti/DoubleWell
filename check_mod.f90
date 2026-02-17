@@ -4,6 +4,7 @@
 
       module check_module
 
+      use constants
       use matrix_module 
       use potential_module
       use basisset_module
@@ -199,6 +200,20 @@
          end do
        end do
 
+       write(*,*) "------------------------------"
+       write(*,*) "The values of Hmat Shifted"
+       write(*,*) "------------------------------"
+
+       do i = 1,3
+         do j =1,3
+           write(*,*) "x: ",1.d0,"qi: ",i,"qj: ",j
+           Hmat = fun_HmatShift(1.d0,dfloat(i),dfloat(j))
+           do k = 1,nh
+             write(*,*) Hmat(k,:)
+           end do
+         end do
+       end do
+
       end subroutine  
 
 !.....Check Y0..........................................................
@@ -381,5 +396,82 @@
 
       end subroutine
 
+!.....Check shifted overlap.............................................
 
+      subroutine check_shiftedoverlap(nd)
+      ! nd: dimension of y
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: Nsq,NiNj
+       real*8,dimension(nd+1) :: qi,qj,ppi,pj 
+       complex*16,dimension(nd+1,nd+1) :: Bimat,Bjmat
+       complex*16,dimension(nh,nh) :: TauMat
+
+       complex*16 :: Sb
+
+       do i = 1,nd+1
+          Bimat(i,i) = i+iu*i
+          do j = i+1,nd+1
+             Bimat(i,j) = (j+iu*j)/20.d0 !Gershgoring circle theorem
+             Bimat(j,i) = Bimat(i,j)
+          end do
+       end do
+
+       do i = 1,nd+1
+          Bjmat(i,i) = (i+2)*(1+iu)
+          do j = i+1,nd+1
+             Bjmat(i,j) = (j+iu*j)/5.d0 !Gershgoring circle theorem
+             Bjmat(j,i) = Bjmat(i,j)
+          end do
+       end do
+
+       write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+       write(*,*) "# HELLO I'M CHECK_NORM"
+       write(*,*) "Bi matrix"
+     
+       do i = 1,nd+1
+          write(*,*) Bimat(i,:)
+       end do
+
+       write(*,*) "Bj matrix"
+     
+       do i = 1,nd+1
+          write(*,*) Bjmat(i,:)
+       end do
+
+       write(*,*) "------------------------------"
+
+       Nsq = fun_Nsq(nd+1,real(Bimat))
+       NiNj = fun_NiNj(nd+1,real(Bimat),real(Bimat))
+       write(*,*) "Nsq: ",Nsq,"NiNj: ",NiNj
+       NiNj = fun_NiNj(nd+1,real(Bimat),real(Bjmat))
+       write(*,*) "Nsq: ",Nsq,"NiNj: ",NiNj
+
+       qj(:) = 1.5d0
+       pj(:) = 2.d0
+       qi(:) = 1.7d0
+       ppi(:) = 1.5d0
+
+       qj(1) = 1.d0
+       qi(1) = 0.7d0 
+
+       write(*,*) "------------------------------"
+       
+       Sb = fun_Sb(nd,1.5d0,qi,qj,ppi,pj,Bimat,Bjmat)
+       write(*,*) "Sb: ", Sb
+
+       write(*,*) "------------------------------"
+
+       TauMat = int_TauMat(nd,qi,qi,ppi,ppi,Bimat,Bimat)
+ 
+       write(*,*) "TauMat(1,1): ", TauMat(1,1)
+
+       TauMat = int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat)
+ 
+       write(*,*) "TauMat(1,1): ", TauMat(3,5)
+    
+
+      end subroutine
+  
       end module

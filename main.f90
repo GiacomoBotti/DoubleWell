@@ -22,6 +22,9 @@
       complex*16,dimension(nv+1,nv+1) :: Bcmplx !Initial width matrix
       integer*8,dimension(3) :: trj
 
+!      call print_double_well_banner()
+      call execute_command_line('cat banner.txt')
+
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "|               MAIN CODE EXECUTION                 |"
       write(*,*) "+---------------------------------------------------+"
@@ -95,19 +98,21 @@
 !      call check_V0(nv,c0)
 !.....Check Norm........................................................
 !      call check_norm(nv,c0)
+!.....Check NN..........................................................
+      call check_shiftedoverlap(nv)
 !.....Evolution.........................................................
 
-      write(*,*) "WE ARE RUNNING"
-      write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,5,1000]
-      write(*,*) trj
+!      write(*,*) "WE ARE RUNNING"
+!      write(*,*) "+---------------------------------------------------+"
+!      write(*,*) "Start       ", "Stop       ", "Lenght     "  
+!      trj = [0,5,1000]
+!      write(*,*) trj
 
-      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
+!      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
 
-      write(*,*) "End of a successful run"
-      write(*,*) "Have a nice day"
-      write(*,*) "+---------------------------------------------------+"
+!      write(*,*) "End of a successful run"
+!      write(*,*) "Have a nice day"
+!      write(*,*) "+---------------------------------------------------+"
 
       end program
 

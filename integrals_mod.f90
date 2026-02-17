@@ -16,7 +16,7 @@
        integer*8, parameter :: nstep=500
 
        private
-       public :: int_Y0,int_XnMat,fun_Nsq
+       public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat
 
        contains
 
@@ -190,5 +190,171 @@
         Gx=dexp(-(a-aLa)*(x-q)**2)
 
        end function
+
+!......NiNj factor......................................................
+
+       function fun_NiNj(ndim,Bimat,Bjmat) result(NiNj)
+       ! ndim: dimension of the Bmat
+       ! Bimat: fullD Gaussian width matrix (x & y) BRA
+       ! Bjmat: fullD Gaussian width matrix (x & y) KET
+       ! NiNj: square of the normalization factor
+        integer, intent(in) :: ndim
+        real*8, dimension(ndim,ndim), intent(in) :: Bimat
+        real*8, dimension(ndim,ndim), intent(in) :: Bjmat
+
+        real*8 :: NiNj,Bidet,Bjdet
+        real*8, dimension(ndim,ndim) :: Supporti,Supportj
+
+        Supporti = Bimat
+        Bidet = determinant(ndim,Supporti)
+        Supportj = Bjmat
+        Bjdet = determinant(ndim,Supportj)
+        !write(*,*) "Bdet", Bdet
+        NiNj =((Bjdet/pi**ndim)*(Bidet/pi**ndim))**(1.d0/4.d0) 
+        write(*,*) "NiNj", NiNj
+
+       end function
+
+!......Sb function......................................................
+
+       function fun_Sb(nd,x,qi,qj,pi,pj,Bimat,Bjmat) result(Sb)
+       ! nd: bath dimensions
+       ! x: active mode coordinate
+       ! qi: total gaussian center vector (bra)
+       ! qj: total gaussian center vector (ket)
+       ! pi: total gaussian momenta vector (bra)
+       ! pj: total gaussian momenta vector (ket)
+       ! Bimat: complex gaussian width matrix (bra)
+       ! Bjmat: complex gaussian width matrix (ket)
+        integer, intent(in) :: nd
+        real*8, intent(in) :: x
+        real*8, dimension(nd+1), intent(in) :: qi,qj,pi,pj
+        complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
+
+        integer :: i,j
+        integer*8 :: ndouble
+        real*8 :: q,p
+        real*8, dimension(nd) :: pbi,pbj,qbi,qbj
+        complex*16 :: alphai,alphaj,Sb,gAg,qiAiqi,qjAjqj,prodi,prodj
+        complex*16 :: h0i, h0j
+        complex*16, dimension(nd) :: aveci,avecj,gveci,gvecj,gtot,qiAi
+        complex*16, dimension(nd) :: qjAj,Ag,veci,vecj
+        complex*16, dimension(nd,nd) :: Ai,Aj,Atot,invAtot
+
+        pbi=pi(2:nd+1)
+        pbj=pj(2:nd+1)
+        qbi=qi(2:nd+1)
+        qbj=qj(2:nd+1)
+
+        call extracttildeA(nd,Bimat,Ai,aveci,alphai) 
+        call extracttildeA(nd,Bjmat,Aj,avecj,alphaj) 
+
+        Atot = Aj + transpose(dconjg(Ai))
+        ndouble=nd
+        invAtot = invgen(ndouble,Atot)
+         
+        qiAi=matmul(transpose(dconjg(Ai)),qbi)
+        qiAiqi = dot_product(qbi,qiAi)
+        qjAj=matmul(Aj,qbj)
+        qjAjqj = dot_product(qbj,qjAj)
+
+        gveci=-(x-qi(1))*dconjg(aveci)-iu*pbi+qiAi
+        gvecj=-(x-qj(1))*avecj+iu*pbj+qjAj
+        gtot=gveci+gvecj
+
+        Ag = matmul(invAtot,gtot)
+        gAg = dot_product(dconjg(gtot),Ag)
+
+        veci = (x-qi(1))*dconjg(aveci) + iu*pbi
+        prodi = dot_product(qbi,veci)
+
+        h0i=-0.5d0*dconjg(alphai)*(x-qi(1))**2-iu*pi(1)*(x-qi(1))&
+            -0.5d0*qiAiqi+prodi
+
+        vecj = (x-qj(1))*avecj - iu*pbj
+        prodj = dot_product(qbj,vecj)
+
+        h0j=-0.5d0*alphaj*(x-qj(1))**2+iu*pj(1)*(x-qj(1))&
+            -0.5d0*qjAjqj+prodj
+
+        Sb=exp(+0.5d0*gAg+h0i+h0j)
+
+       end function
+
+!......Time-shifted overlap.............................................
+
+       function int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat) result(TauMat)
+       ! nd: bath dimensions
+       ! x: active mode coordinate
+       ! qi: total gaussian center vector (bra)
+       ! qj: total gaussian center vector (ket)
+       ! ppi: total gaussian momenta vector (bra)
+       ! pj: total gaussian momenta vector (ket)
+       ! Bimat: complex gaussian width matrix (bra)
+       ! Bjmat: complex gaussian width matrix (ket)
+        integer, intent(in) :: nd
+        real*8, dimension(nd+1), intent(in) :: qi,qj,ppi,pj
+        complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
+
+        integer :: i
+        real*8 :: x,h,NiNj
+        complex*16 :: Sb,norm,alphai,alphaj,detAtot
+        real*8, dimension(nh,nh) :: HiHjmat
+        complex*16, dimension(nh,nh) :: integral,integrand,s,TauMat
+        complex*16, dimension(nd) :: aveci,avecj 
+        complex*16, dimension(nd,nd) :: Atot,Ai,Aj 
+
+        NiNj = fun_NiNj(nd+1,real(Bimat),real(Bjmat))
+
+        call extracttildeA(nd,Bimat,Ai,aveci,alphai) 
+        call extracttildeA(nd,Bjmat,Aj,avecj,alphaj) 
+        Atot = Aj + transpose(dconjg(Ai))
+        detAtot = det_cmplx(nd,Atot)
+        write(*,*) "detAtot: ", detAtot
+        norm = zsqrt(((2*pi)**nd)/detAtot)
+
+        h = (hgb-lwb)/dfloat(nstep)
+ 
+        ! Compute integral in boundaries
+        integral(:,:) = 0.d0
+        ! Lower bound
+        x = lwb
+        Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+        HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+        integral=Sb*HiHjmat
+        ! Higher bound
+        x = hgb
+        Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+        HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+        integral=integral+Sb*HiHjmat
+        ! First step
+        x = lwb+h
+        Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+        HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+        integral=integral+Sb*HiHjmat
+
+        s(:,:) = 0.d0
+        do i = 2, nstep-2, 2 !only even
+           x = lwb + i*h
+           Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+           HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+           integrand=Sb*HiHjmat
+           s = s + 2.d0*integrand ! even
+           x = x + h
+           Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+           HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+           integrand=Sb*HiHjmat
+           s = s + 4.d0*integrand ! odd
+        end do
+
+        integral = (integral + s)*h/3.d0
+ 
+        TauMat = integral*NiNj*norm
+
+!        write(*,*) "power:", pow
+!        write(*,*) "Xn11:", XnMat(1,1)
+     
+       end function
+
        end module
      

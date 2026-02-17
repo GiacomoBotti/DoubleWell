@@ -48,12 +48,6 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
-- [ ] Time shifted overlap matrix $\mathscr{S}_{mn} (t_{i},t_{j})$:
-    - [x] Time shifted Hermite polynomials product function
-    - [ ] Debug w/ MAPLE using `check_module.f90`
-    - [ ] $S_{b}$ function
-    - [ ] Adapt Cavalieri-Simpson
-    - [ ] Debug w/ MAPLE
 - [ ] Adapt `bot`
    - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
    - [ ] Implement algorithm
@@ -133,6 +127,16 @@ The same goes for the Hermite polynomials basis set.
     - [x] test $\mathbb{H}^{(00)}$
 - [x] Debug $\mathbb{H}^{(00)}$ by checking step-by-step $\mathbb{T}^{(00)}$
 - [x] Debug *dynamics* with $\tilde{\mathbb{B}}$ complex
+- [x] Time shifted overlap matrix $\mathscr{S}_{mn} (t_{i},t_{j})$:
+    - [x] Test in MAPLE
+    - [x] Time shifted Hermite polynomials product function
+    - [x] Debug w/ MAPLE
+    - [x] Time shifted $N^{2} = N_{i} \times N_{j}$
+    - [x] Debug w/ MAPLE using `check_module.f90`
+    - [x] $S_{b}$ function
+    - [x] Debug w/ MAPLE
+    - [x] Adapt Cavalieri-Simpson
+    - [x] Debug w/ MAPLE
 
 ## OLD FRAMEWORK (TWO HERMITE)
 
