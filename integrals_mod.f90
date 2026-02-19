@@ -99,29 +99,29 @@
         ! Lower bound
         x = lwb
         Gx=fun_Gx(nd,a,avec,Amat,x,q)
-        Hmat=fun_Hmat(x,q)
+        Hmat=fun_Hmat(x,q,a)
         integral=Gx*Hmat*x**pow
         ! Higher bound
         x = hgb
         Gx=fun_Gx(nd,a,avec,Amat,x,q)
-        Hmat=fun_Hmat(x,q)
+        Hmat=fun_Hmat(x,q,a)
         integral=integral+Gx*Hmat*x**pow
         ! First step
         x = lwb+h
         Gx=fun_Gx(nd,a,avec,Amat,x,q)
-        Hmat=fun_Hmat(x,q)
+        Hmat=fun_Hmat(x,q,a)
         integral=integral+Gx*Hmat*x**pow
 
         s(:,:) = 0.d0
         do i = 2, nstep-2, 2 !only even
            x = lwb + i*h
            Gx=fun_Gx(nd,a,avec,Amat,x,q)
-           Hmat=fun_Hmat(x,q)
+           Hmat=fun_Hmat(x,q,a)
            integrand = Gx*Hmat*x**pow 
            s = s + 2.d0*integrand ! even
            x = x + h
            Gx=fun_Gx(nd,a,avec,Amat,x,q)
-           Hmat=fun_Hmat(x,q)
+           Hmat=fun_Hmat(x,q,a)
            integrand = Gx*Hmat*x**pow
            s = s + 4.d0*integrand ! odd
         end do
@@ -297,7 +297,7 @@
         complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
 
         integer :: i
-        real*8 :: x,h,NiNj
+        real*8 :: x,h,NiNj,ralphai,ralphaj
         complex*16 :: Sb,norm,alphai,alphaj,detAtot
         real*8, dimension(nh,nh) :: HiHjmat
         complex*16, dimension(nh,nh) :: integral,integrand,s,TauMat
@@ -308,6 +308,8 @@
 
         call extracttildeA(nd,Bimat,Ai,aveci,alphai) 
         call extracttildeA(nd,Bjmat,Aj,avecj,alphaj) 
+        ralphai = real(alphai)
+        ralphaj = real(alphaj)
         Atot = Aj + transpose(dconjg(Ai))
         detAtot = det_cmplx(nd,Atot)
         write(*,*) "detAtot: ", detAtot
@@ -320,29 +322,29 @@
         ! Lower bound
         x = lwb
         Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-        HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+        HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
         integral=Sb*HiHjmat
         ! Higher bound
         x = hgb
         Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-        HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+        HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
         integral=integral+Sb*HiHjmat
         ! First step
         x = lwb+h
         Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-        HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+        HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
         integral=integral+Sb*HiHjmat
 
         s(:,:) = 0.d0
         do i = 2, nstep-2, 2 !only even
            x = lwb + i*h
            Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-           HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+           HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
            integrand=Sb*HiHjmat
            s = s + 2.d0*integrand ! even
            x = x + h
            Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-           HiHjmat=fun_HmatShift(x,qi(1),qj(1))
+           HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
            integrand=Sb*HiHjmat
            s = s + 4.d0*integrand ! odd
         end do

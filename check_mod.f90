@@ -180,7 +180,7 @@
        do i = 1,3
          do j = 1,3
            do l = 1,nh
-             H = herm_pol(l,dfloat(i),dfloat(j))
+             H = herm_pol(l,dfloat(i),dfloat(j),3.d0)
              write(*,*) "npol: ",l,"x: ",i,"q: ",j,"H: ",H
            end do 
          end do
@@ -193,7 +193,7 @@
        do i = 1,3
          do j =1,3
            write(*,*) "x: ",i,"q: ",j
-           Hmat = fun_Hmat(dfloat(i),dfloat(j))
+           Hmat = fun_Hmat(dfloat(i),dfloat(j),3.d0)
            do k = 1,nh
              write(*,*) Hmat(k,:)
            end do
@@ -207,7 +207,7 @@
        do i = 1,3
          do j =1,3
            write(*,*) "x: ",1.d0,"qi: ",i,"qj: ",j
-           Hmat = fun_HmatShift(1.d0,dfloat(i),dfloat(j))
+           Hmat = fun_HmatShift(1.d0,dfloat(i),dfloat(j),3.d0,4.d0)
            do k = 1,nh
              write(*,*) Hmat(k,:)
            end do

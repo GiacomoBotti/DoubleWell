@@ -125,7 +125,7 @@
       ! alphai: x coord gaussian width (REAL)
       ! alphaj: x coord gaussian width (REAL)
       ! Hmat: matrix of the polynomial products in x-q1 and x-q2
-       real*8, intent(in) :: x,qi,qj,alpha
+       real*8, intent(in) :: x,qi,qj,alphai,alphaj
        
        integer :: i,j
        real*8 :: H1,H2
