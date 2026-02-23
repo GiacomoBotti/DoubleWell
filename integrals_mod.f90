@@ -151,7 +151,7 @@
         Bdet = determinant(ndim,Support)
         !write(*,*) "Bdet", Bdet
         Nsq = dsqrt(Bdet/(pi**ndim))
-        !write(*,*) "Nsq", Nsq
+        write(*,*) "Nsq", Nsq
 
        end function
 

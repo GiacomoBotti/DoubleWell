@@ -11,6 +11,7 @@
       use integrals_module
       use effectivepot_module
       use normalization_module
+      use kinetic_module
 
       implicit none
 
@@ -469,9 +470,67 @@
 
        TauMat = int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat)
  
-       write(*,*) "TauMat(1,1): ", TauMat(3,5)
+       write(*,*) "TauMat(1,1): ", TauMat(1,1)
     
 
       end subroutine
-  
+
+!.....Check SG maple....................................................
+!.....maple file: TGWP-K-and-S-numeric_GB.mw............................
+      subroutine check_KSnum(nd)
+      ! nd: dimension of y
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: q,p,H 
+       real*8, dimension(nd) :: qvec,pvec
+       real*8, dimension(nd+1) :: qtot,ptot
+       complex*16, dimension(nd+1,nd+1) :: Bmat 
+
+       complex*16, dimension(nh,nh) :: Hmat,Kmat
+ 
+       do i = 1,nd+1
+          qtot(i) = i*dsqrt(2.d0)/3.d0
+          ptot(i) = i*dsqrt(3.d0)/7.d0
+          Bmat(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
+          do j= i+1,nd+1
+            Bmat(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
+            Bmat(j,i) = Bmat(i,j)
+          end do   
+       end do
+
+       q = qtot(1)
+       p = ptot(1)
+       qvec = qtot(2:nd+1)
+       pvec = ptot(2:nd+1)
+
+       write(*,*) "Hermite pol. in x=1"
+       do i = 1,nh
+         H = herm_pol(i,1.d0,q,real(Bmat(1,1)))
+         write(*,*) H
+       end do
+
+       write(*,*) "------------------------------"
+       write(*,*) "The values of Hmat in x=1"
+       write(*,*) "------------------------------"
+
+       Hmat = fun_Hmat(1.d0,q,real(Bmat(1,1)))
+       do i = 1,nh
+         write(*,*) Hmat(i,:)
+       end do
+
+       Kmat = kin_energy(nd,q,p,qvec,pvec,Bmat)
+
+       write(*,*) "qtot: ", qtot
+       write(*,*) "ptot: ", ptot
+       write(*,*) "Bmat: "
+       do i = 1,nd+1
+         write(*,*) Bmat(i,:)
+       end do
+       write(*,*) "Kmat: "
+       do i = 1,nd+1
+         write(*,*) Kmat(i,:)
+       end do
+ 
+      end subroutine  
       end module

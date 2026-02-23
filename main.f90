@@ -72,7 +72,7 @@
       write(*,*) "Masses vector:"
 
       do i = 1,nv+1
-        masses(i) = 1.d0
+        masses(i) = 1.1d0*i
         write(*,*) masses(i)
       end do
 
@@ -89,7 +89,7 @@
 !.....Check Matrix Potential............................................
 !      call check_vmat()
 !.....Check Hermite Matrix..............................................
-      call check_hermmat()
+!      call check_hermmat()
 !.....Check Y0..........................................................
 !      call check_Y0(nv)
 !.....Check XnMat.......................................................
@@ -99,7 +99,9 @@
 !.....Check Norm........................................................
 !      call check_norm(nv,c0)
 !.....Check NN..........................................................
-      call check_shiftedoverlap(nv)
+!      call check_shiftedoverlap(nv)
+!.....Check K and S as SG...............................................
+      call check_KSnum(nv)
 !.....Evolution.........................................................
 
 !      write(*,*) "WE ARE RUNNING"
@@ -110,9 +112,9 @@
 
 !      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
 
-!      write(*,*) "End of a successful run"
-!      write(*,*) "Have a nice day"
-!      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "End of a successful run"
+      write(*,*) "Have a nice day"
+      write(*,*) "+---------------------------------------------------+"
 
       end program
 
