@@ -482,7 +482,7 @@
        integer, intent(in) :: nd
 
        integer :: i,j
-       real*8 :: q,p,H 
+       real*8 :: q,p,H,fact1,fact2,norm,normdev,pre
        real*8, dimension(nd) :: qvec,pvec
        real*8, dimension(nd+1) :: qtot,ptot
        complex*16, dimension(nd+1,nd+1) :: Bmat 
@@ -518,6 +518,37 @@
        do i = 1,nh
          write(*,*) Hmat(i,:)
        end do
+
+       write(*,*) "------------------------------"
+       write(*,*) "The values of H derv in x=1"
+       write(*,*) "------------------------------"
+
+       write(*,*) "SECOND DERIVATIVE of H4"
+
+       fact1 = factorial(4) ! H4
+       fact2 = factorial(2) ! H2
+       norm = 1/dsqrt(fact1*2**4) ! H4
+       normdev = 1/dsqrt(fact2*2**2) ! H2
+       pre = real(Bmat(1,1))*norm/normdev
+       H = herm_pol(5-2,1.d0,q,real(Bmat(1,1)))
+       write(*,*) 4.d0*(5-1)*(5-2)*H*pre, pre
+       pre = der_pre(5,2,real(Bmat(1,1)))
+       write(*,*) 4.d0*(5-1)*(5-2)*H*pre, pre
+
+       write(*,*) "FIRST DERIVATIVE of H2"
+
+       fact1 = factorial(2) ! H2
+       fact2 = factorial(1) ! H1
+       norm = 1/dsqrt(fact1*2**2) ! H2
+       normdev = 1/dsqrt(fact2*2**1) ! H1
+       pre = dsqrt(real(Bmat(1,1)))*norm/normdev
+       H = herm_pol(3-1,1.d0,q,real(Bmat(1,1)))
+       write(*,*) 2.d0*(3-1)*H*pre,pre
+       pre = der_pre(3,1,real(Bmat(1,1)))
+       write(*,*) 2.d0*(3-1)*H*pre,pre
+      
+
+ 
 
        Kmat = kin_energy(nd,q,p,qvec,pvec,Bmat)
 

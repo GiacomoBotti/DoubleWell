@@ -14,9 +14,35 @@
        implicit none
 
        private  
-       public :: kin_energy 
+       public :: kin_energy,der_pre 
 
        contains
+
+!......Derivative prefactor.............................................
+       
+       function der_pre(indx,order,alpha) result(pre)
+       ! indx: index of derived polynomial, as in Hmat
+       ! order: order of the derivative
+       ! alpha: gaussian width along the x coord (REAL)
+        integer, intent(in) :: indx,order
+        real*8, intent(in) :: alpha
+
+        real*8 :: pre
+
+        real*8 :: fact1,fact2,norm,normdev,sqrta
+
+        fact1 = factorial(indx-1)
+        fact2 = factorial(indx-1-order)
+        sqrta = dsqrt(alpha)
+
+        norm = 1/dsqrt(fact1*2**(indx-1))
+        normdev = 1/dsqrt(fact2*2**(indx-1-order))
+
+        pre = norm/normdev
+
+        pre = pre*sqrta**order
+      
+       end function
 
 !......K bath...........................................................
 
@@ -173,7 +199,7 @@
         real*8 :: Y0
         real*8, dimension(nh,nh) :: X0mat,X1mat,X2mat,lin,sqr
 
-        real*8 :: a,Nsq
+        real*8 :: a,Nsq,prf
         real*8, dimension(nd) :: avec,invAa,kvec
         real*8, dimension(nd,nd) :: Amat,invA,LambdaMat,Tmat,qqMat
         real*8, dimension(nd,nd) :: invAainvAaMat,qinvAa 
@@ -219,7 +245,8 @@
 
         do i = 1,nh
            do j = 3,nh
-              intKa1(i,j) = 4.d0*(j-1)*(j-2)*Y0*X0mat(i,j-2)*Nsq
+              prf = der_pre(j,2,a)
+              intKa1(i,j) = 4.d0*(j-1)*(j-2)*Y0*X0mat(i,j-2)*Nsq*prf
            end do
         end do
 
@@ -234,7 +261,9 @@
 
         do i = 1,nh
            do j = 2,nh
-             intKa2(i,j)=2*(j-1)*(Ka2c0*X0mat(i,j-1)+Ka2c1*lin(i,j-1))
+             prf = der_pre(j,1,a)
+             intKa2(i,j)=2*(j-1)*(Ka2c0*X0mat(i,j-1)+Ka2c1*lin(i,j-1))&
+                        &*prf
            end do
         end do
 

@@ -17,7 +17,7 @@
       real*8, dimension(nh,max_x), public :: Mherm
 
       private
-      public :: GenHermMat,herm_pol,fun_Hmat,fun_HmatShift
+      public :: GenHermMat,herm_pol,fun_Hmat,fun_HmatShift,factorial
 
       contains
 
@@ -85,7 +85,7 @@
        fact = factorial(npol-1)
 
        Hnorm = 1/dsqrt(fact*2**(npol-1))
-!       Hnorm = 1
+       !Hnorm = 1
 
        !write(*,*) "npol: ", npol, "factorial: ", fact
 
