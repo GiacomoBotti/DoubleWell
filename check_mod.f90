@@ -531,7 +531,9 @@
        normdev = 1/dsqrt(fact2*2**2) ! H2
        pre = real(Bmat(1,1))*norm/normdev
        H = herm_pol(5-2,1.d0,q,real(Bmat(1,1)))
+       write(*,*) "No function (H and pre)"
        write(*,*) 4.d0*(5-1)*(5-2)*H*pre, pre
+       write(*,*) "Function (H and pre)"
        pre = der_pre(5,2,real(Bmat(1,1)))
        write(*,*) 4.d0*(5-1)*(5-2)*H*pre, pre
 
@@ -543,13 +545,12 @@
        normdev = 1/dsqrt(fact2*2**1) ! H1
        pre = dsqrt(real(Bmat(1,1)))*norm/normdev
        H = herm_pol(3-1,1.d0,q,real(Bmat(1,1)))
+       write(*,*) "No function (H and pre)"
        write(*,*) 2.d0*(3-1)*H*pre,pre
+       write(*,*) "Function (H and pre):"
        pre = der_pre(3,1,real(Bmat(1,1)))
        write(*,*) 2.d0*(3-1)*H*pre,pre
       
-
- 
-
        Kmat = kin_energy(nd,q,p,qvec,pvec,Bmat)
 
        write(*,*) "qtot: ", qtot

@@ -81,7 +81,7 @@
         complex*16, dimension(nd) :: tildeavec 
         complex*16, dimension(nd,nd) :: tildeAmat 
 
-        write(111,*) "KINETIC BATH"
+!        write(111,*) "KINETIC BATH"
         Bmat = real(tildeBmat)
         Nsq=fun_Nsq(nd+1,Bmat)
 
@@ -101,11 +101,11 @@
         lin = X1mat -q*X0mat
         sqr = X2mat -2*q*X1mat +q*q*X0mat
 
-        write(111,*) "X0mat(1,2): ", X0mat(1,2)
-        write(111,*) "X1mat(1,2): ", X1mat(1,2)
-        write(111,*) "X2mat(1,2): ", X2mat(1,2)
-        write(111,*) "lin: ", lin(1,2)
-        write(111,*) "sqr: ", sqr(1,2)
+!        write(111,*) "X0mat(1,2): ", X0mat(1,2)
+!        write(111,*) "X1mat(1,2): ", X1mat(1,2)
+!        write(111,*) "X2mat(1,2): ", X2mat(1,2)
+!        write(111,*) "lin: ", lin(1,2)
+!        write(111,*) "sqr: ", sqr(1,2)
 
         !\mathbf{p}^{T}\mathbb{M}_{y}^{-1}\mathbf{p}
         Mp = matmul(invMy,pvec)
@@ -170,16 +170,16 @@
 !        write(111,*) "Tr4: ", Tr4
 
         coeff0=-Tr0+0.5*Tr4+Tr1-qtAMtAq-pMp
-        write(111,*) "coeff0: ", coeff0
+!        write(111,*) "coeff0: ", coeff0
         !coeff1=-2*Tr3+2*qtAMtAiAa-2*pMtAa-2*iu*pMa
         coeff1=-2*Tr3+2*qtAMtAiAa+2*iu*pMtAiAa-2*iu*pMa
-        write(111,*) "coeff1: ", coeff1
-        write(111,*) "Tr3: ", Tr3
-        write(111,*) "qtAMtAiAa: ", qtAMtAiAa
-        write(111,*) "pMtAiAa: ", pMtAiAa
-        write(111,*) "pMa: ", pMa
+!        write(111,*) "coeff1: ", coeff1
+!        write(111,*) "Tr3: ", Tr3
+!        write(111,*) "qtAMtAiAa: ", qtAMtAiAa
+!        write(111,*) "pMtAiAa: ", pMtAiAa
+!        write(111,*) "pMa: ", pMa
         coeff2=Tr2-2*aMtAiAa+aMa
-        write(111,*) "coeff2: ", coeff2
+!        write(111,*) "coeff2: ", coeff2
  
         intKb = coeff0*X0mat+coeff1*lin+coeff2*sqr
 
@@ -223,7 +223,7 @@
         complex*16, dimension(nd,nd) :: alphaqq,alphaInvAaInvAa
         complex*16, dimension(nd,nd) :: alphaqinvAa,alphainvA
 
-        write(111,*) "KINETIC ACTIVE"
+!        write(111,*) "KINETIC ACTIVE"
         Bmat = real(tildeBmat)
         Nsq=fun_Nsq(nd+1,Bmat)
 
@@ -239,9 +239,9 @@
         X1mat = int_XnMat(nd,1,a,avec,Amat,q)
         X2mat = int_XnMat(nd,2,a,avec,Amat,q)
 
-        write(111,*) "X0mat(1,2): ", X0mat(1,2)
-        write(111,*) "X1mat(1,2): ", X1mat(1,2)
-        write(111,*) "X2mat(1,2): ", X2mat(1,2)
+!        write(111,*) "X0mat(1,2): ", X0mat(1,2)
+!        write(111,*) "X1mat(1,2): ", X1mat(1,2)
+!        write(111,*) "X2mat(1,2): ", X2mat(1,2)
 
         lin = X1mat -q*X0mat
         sqr = X2mat -2*q*X1mat +q*q*X0mat
