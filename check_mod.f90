@@ -482,12 +482,13 @@
        integer, intent(in) :: nd
 
        integer :: i,j
-       real*8 :: q,p,H,fact1,fact2,norm,normdev,pre
+       real*8 :: q,p,H,fact1,fact2,norm,normdev,pre,Nout
        real*8, dimension(nd) :: qvec,pvec
-       real*8, dimension(nd+1) :: qtot,ptot
-       complex*16, dimension(nd+1,nd+1) :: Bmat 
+       real*8, dimension(nd+1) :: qtot,ptot,dq,dp,qi,ppi
+       complex*16, dimension(nd+1) :: cvec
+       complex*16, dimension(nd+1,nd+1) :: Bmat,Bimat
 
-       complex*16, dimension(nh,nh) :: Hmat,Kmat
+       complex*16, dimension(nh,nh) :: Hmat,Kmat,Tau
  
        do i = 1,nd+1
           qtot(i) = i*dsqrt(2.d0)/3.d0
@@ -503,6 +504,13 @@
        p = ptot(1)
        qvec = qtot(2:nd+1)
        pvec = ptot(2:nd+1)
+
+       write(*,*) "qtot: ", qtot
+       write(*,*) "ptot: ", ptot
+       write(*,*) "Bmat: "
+       do i = 1,nd+1
+         write(*,*) Bmat(i,:)
+       end do
 
        write(*,*) "Hermite pol. in x=1"
        do i = 1,nh
@@ -563,6 +571,38 @@
        do i = 1,nd+1
          write(*,*) Kmat(i,:)
        end do
- 
+
+       dq = [0.01,0.02,0.03]
+       dp = [0.04,0.05,0.06]
+
+       qi = qtot + dq
+       ppi = ptot + dp
+
+       write(*,*) dq
+       write(*,*) dp
+       write(*,*) sin(0.1)
+       write(*,*) qi 
+       write(*,*) ppi
+
+       Bimat(:,:) = Bmat(:,:)*sin(0.1)
+
+       write(*,*) "Bimat: "
+       do i = 1,nd+1
+         write(*,*) Bimat(i,:)
+       end do
+
+       Tau=int_TauMat(nd,qi,qtot,ppi,ptot,Bimat,Bmat) 
+
+       write(*,*) "Tau: "
+       do i = 1,nd+1
+         write(*,*) Tau(i,:)
+       end do
+       
+       cvec(:) = complex(1.d0,0.d0)
+       
+       Nout = normalization(nd,q,cvec,real(Bmat))
+
+        
+
       end subroutine  
       end module

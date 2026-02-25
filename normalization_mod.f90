@@ -54,6 +54,11 @@
 
        Nout = Nsq*Y0*cX0c
 
+       write(*,*) "S00"
+       do i = 1,nh
+         write(*,*) Y0*X0Mat(i,:)
+       end do
+
       end function
  
       end module
