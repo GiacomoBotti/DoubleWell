@@ -360,7 +360,7 @@
         intKb = Kbath(nd,q,p,qvec,pvec,tildeBmat)  
         intKa = Kact(nd,q,p,qvec,tildeBmat)  
 
-        write(*,*) invMassMat
+!        write(*,*) invMassMat
         mx = invMassMat(1,1)
 
         !K00 = -(mx*(intdlnGsq+intdHdH+transpose(dconjg(intdlnG))+&
@@ -371,14 +371,14 @@
 !        write(111,*) "Kb: ", real(intKb(1,1)), aimag(intKb(1,1))
 !        write(111,*) "K00: ", real(K00(1,1)), aimag(K00(1,1))
         !write(111,*) "K00: ", K00(3,2)
-        write(*,*) "Ka"
-        do i = 1,nh
-          write(*,*) -intKa(i,:)
-        end do
-        write(*,*) "Kb"
-        do i = 1,nh
-          write(*,*) -intKb(i,:)
-        end do
+!        write(*,*) "Ka"
+!        do i = 1,nh
+!          write(*,*) -intKa(i,:)
+!        end do
+!        write(*,*) "Kb"
+!        do i = 1,nh
+!          write(*,*) -intKb(i,:)
+!        end do
 
        end function
        end module

@@ -11,9 +11,9 @@
 
        implicit none
 
-       real*8, parameter :: lwb=-15.d0
-       real*8, parameter :: hgb=15.d0
-       integer*8, parameter :: nstep=5000
+       real*8, parameter :: lwb=-10.d0
+       real*8, parameter :: hgb=10.d0
+       integer*8, parameter :: nstep=500
 
        private
        public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat
@@ -151,7 +151,7 @@
         Bdet = determinant(ndim,Support)
         !write(*,*) "Bdet", Bdet
         Nsq = dsqrt(Bdet/(pi**ndim))
-        write(*,*) "Nsq", Nsq
+!        write(*,*) "Nsq", Nsq
 
        end function
 
@@ -211,7 +211,7 @@
         Bjdet = determinant(ndim,Supportj)
         !write(*,*) "Bdet", Bdet
         NiNj =((Bjdet/pi**ndim)*(Bidet/pi**ndim))**(1.d0/4.d0) 
-        write(*,*) "NiNj", NiNj
+!        write(*,*) "NiNj", NiNj
 
        end function
 

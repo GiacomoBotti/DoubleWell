@@ -101,16 +101,16 @@
 !.....Check NN..........................................................
 !      call check_shiftedoverlap(nv)
 !.....Check K and S as SG...............................................
-      call check_KSnum(nv)
+!      call check_KSnum(nv)
 !.....Evolution.........................................................
 
-!      write(*,*) "WE ARE RUNNING"
-!      write(*,*) "+---------------------------------------------------+"
-!      write(*,*) "Start       ", "Stop       ", "Lenght     "  
-!      trj = [0,5,1000]
-!      write(*,*) trj
+      write(*,*) "WE ARE RUNNING"
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Start       ", "Stop       ", "Lenght     "  
+      trj = [0,5,500]
+      write(*,*) trj
 
-!      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
+      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
 
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"
