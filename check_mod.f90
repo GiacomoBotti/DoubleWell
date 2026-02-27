@@ -11,6 +11,7 @@
       use integrals_module
       use effectivepot_module
       use normalization_module
+      use kinetic_module
 
       implicit none
 
@@ -180,7 +181,7 @@
        do i = 1,3
          do j = 1,3
            do l = 1,nh
-             H = herm_pol(l,dfloat(i),dfloat(j))
+             H = herm_pol(l,dfloat(i),dfloat(j),3.d0)
              write(*,*) "npol: ",l,"x: ",i,"q: ",j,"H: ",H
            end do 
          end do
@@ -193,7 +194,7 @@
        do i = 1,3
          do j =1,3
            write(*,*) "x: ",i,"q: ",j
-           Hmat = fun_Hmat(dfloat(i),dfloat(j))
+           Hmat = fun_Hmat(dfloat(i),dfloat(j),3.d0)
            do k = 1,nh
              write(*,*) Hmat(k,:)
            end do
@@ -207,7 +208,7 @@
        do i = 1,3
          do j =1,3
            write(*,*) "x: ",1.d0,"qi: ",i,"qj: ",j
-           Hmat = fun_HmatShift(1.d0,dfloat(i),dfloat(j))
+           Hmat = fun_HmatShift(1.d0,dfloat(i),dfloat(j),3.d0,4.d0)
            do k = 1,nh
              write(*,*) Hmat(k,:)
            end do
@@ -469,9 +470,139 @@
 
        TauMat = int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat)
  
-       write(*,*) "TauMat(1,1): ", TauMat(3,5)
+       write(*,*) "TauMat(1,1): ", TauMat(1,1)
     
 
       end subroutine
-  
+
+!.....Check SG maple....................................................
+!.....maple file: TGWP-K-and-S-numeric_GB.mw............................
+      subroutine check_KSnum(nd)
+      ! nd: dimension of y
+       integer, intent(in) :: nd
+
+       integer :: i,j
+       real*8 :: q,p,H,fact1,fact2,norm,normdev,pre,Nout
+       real*8, dimension(nd) :: qvec,pvec
+       real*8, dimension(nd+1) :: qtot,ptot,dq,dp,qi,ppi
+       complex*16, dimension(nd+1) :: cvec
+       complex*16, dimension(nd+1,nd+1) :: Bmat,Bimat
+
+       complex*16, dimension(nh,nh) :: Hmat,Kmat,Tau
+ 
+       do i = 1,nd+1
+          qtot(i) = i*dsqrt(2.d0)/3.d0
+          ptot(i) = i*dsqrt(3.d0)/7.d0
+          Bmat(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
+          do j= i+1,nd+1
+            Bmat(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
+            Bmat(j,i) = Bmat(i,j)
+          end do   
+       end do
+
+       q = qtot(1)
+       p = ptot(1)
+       qvec = qtot(2:nd+1)
+       pvec = ptot(2:nd+1)
+
+       write(*,*) "qtot: ", qtot
+       write(*,*) "ptot: ", ptot
+       write(*,*) "Bmat: "
+       do i = 1,nd+1
+         write(*,*) Bmat(i,:)
+       end do
+
+       write(*,*) "Hermite pol. in x=1"
+       do i = 1,nh
+         H = herm_pol(i,1.d0,q,real(Bmat(1,1)))
+         write(*,*) H
+       end do
+
+       write(*,*) "------------------------------"
+       write(*,*) "The values of Hmat in x=1"
+       write(*,*) "------------------------------"
+
+       Hmat = fun_Hmat(1.d0,q,real(Bmat(1,1)))
+       do i = 1,nh
+         write(*,*) Hmat(i,:)
+       end do
+
+       write(*,*) "------------------------------"
+       write(*,*) "The values of H derv in x=1"
+       write(*,*) "------------------------------"
+
+       write(*,*) "SECOND DERIVATIVE of H4"
+
+       fact1 = factorial(4) ! H4
+       fact2 = factorial(2) ! H2
+       norm = 1/dsqrt(fact1*2**4) ! H4
+       normdev = 1/dsqrt(fact2*2**2) ! H2
+       pre = real(Bmat(1,1))*norm/normdev
+       H = herm_pol(5-2,1.d0,q,real(Bmat(1,1)))
+       write(*,*) "No function (H and pre)"
+       write(*,*) 4.d0*(5-1)*(5-2)*H*pre, pre
+       write(*,*) "Function (H and pre)"
+       pre = der_pre(5,2,real(Bmat(1,1)))
+       write(*,*) 4.d0*(5-1)*(5-2)*H*pre, pre
+
+       write(*,*) "FIRST DERIVATIVE of H2"
+
+       fact1 = factorial(2) ! H2
+       fact2 = factorial(1) ! H1
+       norm = 1/dsqrt(fact1*2**2) ! H2
+       normdev = 1/dsqrt(fact2*2**1) ! H1
+       pre = dsqrt(real(Bmat(1,1)))*norm/normdev
+       H = herm_pol(3-1,1.d0,q,real(Bmat(1,1)))
+       write(*,*) "No function (H and pre)"
+       write(*,*) 2.d0*(3-1)*H*pre,pre
+       write(*,*) "Function (H and pre):"
+       pre = der_pre(3,1,real(Bmat(1,1)))
+       write(*,*) 2.d0*(3-1)*H*pre,pre
+      
+       Kmat = kin_energy(nd,q,p,qvec,pvec,Bmat)
+
+       write(*,*) "qtot: ", qtot
+       write(*,*) "ptot: ", ptot
+       write(*,*) "Bmat: "
+       do i = 1,nd+1
+         write(*,*) Bmat(i,:)
+       end do
+       write(*,*) "Kmat: "
+       do i = 1,nd+1
+         write(*,*) Kmat(i,:)
+       end do
+
+       dq = [0.01,0.02,0.03]
+       dp = [0.04,0.05,0.06]
+
+       qi = qtot + dq
+       ppi = ptot + dp
+
+       write(*,*) dq
+       write(*,*) dp
+       write(*,*) sin(0.1)
+       write(*,*) qi 
+       write(*,*) ppi
+
+       Bimat(:,:) = Bmat(:,:)*sin(0.1)
+
+       write(*,*) "Bimat: "
+       do i = 1,nd+1
+         write(*,*) Bimat(i,:)
+       end do
+
+       Tau=int_TauMat(nd,qi,qtot,ppi,ptot,Bimat,Bmat) 
+
+       write(*,*) "Tau: "
+       do i = 1,nd+1
+         write(*,*) Tau(i,:)
+       end do
+       
+       cvec(:) = complex(1.d0,0.d0)
+       
+       Nout = normalization(nd,q,cvec,real(Bmat))
+
+        
+
+      end subroutine  
       end module

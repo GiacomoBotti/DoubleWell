@@ -48,6 +48,10 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
+- [x] DEBUG W/ MAPLE
+- [ ] Check w/ S.Garashchuk
+   - [ ] Hermite polynomials indeces
+   - [ ] Gaussian normalization
 - [ ] Adapt `bot`
    - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
    - [ ] Implement algorithm
@@ -137,6 +141,12 @@ The same goes for the Hermite polynomials basis set.
     - [x] Debug w/ MAPLE
     - [x] Adapt Cavalieri-Simpson
     - [x] Debug w/ MAPLE
+- [x] Hermite normalization
+   - [x] factorial
+   - [x] Hermite norm
+   - [x] scaled variables
+   - [x] update the rest
+   - [x] debug w/ MAPLE
 
 ## OLD FRAMEWORK (TWO HERMITE)
 

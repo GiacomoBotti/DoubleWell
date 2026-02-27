@@ -14,9 +14,35 @@
        implicit none
 
        private  
-       public :: kin_energy 
+       public :: kin_energy,der_pre 
 
        contains
+
+!......Derivative prefactor.............................................
+       
+       function der_pre(indx,order,alpha) result(pre)
+       ! indx: index of derived polynomial, as in Hmat
+       ! order: order of the derivative
+       ! alpha: gaussian width along the x coord (REAL)
+        integer, intent(in) :: indx,order
+        real*8, intent(in) :: alpha
+
+        real*8 :: pre
+
+        real*8 :: fact1,fact2,norm,normdev,sqrta
+
+        fact1 = factorial(indx-1)
+        fact2 = factorial(indx-1-order)
+        sqrta = dsqrt(alpha)
+
+        norm = 1/dsqrt(fact1*2**(indx-1))
+        normdev = 1/dsqrt(fact2*2**(indx-1-order))
+
+        pre = norm/normdev
+
+        pre = pre*sqrta**order
+      
+       end function
 
 !......K bath...........................................................
 
@@ -46,16 +72,16 @@
         real*8, dimension(nd+1,nd+1) :: Bmat
 
         complex*16 :: tildea,aMa,qtAMtAq,iAatAMtAq,qtAMtAiAa,pMa,aMtAq
-        complex*16 :: aMtAiAa,Tr0,Tr1,Tr2,Tr3,Tr4,pMtAa
+        complex*16 :: aMtAiAa,Tr0,Tr1,Tr2,Tr3,Tr4,pMtAiAa
         complex*16 :: coeff0,coeff1,coeff2 
-        complex*16, dimension(nd) :: Ma,tAMtAq,tAMtAiAa,aMtA,MtAa 
+        complex*16, dimension(nd) :: Ma,tAMtAq,tAMtAiAa,aMtA,MtAiAa 
         complex*16, dimension(nd,nd) :: MtA,tAMtA,tAMtAqq,tAMtAiAaiAa 
         complex*16, dimension(nd,nd) :: tAMtAqiAa,tAMtAiA
 
         complex*16, dimension(nd) :: tildeavec 
         complex*16, dimension(nd,nd) :: tildeAmat 
 
-        !write(111,*) "KINETIC BATH"
+!        write(111,*) "KINETIC BATH"
         Bmat = real(tildeBmat)
         Nsq=fun_Nsq(nd+1,Bmat)
 
@@ -75,9 +101,11 @@
         lin = X1mat -q*X0mat
         sqr = X2mat -2*q*X1mat +q*q*X0mat
 
-        !write(111,*) "X0mat(1,1): ", X0mat(1,1)
-        !write(111,*) "X1mat(1,1): ", X1mat(1,1)
-        !write(111,*) "X2mat(1,1): ", X2mat(1,1)
+!        write(111,*) "X0mat(1,2): ", X0mat(1,2)
+!        write(111,*) "X1mat(1,2): ", X1mat(1,2)
+!        write(111,*) "X2mat(1,2): ", X2mat(1,2)
+!        write(111,*) "lin: ", lin(1,2)
+!        write(111,*) "sqr: ", sqr(1,2)
 
         !\mathbf{p}^{T}\mathbb{M}_{y}^{-1}\mathbf{p}
         Mp = matmul(invMy,pvec)
@@ -108,8 +136,10 @@
         !aMtAiAa = dot_product(aMtA,invAa)
         aMtAiAa = dot_product(invAa,aMtA)
         ! \mathbf{p} \mathbb{M}^{-1}\tilde{\mathbb{A}}\mathbb{A}^{-1}\mathbf{a}
-        MtAa = matmul(MtA,avec)
-        pMtAa = dot_product(pvec,MtAa)
+        !MtAa = matmul(MtA,avec)
+        !pMtAa = dot_product(pvec,MtAa)
+        MtAiAa = matmul(MtA,invAa)
+        pMtAiAa = dot_product(pvec,MtAiAa)
 
         do i =1,nd
           do j = 1,nd
@@ -141,8 +171,13 @@
 
         coeff0=-Tr0+0.5*Tr4+Tr1-qtAMtAq-pMp
 !        write(111,*) "coeff0: ", coeff0
-        coeff1=-2*Tr3+2*qtAMtAiAa-2*pMtAa+2*pMa
+        !coeff1=-2*Tr3+2*qtAMtAiAa-2*pMtAa-2*iu*pMa
+        coeff1=-2*Tr3+2*qtAMtAiAa+2*iu*pMtAiAa-2*iu*pMa
 !        write(111,*) "coeff1: ", coeff1
+!        write(111,*) "Tr3: ", Tr3
+!        write(111,*) "qtAMtAiAa: ", qtAMtAiAa
+!        write(111,*) "pMtAiAa: ", pMtAiAa
+!        write(111,*) "pMa: ", pMa
         coeff2=Tr2-2*aMtAiAa+aMa
 !        write(111,*) "coeff2: ", coeff2
  
@@ -173,7 +208,7 @@
         real*8 :: Y0
         real*8, dimension(nh,nh) :: X0mat,X1mat,X2mat,lin,sqr
 
-        real*8 :: a,Nsq
+        real*8 :: a,Nsq,prf
         real*8, dimension(nd) :: avec,invAa,kvec
         real*8, dimension(nd,nd) :: Amat,invA,LambdaMat,Tmat,qqMat
         real*8, dimension(nd,nd) :: invAainvAaMat,qinvAa 
@@ -204,6 +239,10 @@
         X1mat = int_XnMat(nd,1,a,avec,Amat,q)
         X2mat = int_XnMat(nd,2,a,avec,Amat,q)
 
+!        write(111,*) "X0mat(1,2): ", X0mat(1,2)
+!        write(111,*) "X1mat(1,2): ", X1mat(1,2)
+!        write(111,*) "X2mat(1,2): ", X2mat(1,2)
+
         lin = X1mat -q*X0mat
         sqr = X2mat -2*q*X1mat +q*q*X0mat
 
@@ -219,7 +258,8 @@
 
         do i = 1,nh
            do j = 3,nh
-              intKa1(i,j) = 4.d0*(j-1)*(j-2)*Y0*X0mat(i,j-2)*Nsq
+              prf = der_pre(j,2,a)
+              intKa1(i,j) = 4.d0*(j-1)*(j-2)*Y0*X0mat(i,j-2)*Nsq*prf
            end do
         end do
 
@@ -234,7 +274,9 @@
 
         do i = 1,nh
            do j = 2,nh
-             intKa2(i,j)=2*(j-1)*(Ka2c0*X0mat(i,j-1)+Ka2c1*lin(i,j-1))
+             prf = der_pre(j,1,a)
+             intKa2(i,j)=2*(j-1)*(Ka2c0*X0mat(i,j-1)+Ka2c1*lin(i,j-1))&
+                        &*prf
            end do
         end do
 
@@ -305,6 +347,7 @@
 
         complex*16, dimension(nh,nh) :: K00 !Complex for debugging
 
+        integer :: i
         real*8 :: mx
         complex*16, dimension(nh,nh) :: intKb,intKa
         complex*16, dimension(nh,nh) :: intdHdH,intdlnG
@@ -317,6 +360,7 @@
         intKb = Kbath(nd,q,p,qvec,pvec,tildeBmat)  
         intKa = Kact(nd,q,p,qvec,tildeBmat)  
 
+!        write(*,*) invMassMat
         mx = invMassMat(1,1)
 
         !K00 = -(mx*(intdlnGsq+intdHdH+transpose(dconjg(intdlnG))+&
@@ -327,6 +371,14 @@
 !        write(111,*) "Kb: ", real(intKb(1,1)), aimag(intKb(1,1))
 !        write(111,*) "K00: ", real(K00(1,1)), aimag(K00(1,1))
         !write(111,*) "K00: ", K00(3,2)
+!        write(*,*) "Ka"
+!        do i = 1,nh
+!          write(*,*) -intKa(i,:)
+!        end do
+!        write(*,*) "Kb"
+!        do i = 1,nh
+!          write(*,*) -intKb(i,:)
+!        end do
 
        end function
        end module
