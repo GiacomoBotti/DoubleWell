@@ -8,7 +8,7 @@
        use basisset_module
        use normalization_module
        use observable_module
-!       use BOT_module
+       use BOT_module
        use eofmotion_module
        use integrals_module
 
@@ -153,7 +153,9 @@
        kb(:,:,:) = 0.d0
        do j = 1,nstep
           time = j*h
-!          cj = c_static(nd,npar,yj,work,h)
+          ! WATCH OUT CVEC HERE
+          cj = c_static(nd,h,qtotj,ptotj,cvec,Bcmplx)
+          cj = cvec
           do i = 1,4
              call KarplusTimeDer(nd,cj,qtoti,ptoti,Bcmplxi,&
                   &kq(:,i),kp(:,i),kb(:,:,i))             

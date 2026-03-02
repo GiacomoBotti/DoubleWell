@@ -47,23 +47,34 @@
         write(*,*) c0(i) 
       end do
 
-      q0(:)=0.3d0
-      p0(:)=0.3d0
+!      q0(:)=0.3d0
+!      p0(:)=0.3d0
 
-      q0(1) = 1.5d0
-      p0(1) = 1.0d0
+!      q0(1) = 1.5d0
+!      p0(1) = 1.0d0
+ 
+       do i = 1,nv+1
+          q0(i) = i*dsqrt(2.d0)/3.d0
+          p0(i) = i*dsqrt(3.d0)/7.d0
+          Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
+          do j= i+1,nv+1
+            Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
+            Bcmplx(j,i) = Bcmplx(i,j)
+          end do   
+          write(*,*) Bcmplx(i,:)
+       end do
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
 
-      do i = 1,nv+1
-         Bcmplx(i,i) = i+iu*i
-         do j = i+1,nv+1
-            Bcmplx(i,j) = (j+iu*j)/20.d0 !Gershgoring circle theorem
-            Bcmplx(j,i) = Bcmplx(i,j)
-         end do
-         write(*,*) Bcmplx(i,:)
-      end do
+!      do i = 1,nv+1
+!         Bcmplx(i,i) = i+iu*i
+!         do j = i+1,nv+1
+!            Bcmplx(i,j) = (j+iu*j)/20.d0 !Gershgoring circle theorem
+!            Bcmplx(j,i) = Bcmplx(i,j)
+!         end do
+!         write(*,*) Bcmplx(i,:)
+!      end do
 
 !      Bcmplx(1,1) = complex(1.d0,1.d0)
 
