@@ -78,10 +78,6 @@
         call ZHEGV(1,'V','U',nh,Z,nh,B,nh,eigenv,&
                   &lapwork,lwork,rwork,info)
 
-        write(*,*) "Eigenvalues:"
-        do i = 1,nh
-           write(*,*) eigenv(i)
-        end do
 !         write(*,*) info
         adjZ = dconjg(transpose(Z))
          
@@ -149,16 +145,19 @@
         write(*,*) "Z^H*S*Z = 1"
         write(*,formato) TEST2(1,1)-1.d0, TEST2(1,2)
         write(*,formato) TEST2(2,1), TEST2(2,2)-1.d0
+        write(*,formato) TEST2(3,1), TEST2(3,2)-1.d0
         write(*,*) " "
         invS = invgen(nd_double,S)
         TEST3 = matmul(Z,adjZ)
-        write(*,*) "ZZ*=S-1"
+        write(*,*) "ZZ^H=S-1"
         write(*,formato) TEST3(1,1)-invS(1,1), TEST3(1,2)-invS(1,2)
         write(*,formato) TEST3(2,1)-invS(2,1), TEST3(2,2)-invS(2,2)
+        write(*,formato) TEST3(3,1)-invS(3,1), TEST3(3,2)-invS(3,2)
         write(*,*) " "
         write(*,*) "Z^H*H*Z=L"
         write(*,formato) TEST4(1,1)-TEST5(1,1), TEST4(1,2)-TEST5(1,2)
         write(*,formato) TEST4(2,1)-TEST5(2,1), TEST4(2,2)-TEST5(2,2)
+        write(*,formato) TEST4(3,1)-TEST5(3,1), TEST4(3,2)-TEST5(3,2)
         write(*,*) " "
 
        end subroutine
