@@ -2,6 +2,10 @@
 butta
 /OLD/
 *.dat
+*.agr
+*.eps
+fort.*
+/MAPLE_DEBUG/
 
 # Prerequisites
 *.d
