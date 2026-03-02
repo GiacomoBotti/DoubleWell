@@ -312,7 +312,7 @@
        real*8, dimension(nd+1) :: qtot, V1
        real*8, dimension(nd+1,nd+1) :: Bmat,V2
        real*8 :: harvest
-       real*8 :: V0 
+       real*8, dimension(nh,nh) :: V0
 
        do i = 1,nd+1
           Bmat(i,i) = i
@@ -342,7 +342,7 @@
 
        write(*,*) "------------------------------"
        V0 = fun_V0(nd,qtot,cvec,Bmat)
-       write(*,*) "V0 ", V0
+       write(*,*) "V0(1,1) ", V0(1,1)
        
        write(*,*) "------------------------------"
        V1 = fun_V1(nd,qtot,cvec,Bmat)

@@ -5,42 +5,41 @@
 
        module BOT_module
 
-       use integral_module
-       use smatrix_module
-       use hmatrix_module
-       use overlap_module
-       use hamiltonian_module
-       use inversion_module
+       use basisset_module
 
        implicit none
 
        integer*8 :: info
 
        private
-       public :: c_static,c_stat_num,c_update,c_upd_num
+       public :: c_static,c_update
 
        contains
 
 !......Coefficient update with static basis (analytical)................
 
-       function c_static(nd,npar,y,work,h) result(csout)
-       ! nd: basis set dimension
-       ! npar: parameter space dimension
-       ! y: runge-kutta function - [parameters - coefficients]
-       ! work: work array for I/O
+       function c_static(nd,h,q0,p0,tildeBmat) result(csout)
+       ! nd: bath dimension 
        ! h : time-step size
+       ! q0: full position vector
+       ! p0: full momenta vector
+       ! tildeBmat: full complex gaussian width matrix
         implicit none
-        integer*8, intent(in) :: nd,npar
+        integer, intent(in) :: nd
         real*8, intent(in) :: h
-        complex*16, dimension(npar+nd), intent(in) :: y
-        real*8, dimension(4), intent(in) :: work
+        real*8, dimension(nd+1), intent(in) :: q0,p0
+        complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
         integer*8 :: i,lwork
-        real*8 :: q,p,a,alpha,xi,zeta
-        real*8, dimension(nd) :: eigenv
-        complex*16, dimension(nd) :: c,csout,expvec
-        complex*16, dimension(nd,nd) :: S00M,T00M,V00M,H00M,B
-        complex*16, dimension(nd,nd) :: Z,adjZ
+        real*8 :: q,p,a,Nsq,Y0
+        real*8, dimension(nd) :: qvec,pvec,avec
+        real*8, dimension(nh) :: eigenv
+        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+        real*8, dimension(nd+1,nd+1) :: Bmat
+        real*8, dimension(nh,nh) :: X0Mat
+        complex*16, dimension(nh) :: c,csout,expvec
+        complex*16, dimension(nh,nh) :: S00M,T00M,V00M,H00M
+        complex*16, dimension(nh,nh) :: Z,adjZ,B
 
         complex*16, dimension(2*nd-1) :: lapwork
         complex*16, dimension(3*nd-1) :: rwork
@@ -49,19 +48,21 @@
         external ZHEGV
         lwork = 2*nd-1
 
-        ! extract work
-        a = work(1)
-        alpha = work(2)
-        xi = work(3)
-        zeta = work(4)
+        q = qtot(1)
+        p = ptot(1)
+        qvec = qtot(2:nd+1)
+        pvec = ptot(2:nd+1)
 
-        ! extract y
-        q = dreal(y(1))
-        p = dreal(y(2))
-        c(:) = y(npar+1:npar+nd)
+        Bmat = real(tildeBmat)
 
-        S00M = S00maple(alpha,q,p,xi,zeta)
-        T00M = T00maple(a,alpha,q,p,xi,zeta) 
+        Nsq=fun_Nsq(nd+1,Bmat)
+        call extractA(nd,Bmat,Amat,avec,a)
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+        Y0=int_Y0(nd,LambdaMat)
+        X0Mat=int_XnMat(nd,0,a,avec,Amat,qq)
+
+        S00M = X0Mat*Y0*Nsq 
+        T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat)  
         V00M = V00maple(a,alpha,q,p,xi,zeta) 
         H00M = T00M + V00M
         ! Copy H00M so LAPACK can overwrite

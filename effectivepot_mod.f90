@@ -22,7 +22,7 @@
 
 !.....EFFECTIVE POTENTIAL V0 = <V>......................................
 
-      function fun_V0(nd,qtot,cvec,Bmat) result(V0)
+      function fun_V0(nd,qtot,cvec,Bmat) result(V0mat)
       ! nd: bath dimensions
       ! qtot: total Gaussian center vector (x&y)
       ! cvec: vector of the coefficients
@@ -43,6 +43,7 @@
        real*8, dimension(nh) :: Xcvec, XYcvec, Ycvec
        real*8, dimension(nh,nh) :: X4mat,X2mat,X1mat,X0mat
        real*8, dimension(nh,nh) :: Xtot,XYtot,Ytot,lin,sqr
+       real*8, dimension(nh,nh) :: V0mat,Vxmat,Vxymat,Vymat 
 
 !       write(111,*) "POTENTIAL"
 
@@ -120,17 +121,21 @@
        Ycvec=matmul(Ytot,cvec)
 
        ! V elements
-       Vx=Nsq*Y0*dot_product(cvec,Xcvec)
+!       Vx=Nsq*Y0*dot_product(cvec,Xcvec)
+       Vxmat=Nsq*Y0*Xtot
 !       write(111,*) "Vx: ", Vx
-       Vxy=Nsq*Y0*gamma_const*dot_product(cvec,XYcvec)
+!       Vxy=Nsq*Y0*gamma_const*dot_product(cvec,XYcvec)
+       Vxymat=Nsq*Y0*gamma_const*XYtot
 !       write(111,*) "Vxy: ", Vxy
-       Vy=Nsq*Y0*dot_product(cvec,Ycvec)
+!       Vy=Nsq*Y0*dot_product(cvec,Ycvec)
+       Vymat=Nsq*Y0*Ytot
 !       write(111,*) "Vy: ", Vy
              
 !       Vx=0.d0
 !       Vxy=0.d0
 !       Vy=0.d0
-       V0 = Vx+Vxy+Vy
+       V0mat = Vxmat+Vxymat+Vymat
+!       V0 = Vx+Vxy+Vy 
 !       write(111,*) "V0", V0
         
       end function
