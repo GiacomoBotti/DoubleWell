@@ -49,9 +49,9 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
 - [x] DEBUG W/ MAPLE
-- [ ] Check w/ S.Garashchuk
-   - [ ] Hermite polynomials indeces
-   - [ ] Gaussian normalization
+- [x] Check w/ S.Garashchuk
+   - [x] Hermite polynomials indeces
+   - [x] Gaussian normalization
 - [ ] Adapt `bot`
    - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
    - [ ] Implement algorithm

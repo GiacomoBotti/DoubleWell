@@ -17,7 +17,7 @@
        integer*8 :: info
 
        private
-       public :: c_static!,c_update
+       public :: c_static,c_update
 
        contains
 
@@ -162,5 +162,45 @@
 
        end subroutine
 
-! TAKE AND ADAPT THE OTHER PART FROM COPY_BOT_mod.f90
+!......Analytical update of electronic coefficients.....................
+
+       function c_update(nd,qb,pb,qk,pk,c,Bb,Bk) result(cout)
+       ! nd : bath dimension
+       ! qb : full position vector (Bra)
+       ! pb : full momentum vector (Bra)
+       ! qk : full position vector (Ket)
+       ! pk : full momentum vector (Ket)
+       ! c : exponentially-evolved coefficients
+       ! Bb : full width matrix (Bra)
+       ! Bk : full width matrix (Ket)
+        integer, intent(in) :: nd
+        real*8, dimension(nd+1), intent(in) :: qb,pb,qk,pk
+        complex*16, dimension(nh), intent(in) :: c
+        complex*16, dimension(nd+1,nd+1), intent(in) :: Bb,Bk
+
+        real*8 :: a,q,Nsq,Y0
+        real*8, dimension(nd) :: avec 
+        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+        real*8, dimension(nd+1,nd+1) :: Bmat
+        complex*16, dimension(nh) :: csupp,cout
+        complex*16, dimension(nh,nh) :: S00M,Tt0M,invS,X0Mat
+
+        q = qb(1)
+
+        Bmat = real(Bb)
+
+        Nsq=fun_Nsq(nd+1,Bmat)
+        call extractA(nd,Bmat,Amat,avec,a)
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+        Y0=int_Y0(nd,LambdaMat)
+        X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
+
+        S00M = X0Mat*Y0*Nsq 
+
+        Tt0M = int_TauMat(nd,qb,qk,pb,pk,Bb,Bk) 
+        csupp = matmul(Tt0M,c)
+
+        cout = linsys(nh,S00M,csupp) 
+
+       end function
        end module

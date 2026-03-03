@@ -153,9 +153,7 @@
        kb(:,:,:) = 0.d0
        do j = 1,nstep
           time = j*h
-          ! WATCH OUT CVEC HERE
-          cj = c_static(nd,h,qtotj,ptotj,cvec,Bcmplx)
-          cj = cvec
+          cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplx)
           do i = 1,4
              call KarplusTimeDer(nd,cj,qtoti,ptoti,Bcmplxi,&
                   &kq(:,i),kp(:,i),kb(:,:,i))             
@@ -173,7 +171,7 @@
           Bcmplxj = Bcmplxj&
           &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
 
-!          cj = c_update(nd,npar,lambdaj,lambdaold,cj,work)
+          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
           E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
