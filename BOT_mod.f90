@@ -1,4 +1,4 @@
-!**********************************************************************!
+
 ! Module containing the functions required by the BOT_evo subroutine   !
 ! in evolution_mod.f90                                                 !
 !**********************************************************************!
@@ -11,6 +11,7 @@
        use integrals_module
        use inversion_module
        use matrix_module
+       use constants
 
        implicit none
 
@@ -48,7 +49,7 @@
         complex*16, dimension(nh,nh) :: Z,adjZ,B
 
         complex*16, dimension(2*nh-1) :: lapwork
-        complex*16, dimension(3*nh-1) :: rwork
+        real*8, dimension(3*nh-1) :: rwork
 
         ! External procedures defined in LAPACK
         external ZHEGV
@@ -75,6 +76,23 @@
         Z = H00M
         B = S00M
 
+!        write(*,*) "I AM STATIC"
+
+!        write(*,*) "T00M:"
+!        do i = 1,nh
+!          write(*,*) T00M(i,:)
+!        end do
+
+!        write(*,*) "V00M:"
+!        do i = 1,nh
+!          write(*,*) V00M(i,:)
+!        end do
+
+!        write(*,*) "H00M:"
+!        do i = 1,nh
+!          write(*,*) H00M(i,:)
+!        end do
+
         call ZHEGV(1,'V','U',nh,Z,nh,B,nh,eigenv,&
                   &lapwork,lwork,rwork,info)
 
@@ -88,7 +106,7 @@
         c = matmul(adjZ,c) 
        
         do i = 1,nd
-           expvec(i) = zexp(-(0,1.d0)*eigenv(i)*h)*c(i)
+           expvec(i) = zexp(-iu*eigenv(i)*h)*c(i)
         end do
 
         csout = matmul(Z,expvec)
@@ -114,7 +132,7 @@
         character(len=100) :: formato
       
         nd_double = nd
-        formato="(E10.1,E10.1,E10.1,E10.1)"
+        formato="(E10.1,E10.1,E10.1,E10.1,E10.1,E10.1)"
   
         write(*,*) "S:"
         do i = 1,nd
@@ -124,6 +142,11 @@
         write(*,*) "H:"
         do i = 1,nd
            write(*,*) H(i,:)
+        end do
+  
+        write(*,*) "Z:"
+        do i = 1,nd
+           write(*,*) Z(i,:)
         end do
 
         adjZ = dconjg(transpose(Z))
@@ -143,9 +166,9 @@
         TEST1 = matmul(S,Z)
         TEST2 = matmul(adjZ,TEST1)
         write(*,*) "Z^H*S*Z = 1"
-        write(*,formato) TEST2(1,1)-1.d0, TEST2(1,2)
-        write(*,formato) TEST2(2,1), TEST2(2,2)-1.d0
-        write(*,formato) TEST2(3,1), TEST2(3,2)-1.d0
+        write(*,formato) TEST2(1,1)-1.d0, TEST2(1,2), TEST2(1,3)
+        write(*,formato) TEST2(2,1), TEST2(2,2)-1.d0, TEST2(2,3)
+        write(*,formato) TEST2(3,1), TEST2(3,2), TEST2(3,3)-1.d0
         write(*,*) " "
         invS = invgen(nd_double,S)
         TEST3 = matmul(Z,adjZ)
@@ -178,6 +201,7 @@
         complex*16, dimension(nh), intent(in) :: c
         complex*16, dimension(nd+1,nd+1), intent(in) :: Bb,Bk
 
+        integer :: i
         real*8 :: a,q,Nsq,Y0
         real*8, dimension(nd) :: avec 
         real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
@@ -199,6 +223,13 @@
 
         Tt0M = int_TauMat(nd,qb,qk,pb,pk,Bb,Bk) 
         csupp = matmul(Tt0M,c)
+
+        write(*,*) "I AM UPDATE"
+
+        write(*,*) "Tt0M:"
+        do i = 1,nh
+          write(*,*) Tt0M(i,:)
+        end do
 
         cout = linsys(nh,S00M,csupp) 
 

@@ -153,6 +153,8 @@
         Nsq = dsqrt(Bdet/(pi**ndim))
 !        write(*,*) "Nsq", Nsq
 
+!        Nsq = 1.d0
+
        end function
 
 !......Gx function......................................................
@@ -212,6 +214,8 @@
         !write(*,*) "Bdet", Bdet
         NiNj =((Bjdet/pi**ndim)*(Bidet/pi**ndim))**(1.d0/4.d0) 
 !        write(*,*) "NiNj", NiNj
+
+!        NiNj = 1.d0
 
        end function
 
@@ -312,7 +316,7 @@
         ralphaj = real(alphaj)
         Atot = Aj + transpose(dconjg(Ai))
         detAtot = det_cmplx(nd,Atot)
-        write(*,*) "detAtot: ", detAtot
+!        write(*,*) "detAtot: ", detAtot
         norm = zsqrt(((2*pi)**nd)/detAtot)
 
         h = (hgb-lwb)/dfloat(nstep)
