@@ -52,9 +52,13 @@ The same goes for the Hermite polynomials basis set.
 - [x] Check w/ S.Garashchuk
    - [x] Hermite polynomials indeces
    - [x] Gaussian normalization
-- [ ] Adapt `bot`
+- [x] Adapt `bot`
    - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
-   - [ ] Implement algorithm
+   - [x] Implement algorithm
+- [ ] Debug BOT
+   - [x] check $dt =0$
+   - [ ] check with parameters' $dt = 0$
+   - [ ] Remove $N^{2} =1$ and $N_{i}N_{j} =1$
    
 
 ### DONE

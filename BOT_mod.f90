@@ -1,4 +1,4 @@
-
+!**********************************************************************!
 ! Module containing the functions required by the BOT_evo subroutine   !
 ! in evolution_mod.f90                                                 !
 !**********************************************************************!
@@ -55,6 +55,15 @@
         external ZHEGV
         lwork = 2*nh-1
 
+        write(*,*) "I AM  STATIC"
+
+        write(*,*) qtot
+        write(*,*) ptot
+        write(*,*) cvec
+        do i = 1,nd+1
+          write(*,*) tildeBmat(i,:)
+        end do
+
         q = qtot(1)
         p = ptot(1)
         qvec = qtot(2:nd+1)
@@ -105,8 +114,9 @@
         c = matmul(S00M,c)
         c = matmul(adjZ,c) 
        
-        do i = 1,nd
-           expvec(i) = zexp(-iu*eigenv(i)*h)*c(i)
+        write(*,*) nd, nh
+        do i = 1,nh
+          expvec(i) = zexp(-iu*eigenv(i)*h)*c(i)
         end do
 
         csout = matmul(Z,expvec)
@@ -211,6 +221,13 @@
 
         q = qb(1)
 
+        write(*,*) "I AM C UPDATE"
+
+        write(*,*) qb
+        write(*,*) pb
+        write(*,*) qk
+        write(*,*) pk
+
         Bmat = real(Bb)
 
         Nsq=fun_Nsq(nd+1,Bmat)
@@ -223,8 +240,6 @@
 
         Tt0M = int_TauMat(nd,qb,qk,pb,pk,Bb,Bk) 
         csupp = matmul(Tt0M,c)
-
-        write(*,*) "I AM UPDATE"
 
         write(*,*) "Tt0M:"
         do i = 1,nh

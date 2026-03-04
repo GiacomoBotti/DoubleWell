@@ -43,7 +43,7 @@
        real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
        complex*16,dimension(nd+1,nd+1) :: Bcmplxi,Bcmplxj,Bold
        
-       complex*16,dimension(nh) :: cvec,cj 
+       complex*16,dimension(nh) :: cvec,cj,ctemp
 
        real*8,dimension(nd+1,4) :: kq,kp
        complex*16,dimension(nd+1,nd+1,4) :: kb
@@ -122,23 +122,8 @@
        write(325,*) "#Normalization constant: ",N
        write(325,*) "#H ", "T ", "V "
 
-!       Bmat = real(Bcmplx)
-
-!       Nsq=fun_Nsq(nd+1,Bmat)
-!       call extractA(nd,Bmat,Amat,avec,a)
-!       call diagonalization(nd,Amat,LambdaMat,Tmat)
-!       Y0=int_Y0(nd,LambdaMat)
-!       X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
-
-!       S00M = X0Mat*Y0*Nsq 
-
-!       invS = invgen_real(nh,S00M)
-
-!       cvec = matmul(invS,c0)
-
-
        N = normalization(nd,q,cvec,dreal(Bcmplx))
-       E0 = energy(nd,q0,p0,c0,Bcmplx)
+       E0 = energy(nd,q0,p0,cvec,Bcmplx)
        E=E0
 
        write(*,*) "First step:"
@@ -167,6 +152,10 @@
        qtotj = q0
        ptotj = p0
        Bcmplxj = Bcmplx
+
+       do i = 1,nd+1
+         write(*,*) Bcmplxj(i,:)
+       end do
  
        cj = cvec
 
@@ -174,6 +163,7 @@
        kp(:,:) = 0.d0
        kb(:,:,:) = 0.d0
        do j = 1,nstep
+       h = dfloat(last-first)/dfloat(nstep)
           time = j*h
           cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
@@ -191,17 +181,14 @@
           qold = qtotj
           pold = ptotj
           Bold = Bcmplxj
-          qtotj = qtotj&
-             &+h*(kq(:,1)+2.d0*kq(:,2)+2.d0*kq(:,3)+kq(:,4))/6.d0
-          ptotj = ptotj&
-             &+h*(kp(:,1)+2.d0*kp(:,2)+2.d0*kp(:,3)+kp(:,4))/6.d0
-          Bcmplxj = Bcmplxj&
-          &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
+!          qtotj = qtotj&
+!             &+h*(kq(:,1)+2.d0*kq(:,2)+2.d0*kq(:,3)+kq(:,4))/6.d0
+!          ptotj = ptotj&
+!             &+h*(kp(:,1)+2.d0*kp(:,2)+2.d0*kp(:,3)+kp(:,4))/6.d0
+!          Bcmplxj = Bcmplxj&
+!          &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
           
-          !Nsq=fun_Nsq(nd+1,real(Bcmplxj))
-
-!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
-!          cj = c_update(nd,qold,pold,qtotj,ptotj,cj,Bold,Bcmplxj)
+          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
           E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
