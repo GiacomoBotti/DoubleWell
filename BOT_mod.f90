@@ -37,7 +37,7 @@
         complex*16, dimension(nh), intent(in) :: cvec
         complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
-        integer*8 :: i,lwork
+        integer*8 :: i,lwork,nh8
         real*8 :: q,p,a,Nsq,Y0
         real*8, dimension(nd) :: qvec,pvec,avec
         real*8, dimension(nh) :: eigenv
@@ -55,14 +55,14 @@
         external ZHEGV
         lwork = 2*nh-1
 
-        write(*,*) "I AM  STATIC"
+!        write(*,*) "I AM  STATIC"
 
-        write(*,*) qtot
-        write(*,*) ptot
-        write(*,*) cvec
-        do i = 1,nd+1
-          write(*,*) tildeBmat(i,:)
-        end do
+!        write(*,*) qtot
+!        write(*,*) ptot
+!        write(*,*) cvec
+!        do i = 1,nd+1
+!          write(*,*) tildeBmat(i,:)
+!        end do
 
         q = qtot(1)
         p = ptot(1)
@@ -84,6 +84,7 @@
         ! Copy H00M so LAPACK can overwrite
         Z = H00M
         B = S00M
+!        B = invgen(nh,S00M)
 
 !        write(*,*) "I AM STATIC"
 
@@ -108,13 +109,12 @@
 !         write(*,*) info
         adjZ = dconjg(transpose(Z))
          
-        call test_static(nh,S00M,H00M,Z,eigenv)
+!        call test_static(nh,S00M,H00M,Z,eigenv)
 
         c = cvec
         c = matmul(S00M,c)
         c = matmul(adjZ,c) 
        
-        write(*,*) nd, nh
         do i = 1,nh
           expvec(i) = zexp(-iu*eigenv(i)*h)*c(i)
         end do
@@ -134,14 +134,13 @@
         implicit none
         integer, intent(in) :: nd
 
-        integer*8 :: i,nd_double
+        integer*8 :: i
         real*8, dimension(nd) :: eigenv
         complex*16, dimension(nd,nd) :: S,H
         complex*16, dimension(nd,nd) :: Z,adjZ,TEST1,TEST2,TEST6
         complex*16, dimension(nd,nd) :: TEST3,TEST4,TEST5,invS
         character(len=100) :: formato
       
-        nd_double = nd
         formato="(E10.1,E10.1,E10.1,E10.1,E10.1,E10.1)"
   
         write(*,*) "S:"
@@ -180,7 +179,7 @@
         write(*,formato) TEST2(2,1), TEST2(2,2)-1.d0, TEST2(2,3)
         write(*,formato) TEST2(3,1), TEST2(3,2), TEST2(3,3)-1.d0
         write(*,*) " "
-        invS = invgen(nd_double,S)
+        invS = invgen(nd,S)
         TEST3 = matmul(Z,adjZ)
         write(*,*) "ZZ^H=S-1"
         write(*,formato) TEST3(1,1)-invS(1,1), TEST3(1,2)-invS(1,2)
@@ -221,12 +220,12 @@
 
         q = qb(1)
 
-        write(*,*) "I AM C UPDATE"
+!        write(*,*) "I AM C UPDATE"
 
-        write(*,*) qb
-        write(*,*) pb
-        write(*,*) qk
-        write(*,*) pk
+!        write(*,*) qb
+!        write(*,*) pb
+!        write(*,*) qk
+!        write(*,*) pk
 
         Bmat = real(Bb)
 
@@ -241,10 +240,10 @@
         Tt0M = int_TauMat(nd,qb,qk,pb,pk,Bb,Bk) 
         csupp = matmul(Tt0M,c)
 
-        write(*,*) "Tt0M:"
-        do i = 1,nh
-          write(*,*) Tt0M(i,:)
-        end do
+!        write(*,*) "Tt0M:"
+!        do i = 1,nh
+!          write(*,*) Tt0M(i,:)
+!        end do
 
         cout = linsys(nh,S00M,csupp) 
 

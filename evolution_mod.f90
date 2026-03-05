@@ -163,14 +163,15 @@
        kp(:,:) = 0.d0
        kb(:,:,:) = 0.d0
        do j = 1,nstep
-       h = dfloat(last-first)/dfloat(nstep)
+!       h = dfloat(last-first)/dfloat(nstep)
           time = j*h
           cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
-          N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
-          E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
-          write(421,*) time,N,E/E0,qtotj(1),ptotj(1)&
-                       &,real(Bcmplxj(1,1))&
-                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+!          N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
+!          E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
+!          write(421,*) time,N,E/E0,qtotj(1),ptotj(1)&
+!                       &,real(Bcmplxj(1,1))&
+!                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+!       h = 0.d0
           do i = 1,4
              call KarplusTimeDer(nd,cj,qtoti,ptoti,Bcmplxi,&
                   &kq(:,i),kp(:,i),kb(:,:,i))             
@@ -181,12 +182,12 @@
           qold = qtotj
           pold = ptotj
           Bold = Bcmplxj
-!          qtotj = qtotj&
-!             &+h*(kq(:,1)+2.d0*kq(:,2)+2.d0*kq(:,3)+kq(:,4))/6.d0
-!          ptotj = ptotj&
-!             &+h*(kp(:,1)+2.d0*kp(:,2)+2.d0*kp(:,3)+kp(:,4))/6.d0
-!          Bcmplxj = Bcmplxj&
-!          &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
+          qtotj = qtotj&
+             &+h*(kq(:,1)+2.d0*kq(:,2)+2.d0*kq(:,3)+kq(:,4))/6.d0
+          ptotj = ptotj&
+             &+h*(kp(:,1)+2.d0*kp(:,2)+2.d0*kp(:,3)+kp(:,4))/6.d0
+          Bcmplxj = Bcmplxj&
+          &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
           
           cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 

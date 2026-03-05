@@ -39,6 +39,8 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial coefficients:"
 
+!      c0(:) =0.d0
+!      c0(1) =1.d0
       c0(:) = complex(1.d0,1.d0)
       c0(1) = complex(1.d0,1.d0)
     
@@ -119,7 +121,7 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,1,100]
+      trj = [0,1,1000]
       write(*,*) trj
 
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)

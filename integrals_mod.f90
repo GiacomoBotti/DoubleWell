@@ -254,8 +254,7 @@
         call extracttildeA(nd,Bjmat,Aj,avecj,alphaj) 
 
         Atot = Aj + transpose(dconjg(Ai))
-        ndouble=nd
-        invAtot = invgen(ndouble,Atot)
+        invAtot = invgen(nd,Atot)
          
         qiAi=matmul(transpose(dconjg(Ai)),qbi)
         qiAiqi = dot_product(qbi,qiAi)

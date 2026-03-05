@@ -48,17 +48,6 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [ ] `main.f90` at Report
-- [x] DEBUG W/ MAPLE
-- [x] Check w/ S.Garashchuk
-   - [x] Hermite polynomials indeces
-   - [x] Gaussian normalization
-- [x] Adapt `bot`
-   - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
-   - [x] Implement algorithm
-- [ ] Debug BOT
-   - [x] check $dt =0$
-   - [ ] check with parameters' $dt = 0$
-   - [ ] Remove $N^{2} =1$ and $N_{i}N_{j} =1$
    
 
 ### DONE
@@ -151,6 +140,17 @@ The same goes for the Hermite polynomials basis set.
    - [x] scaled variables
    - [x] update the rest
    - [x] debug w/ MAPLE
+- [x] DEBUG W/ MAPLE
+- [x] Check w/ S.Garashchuk
+   - [x] Hermite polynomials indeces
+   - [x] Gaussian normalization
+- [x] Adapt `bot`
+   - [x] $\mathbb{T}(\tau,0)$ from S.G. docs
+   - [x] Implement algorithm
+- [x] Debug BOT
+   - [x] check $dt =0$
+   - [x] check with parameters' $dt = 0$
+   - [x] Remove $N^{2} =1$ and $N_{i}N_{j} =1$
 
 ## OLD FRAMEWORK (TWO HERMITE)
 
