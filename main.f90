@@ -121,7 +121,7 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,1,1000]
+      trj = [0,1,10000]
       write(*,*) trj
 
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
