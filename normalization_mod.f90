@@ -22,7 +22,6 @@
       ! q: center of the well gaussian
       ! cvec: vector of the coefficients
       ! work: work array for I/O
-       implicit none
        integer, intent(in) :: nd
        real*8, intent(in) :: q
        complex*16, dimension(nh), intent(in) :: cvec
@@ -31,11 +30,15 @@
        real*8 :: Nout
 
        integer :: i,j
-       real*8 :: Nsq,Y0,cX0c,a,qq
-       real*8, dimension(nh) :: X0c
+       real*8 :: Nsq,Y0,a,qq
+       complex*16 :: cX0c
+       complex*16, dimension(nh) :: X0c
        real*8, dimension(nd) :: avec
        real*8, dimension(nh,nh) :: X0Mat
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+       complex*16, dimension(nh) :: test
+
+       test(:) = complex(1.d0,1.d0)
 
        qq=q
 
@@ -48,11 +51,16 @@
 !       write(111,*) "Y0: ", Y0
 !       write(111,*) "Nsq: ", Nsq
 
+!       write(*,*) cvec
+
        X0Mat=int_XnMat(nd,0,a,avec,Amat,qq)
        X0c=matmul(X0Mat,cvec)
        cX0c=dot_product(cvec,X0c)
+!       X0c=matmul(X0Mat,test)
+!       cX0c=dot_product(test,X0c)
 
-       Nout = Nsq*Y0*cX0c
+       Nout = Nsq*Y0*dreal(cX0c)
+!       Nout = dot_product(cvec,cvec) 
 
 !       write(*,*) "S00"
 !       do i = 1,nh

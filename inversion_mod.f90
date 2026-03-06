@@ -41,7 +41,7 @@
 ! decomposition.  Depends on LAPACK.
       function invgen(npar,A) result(Ainv)
         implicit none
-        integer*8, intent(in) :: npar
+        integer, intent(in) :: npar
         complex*16, dimension(npar,npar), intent(in) :: A
         complex*16, dimension(npar,npar) :: Ainv
 
@@ -81,7 +81,7 @@
 ! decomposition.  Depends on LAPACK.
       function linsys(npar,A,B) result(xout)
         implicit none
-        integer*8, intent(in) :: npar
+        integer, intent(in) :: npar
         complex*16, dimension(npar,npar), intent(in) :: A
         complex*16, dimension(npar),intent(in) :: B
 

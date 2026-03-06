@@ -8,9 +8,11 @@
        use basisset_module
        use normalization_module
        use observable_module
-!       use BOT_module
+       use BOT_module
        use eofmotion_module
        use integrals_module
+       use inversion_module
+       use matrix_module
 
        implicit none
 
@@ -41,10 +43,16 @@
        real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
        complex*16,dimension(nd+1,nd+1) :: Bcmplxi,Bcmplxj,Bold
        
-       complex*16,dimension(nh) :: cvec,cj 
+       complex*16,dimension(nh) :: cvec,cj,ctemp
 
        real*8,dimension(nd+1,4) :: kq,kp
        complex*16,dimension(nd+1,nd+1,4) :: kb
+
+       real*8 :: a,Y0
+       real*8, dimension(nd) :: avec
+       real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+       real*8, dimension(nd+1,nd+1) :: Bmat
+       real*8, dimension(nh,nh) :: S00M,invS,X0Mat
 
        ! trajectory parameters
        first = trj(1)
@@ -80,6 +88,7 @@
        hvec = hvec*h
 
        N = normalization(nd,q,c0,dreal(Bcmplx))
+       cvec= c0/dsqrt(N)
 
        write(321,*) "#Evolution parameters:"
        write(321,*) "#Range: ",first,last
@@ -113,10 +122,8 @@
        write(325,*) "#Normalization constant: ",N
        write(325,*) "#H ", "T ", "V "
 
-       cvec= c0/dsqrt(N)
-
        N = normalization(nd,q,cvec,dreal(Bcmplx))
-       E0 = energy(nd,q0,p0,c0,Bcmplx)
+       E0 = energy(nd,q0,p0,cvec,Bcmplx)
        E=E0
 
        write(*,*) "First step:"
@@ -130,8 +137,8 @@
        write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
                     &real(Bcmplx(3,3)),real(Bcmplx(1,3))
 
-       write(322,*) "#Time ","Real c", "Immaginary c"
-       write(322,*) 0.d0, dreal(c0), dimag(c0)
+       write(322,*) "#Time ","Real c ", "Immaginary c"
+       write(322,*) 0.d0, dreal(cvec), dimag(cvec)
 
        write(323,*) "#Time ","qbath"
        write(323,*) 0.d0, q0(2:nd+1) 
@@ -145,6 +152,10 @@
        qtotj = q0
        ptotj = p0
        Bcmplxj = Bcmplx
+
+       do i = 1,nd+1
+         write(*,*) Bcmplxj(i,:)
+       end do
  
        cj = cvec
 
@@ -152,8 +163,15 @@
        kp(:,:) = 0.d0
        kb(:,:,:) = 0.d0
        do j = 1,nstep
+!       h = dfloat(last-first)/dfloat(nstep)
           time = j*h
-!          cj = c_static(nd,npar,yj,work,h)
+          cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
+!          N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
+!          E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
+!          write(421,*) time,N,E/E0,qtotj(1),ptotj(1)&
+!                       &,real(Bcmplxj(1,1))&
+!                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+!       h = 0.d0
           do i = 1,4
              call KarplusTimeDer(nd,cj,qtoti,ptoti,Bcmplxi,&
                   &kq(:,i),kp(:,i),kb(:,:,i))             
@@ -170,8 +188,8 @@
              &+h*(kp(:,1)+2.d0*kp(:,2)+2.d0*kp(:,3)+kp(:,4))/6.d0
           Bcmplxj = Bcmplxj&
           &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
-
-!          cj = c_update(nd,npar,lambdaj,lambdaold,cj,work)
+          
+          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
           E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
@@ -182,7 +200,6 @@
           write(323,*) time, qtotj(2:nd+1) 
           write(325,*) time, ptotj(2:nd+1) 
         
-          Nsq=fun_Nsq(nd+1,real(Bcmplxj))
 
           ! DEBUG: prints tildeB at each step
           !write(444,*) "Time: ", time, "Nsq: ", Nsq
