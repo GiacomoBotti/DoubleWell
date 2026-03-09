@@ -34,8 +34,9 @@ The same goes for the Hermite polynomials basis set.
 ## NEW FRAMEWORK
 
 ### TO DO
-- [ ] `Makefile` at Report
-- [ ] `constants.f90` at Report
+- [x] `Makefile` at Report
+- [x] `constants.f90` at Report
+- [x] `inversion_module.f90` at Report
 - [ ] `basisset_module.f90` at Report
 - [ ] `potential_module.f90` at Report
 - [ ] `matrix_module.f90` at Report
@@ -47,7 +48,7 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `kinetic_module.f90` at Report
 - [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
-- [ ] `main.f90` at Report
+- [x] `main.f90` at Report
    
 
 ### DONE
