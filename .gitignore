@@ -6,6 +6,7 @@ butta
 *.eps
 fort.*
 /MAPLE_DEBUG/
+/USELESS/
 
 # Prerequisites
 *.d
