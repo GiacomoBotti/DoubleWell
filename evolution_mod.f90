@@ -127,6 +127,8 @@
        E=E0
 
        write(*,*) "First step:"
+       write(*,*) "Time ","N ","E ","q ","p ","B(1,1) ",&
+                    &"B(3,3) ", "B(1,3)"
        write(*,*) N, E/E0, q0(1), p0(1), real(Bcmplx(1,1)),&
                   &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
        write(*,*) time, dreal(cvec), dimag(cvec)

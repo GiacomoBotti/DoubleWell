@@ -58,16 +58,19 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
 
-       do i = 1,nv+1
-          q0(i) = i*dsqrt(2.d0)/3.d0
-          p0(i) = i*dsqrt(3.d0)/7.d0
-          Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
-          do j= i+1,nv+1
-            Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
-            Bcmplx(j,i) = Bcmplx(i,j)
-          end do   
-          write(*,*) Bcmplx(i,:)
-       end do
+      do i = 1,nv+1
+         q0(i) = i*dsqrt(2.d0)/3.d0
+         p0(i) = i*dsqrt(3.d0)/7.d0
+         Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
+         do j= i+1,nv+1
+           Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
+           Bcmplx(j,i) = Bcmplx(i,j)
+         end do   
+         write(*,*) Bcmplx(i,:)
+      end do
+
+      q0(1) = 0.d0
+      p0(1) = 0.00001d0
 
 
 !      do i = 1,nv+1
@@ -121,7 +124,7 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,1,10000]
+      trj = [0,5,5000]
       write(*,*) trj
 
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
