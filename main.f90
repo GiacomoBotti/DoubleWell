@@ -39,10 +39,10 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial coefficients:"
 
-!      c0(:) =0.d0
-!      c0(1) =1.d0
-      c0(:) = complex(1.d0,1.d0)
-      c0(1) = complex(1.d0,1.d0)
+      c0(:) =0.d0
+      c0(1) =1.d0
+!      c0(:) = complex(1.d0,1.d0)
+!      c0(1) = complex(1.d0,1.d0)
     
       do i = 1,nh
 !        c0(i) = 1.d0/nh
@@ -69,8 +69,13 @@
          write(*,*) Bcmplx(i,:)
       end do
 
-      q0(1) = 0.d0
-      p0(1) = 0.00001d0
+      q0(2) = q0(1) 
+      p0(2) = p0(1)
+
+      Bcmplx(2,2) = Bcmplx(1,1)
+      Bcmplx(1,2) = 0.d0
+      Bcmplx(2,1) = 0.d0
+
 
 
 !      do i = 1,nv+1
@@ -92,6 +97,8 @@
         masses(i) = 1.1d0*i
         write(*,*) masses(i)
       end do
+
+      masses(2) = masses(1)
 
       call MassesMat(masses)
 

@@ -112,7 +112,7 @@
        sqr=X2mat-2*q*X1mat+q*q*X0mat
 
        ! Total Hermite Matrices
-       Xtot=(X4mat/(16.d0*eta_const)) - X2mat/2.d0      
+       Xtot=(X4mat/(16.d0*eta_const))+sigma_const*X2mat/2.d0      
        Xcvec=matmul(Xtot,cvec)
        XYtot=(qvec(1) +q*Aa(1))*X1mat - Aa(1)*X2mat
        XYcvec=matmul(XYtot,cvec)
@@ -198,7 +198,7 @@
        cX3c=dot_product(cvec,X3c)
        cX1c=dot_product(cvec,X1c)
        cX0c=dot_product(cvec,X0c)
-       dxV=(cX3c/(4.d0*eta_const) - (1+gamma_const*Aa(1))*cX1c+&
+       dxV=(cX3c/(4.d0*eta_const)+(sigma_const-gamma_const*Aa(1))*cX1c+&
              &gamma_const*(qvec(1)+Aa(1)*q)*cX0c)*Nsq*Y0
 
        V1prime=2*Nsq*Y0*(cX0c*(Vq+q*VAa)-cX1c*VAa)
@@ -273,7 +273,7 @@
 
        V2(:,:) = 0.d0
 
-       V2(1,1) = Nsq*Y0*(3.d0*cX2c/(4.d0*eta_const)-cX0c)
+       V2(1,1) = Nsq*Y0*(3.d0*cX2c/(4.d0*eta_const)+sigma_const*cX0c)
        V2(1,2) = gamma_const*Nsq*Y0*cX0c
        V2(2,1) = V2(1,2) 
        V2(2:nd+1,2:nd+1) = 2.d0*Nsq*Y0*cX0c*Vmat

@@ -38,6 +38,7 @@
 
        integer*8 :: i,j,first,last,nstep,k
        real*8 :: h,time,N,E,q,p,E0,Nsq
+       real*8,dimension(nh) :: csq 
        real*8,dimension(nd) :: qvec,pvec 
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold 
        real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
@@ -89,6 +90,7 @@
 
        N = normalization(nd,q,c0,dreal(Bcmplx))
        cvec= c0/dsqrt(N)
+       csq(:) = conjg(cvec(:))*cvec(:)
 
        write(321,*) "#Evolution parameters:"
        write(321,*) "#Range: ",first,last
@@ -127,26 +129,29 @@
        E=E0
 
        write(*,*) "First step:"
-       write(*,*) "Time ","N ","E ","q ","p ","B(1,1) ",&
+       write(*,*) "N ","E ","q ","p ","B(1,1) ",&
                     &"B(3,3) ", "B(1,3)"
-       write(*,*) N, E/E0, q0(1), p0(1), real(Bcmplx(1,1)),&
-                  &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
-       write(*,*) time, dreal(cvec), dimag(cvec)
-       write(*,*) time, q0(2:nd+1) 
+       write(*,*) N, E/E0, q0(1), p0(1), real(Bcmplx(1,1))!,&
+!                  &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+!       write(*,*) time, dreal(cvec), dimag(cvec)
+       write(*,*) csq
+       write(*,*) q0(2:nd+1) 
 
        write(321,*) "#Time ","N ","E ","q ","p ","B(1,1) ",&
                     &"B(3,3) ", "B(1,3)"
-       write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
-                    &real(Bcmplx(3,3)),real(Bcmplx(1,3))
+       write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1))!,&
+!                    &real(Bcmplx(3,3)),real(Bcmplx(1,3))
 
-       write(322,*) "#Time ","Real c ", "Immaginary c"
-       write(322,*) 0.d0, dreal(cvec), dimag(cvec)
+       write(322,*) "#Time ","|c|^2"
+       write(322,*) 0.d0, csq
+!       write(322,*) "#Time ","Real c ", "Immaginary c"
+!       write(322,*) 0.d0, dreal(cvec), dimag(cvec)
 
        write(323,*) "#Time ","qbath"
        write(323,*) 0.d0, q0(2:nd+1) 
 
-       write(323,*) "#Time ","pbath"
-       write(323,*) 0.d0, p0(2:nd+1) 
+       write(325,*) "#Time ","pbath"
+       write(325,*) 0.d0, p0(2:nd+1) 
 
        qtoti = q0
        ptoti = p0
@@ -192,13 +197,15 @@
           &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
           
           cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+          csq(:) = conjg(cj(:))*cj(:)
 
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
           E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
 
-          write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
-                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
-          write(322,*) time, dreal(cj), dimag(cj)
+          write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))!&
+!                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+!          write(322,*) time, dreal(cj), dimag(cj)
+          write(322,*) time, csq
           write(323,*) time, qtotj(2:nd+1) 
           write(325,*) time, ptotj(2:nd+1) 
         
@@ -215,9 +222,10 @@
        end do
 
        write(*,*) "Last step:"
-       write(*,*) N,E/E0, qtotj(1), ptotj(1),real(Bcmplxj(1,1)),&  
-                  &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
-       write(*,*) time, dreal(cj), dimag(cj)
+       write(*,*) N,E/E0, qtotj(1), ptotj(1),real(Bcmplxj(1,1))!,&  
+!                  &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+!       write(*,*) time, dreal(cj), dimag(cj)
+       write(*,*) time, csq
        write(*,*) time, qtotj(2:nd+1) 
 
        !write(222,*) qtotj
