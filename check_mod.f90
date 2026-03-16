@@ -602,7 +602,90 @@
        
        Nout = normalization(nd,q,cvec,real(Bmat))
 
-        
-
       end subroutine  
+
+!.....Coherent dynamics calculator......................................
+
+      subroutine coherent_calc(nd,trj,q0,p0,masses,c0,Bcmplx)
+      ! nd: bath dimension
+      ! trj : trajectory parameters (first step, last step, nstep)
+      ! q0 : initial gaussian center (x&y)
+      ! p0 : initial gaussian momentum (x&y)
+      ! masses : vector of the masses
+      ! c0 : initial coefficients 
+      ! Bcmplx : initial gaussian width matrix, real & imaginary
+      integer, intent(in) :: nd
+      integer*8, dimension(3), intent(in) :: trj
+      real*8, dimension(nd+1), intent(in) :: q0,p0,masses
+      complex*16,dimension(nh), intent(in) :: c0 
+      complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx 
+      
+      integer*8 :: i,j,first,last,nstep,k
+      real*8 :: h,time,N,E,q,p,E0,Nsq
+      real*8,dimension(nh) :: csq 
+      real*8,dimension(nd) :: qvec,pvec 
+      real*8,dimension(nd+1) :: qtot,ptot,w,phase 
+      real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
+      complex*16,dimension(nd+1,nd+1) :: Bcoh,Bt,num,den
+      
+      complex*16,dimension(nh) :: cvec,cj,ctemp
+
+      real*8,dimension(nd+1,4) :: kq,kp
+      complex*16,dimension(nd+1,nd+1,4) :: kb
+
+      real*8 :: a,Y0
+      real*8, dimension(nd) :: avec
+      real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+      real*8, dimension(nd+1,nd+1) :: Bmat
+      real*8, dimension(nh,nh) :: S00M,invS,X0Mat
+
+      open(unit=777,file='coherent.dat',status='unknown')
+
+      ! trajectory parameters
+      first = trj(1)
+      last = trj(2)
+      nstep = trj(3)
+
+      ! Separate x & y
+      q = q0(1)
+      qvec = q0(2:nd+1)
+      p = p0(1)
+      pvec = p0(2:nd+1)
+
+      h = dfloat(last-first)/dfloat(nstep)
+
+      Bcoh(:,:) =0.d0
+      do i = 1,nd+1
+         Bcoh(i,i) = dsqrt(masses(i))
+      end do
+
+      w(:) = dsqrt(1.d0/masses(:))
+
+      write(777,*) '#Time ','q ', 'p ','B(1,1) ','B(2,2) ','phase'
+
+      num(:,:) = 0.d0
+      den(:,:) = 0.d0
+      do j = 1,nstep
+         time = j*h
+
+         do i = 1,nd+1
+           qtot(i)=q0(i)*dcos(w(i)*time)&
+                   &+p0(i)*dsin(w(i)*time)/(masses(i)*w(i))
+           ptot(i)=p0(i)*dcos(w(i)*time)&
+                   &-masses(i)*w(i)*q0(i)*dsin(w(i)*time)
+           num(i,i)=Bcmplx(i,i)*dcos(w(i)*time)+&
+                    &iu*Bcoh(i,i)*dsin(w(i)*time)
+           den(i,i)=iu*Bcmplx(i,i)*dsin(w(i)*time)+&
+                    &Bcoh(i,i)*dcos(w(i)*time)
+           phase(i)=0.5d0*(ptot(i)*qtot(i)-p0(i)*q0(i))-&
+                    &0.5d0*w(i)*time
+         end do
+           Bt(:,:) = Bcoh(:,:)*num(:,:)/den(:,:)
+
+         write(777,*) time,qtot,ptot,real(Bt(1,1)),real(Bt(2,2)),phase
+
+      end do
+
+      end subroutine
+
       end module

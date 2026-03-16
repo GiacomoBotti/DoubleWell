@@ -113,12 +113,12 @@
 
        ! Total Hermite Matrices
        Xtot=(X4mat/(16.d0*eta_const))+sigma_const*X2mat/2.d0      
-       Xcvec=matmul(Xtot,cvec)
+!       Xcvec=matmul(Xtot,cvec)
        XYtot=(qvec(1) +q*Aa(1))*X1mat - Aa(1)*X2mat
-       XYcvec=matmul(XYtot,cvec)
+!       XYcvec=matmul(XYtot,cvec)
        Ytot=(0.5*Tr0+Tr1)*X0mat&
            &-2*Tr3*lin+Tr2*sqr
-       Ycvec=matmul(Ytot,cvec)
+!       Ycvec=matmul(Ytot,cvec)
 
        ! V elements
 !       Vx=Nsq*Y0*dot_product(cvec,Xcvec)
@@ -159,7 +159,7 @@
        real*8 :: dxV, dy1V
        real*8, dimension(nd) :: avec,qvec,Aa,VAa,Vq,VVAa,V1prime
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat,invA
-       real*8, dimension(nh) :: X3c, X1c, X0c 
+       complex*16, dimension(nh) :: X3c, X1c, X0c 
        real*8, dimension(nh,nh) :: X3mat,X2mat,X1mat,X0mat
 
 !       write(111,*) "GRADIENT"
@@ -232,7 +232,7 @@
        real*8 :: dxV, dy1V
        real*8, dimension(nd) :: avec,qvec,Aa,VAa,Vq,VVAa,V1prime
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat,invA
-       real*8, dimension(nh) :: X2c, X0c 
+       complex*16, dimension(nh) :: X2c, X0c 
        real*8, dimension(nh,nh) :: X2mat,X0mat
 
        ! Unreavel qtot

@@ -130,17 +130,17 @@
 
        write(*,*) "First step:"
        write(*,*) "N ","E ","q ","p ","B(1,1) ",&
-                    &"B(3,3) ", "B(1,3)"
-       write(*,*) N, E/E0, q0(1), p0(1), real(Bcmplx(1,1))!,&
-!                  &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+                    &"B(2,2) ", "B(1,3)"
+       write(*,*) N, E/E0, q0(1), p0(1), real(Bcmplx(1,1)),&
+                  &real(Bcmplxj(2,2))!,real(Bcmplxj(1,3))
 !       write(*,*) time, dreal(cvec), dimag(cvec)
        write(*,*) csq
        write(*,*) q0(2:nd+1) 
 
        write(321,*) "#Time ","N ","E ","q ","p ","B(1,1) ",&
                     &"B(3,3) ", "B(1,3)"
-       write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1))!,&
-!                    &real(Bcmplx(3,3)),real(Bcmplx(1,3))
+       write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
+                    &real(Bcmplx(2,2))!,real(Bcmplx(1,3))
 
        write(322,*) "#Time ","|c|^2"
        write(322,*) 0.d0, csq
@@ -202,8 +202,8 @@
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
           E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
 
-          write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))!&
-!                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+          write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
+                      &,real(Bcmplxj(2,2))!,real(Bcmplxj(1,3))
 !          write(322,*) time, dreal(cj), dimag(cj)
           write(322,*) time, csq
           write(323,*) time, qtotj(2:nd+1) 

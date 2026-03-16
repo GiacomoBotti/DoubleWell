@@ -54,6 +54,7 @@
 !       write(*,*) cvec
 
        X0Mat=int_XnMat(nd,0,a,avec,Amat,qq)
+
        X0c=matmul(X0Mat,cvec)
        cX0c=dot_product(cvec,X0c)
 !       X0c=matmul(X0Mat,test)
@@ -62,10 +63,10 @@
        Nout = Nsq*Y0*dreal(cX0c)
 !       Nout = dot_product(cvec,cvec) 
 
-!       write(*,*) "S00"
-!       do i = 1,nh
-!         write(*,*) Y0*X0Mat(i,:)
-!       end do
+       write(*,*) "S00"
+       do i = 1,nh
+         write(*,*) X0Mat(i,:)
+       end do
 
       end function
  

@@ -34,15 +34,32 @@
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
 
+!.....Define masses vector..............................................
+
+      write(*,*) "Masses vector:"
+
+      do i = 1,nv+1
+        masses(i) = 1.1d0*i
+        write(*,*) masses(i)
+      end do
+
+!      masses(2) = masses(1) !WATCH OUT
+
+      call MassesMat(masses)
+
+      write(*,*) "+---------------------------------------------------+"
+
 !.....Define initial conditions.........................................
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial coefficients:"
 
       c0(:) =0.d0
-      c0(1) =1.d0
+!      c0(1) =10.d0  !creal
+!      c0(1) =iu !cimg
+!      c0(2) = 1.d0 !c2real
 !      c0(:) = complex(1.d0,1.d0)
-!      c0(1) = complex(1.d0,1.d0)
+      c0(1) = complex(1.d0,1.d0) !ccmplx
     
       do i = 1,nh
 !        c0(i) = 1.d0/nh
@@ -72,37 +89,10 @@
       q0(2) = q0(1) 
       p0(2) = p0(1)
 
-      Bcmplx(2,2) = Bcmplx(1,1)
+!      Bcmplx(1,1) = dsqrt(sigma_const*masses(1)) 
+!      Bcmplx(2,2) = dsqrt(masses(2)) 
       Bcmplx(1,2) = 0.d0
       Bcmplx(2,1) = 0.d0
-
-
-
-!      do i = 1,nv+1
-!         Bcmplx(i,i) = i+iu*i
-!         do j = i+1,nv+1
-!            Bcmplx(i,j) = (j+iu*j)/20.d0 !Gershgoring circle theorem
-!            Bcmplx(j,i) = Bcmplx(i,j)
-!         end do
-!         write(*,*) Bcmplx(i,:)
-!      end do
-
-!      Bcmplx(1,1) = complex(1.d0,1.d0)
-
-!.....Define masses vector..............................................
-
-      write(*,*) "Masses vector:"
-
-      do i = 1,nv+1
-        masses(i) = 1.1d0*i
-        write(*,*) masses(i)
-      end do
-
-      masses(2) = masses(1)
-
-      call MassesMat(masses)
-
-      write(*,*) "+---------------------------------------------------+"
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
@@ -135,6 +125,7 @@
       write(*,*) trj
 
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
+      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
 
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"
