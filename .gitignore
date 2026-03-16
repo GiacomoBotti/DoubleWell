@@ -7,6 +7,7 @@ butta
 fort.*
 /MAPLE_DEBUG/
 /USELESS/
+/2CHO_*/
 
 # Prerequisites
 *.d
