@@ -5,6 +5,7 @@
 
        module evolution_module
 
+       use constants
        use basisset_module
        use normalization_module
        use observable_module
@@ -172,7 +173,8 @@
        do j = 1,nstep
 !       h = dfloat(last-first)/dfloat(nstep)
           time = j*h
-          cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
+!          cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
+!           cj = cj*zexp(-iu*E*h/E0)
 !          N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
 !          E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
 !          write(421,*) time,N,E/E0,qtotj(1),ptotj(1)&
@@ -196,7 +198,7 @@
           Bcmplxj = Bcmplxj&
           &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
           
-          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
           csq(:) = conjg(cj(:))*cj(:)
 
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))

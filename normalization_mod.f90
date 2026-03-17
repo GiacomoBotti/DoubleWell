@@ -63,10 +63,10 @@
        Nout = Nsq*Y0*dreal(cX0c)
 !       Nout = dot_product(cvec,cvec) 
 
-       write(*,*) "S00"
-       do i = 1,nh
-         write(*,*) X0Mat(i,:)
-       end do
+!       write(*,*) "S00"
+!       do i = 1,nh
+!         write(*,*) X0Mat(i,:)
+!       end do
 
       end function
  

@@ -624,7 +624,7 @@
       real*8 :: h,time,N,E,q,p,E0,Nsq
       real*8,dimension(nh) :: csq 
       real*8,dimension(nd) :: qvec,pvec 
-      real*8,dimension(nd+1) :: qtot,ptot,w,phase 
+      real*8,dimension(nd+1) :: qtot,ptot,w,phase,phase_c 
       real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
       complex*16,dimension(nd+1,nd+1) :: Bcoh,Bt,num,den
       
@@ -633,13 +633,21 @@
       real*8,dimension(nd+1,4) :: kq,kp
       complex*16,dimension(nd+1,nd+1,4) :: kb
 
-      real*8 :: a,Y0
+      real*8 :: energy,gbot
       real*8, dimension(nd) :: avec
       real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
       real*8, dimension(nd+1,nd+1) :: Bmat
       real*8, dimension(nh,nh) :: S00M,invS,X0Mat
 
       open(unit=777,file='coherent.dat',status='unknown')
+      open(unit=888,file='energy_BOT.dat',status='old')
+
+      read(888,*)
+      read(888,*)
+      read(888,*)
+      read(888,*)
+      read(888,*)
+      read(888,*)
 
       ! trajectory parameters
       first = trj(1)
@@ -663,11 +671,17 @@
 
       write(777,*) '#Time ','q ', 'p ','B(1,1) ','B(2,2) ','phase'
 
+      read(888,*) energy
+
+      write(*,*) "I AM COHERENT"
+ 
+      write(*,*) energy, 0.5d0*(w(1) + w(2))
+
       num(:,:) = 0.d0
       den(:,:) = 0.d0
       do j = 1,nstep
          time = j*h
-
+         read(888,*) energy
          do i = 1,nd+1
            qtot(i)=q0(i)*dcos(w(i)*time)&
                    &+p0(i)*dsin(w(i)*time)/(masses(i)*w(i))
@@ -677,12 +691,19 @@
                     &iu*Bcoh(i,i)*dsin(w(i)*time)
            den(i,i)=iu*Bcmplx(i,i)*dsin(w(i)*time)+&
                     &Bcoh(i,i)*dcos(w(i)*time)
-           phase(i)=0.5d0*(ptot(i)*qtot(i)-p0(i)*q0(i))-&
+           phase(i)=0.5d0*(ptot(i)*qtot(i)-p0(i)*q0(i))!+&
+                    !&0.5d0*iu*log(iu*Bcmplx(i,i)*dsin(w(i)*time)+&
+                    !&Bcoh(i,i)*dcos(w(i)*time)/Bcoh(i,i))
+           phase_c(i)=0.5d0*(ptot(i)*qtot(i)-p0(i)*q0(i))-&
                     &0.5d0*w(i)*time
          end do
-           Bt(:,:) = Bcoh(:,:)*num(:,:)/den(:,:)
+         gbot = -energy*time!&
+      !       &+0.5d0*dot_product(ptot,qtot)-0.5d0*dot_product(p0,q0)
+         Bt(:,:) = Bcoh(:,:)*num(:,:)/den(:,:)
 
-         write(777,*) time,qtot,ptot,real(Bt(1,1)),real(Bt(2,2)),phase
+      write(777,*) time,qtot,ptot,real(Bt(1,1)),real(Bt(2,2)),phase,&
+                   phase_c,gbot,phase_c(1)+phase_c(2),&
+                   -0.5d0*(w(1)+w(2))*time
 
       end do
 

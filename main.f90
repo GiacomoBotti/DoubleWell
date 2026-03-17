@@ -55,11 +55,12 @@
       write(*,*) "Initial coefficients:"
 
       c0(:) =0.d0
-!      c0(1) =10.d0  !creal
+      c0(1) =1.d0  !creal
 !      c0(1) =iu !cimg
 !      c0(2) = 1.d0 !c2real
 !      c0(:) = complex(1.d0,1.d0)
-      c0(1) = complex(1.d0,1.d0) !ccmplx
+!      c0(2) = complex(1.d0,1.d0) !ccmplx
+!      c0(2) = complex(1.d0,1.d0) !ccmplx
     
       do i = 1,nh
 !        c0(i) = 1.d0/nh
@@ -86,11 +87,13 @@
          write(*,*) Bcmplx(i,:)
       end do
 
-      q0(2) = q0(1) 
-      p0(2) = p0(1)
+!      q0(2) = q0(1) 
+!      p0(2) = p0(1)
+      q0(:) = 0.d0 
+      p0(:) = 0.d0
 
-!      Bcmplx(1,1) = dsqrt(sigma_const*masses(1)) 
-!      Bcmplx(2,2) = dsqrt(masses(2)) 
+      Bcmplx(1,1) = dsqrt(masses(1)) 
+      Bcmplx(2,2) = dsqrt(masses(2)) 
       Bcmplx(1,2) = 0.d0
       Bcmplx(2,1) = 0.d0
 
