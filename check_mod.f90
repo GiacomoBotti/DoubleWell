@@ -633,13 +633,16 @@
       real*8,dimension(nd+1,4) :: kq,kp
       complex*16,dimension(nd+1,nd+1,4) :: kb
 
-      real*8 :: energy,gbot
+      real*8 :: energy,gbot,x,y,rx,ry
       real*8, dimension(nd) :: avec
       real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
       real*8, dimension(nd+1,nd+1) :: Bmat
       real*8, dimension(nh,nh) :: S00M,invS,X0Mat
 
+      complex*16 :: img,psi
+
       open(unit=777,file='coherent.dat',status='unknown')
+      open(unit=778,file='final_coh_wfn.dat',status='unknown')
       open(unit=888,file='energy_BOT.dat',status='old')
 
       read(888,*)
@@ -670,6 +673,7 @@
       w(:) = dsqrt(1.d0/masses(:))
 
       write(777,*) '#Time ','q ', 'p ','B(1,1) ','B(2,2) ','phase'
+      write(778,*) '#x ','y ', 'Re(Psi) ','Im(Psi) '
 
       read(888,*) energy
 
@@ -691,9 +695,9 @@
                     &iu*Bcoh(i,i)*dsin(w(i)*time)
            den(i,i)=iu*Bcmplx(i,i)*dsin(w(i)*time)+&
                     &Bcoh(i,i)*dcos(w(i)*time)
-           phase(i)=0.5d0*(ptot(i)*qtot(i)-p0(i)*q0(i))!+&
-                    !&0.5d0*iu*log(iu*Bcmplx(i,i)*dsin(w(i)*time)+&
-                    !&Bcoh(i,i)*dcos(w(i)*time)/Bcoh(i,i))
+           phase(i)=0.5d0*(ptot(i)*qtot(i)-p0(i)*q0(i))+&
+                    &0.5d0*iu*log((iu*Bcmplx(i,i)*dsin(w(i)*time)+&
+                    &Bcoh(i,i)*dcos(w(i)*time))/Bcoh(i,i))
            phase_c(i)=0.5d0*(ptot(i)*qtot(i)-p0(i)*q0(i))-&
                     &0.5d0*w(i)*time
          end do
@@ -701,11 +705,28 @@
       !       &+0.5d0*dot_product(ptot,qtot)-0.5d0*dot_product(p0,q0)
          Bt(:,:) = Bcoh(:,:)*num(:,:)/den(:,:)
 
-      write(777,*) time,qtot,ptot,real(Bt(1,1)),real(Bt(2,2)),phase,&
-                   phase_c,gbot,phase_c(1)+phase_c(2),&
+      write(777,*) time,qtot,ptot,real(Bt(1,1)),real(Bt(2,2)),&
+                   phase(1) + phase(2),gbot,phase_c(1)+phase_c(2),&
                    -0.5d0*(w(1)+w(2))*time
 
       end do
+
+      
+      x = -5.d0
+      y = -5.d0
+      do i = 1,100
+         x = x+0.1d0
+         y = y+0.1d0
+         rx = x - qtot(1)
+         ry = y - qtot(2)
+         img = iu*(ptot(1)*rx+ptot(2)*ry+phase(1)+phase(2))
+         psi = zexp(-0.5d0*Bt(1,1)*rx*rx-0.5d0*Bt(2,2)*ry*ry+img)
+         write(778,*) x,y,real(psi),aimag(psi)
+      end do
+
+      close(777)
+      close(888)
+      close(778)
 
       end subroutine
 

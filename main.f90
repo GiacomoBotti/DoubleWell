@@ -87,12 +87,12 @@
          write(*,*) Bcmplx(i,:)
       end do
 
-!      q0(2) = q0(1) 
-!      p0(2) = p0(1)
-      q0(:) = 0.d0 
-      p0(:) = 0.d0
+      q0(2) = q0(1) 
+      p0(2) = p0(1)
+!      q0(:) = 0.d0 
+!      p0(:) = 0.d0
 
-      Bcmplx(1,1) = dsqrt(masses(1)) 
+!      Bcmplx(1,1) = dsqrt(masses(1)) 
       Bcmplx(2,2) = dsqrt(masses(2)) 
       Bcmplx(1,2) = 0.d0
       Bcmplx(2,1) = 0.d0
@@ -124,7 +124,7 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,5,5000]
+      trj = [0,1,5000]
       write(*,*) trj
 
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)

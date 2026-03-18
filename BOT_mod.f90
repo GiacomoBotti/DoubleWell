@@ -121,6 +121,12 @@
 
         csout = matmul(Z,expvec)
 
+!.......1H DEBUGGING....................................................
+
+        write(*,*) "I am doing a 1H evolution!"
+        csout(:) = 0.d0
+        csout(1) = cvec(1)*zexp(-iu*H00M(1,1)*h)/S00M(1,1)
+
        end function
 
 
@@ -246,6 +252,12 @@
 !        end do
 
         cout = linsys(nh,S00M,csupp) 
+
+!.......1H DEBUGGING....................................................
+
+        write(*,*) "I am doing a 1H evolution!"
+        cout(:) = 0.d0
+        cout(1) = Tt0M(1,1)*c(1)/S00M(1,1)
 
        end function
        end module

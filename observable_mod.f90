@@ -4,6 +4,8 @@
 
        module observable_module
 
+       use constants
+       use integrals_module
        use kinetic_module
        use effectivepot_module
        use basisset_module
@@ -11,7 +13,7 @@
        implicit none
 
        private
-       public :: energy
+       public :: energy,plot_wfn
 
        contains
 
@@ -52,4 +54,45 @@
          write(324,*) Hout, T0, V0
          
        end function
+
+!......Plot wavefunction................................................
+
+       subroutine plot_wfn(nd,qtot,ptot,cvec,tildeBmat,uuunit)
+       ! nd: bath dimension
+       ! qtot: total position vector
+       ! ptot: total momentum vector
+       ! cvec: basis set coefficients vector
+       ! tildeBmat: total complex gaussian width
+       ! uuunit: unit in which to print => fort.unit 
+         integer, intent(in) :: nd,uuunit
+         real*8, dimension(nd+1), intent(in) :: qtot,ptot
+         complex*16, dimension(nh), intent(in) :: cvec
+         complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
+
+         integer :: i
+         real*8 :: Nsq,N,phase
+         real*8, dimension(nd+1) :: rvec,xvec
+         complex*16 :: sqr,img,psi
+         complex*16, dimension(nd+1) :: sqrvec
+
+         write(*,*) "Plotting gaussian wfn on the x=y cut"
+   
+         !Nsq = fun_Nsq(nd,real(tildeBmat))
+         !N = dsqrt(Nsq)
+
+         phase = datan((aimag(cvec(1))/real(cvec(1))))
+
+         xvec(:) = -5.d0
+         do i = 1,100
+            xvec(:) = xvec(:)+0.1d0 
+            rvec(:) = xvec(:) - qtot(:)
+            sqrvec = matmul(tildeBmat,rvec)
+            sqr = dot_product(rvec,sqrvec)
+            img = iu*dot_product(ptot,rvec)
+            psi = zexp(-0.5d0*sqr + img)*cvec(1)
+            write(uuunit,*) xvec, real(psi), aimag(psi)
+         end do
+
+       end subroutine
+
        end module
