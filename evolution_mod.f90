@@ -126,14 +126,14 @@
        write(325,*) "#Steps: ",nstep
        write(325,*) "#Timestep: ",h
        write(325,*) "#Normalization constant: ",N
-       write(323,*) "#Time ", "pbath"
+       write(325,*) "#Time ", "pbath"
   
        write(326,*) "#Evolution parameters:"
        write(326,*) "#Range: ",first,last
        write(326,*) "#Steps: ",nstep
        write(326,*) "#Timestep: ",h
        write(326,*) "#Normalization constant: ",N
-       write(323,*) "#Time ", "phase"
+       write(326,*) "#Time ", "phase"
 
        N = normalization(nd,q,cvec,dreal(Bcmplx))
        E0 = energy(nd,q0,p0,cvec,Bcmplx)
@@ -153,15 +153,12 @@
        write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
                     &real(Bcmplx(2,2))!,real(Bcmplx(1,3))
 
-       write(322,*) "#Time ","|c|^2"
        write(322,*) 0.d0, csq
 !       write(322,*) "#Time ","Real c ", "Immaginary c"
 !       write(322,*) 0.d0, dreal(cvec), dimag(cvec)
 
-       write(323,*) "#Time ","qbath"
        write(323,*) 0.d0, q0(2:nd+1) 
 
-       write(325,*) "#Time ","pbath"
        write(325,*) 0.d0, p0(2:nd+1) 
 
        qtoti = q0
