@@ -112,20 +112,55 @@
 !        call test_static(nh,S00M,H00M,Z,eigenv)
 
         c = cvec
+        write(*,*) "IN" 
+        write(*,*) c
         c = matmul(S00M,c)
+!        write(*,*) "Sc" 
+!        write(*,*) c
         c = matmul(adjZ,c) 
        
+!        write(*,*) "Z^HSc" 
+!        write(*,*) c
+
+        B(:,:) = 0.d0
         do i = 1,nh
           expvec(i) = zexp(-iu*eigenv(i)*h)*c(i)
+          B(i,i) = zexp(-iu*eigenv(i)*h)
         end do
 
+        B = matmul(B,adjZ)
+        B = matmul(Z,B)
+
+        write(*,*) "ZexpZ"
+        do i = 1,nh
+          write(*,*) B(i,:)
+        end do
+
+!        write(*,*) "exp Z^HSc" 
+!        write(*,*) expvec 
         csout = matmul(Z,expvec)
+        
+!        csout = expvec
+!        write(*,*) "Zexp Z^HSc" 
+        write(*,*) "c final"
+        write(*,*) csout(:)
 
 !.......1H DEBUGGING....................................................
 
         write(*,*) "I am doing a 1H evolution!"
-        csout(:) = 0.d0
-        csout(1) = cvec(1)*zexp(-iu*H00M(1,1)*h)/S00M(1,1)
+       ! csout(1) = cvec(1)*zexp(-iu*H00M(1,1)*h)/S00M(1,1)
+      
+
+!        csout(:) = 0.d0
+!        do i= 1,nh
+!           csout(i) = cvec(i)*zexp(-iu*H00M(i,i)*h)!/S00M(i,i)
+!           csout(i) = cvec(i)*zexp(-iu*eigenv(i)*h)!/S00M(i,i)
+!        end do
+
+!        write(*,*) zexp(-iu*eigenv(1)*h), zexp(-iu*eigenv(2)*h)
+!        write(*,*) zexp(-iu*H00M(1,1)*h), zexp(-iu*H00M(2,2)*h)
+
+!        write(*,*) csout(:)
 
        end function
 
@@ -226,7 +261,7 @@
 
         q = qb(1)
 
-!        write(*,*) "I AM C UPDATE"
+        write(*,*) "I AM C UPDATE"
 
 !        write(*,*) qb
 !        write(*,*) pb
@@ -243,8 +278,16 @@
 
         S00M = X0Mat*Y0*Nsq 
 
+        invS = invgen(nh,S00M) 
+
+        write(*,*) "IN UPDATE"
+        write(*,*) c
+
         Tt0M = int_TauMat(nd,qb,qk,pb,pk,Bb,Bk) 
         csupp = matmul(Tt0M,c)
+ 
+        write(*,*) "TtOMc"
+        write(*,*) csupp
 
 !        write(*,*) "Tt0M:"
 !        do i = 1,nh
@@ -253,11 +296,17 @@
 
         cout = linsys(nh,S00M,csupp) 
 
+        write(*,*) "cout"
+        write(*,*) cout
+ 
+!        cout = matmul(invS,csupp)
+
 !.......1H DEBUGGING....................................................
 
-        write(*,*) "I am doing a 1H evolution!"
-        cout(:) = 0.d0
-        cout(1) = Tt0M(1,1)*c(1)/S00M(1,1)
+       ! write(*,*) "I am doing a 1H evolution!"
+       ! cout(:) = 0.d0
+       ! cout(1) = Tt0M(1,1)*c(1)/S00M(1,1)
+       ! write(*,*) cout(nh)
 
        end function
        end module

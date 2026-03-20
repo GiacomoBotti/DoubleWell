@@ -10,7 +10,7 @@
       implicit none
 
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 4 
+      integer,parameter,public :: nh = 1 
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Database of the coefficients
@@ -49,7 +49,9 @@
        ! The coefficients are listed for INCREASING ORDER of x power
 
        Mherm(1,1) = 1.d0
-       Mherm(2,2) = 2.d0 
+       if(nh.ne.1) then
+          Mherm(2,2) = 2.d0 
+       end if
 
        do i = 3,nh
          Mherm(i,1) =-Mherm(i-1,2)
