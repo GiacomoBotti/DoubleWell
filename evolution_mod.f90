@@ -181,8 +181,8 @@
 !       h = dfloat(last-first)/dfloat(nstep)
           time = j*h
           cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
-          write(*,*) "STATIC OUT:"
-          write(*,*) cj
+!          write(*,*) "STATIC OUT:"
+!          write(*,*) cj
 !          N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
 !          E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
 !          write(421,*) time,N,E/E0,qtotj(1),ptotj(1)&
@@ -206,11 +206,11 @@
           Bcmplxj = Bcmplxj&
           &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
           
-          write(*,*) "UPDATE IN:"
-          write(*,*) cj
+!          write(*,*) "UPDATE IN:"
+!          write(*,*) cj
           cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
-          write(*,*) "UPDATE OUT:"
-          write(*,*) cj
+!          write(*,*) "UPDATE OUT:"
+!          write(*,*) cj
           csq(:) = conjg(cj(:))*cj(:)
           phase(:) = datan((aimag(cj(:))/real(cj(:))))
 

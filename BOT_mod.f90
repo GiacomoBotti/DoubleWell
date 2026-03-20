@@ -86,8 +86,6 @@
         B = S00M
 !        B = invgen(nh,S00M)
 
-!        write(*,*) "I AM STATIC"
-
 !        write(*,*) "T00M:"
 !        do i = 1,nh
 !          write(*,*) T00M(i,:)
@@ -112,8 +110,8 @@
 !        call test_static(nh,S00M,H00M,Z,eigenv)
 
         c = cvec
-        write(*,*) "IN" 
-        write(*,*) c
+!        write(*,*) "IN" 
+!        write(*,*) c
         c = matmul(S00M,c)
 !        write(*,*) "Sc" 
 !        write(*,*) c
@@ -122,19 +120,19 @@
 !        write(*,*) "Z^HSc" 
 !        write(*,*) c
 
-        B(:,:) = 0.d0
+!        B(:,:) = 0.d0
         do i = 1,nh
           expvec(i) = zexp(-iu*eigenv(i)*h)*c(i)
-          B(i,i) = zexp(-iu*eigenv(i)*h)
+!          B(i,i) = zexp(-iu*eigenv(i)*h)
         end do
 
-        B = matmul(B,adjZ)
-        B = matmul(Z,B)
+!        B = matmul(B,adjZ)
+!        B = matmul(Z,B)
 
-        write(*,*) "ZexpZ"
-        do i = 1,nh
-          write(*,*) B(i,:)
-        end do
+!        write(*,*) "ZexpZ"
+!        do i = 1,nh
+!          write(*,*) B(i,:)
+!        end do
 
 !        write(*,*) "exp Z^HSc" 
 !        write(*,*) expvec 
@@ -142,12 +140,12 @@
         
 !        csout = expvec
 !        write(*,*) "Zexp Z^HSc" 
-        write(*,*) "c final"
-        write(*,*) csout(:)
+!        write(*,*) "c final"
+!        write(*,*) csout(:)
 
 !.......1H DEBUGGING....................................................
 
-        write(*,*) "I am doing a 1H evolution!"
+!        write(*,*) "I am doing a 1H evolution!"
        ! csout(1) = cvec(1)*zexp(-iu*H00M(1,1)*h)/S00M(1,1)
       
 
@@ -261,7 +259,7 @@
 
         q = qb(1)
 
-        write(*,*) "I AM C UPDATE"
+!        write(*,*) "I AM C UPDATE"
 
 !        write(*,*) qb
 !        write(*,*) pb
@@ -280,14 +278,14 @@
 
         invS = invgen(nh,S00M) 
 
-        write(*,*) "IN UPDATE"
-        write(*,*) c
+!        write(*,*) "IN UPDATE"
+!        write(*,*) c
 
         Tt0M = int_TauMat(nd,qb,qk,pb,pk,Bb,Bk) 
         csupp = matmul(Tt0M,c)
  
-        write(*,*) "TtOMc"
-        write(*,*) csupp
+!        write(*,*) "TtOMc"
+!        write(*,*) csupp
 
 !        write(*,*) "Tt0M:"
 !        do i = 1,nh
@@ -296,8 +294,8 @@
 
         cout = linsys(nh,S00M,csupp) 
 
-        write(*,*) "cout"
-        write(*,*) cout
+!        write(*,*) "cout"
+!        write(*,*) cout
  
 !        cout = matmul(invS,csupp)
 
