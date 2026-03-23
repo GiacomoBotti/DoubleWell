@@ -10,7 +10,7 @@
       implicit none
 
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 1 
+      integer,parameter,public :: nh = 4 
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Database of the coefficients
@@ -50,6 +50,7 @@
 
        Mherm(1,1) = 1.d0
        if(nh.ne.1) then
+       write(*,*) "Matrix of the Hermite coefficients generated"
           Mherm(2,2) = 2.d0 
        end if
 
@@ -60,7 +61,6 @@
          end do
        end do
 
-       write(*,*) "Matrix of the Hermite coefficients generated"
 
       end subroutine
 
