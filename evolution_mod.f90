@@ -56,6 +56,10 @@
        real*8, dimension(nd+1,nd+1) :: Bmat
        real*8, dimension(nh,nh) :: S00M,invS,X0Mat
 
+       complex*16 :: cTau0c
+       complex*16, dimension(nh) :: Tau0c
+       complex*16, dimension(nh,nh) :: Tau0
+
        ! trajectory parameters
        first = trj(1)
        last = trj(2)
@@ -81,11 +85,15 @@
        open(unit=324,file="energy_BOT.dat",status="unknown")
        open(unit=325,file="pbath_BOT.dat",status="unknown")
        open(unit=326,file="phase_BOT.dat",status="unknown")
+       open(unit=327,file="correlation_BOT.dat",status="unknown")
       write(*,*) "+---------------------------------------------------+"
        write(*,*) "Writing trajectory output on trajectory_BOT.dat"
        write(*,*) "Writing coefficients output on coefficients_BOT.dat"
-       write(*,*) "Writing bath positions on bath_BOT.dat"
-       write(*,*) "Writing energy components on enegy_BOT.dat"
+       write(*,*) "Writing bath positions on qbath_BOT.dat"
+       write(*,*) "Writing bath momenta on pbath_BOT.dat"
+       write(*,*) "Writing energy components on energy_BOT.dat"
+       write(*,*) "Writing total phase on phase_BOT.dat"
+       write(*,*) "Writing correlation function on correlation_BOT.dat"
       write(*,*) "+---------------------------------------------------+"
        h = dfloat(last-first)/dfloat(nstep)
        hvec = hvec*h
@@ -93,6 +101,7 @@
        N = normalization(nd,q,c0,dreal(Bcmplx))
        cvec= c0/dsqrt(N)
        csq(:) = conjg(cvec(:))*cvec(:)
+       phase(:) = datan((aimag(cvec(:))/real(cvec(:))))
 
        write(321,*) "#Evolution parameters:"
        write(321,*) "#Range: ",first,last
@@ -134,6 +143,13 @@
        write(326,*) "#Timestep: ",h
        write(326,*) "#Normalization constant: ",N
        write(326,*) "#Time ", "phase"
+  
+       write(327,*) "#Evolution parameters:"
+       write(327,*) "#Range: ",first,last
+       write(327,*) "#Steps: ",nstep
+       write(327,*) "#Timestep: ",h
+       write(327,*) "#Normalization constant: ",N
+       write(327,*) "#Time ", "correlation: real & imaginary"
 
        N = normalization(nd,q,cvec,dreal(Bcmplx))
        E0 = energy(nd,q0,p0,cvec,Bcmplx)
@@ -161,6 +177,8 @@
 
        write(325,*) 0.d0, p0(2:nd+1) 
 
+       write(326,*) 0.d0, phase
+
        qtoti = q0
        ptoti = p0
        Bcmplxi = Bcmplx
@@ -173,6 +191,13 @@
        end do
  
        cj = cvec
+
+       Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
+       Tau0c = matmul(Tau0,cvec)
+       cTau0c = dot_product(cj,Tau0c)
+       !cTau0c=Tau0(1,1)
+
+       write(327,*) 0.d0, real(cTau0c),aimag(cTau0c)
 
        kq(:,:) = 0.d0
        kp(:,:) = 0.d0
@@ -217,6 +242,12 @@
           N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
           E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
 
+          Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
+          Tau0c = matmul(Tau0,cvec)
+          cTau0c = dot_product(cj,Tau0c)
+          !cTau0c=Tau0(1,1)
+
+
           write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
                       &,real(Bcmplxj(2,2))!,real(Bcmplxj(1,3))
 !          write(322,*) time, dreal(cj), dimag(cj)
@@ -224,6 +255,7 @@
           write(323,*) time, qtotj(2:nd+1) 
           write(325,*) time, ptotj(2:nd+1) 
           write(326,*) time, phase 
+          write(327,*) time, real(cTau0c),aimag(cTau0c)
         
 
           ! DEBUG: prints tildeB at each step

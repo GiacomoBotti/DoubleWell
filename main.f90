@@ -92,7 +92,7 @@
 !      q0(:) = 0.d0 
 !      p0(:) = 0.d0
 
-!      Bcmplx(1,1) = dsqrt(masses(1)) 
+      Bcmplx(1,1) = dsqrt(masses(1)) 
       Bcmplx(2,2) = dsqrt(masses(2)) 
       Bcmplx(1,2) = 0.d0
       Bcmplx(2,1) = 0.d0

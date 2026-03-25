@@ -624,7 +624,7 @@
       real*8 :: h,time,N,E,q,p,E0,Nsq
       real*8,dimension(nh) :: csq 
       real*8,dimension(nd) :: qvec,pvec 
-      real*8,dimension(nd+1) :: qtot,ptot,w,phase,phase_c 
+      real*8,dimension(nd+1) :: qtot,ptot,w,phase,phase_c,phase_0 
       real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
       complex*16,dimension(nd+1,nd+1) :: Bcoh,Bt,num,den
       
@@ -639,7 +639,8 @@
       real*8, dimension(nd+1,nd+1) :: Bmat
       real*8, dimension(nh,nh) :: S00M,invS,X0Mat
 
-      complex*16 :: img,psi
+      complex*16 :: img,psi,totcorr
+      complex*16, dimension(nd+1) :: A,B,C,correlation
 
       open(unit=777,file='coherent.dat',status='unknown')
       open(unit=778,file='final_coh_wfn.dat',status='unknown')
@@ -679,7 +680,17 @@
 
       write(*,*) "I AM COHERENT"
  
-      write(*,*) energy, 0.5d0*(w(1) + w(2))
+     ! write(*,*) energy, 0.5d0*(w(1) + w(2))
+
+      qtot(:) = q0(:)
+      ptot(:) = p0(:)
+      do i=1,nd+1
+      phase_0(i)=0.5d0*(ptot(i)*qtot(i)-p0(i)*q0(i))+&
+               &0.5d0*iu*log((iu*Bcmplx(i,i)*dsin(w(i)*time)+&
+               &Bcoh(i,i)*dcos(w(i)*time))/Bcoh(i,i))
+      end do
+
+      write(*,*) phase_0
 
       num(:,:) = 0.d0
       den(:,:) = 0.d0
@@ -700,14 +711,30 @@
                     &Bcoh(i,i)*dcos(w(i)*time))/Bcoh(i,i))
            phase_c(i)=0.5d0*(ptot(i)*qtot(i)-p0(i)*q0(i))-&
                     &0.5d0*w(i)*time
+           Bt(i,i) = Bcoh(i,i)*num(i,i)/den(i,i)
+           A(i) = (conjg(Bt(i,i)) + Bcmplx(i,i))/2.d0
+           B(i)=Bcmplx(i,i)*q0(i)-iu*ptot(i)+iu*p0(i)+&
+                &conjg(Bt(i,i))*qtot(i)
+           C(i)=-iu*phase(i)+iu*phase_0(i)-iu*p0(i)*q0(i)&
+           !C(i)=-iu*p0(i)*q0(i)&
+                &+iu*ptot(i)*qtot(i)-(Bcmplx(i,i)*q0(i)*q0(i))/2.d0&
+                &-(conjg(Bt(i,i))*qtot(i)*qtot(i))/2.d0
+         correlation(i)=zsqrt(pi/A(i))*zexp(B(i)*B(i)/(4.d0*A(i))+C(i))&
+                        &*(real(Bt(i,i))*real(Bcmplx(i,i))/pi**2)**0.25d0
+         ! Check if A(i) is const with q0=p0=0
+         !correlation(i)=zsqrt(pi/A(i))!*zexp(B(i)*B(i)/(4.d0*A(i))+C(i))&
+                        !&*(real(Bt(i,i))*real(Bcmplx(i,i))/pi**2)**0.25d0
+         ! Check if B(i) is const with q0=p0=0
+         !correlation(i)=zexp(B(i)*B(i)/(4.d0*A(i)))!+C(i))&
+         ! Check if C(i) is const with q0=p0=0
+         !correlation(i)=zexp(C(i))
          end do
          gbot = -energy*time!&
       !       &+0.5d0*dot_product(ptot,qtot)-0.5d0*dot_product(p0,q0)
-         Bt(:,:) = Bcoh(:,:)*num(:,:)/den(:,:)
-
+         totcorr =correlation(1)*correlation(2)
       write(777,*) time,qtot,ptot,real(Bt(1,1)),real(Bt(2,2)),&
                    phase(1) + phase(2),gbot,phase_c(1)+phase_c(2),&
-                   -0.5d0*(w(1)+w(2))*time
+                   -0.5d0*(w(1)+w(2))*time,real(totcorr),aimag(totcorr)
 
       end do
 

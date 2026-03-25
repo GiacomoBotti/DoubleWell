@@ -276,7 +276,7 @@
 
         S00M = X0Mat*Y0*Nsq 
 
-        invS = invgen(nh,S00M) 
+!        invS = invgen(nh,S00M) 
 
 !        write(*,*) "IN UPDATE"
 !        write(*,*) c
