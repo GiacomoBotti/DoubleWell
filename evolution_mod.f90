@@ -186,9 +186,9 @@
        ptotj = p0
        Bcmplxj = Bcmplx
 
-       do i = 1,nd+1
-         write(*,*) Bcmplxj(i,:)
-       end do
+       !do i = 1,nd+1
+       !  write(*,*) Bcmplxj(i,:)
+       !end do
  
        cj = cvec
 
@@ -197,11 +197,14 @@
        cTau0c = dot_product(cj,Tau0c)
        !cTau0c=Tau0(1,1)
 
-       write(327,*) 0.d0, real(cTau0c),aimag(cTau0c)
+       write(327,*) 0.d0, real(cTau0c),aimag(cTau0c),&
+                       real(cTau0c*conjg(cTau0c))
 
        kq(:,:) = 0.d0
        kp(:,:) = 0.d0
        kb(:,:,:) = 0.d0
+       
+       call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,998)
        do j = 1,nstep
 !       h = dfloat(last-first)/dfloat(nstep)
           time = j*h
@@ -255,7 +258,8 @@
           write(323,*) time, qtotj(2:nd+1) 
           write(325,*) time, ptotj(2:nd+1) 
           write(326,*) time, phase 
-          write(327,*) time, real(cTau0c),aimag(cTau0c)
+          write(327,*) time,real(cTau0c),aimag(cTau0c),&
+                       real(cTau0c*conjg(cTau0c))
         
 
           ! DEBUG: prints tildeB at each step

@@ -7,12 +7,14 @@
 
       implicit none
 
-      real*8, parameter,public  :: gamma_const = 0.d0!0.25d0
-      real*8, parameter,public  :: eta_const = 1e30!0.25d0
-      real*8, parameter,public  :: sigma_const = +1.d0
+      real*8, parameter,public  :: gamma_const = 0.d0
+      !real*8, parameter,public  :: eta_const = 10e+30!1.3544d0 
+      real*8, parameter,public  :: eta_const = 1.3544d0 
+      !real*8, parameter,public  :: sigma_const = 1.d0
+      real*8, parameter,public  :: sigma_const = -1.d0
   
       ! Bath potential matrix dimensions
-      integer,parameter,public :: nv = 1 
+      integer,parameter,public :: nv = 1  
       real*8, dimension(nv,nv),public :: Vmat 
 
       private

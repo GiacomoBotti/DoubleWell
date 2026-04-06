@@ -15,6 +15,7 @@
       implicit none
 
       integer :: i,j
+      real*8 :: t0,t1
       real*8,dimension(nv+1) :: masses !Masses vector
       real*8,dimension(nv+1) :: q0 !inital centers vector
       real*8,dimension(nv+1) :: p0 !initial momenta vector
@@ -34,12 +35,22 @@
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
 
+!.....Print potential constants.........................................
+
+      write(*,*) "Potential constants"
+
+      write(*,*) "Eta: ", eta_const
+      write(*,*) "Sigma: ", sigma_const
+      write(*,*) "Gamma: ", gamma_const
+
+      write(*,*) "+---------------------------------------------------+"
+
 !.....Define masses vector..............................................
 
       write(*,*) "Masses vector:"
 
       do i = 1,nv+1
-        masses(i) = 1.1d0*i
+        masses(i) = 1.d0
         write(*,*) masses(i)
       end do
 
@@ -47,55 +58,40 @@
 
       call MassesMat(masses)
 
-      write(*,*) "+---------------------------------------------------+"
-
 !.....Define initial conditions.........................................
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial coefficients:"
 
       c0(:) =0.d0
-      c0(1) =1.d0  !creal
-!      c0(1) =iu !cimg
-!      c0(2) = 1.d0 !c2real
-!      c0(:) = complex(1.d0,1.d0)
-!      c0(2) = complex(1.d0,1.d0) !ccmplx
-!      c0(2) = complex(1.d0,1.d0) !ccmplx
+!      c0(1) =1.d0  !creal
     
       do i = 1,nh
-!        c0(i) = 1.d0/nh
+        c0(i) = 1.d0/nh
         write(*,*) c0(i) 
       end do
 
-!      q0(:)=0.3d0
-!      p0(:)=0.3d0
-
-!      q0(1) = 1.5d0
-!      p0(1) = 1.0d0
- 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
 
       do i = 1,nv+1
          q0(i) = i*dsqrt(2.d0)/3.d0
          p0(i) = i*dsqrt(3.d0)/7.d0
-         Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
-         do j= i+1,nv+1
-           Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
-           Bcmplx(j,i) = Bcmplx(i,j)
-         end do   
+         !Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
+         Bcmplx(i,i) = dsqrt(masses(i))
+         !do j= i+1,nv+1
+          ! Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
+          ! Bcmplx(j,i) = Bcmplx(i,j)
+         !end do   
          write(*,*) Bcmplx(i,:)
       end do
 
-      q0(2) = q0(1) 
-      p0(2) = p0(1)
-!      q0(:) = 0.d0 
-!      p0(:) = 0.d0
+      q0(1) = 2.d0*dsqrt(eta_const)
+!      q0(1) = 2.08 
+!      q0(1) = 0.d0
+      q0(2) = 0.d0 
 
-      Bcmplx(1,1) = dsqrt(masses(1)) 
-      Bcmplx(2,2) = dsqrt(masses(2)) 
-      Bcmplx(1,2) = 0.d0
-      Bcmplx(2,1) = 0.d0
+      p0(:) = 0.d0
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
@@ -124,14 +120,16 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,5,5000]
+      trj = [0,2,5000]
       write(*,*) trj
 
+      call cpu_time(t0)
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
       call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
-
+      call cpu_time(t1)
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"
+      write(*,*) "I took ", t1-t0, "time"
       write(*,*) "+---------------------------------------------------+"
 
       end program

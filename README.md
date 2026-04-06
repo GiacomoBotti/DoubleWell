@@ -33,6 +33,18 @@ The same goes for the Hermite polynomials basis set.
 
 ## NEW FRAMEWORK
 
+### TO RUN
+
+- [ ] Uncoupled DW + HO
+   - [ ] Start at bottom
+   - [ ] Start at top
+- [ ] Coupled system:
+   - [ ] QTAG
+   - [ ] Increasing $N_{h}$
+   - [ ] Quartic well
+   - [ ] Cubic well
+   - [ ] Ammonia inversion 
+
 ### TO DO
 - [x] `Makefile` at Report
 - [x] `constants.f90` at Report

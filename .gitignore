@@ -9,6 +9,7 @@ fort.*
 /USELESS/
 /2CHO_*/
 /PLOT_*/
+log
 
 # Prerequisites
 *.d

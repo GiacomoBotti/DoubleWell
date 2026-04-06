@@ -69,8 +69,8 @@
          complex*16, dimension(nh), intent(in) :: cvec
          complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
-         integer :: i
-         real*8 :: Nsq,N,phase
+         integer :: i,j
+         real*8 :: Nsq,N,phase,pol,herm
          real*8, dimension(nd+1) :: rvec,xvec
          complex*16 :: sqr,img,psi
          complex*16, dimension(nd+1) :: sqrvec
@@ -89,8 +89,14 @@
             sqrvec = matmul(tildeBmat,rvec)
             sqr = dot_product(rvec,sqrvec)
             img = iu*dot_product(ptot,rvec)
-            psi = zexp(-0.5d0*sqr + img)*cvec(1)
-            write(uuunit,*) xvec, real(psi), aimag(psi)
+            pol = 0.d0
+            do j = 1,nh
+              herm = herm_pol(j,xvec(1),qtot(1),real(tildeBmat(1,1)))
+              pol = pol + cvec(j)*herm
+            end do
+            psi = zexp(-0.5d0*sqr + img)*pol
+            write(uuunit,*) xvec, real(psi), aimag(psi), &
+                & real(psi*dconjg(psi))
          end do
 
        end subroutine
