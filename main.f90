@@ -86,7 +86,7 @@
          write(*,*) Bcmplx(i,:)
       end do
 
-      q0(1) = 2.d0*dsqrt(eta_const)
+      q0(1) = -2.d0*dsqrt(eta_const)
 !      q0(1) = 2.08 
 !      q0(1) = 0.d0
       q0(2) = 0.d0 

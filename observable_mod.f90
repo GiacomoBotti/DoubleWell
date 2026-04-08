@@ -77,14 +77,19 @@
 
          write(*,*) "Plotting gaussian wfn on the x=y cut"
    
-         !Nsq = fun_Nsq(nd,real(tildeBmat))
-         !N = dsqrt(Nsq)
 
          phase = datan((aimag(cvec(1))/real(cvec(1))))
 
-         xvec(:) = -5.d0
+        ! write(*,*) "Plotting gaussian wfn on the y=0 cut"
+        ! xvec(:) = 0.d0
+        ! xvec(1) = -5.d0 
+         xvec(:) = -5.d0 
          do i = 1,100
+            !xvec(1) = xvec(1)+0.1d0 
             xvec(:) = xvec(:)+0.1d0 
+            !xvec(1) = -2*dsqrt(1.3544d0)
+            !xvec(2) = 0
+            !write(*,*) xvec(:)
             rvec(:) = xvec(:) - qtot(:)
             sqrvec = matmul(tildeBmat,rvec)
             sqr = dot_product(rvec,sqrvec)
@@ -94,7 +99,9 @@
               herm = herm_pol(j,xvec(1),qtot(1),real(tildeBmat(1,1)))
               pol = pol + cvec(j)*herm
             end do
-            psi = zexp(-0.5d0*sqr + img)*pol
+            Nsq = fun_Nsq(nd+1,real(tildeBmat))
+            N = dsqrt(Nsq)
+            psi = zexp(-0.5d0*sqr + img)*pol*N
             write(uuunit,*) xvec, real(psi), aimag(psi), &
                 & real(psi*dconjg(psi))
          end do
