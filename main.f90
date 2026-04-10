@@ -11,16 +11,21 @@
       use eofmotion_module
       use check_module
       use evolution_module
+      use BOT_module
+      use observable_module
 
       implicit none
 
       integer :: i,j
       real*8 :: t0,t1
-      real*8,dimension(nv+1) :: masses !Masses vector
+      real*8,dimension(nv+1) :: masses !masses vector
       real*8,dimension(nv+1) :: q0 !inital centers vector
       real*8,dimension(nv+1) :: p0 !initial momenta vector
-      complex*16,dimension(nh) :: c0 !Initial coefficient vector
-      complex*16,dimension(nv+1,nv+1) :: Bcmplx !Initial width matrix
+      real*8,dimension(nv+1) :: qeq !equilibrium centers vector
+      real*8,dimension(nv+1) :: peq !equilibrium momenta vector
+      complex*16,dimension(nh) :: c0 !initial coefficient vector
+      complex*16,dimension(nh) :: ceq !equilibrium coefficient vector
+      complex*16,dimension(nv+1,nv+1) :: Bcmplx !initial width matrix
       integer*8,dimension(3) :: trj
 
 !      call print_double_well_banner()
@@ -61,22 +66,22 @@
 !.....Define initial conditions.........................................
 
       write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Initial coefficients:"
+      write(*,*) "Equilibrium Coefficients:"
 
-      c0(:) =0.d0
-      c0(1) =1.0d0  !creal
+      ceq(:) =0.d0
+      ceq(1) =1.0d0  !creal
     
       do i = 1,nh
-        c0(i) = 1.d0/nh
-        write(*,*) c0(i) 
+        ceq(i) = 1.d0/nh
+        write(*,*) ceq(i) 
       end do
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
 
       do i = 1,nv+1
-         q0(i) = i*dsqrt(2.d0)/3.d0
-         p0(i) = i*dsqrt(3.d0)/7.d0
+         qeq(i) = i*dsqrt(2.d0)/3.d0
+         peq(i) = i*dsqrt(3.d0)/7.d0
          !Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
          Bcmplx(i,i) = dsqrt(masses(i))
          !do j= i+1,nv+1
@@ -86,13 +91,31 @@
          write(*,*) Bcmplx(i,:)
       end do
 
-      q0(1) = -2.d0*dsqrt(eta_const)
-!      q0(1) = 2.08 
-!      q0(1) = 0.d0
-      q0(2) = 0.d0 
+      qeq(1) = -2.d0*dsqrt(eta_const)
+!      qeq(1) = 2.08 
+!      qeq(1) = 0.d0
+      qeq(2) = 0.d0 
 
+      peq(:) = 0.d0
+!      peq(1) = 0.5d0
+
+!.....Basis Projection..................................................
+
+      q0(:) = 0.d0
       p0(:) = 0.d0
-       p0(1) = 0.5d0
+
+      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,996)
+
+      c0 = c_update(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Starting Coefficients:"
+
+      do i = 1,nh
+        write(*,*) c0(i) 
+      end do
+
+      call plot_wfn(nv,q0,p0,c0,Bcmplx,997)
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
@@ -125,8 +148,8 @@
       write(*,*) trj
 
       call cpu_time(t0)
-      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
-      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
+!      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
+!      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
       call cpu_time(t1)
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"

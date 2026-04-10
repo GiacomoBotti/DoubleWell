@@ -292,6 +292,11 @@
 !          write(*,*) Tt0M(i,:)
 !        end do
 
+        write(*,*) "S00M:"
+        do i = 1,nh
+          write(*,*) S00M(i,:)
+        end do
+
         cout = linsys(nh,S00M,csupp) 
 
 !        write(*,*) "cout"
