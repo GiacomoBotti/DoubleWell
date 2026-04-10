@@ -208,7 +208,7 @@
        do j = 1,nstep
 !       h = dfloat(last-first)/dfloat(nstep)
           time = j*h
-          cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
+!          cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
 !          write(*,*) "STATIC OUT:"
 !          write(*,*) cj
 !          N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
@@ -236,7 +236,7 @@
           
 !          write(*,*) "UPDATE IN:"
 !          write(*,*) cj
-          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          write(*,*) "UPDATE OUT:"
 !          write(*,*) cj
           csq(:) = conjg(cj(:))*cj(:)

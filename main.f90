@@ -64,7 +64,7 @@
       write(*,*) "Initial coefficients:"
 
       c0(:) =0.d0
-!      c0(1) =1.d0  !creal
+      c0(1) =1.0d0  !creal
     
       do i = 1,nh
         c0(i) = 1.d0/nh
@@ -92,6 +92,7 @@
       q0(2) = 0.d0 
 
       p0(:) = 0.d0
+       p0(1) = 0.5d0
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
@@ -120,7 +121,7 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,2,5000]
+      trj = [0,100,117]
       write(*,*) trj
 
       call cpu_time(t0)

@@ -35,9 +35,9 @@ The same goes for the Hermite polynomials basis set.
 
 ### TO RUN
 
-- [ ] Uncoupled DW + HO
-   - [ ] Start at bottom
-   - [ ] Start at top
+- [x] Uncoupled DW + HO
+   - [x] Start at bottom
+   - [x] Start at top
 - [ ] Coupled system:
    - [ ] QTAG
    - [ ] Increasing $N_{h}$
@@ -61,6 +61,9 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [x] `main.f90` at Report
+- [ ] Reaction probability
+- [ ] Mirror correlation
+- [ ] Gift script
    
 
 ### DONE
