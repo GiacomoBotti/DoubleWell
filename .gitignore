@@ -9,7 +9,9 @@ fort.*
 /USELESS/
 /2CHO_*/
 /PLOT_*/
-log
+/Batista_coupled/
+/Propagation_Error/
+log*
 
 # Prerequisites
 *.d
