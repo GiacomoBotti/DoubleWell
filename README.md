@@ -52,6 +52,7 @@ The same goes for the Hermite polynomials basis set.
 ### TO DO
 - [ ] **URGENT:** move the calculation of `Xn` integrals to `eofmotion_mod` and feed the integrals to `fun_V1` and `fun_V2` as input
 - [ ] **URGENT:** do the same for `energy`: move the integrals above and feed them to `fun_V0` and `kin_energy` (and then to `fun_Ka` and `fun_Kb`)
+- [ ] **URGENT:** feed them directly as $\mathbf{c}\mathcal{X}\mathbf{c}$
 - [ ] **URGENT:** test against a dynamics w/out this mod
 - [x] `Makefile` at Report
 - [x] `constants.f90` at Report
