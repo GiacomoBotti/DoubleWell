@@ -22,7 +22,7 @@
 
 !.....EFFECTIVE POTENTIAL V0 = <V>......................................
 
-      function fun_V0(nd,qtot,cvec,Bmat) result(V0mat)
+      function fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X2,X1,X0) result(V0mat)
       ! nd: bath dimensions
       ! qtot: total Gaussian center vector (x&y)
       ! cvec: vector of the coefficients
@@ -31,9 +31,11 @@
        real*8, dimension(nd+1), intent(in) :: qtot
        complex*16, dimension(nh), intent(in) :: cvec
        real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
+       real*8, intent(in) :: Y0
+       real*8, dimension(nh,nh), intent(in) :: X4,X2,X1,X0
 
        integer :: i,j
-       real*8 :: Nsq,Y0,a,q,aAVAa,qVAa,qVq,uWu
+       real*8 :: Nsq,a,q,aAVAa,qVAa,qVq,uWu
        real*8 :: V0,Vx,Vxy,Vy,Tr0,Tr1,Tr2,Tr3
        real*8, dimension(nd) :: avec, qvec, Aa, VAa
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat,invA
@@ -98,16 +100,20 @@
 !        write(111,*) "Tr4: ", Tr4
 
        ! Integrals
-       Y0=int_Y0(nd,LambdaMat)
+!       Y0=int_Y0(nd,LambdaMat)
 !       write(*,*) "Y0:", Y0
-       X4mat=int_XnMat(nd,4,a,avec,Amat,q)
+!       X4mat=int_XnMat(nd,4,a,avec,Amat,q)
 !       write(*,*) "X4mat(3,3)", X4mat(3,3)
-       X2mat=int_XnMat(nd,2,a,avec,Amat,q)
+!       X2mat=int_XnMat(nd,2,a,avec,Amat,q)
 !       write(*,*) "X2mat(3,3)", X2mat(3,3)
-       X1mat=int_XnMat(nd,1,a,avec,Amat,q)
+!       X1mat=int_XnMat(nd,1,a,avec,Amat,q)
 !       write(*,*) "X1mat(3,3)", X1mat(3,3)
-       X0mat=int_XnMat(nd,0,a,avec,Amat,q)
+!       X0mat=int_XnMat(nd,0,a,avec,Amat,q)
 !       write(*,*) "X0mat(3,3)", X0mat(3,3)
+       X4mat=X4
+       X2mat=X2
+       X1mat=X1
+       X0mat=X0
        lin=X1mat-q*X0mat
        sqr=X2mat-2*q*X1mat+q*q*X0mat
 
@@ -142,7 +148,7 @@
 
 !.....EFFECTIVE POTENTIAL V1 = <nabla V>................................
 
-      function fun_V1(nd,qtot,cvec,Bmat) result(V1)
+      function fun_V1(nd,qtot,cvec,Bmat,Y0,X3,X2,X1,X0) result(V1)
       ! nd: bath dimensions
       ! qtot: total Gaussian center vector (x&y)
       ! cvec: vector of the coefficients
@@ -151,16 +157,18 @@
        real*8, dimension(nd+1), intent(in) :: qtot
        complex*16, dimension(nh), intent(in) :: cvec
        real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
+       real*8, intent(in) :: Y0
+       real*8, dimension(nh,nh), intent(in) :: X3,X2,X1,X0
 
        real*8, dimension(nd+1) :: V1
 
        integer :: i
-       real*8 :: Nsq,Y0,a,q,cX3c,cX1c,cX0c
+       real*8 :: Nsq,a,q,cX3c,cX1c,cX0c
        real*8 :: dxV, dy1V
        real*8, dimension(nd) :: avec,qvec,Aa,VAa,Vq,VVAa,V1prime
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat,invA
        complex*16, dimension(nh) :: X3c, X1c, X0c 
-       real*8, dimension(nh,nh) :: X3mat,X2mat,X1mat,X0mat
+!       real*8, dimension(nh,nh) :: X3mat,X2mat,X1mat,X0mat
 
 !       write(111,*) "GRADIENT"
 !       write(111,*) "qtot:", qtot
@@ -173,7 +181,7 @@
 
        ! Matrix work 
        call extractA(nd,Bmat,Amat,avec,a)
-       call diagonalization(nd,Amat,LambdaMat,Tmat)
+       !call diagonalization(nd,Amat,LambdaMat,Tmat)
        invA = invgen_real(nd,Amat)
 
        Aa = matmul(invA,avec)
@@ -182,19 +190,19 @@
        Vq = matmul(Vmat,qvec)
 
        ! Integrals
-       Y0=int_Y0(nd,LambdaMat)
+       !Y0=int_Y0(nd,LambdaMat)
 !       write(*,*) "Y0:", Y0
-       X3mat=int_XnMat(nd,3,a,avec,Amat,q)
+       !X3mat=int_XnMat(nd,3,a,avec,Amat,q)
 !       write(*,*) "X3mat(3,3)", X3mat(3,3)
-       X1mat=int_XnMat(nd,1,a,avec,Amat,q)
+       !X1mat=int_XnMat(nd,1,a,avec,Amat,q)
 !       write(*,*) "X1mat(3,3)", X1mat(3,3)
-       X0mat=int_XnMat(nd,0,a,avec,Amat,q)
+       !X0mat=int_XnMat(nd,0,a,avec,Amat,q)
 !       write(*,*) "X0mat(3,3)", X0mat(3,3)
 
        ! Total Hermite Matrices
-       X3c=matmul(X3mat,cvec)
-       X1c=matmul(X1mat,cvec)
-       X0c=matmul(X0mat,cvec)
+       X3c=matmul(X3,cvec)
+       X1c=matmul(X1,cvec)
+       X0c=matmul(X0,cvec)
        cX3c=dot_product(cvec,X3c)
        cX1c=dot_product(cvec,X1c)
        cX0c=dot_product(cvec,X0c)
@@ -215,7 +223,7 @@
 
 !.....EFFECTIVE POTENTIAL V2= <nabla otimes nabla V>....................
 
-      function fun_V2(nd,qtot,cvec,Bmat) result(V2)
+      function fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X0) result(V2)
       ! nd: bath dimensions
       ! qtot: total Gaussian center vector (x&y)
       ! cvec: vector of the coefficients
@@ -224,16 +232,18 @@
        real*8, dimension(nd+1), intent(in) :: qtot
        complex*16, dimension(nh), intent(in) :: cvec
        real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
+       real*8, intent(in) :: Y0
+       real*8, dimension(nh,nh), intent(in) :: X2,X0
 
        real*8, dimension(nd+1,nd+1) :: V2
 
        integer :: i
-       real*8 :: Nsq,Y0,a,q,cX2c,cX0c
+       real*8 :: Nsq,a,q,cX2c,cX0c
        real*8 :: dxV, dy1V
        real*8, dimension(nd) :: avec,qvec,Aa,VAa,Vq,VVAa,V1prime
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat,invA
        complex*16, dimension(nh) :: X2c, X0c 
-       real*8, dimension(nh,nh) :: X2mat,X0mat
+       !real*8, dimension(nh,nh) :: X2mat,X0mat
 
        ! Unreavel qtot
        q = qtot(1)
@@ -244,7 +254,7 @@
 
        ! Matrix work 
        call extractA(nd,Bmat,Amat,avec,a)
-       call diagonalization(nd,Amat,LambdaMat,Tmat)
+       !call diagonalization(nd,Amat,LambdaMat,Tmat)
        !invA = invgen_real(nd,Amat)
 
        !Aa = matmul(invA,avec)
@@ -258,16 +268,16 @@
 !       write(*,*) VVAa(:)
 
        ! Integrals
-       Y0=int_Y0(nd,LambdaMat)
+!       Y0=int_Y0(nd,LambdaMat)
 !       write(*,*) "Y0:", Y0
-       X2mat=int_XnMat(nd,2,a,avec,Amat,q)
+!       X2mat=int_XnMat(nd,2,a,avec,Amat,q)
 !       write(*,*) "X2mat(3,3)", X2mat(3,3)
-       X0mat=int_XnMat(nd,0,a,avec,Amat,q)
+!       X0mat=int_XnMat(nd,0,a,avec,Amat,q)
 !       write(*,*) "X0mat(3,3)", X0mat(3,3)
 
        ! Total Hermite Matrices
-       X2c=matmul(X2mat,cvec)
-       X0c=matmul(X0mat,cvec)
+       X2c=matmul(X2,cvec)
+       X0c=matmul(X0,cvec)
        cX2c=dot_product(cvec,X2c)
        cX0c=dot_product(cvec,X0c)
 

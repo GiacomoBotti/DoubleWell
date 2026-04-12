@@ -43,7 +43,7 @@
         real*8, dimension(nh) :: eigenv
         real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
         real*8, dimension(nd+1,nd+1) :: Bmat
-        real*8, dimension(nh,nh) :: X0Mat
+        real*8, dimension(nh,nh) :: X4,X3,X2,X1,X0
         complex*16, dimension(nh) :: c,csout,expvec
         complex*16, dimension(nh,nh) :: S00M,T00M,V00M,H00M
         complex*16, dimension(nh,nh) :: Z,adjZ,B
@@ -75,11 +75,15 @@
         call extractA(nd,Bmat,Amat,avec,a)
         call diagonalization(nd,Amat,LambdaMat,Tmat)
         Y0=int_Y0(nd,LambdaMat)
-        X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
+        X4=int_XnMat(nd,4,a,avec,Amat,qtot(1))
+        X3=int_XnMat(nd,3,a,avec,Amat,qtot(1))
+        X2=int_XnMat(nd,2,a,avec,Amat,qtot(1))
+        X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
+        X0=int_XnMat(nd,0,a,avec,Amat,q)
 
-        S00M = X0Mat*Y0*Nsq 
-        T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat)  
-        V00M = fun_V0(nd,qtot,cvec,Bmat) 
+        S00M = X0*Y0*Nsq 
+        T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)  
+        V00M = fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X2,X1,X0) 
         H00M = T00M + V00M
         ! Copy H00M so LAPACK can overwrite
         Z = H00M
@@ -292,10 +296,10 @@
 !          write(*,*) Tt0M(i,:)
 !        end do
 
-        write(*,*) "S00M:"
-        do i = 1,nh
-          write(*,*) S00M(i,:)
-        end do
+!        write(*,*) "S00M:"
+!        do i = 1,nh
+!          write(*,*) S00M(i,:)
+!        end do
 
         cout = linsys(nh,S00M,csupp) 
 

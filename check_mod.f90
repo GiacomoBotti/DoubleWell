@@ -313,6 +313,10 @@
        real*8, dimension(nd+1,nd+1) :: Bmat,V2
        real*8 :: harvest
        real*8, dimension(nh,nh) :: V0
+       real*8 :: a,Y0
+       real*8, dimension(nd) :: avec
+       real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat
+       real*8, dimension(nh,nh) :: X4,X3,X2,X1,X0
 
        do i = 1,nd+1
           Bmat(i,i) = i
@@ -335,22 +339,32 @@
        
           write(*,*) Bmat(i,:)
        end do
+       call extractA(nd,Bmat,Amat,avec,a)
+       call diagonalization(nd,Amat,LambdaMat,Tmat)
+
+       ! Integrals
+       Y0=int_Y0(nd,LambdaMat)
+       X4=int_XnMat(nd,4,a,avec,Amat,qtot(1))
+       X3=int_XnMat(nd,3,a,avec,Amat,qtot(1))
+       X2=int_XnMat(nd,2,a,avec,Amat,qtot(1))
+       X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
+       X0=int_XnMat(nd,0,a,avec,Amat,qtot(1))
 
        write(*,*) "------------------------------"
        Nsq = fun_Nsq(nd+1,Bmat)
        write(*,*) "N squared: ", Nsq
 
        write(*,*) "------------------------------"
-       V0 = fun_V0(nd,qtot,cvec,Bmat)
+       V0 = fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X2,X1,X0)
        write(*,*) "V0(1,1) ", V0(1,1)
        
        write(*,*) "------------------------------"
-       V1 = fun_V1(nd,qtot,cvec,Bmat)
+       V1 = fun_V1(nd,qtot,cvec,Bmat,Y0,X3,X2,X1,X0)
        write(*,*) "V1: "
        write(*,*) V1
 
        write(*,*) "------------------------------"
-       V2 = fun_V2(nd,qtot,cvec,Bmat)
+       V2 = fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X0)
        write(*,*) "V2: "
        do i = 1,nd+1
          write(*,*) V2(i,:)
@@ -487,6 +501,10 @@
        real*8, dimension(nd+1) :: qtot,ptot,dq,dp,qi,ppi
        complex*16, dimension(nd+1) :: cvec
        complex*16, dimension(nd+1,nd+1) :: Bmat,Bimat
+       real*8 :: a,Y0
+       real*8, dimension(nd) :: avec
+       real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat
+       real*8, dimension(nh,nh) :: X4,X3,X2,X1,X0
 
        complex*16, dimension(nh,nh) :: Hmat,Kmat,Tau
  
@@ -511,6 +529,17 @@
        do i = 1,nd+1
          write(*,*) Bmat(i,:)
        end do
+       call extractA(nd,real(Bmat),Amat,avec,a)
+       call diagonalization(nd,Amat,LambdaMat,Tmat)
+
+       ! Integrals
+       Y0=int_Y0(nd,LambdaMat)
+       X4=int_XnMat(nd,4,a,avec,Amat,qtot(1))
+       X3=int_XnMat(nd,3,a,avec,Amat,qtot(1))
+       X2=int_XnMat(nd,2,a,avec,Amat,qtot(1))
+       X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
+       X0=int_XnMat(nd,0,a,avec,Amat,qtot(1))
+
 
        write(*,*) "Hermite pol. in x=1"
        do i = 1,nh
@@ -559,7 +588,7 @@
        pre = der_pre(3,1,real(Bmat(1,1)))
        write(*,*) 2.d0*(3-1)*H*pre,pre
       
-       Kmat = kin_energy(nd,q,p,qvec,pvec,Bmat)
+       Kmat = kin_energy(nd,q,p,qvec,pvec,Bmat,Y0,X2,X1,X0)
 
        write(*,*) "qtot: ", qtot
        write(*,*) "ptot: ", ptot

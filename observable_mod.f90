@@ -9,6 +9,7 @@
        use kinetic_module
        use effectivepot_module
        use basisset_module
+       use matrix_module
 
        implicit none
 
@@ -34,14 +35,29 @@
          real*8, dimension(nd) :: qvec,pvec
          complex*16, dimension(nh) :: Tc,Vc
          complex*16, dimension(nh,nh) :: H00M,T00M,V00M
+         real*8 :: a,Y0
+         real*8, dimension(nd) :: avec
+         real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat
+         real*8, dimension(nh,nh) :: X4,X3,X2,X1,X0
 
          q=qtot(1)
          p=ptot(1)
          qvec=qtot(2:nd+1)
          pvec=ptot(2:nd+1)
 
-         T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat)
-         V00M = fun_V0(nd,qtot,cvec,real(tildeBmat)) 
+         call extractA(nd,real(tildeBmat),Amat,avec,a)
+         call diagonalization(nd,Amat,LambdaMat,Tmat)
+      
+         ! Integrals
+         Y0=int_Y0(nd,LambdaMat)
+         X4=int_XnMat(nd,4,a,avec,Amat,qtot(1))
+         X3=int_XnMat(nd,3,a,avec,Amat,qtot(1))
+         X2=int_XnMat(nd,2,a,avec,Amat,qtot(1))
+         X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
+         X0=int_XnMat(nd,0,a,avec,Amat,qtot(1))
+
+         T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)
+         V00M = fun_V0(nd,qtot,cvec,real(tildeBmat),Y0,X4,X2,X1,X0) 
    
          Tc = matmul(T00M,cvec)
          T0 = dreal(dot_product(cvec,Tc))
