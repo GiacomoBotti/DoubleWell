@@ -38,6 +38,10 @@ The same goes for the Hermite polynomials basis set.
 - [x] Uncoupled DW + HO
    - [x] Start at bottom
    - [x] Start at top
+- [ ] Numerical Stability tests
+   - [ ] No BOT
+   - [ ] BOT, only propagator on proj basis
+   - [ ] Full
 - [ ] Coupled system:
    - [ ] QTAG
    - [ ] Increasing $N_{h}$
@@ -46,6 +50,7 @@ The same goes for the Hermite polynomials basis set.
    - [ ] Ammonia inversion 
 
 ### TO DO
+- [ ] **URGENT:** move the calculation of `Xn` integrals to `eofmotion_mod` and feed the integrals to `fun_V1` and `fun_V2` as input
 - [x] `Makefile` at Report
 - [x] `constants.f90` at Report
 - [x] `inversion_module.f90` at Report
