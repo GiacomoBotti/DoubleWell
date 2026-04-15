@@ -82,31 +82,34 @@
       do i = 1,nv+1
          qeq(i) = i*dsqrt(2.d0)/3.d0
          peq(i) = i*dsqrt(3.d0)/7.d0
-         !Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
+         Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
          Bcmplx(i,i) = dsqrt(masses(i))
-         !do j= i+1,nv+1
-          ! Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
-          ! Bcmplx(j,i) = Bcmplx(i,j)
-         !end do   
+         do j= i+1,nv+1
+           Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
+           Bcmplx(j,i) = Bcmplx(i,j)
+         end do   
          write(*,*) Bcmplx(i,:)
       end do
 
-      qeq(1) = -2.d0*dsqrt(eta_const)
+!      qeq(1) = -2.d0*dsqrt(eta_const)
 !      qeq(1) = 2.08 
 !      qeq(1) = 0.d0
-      qeq(2) = 0.d0 
+!      qeq(2) = 0.d0 
 
-      peq(:) = 0.d0
+!      peq(:) = 0.d0
 !      peq(1) = 0.5d0
 
 !.....Basis Projection..................................................
 
-      q0(:) = 0.d0
+      q0(:) = 0.0d0
       p0(:) = 0.d0
+      q0(:) = qeq(:)
+      p0(:) = peq(:)
+      c0(:) = ceq(:)
 
-      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,996)
+!      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,996)
 
-      c0 = c_update(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
+!      c0 = c_update(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Starting Coefficients:"
@@ -115,7 +118,7 @@
         write(*,*) c0(i) 
       end do
 
-      call plot_wfn(nv,q0,p0,c0,Bcmplx,997)
+!      call plot_wfn(nv,q0,p0,c0,Bcmplx,997)
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
@@ -144,12 +147,16 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,2,1000]
+      open(unit=1111,file="input",status="old",action="read")
+      read(1111,*)
+      read(1111,*) trj
+      close(1111)
+      !trj = [0,50,100]
       write(*,*) trj
 
       call cpu_time(t0)
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
-!      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
+      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
       call cpu_time(t1)
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"

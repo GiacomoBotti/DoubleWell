@@ -18,7 +18,7 @@
        integer*8 :: info
 
        private
-       public :: c_static,c_update
+       public :: c_static,c_update,c_update_fb
 
        contains
 
@@ -314,6 +314,119 @@
        ! cout(:) = 0.d0
        ! cout(1) = Tt0M(1,1)*c(1)/S00M(1,1)
        ! write(*,*) cout(nh)
+
+       end function
+
+!......Analytical update of electronic coefficients (FB).................
+
+       function c_update_fb(nd,qb,pb,qk,pk,c,Bb,Bk) result(cout)
+       ! nd : bath dimension
+       ! qb : full position vector (Bra)
+       ! pb : full momentum vector (Bra)
+       ! qk : full position vector (Ket)
+       ! pk : full momentum vector (Ket)
+       ! c : exponentially-evolved coefficients
+       ! Bb : full width matrix (Bra)
+       ! Bk : full width matrix (Ket)
+        integer, intent(in) :: nd
+        real*8, dimension(nd+1), intent(in) :: qb,pb,qk,pk
+        complex*16, dimension(nh), intent(in) :: c
+        complex*16, dimension(nd+1,nd+1), intent(in) :: Bb,Bk
+
+        integer :: i
+        real*8 :: a,q,Nsq,Y0
+        real*8, dimension(nd) :: avec 
+        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+        real*8, dimension(nd+1,nd+1) :: Bmat
+        complex*16, dimension(nh) :: csupp,cout,csupptest,csuppdiff
+        complex*16, dimension(nh,nh) :: SttM,St0M,invS,X0Mat,S0tM
+        complex*16, dimension(nh,nh) :: prod1,prod2,summa,S00M
+
+!        write(*,*) "I AM C UPDATE FB"
+        q = qb(1)
+        Bmat = real(Bb)
+
+!        write(*,*) q, Bmat(1,1)
+
+        Nsq=fun_Nsq(nd+1,Bmat)
+        call extractA(nd,Bmat,Amat,avec,a)
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+        Y0=int_Y0(nd,LambdaMat)
+        X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
+
+        SttM = X0Mat*Y0*Nsq 
+
+!        write(*,*) "SttM"
+ 
+!        do i = 1,nh
+!          write(*,*) SttM(i,:)
+!        end do
+
+
+        invS = invgen(nh,SttM) 
+!        write(*,*) "SttM^{-1}"
+ 
+!        do i = 1,nh
+!          write(*,*) invS(i,:)
+!        end do
+
+        q = qk(1)
+        Bmat = real(Bk)
+
+!        write(*,*) q, Bmat(1,1)
+
+        Nsq=fun_Nsq(nd+1,Bmat)
+        call extractA(nd,Bmat,Amat,avec,a)
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+        Y0=int_Y0(nd,LambdaMat)
+        X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
+
+        S00M = X0Mat*Y0*Nsq 
+!       write(*,*) "S00M"
+ 
+!        do i = 1,nh
+!          write(*,*) S00M(i,:)
+!        end do
+
+        St0M = int_TauMat(nd,qb,qk,pb,pk,Bb,Bk)
+!        write(*,*) "St0M"
+ 
+!        do i = 1,nh
+!          write(*,*) St0M(i,:)
+!        end do
+        S0tM = conjg(transpose(St0M))
+!        write(*,*) "S0tM"
+ 
+!        do i = 1,nh
+!          write(*,*) S0tM(i,:)
+!        end do
+
+        prod1=matmul(invS,St0M)
+        prod2=matmul(S0tM,prod1)
+
+!        write(*,*) "prod2"
+ 
+!        do i = 1,nh
+!          write(*,*) prod2(i,:)
+!        end do
+
+        summa = 0.5*(prod2+S00M)
+ 
+        !write(*,*) "summa"
+ 
+!       do i = 1,nh
+!          write(*,*) summa(i,:)
+!        end do
+
+        csupp = matmul(summa,c)
+        !csupptest = matmul(St0M,c)
+
+       ! csuppdiff = csupp-csupptest 
+
+       ! write(*,*) "csuppdiff"
+       ! write(*,*) csuppdiff(:)
+ 
+        cout = linsys(nh,S0tM,csupp) 
 
        end function
        end module

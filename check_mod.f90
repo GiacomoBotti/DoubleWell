@@ -702,7 +702,8 @@
 
       w(:) = dsqrt(1.d0/masses(:))
 
-      write(777,*) '#Time ','q ', 'p ','B(1,1) ','B(2,2) ','phase'
+      write(777,*) '#Time ','q(1) ', 'q(2) ', 'p(1) ', 'p(2) ',&
+                   &'B(1,1) ','B(2,2) ','phase ', '|c|^2'
       write(778,*) '#x ','y ', 'Re(Psi) ','Im(Psi) '
 
       read(888,*) energy
@@ -762,8 +763,9 @@
       !       &+0.5d0*dot_product(ptot,qtot)-0.5d0*dot_product(p0,q0)
          totcorr =correlation(1)*correlation(2)
       write(777,*) time,qtot,ptot,real(Bt(1,1)),real(Bt(2,2)),&
-                   phase(1) + phase(2),gbot,phase_c(1)+phase_c(2),&
-                   -0.5d0*(w(1)+w(2))*time,real(totcorr),aimag(totcorr)
+                   phase(1) + phase(2),&!gbot,phase_c(1)+phase_c(2),&
+                   !-0.5d0*(w(1)+w(2))*time,real(totcorr),aimag(totcorr)
+                   real(totcorr*conjg(totcorr))
 
       end do
 

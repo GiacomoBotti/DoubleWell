@@ -159,7 +159,7 @@
        write(*,*) "N ","E ","q ","p ","B(1,1) ",&
                     &"B(2,2) ", "B(1,3)"
        write(*,*) N, E/E0, q0(1), p0(1), real(Bcmplx(1,1)),&
-                  &real(Bcmplxj(2,2))!,real(Bcmplxj(1,3))
+                  &aimag(Bcmplx(1,1))!,real(Bcmplxj(1,3))
 !       write(*,*) time, dreal(cvec), dimag(cvec)
        write(*,*) csq
        write(*,*) q0(2:nd+1) 
@@ -167,7 +167,7 @@
        write(321,*) "#Time ","N ","E ","q ","p ","B(1,1) ",&
                     &"B(3,3) ", "B(1,3)"
        write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
-                    &real(Bcmplx(2,2))!,real(Bcmplx(1,3))
+                    &aimag(Bcmplx(1,1))!,real(Bcmplx(1,3))
 
        write(322,*) 0.d0, csq
 !       write(322,*) "#Time ","Real c ", "Immaginary c"
@@ -236,7 +236,8 @@
           
 !          write(*,*) "UPDATE IN:"
 !          write(*,*) cj
-          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          write(*,*) "UPDATE OUT:"
 !          write(*,*) cj
           csq(:) = conjg(cj(:))*cj(:)
@@ -252,7 +253,7 @@
 
 
           write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
-                      &,real(Bcmplxj(2,2))!,real(Bcmplxj(1,3))
+                      &,aimag(Bcmplxj(1,1))!,real(Bcmplxj(1,3))
 !          write(322,*) time, dreal(cj), dimag(cj)
           write(322,*) time, csq
           write(323,*) time, qtotj(2:nd+1) 
@@ -274,11 +275,11 @@
        end do
 
        write(*,*) "Last step:"
-       write(*,*) N,E/E0, qtotj(1), ptotj(1),real(Bcmplxj(1,1))!,&  
-!                  &real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+       write(*,*) N,E/E0, qtotj(1), ptotj(1),real(Bcmplxj(1,1)),&  
+                  &aimag(Bcmplxj(1,1))
 !       write(*,*) time, dreal(cj), dimag(cj)
        write(*,*) time, csq
-       write(*,*) time, qtotj(2:nd+1) 
+!       write(*,*) time, qtotj(2:nd+1) 
 
        !write(222,*) qtotj
        !write(222,*) ptotj
