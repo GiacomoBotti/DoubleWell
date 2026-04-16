@@ -80,18 +80,18 @@
       write(*,*) "Initial Gaussian Width Matrix:"
 
       do i = 1,nv+1
-         qeq(i) = i*dsqrt(2.d0)/3.d0
-         peq(i) = i*dsqrt(3.d0)/7.d0
+!         qeq(i) = i*dsqrt(2.d0)/3.d0
+!         peq(i) = i*dsqrt(3.d0)/7.d0
          Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
          Bcmplx(i,i) = dsqrt(masses(i))
          do j= i+1,nv+1
            Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
            Bcmplx(j,i) = Bcmplx(i,j)
          end do   
-         write(*,*) Bcmplx(i,:)
+        write(*,*) Bcmplx(i,:)
       end do
 
-!      qeq(1) = -2.d0*dsqrt(eta_const)
+      qeq(1) = -2.d0*dsqrt(eta_const)
 !      qeq(1) = 2.08 
 !      qeq(1) = 0.d0
 !      qeq(2) = 0.d0 
@@ -101,15 +101,16 @@
 
 !.....Basis Projection..................................................
 
-      q0(:) = 0.0d0
-      p0(:) = 0.d0
-      q0(:) = qeq(:)
+      call check_projection(nv,qeq,peq,ceq,Bcmplx)
+
+      stop
+
+      q0(:) = qeq(:) 
       p0(:) = peq(:)
-      c0(:) = ceq(:)
 
-!      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,996)
+      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,990)
 
-!      c0 = c_update(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
+      c0 = c_update(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Starting Coefficients:"
@@ -118,7 +119,66 @@
         write(*,*) c0(i) 
       end do
 
-!      call plot_wfn(nv,q0,p0,c0,Bcmplx,997)
+      call plot_wfn(nv,q0,p0,c0,Bcmplx,991)
+
+      c0 = c_update_fb(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Starting Coefficients:"
+
+      do i = 1,nh
+        write(*,*) c0(i) 
+      end do
+
+      call plot_wfn(nv,q0,p0,c0,Bcmplx,992)
+
+      c0 = c_update_fbs(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Starting Coefficients:"
+
+      do i = 1,nh
+        write(*,*) c0(i) 
+      end do
+ 
+      call plot_wfn(nv,q0,p0,c0,Bcmplx,993)
+      ! GOING BACK
+ 
+      write(*,*) "GOING BACK!"
+
+      ceq = c_update(nv,q0,p0,qeq,peq,c0,Bcmplx,Bcmplx) 
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Starting Coefficients:"
+
+      do i = 1,nh
+        write(*,*) ceq(i) 
+      end do
+
+      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,994)
+
+      ceq = c_update_fb(nv,q0,p0,qeq,peq,c0,Bcmplx,Bcmplx) 
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Starting Coefficients:"
+
+      do i = 1,nh
+        write(*,*) ceq(i) 
+      end do
+
+      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,995)
+
+      ceq = c_update_fbs(nv,q0,p0,qeq,peq,c0,Bcmplx,Bcmplx) 
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Starting Coefficients:"
+
+      do i = 1,nh
+        write(*,*) ceq(i) 
+      end do
+
+      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,996)
+      stop
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)

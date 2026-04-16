@@ -169,7 +169,7 @@
        write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
                     &aimag(Bcmplx(1,1))!,real(Bcmplx(1,3))
 
-       write(322,*) 0.d0, csq
+       write(322,*) 0.d0, csq, dreal(cvec), dimag(cvec)
 !       write(322,*) "#Time ","Real c ", "Immaginary c"
 !       write(322,*) 0.d0, dreal(cvec), dimag(cvec)
 
@@ -255,7 +255,7 @@
           write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
                       &,aimag(Bcmplxj(1,1))!,real(Bcmplxj(1,3))
 !          write(322,*) time, dreal(cj), dimag(cj)
-          write(322,*) time, csq
+          write(322,*) time, csq, dreal(cj), dimag(cj)
           write(323,*) time, qtotj(2:nd+1) 
           write(325,*) time, ptotj(2:nd+1) 
           write(326,*) time, phase 

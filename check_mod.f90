@@ -12,6 +12,8 @@
       use effectivepot_module
       use normalization_module
       use kinetic_module
+      use BOT_module
+      use observable_module
 
       implicit none
 
@@ -702,8 +704,7 @@
 
       w(:) = dsqrt(1.d0/masses(:))
 
-      write(777,*) '#Time ','q(1) ', 'q(2) ', 'p(1) ', 'p(2) ',&
-                   &'B(1,1) ','B(2,2) ','phase ', '|c|^2'
+      write(777,*) '#Time ','q(1) ','B(1,1) ','|c|^2 ','phase'
       write(778,*) '#x ','y ', 'Re(Psi) ','Im(Psi) '
 
       read(888,*) energy
@@ -762,10 +763,14 @@
          gbot = -energy*time!&
       !       &+0.5d0*dot_product(ptot,qtot)-0.5d0*dot_product(p0,q0)
          totcorr =correlation(1)*correlation(2)
-      write(777,*) time,qtot,ptot,real(Bt(1,1)),real(Bt(2,2)),&
-                   phase(1) + phase(2),&!gbot,phase_c(1)+phase_c(2),&
+      !write(777,*) time,qtot,ptot,real(Bt(1,1)),real(Bt(2,2)),&
+      !             phase(1) + phase(2),&!gbot,phase_c(1)+phase_c(2),&
                    !-0.5d0*(w(1)+w(2))*time,real(totcorr),aimag(totcorr)
-                   real(totcorr*conjg(totcorr))
+      !             real(totcorr*conjg(totcorr))
+      write(777,*) time,qtot(1),real(Bt(1,1)),&
+                   real(totcorr*conjg(totcorr)),&
+                   phase(1) + phase(2)!gbot,phase_c(1)+phase_c(2),&
+                   !-0.5d0*(w(1)+w(2))*time,real(totcorr),aimag(totcorr)
 
       end do
 
@@ -787,5 +792,92 @@
       close(778)
 
       end subroutine
+
+!.....Check projection scheme...........................................
+
+      subroutine check_projection(nv,qeq,peq,ceq,Bcmplx)
+       integer, intent(in) :: nv 
+       real*8,dimension(nv+1) :: qeq !inital centers vector
+       real*8,dimension(nv+1) :: peq !initial momenta vector
+       complex*16,dimension(nh) :: ceq !initial coefficient vector
+       complex*16,dimension(nv+1,nv+1),intent(in) :: Bcmplx !initial width matrix
+
+       integer :: i,j,uuunit
+       real*8 :: increment
+       real*8,dimension(nv+1) :: q0 !equilibrium centers vector
+       real*8,dimension(nv+1) :: p0 !equilibrium momenta vector
+       complex*16,dimension(nh) :: c0 !equilibrium coefficient vector
+       complex*16,dimension(nh) :: cref !reference coefficient vector
+
+       cref(:) = ceq(:)
+  
+       increment = 0.05d0
+       uuunit = 1000
+
+       call plot_wfn(nv,qeq,peq,ceq,Bcmplx,uuunit)
+       uuunit=uuunit+1
+ 
+       do j = 1,10
+         q0(:) = qeq(:) + j*increment
+         p0(:) = peq(:) + j*increment
+         write(*,*) "+------------------------------------------------+"
+         write(*,*) "BOT Coefficients forward:"
+         c0 = c_update(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
+         do i = 1,nh
+           write(*,*) c0(i) 
+         end do
+         call plot_wfn(nv,q0,p0,c0,Bcmplx,uuunit)
+         uuunit=uuunit+1
+         write(*,*) "+------------------------------------------------+"
+         write(*,*) "BOT 0tau Coefficients forward:"
+         c0 = c_update_fb(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
+         do i = 1,nh
+           write(*,*) c0(i) 
+         end do
+         call plot_wfn(nv,q0,p0,c0,Bcmplx,uuunit)
+         uuunit=uuunit+1
+         write(*,*) "+------------------------------------------------+"
+         write(*,*) "BOT tau0 Coefficients forward:"
+         c0 = c_update_fbs(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
+         do i = 1,nh
+           write(*,*) c0(i) 
+         end do
+         call plot_wfn(nv,q0,p0,c0,Bcmplx,uuunit)
+         uuunit=uuunit+1
+         write(*,*) "+------------------------------------------------+"
+         write(*,*) "BOT Coefficients backward:"
+         ceq = c_update(nv,q0,p0,qeq,peq,c0,Bcmplx,Bcmplx) 
+         do i = 1,nh
+           write(*,*) ceq(i) 
+         end do
+         write(*,*) "Increment MAE"
+         write(*,*) j*increment, abs(sum(cref-ceq))
+         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,uuunit)
+         uuunit=uuunit+1
+         write(*,*) "+------------------------------------------------+"
+         write(*,*) "BOT tau0 Coefficients backward:"
+         ceq = c_update_fb(nv,q0,p0,qeq,peq,c0,Bcmplx,Bcmplx) 
+         do i = 1,nh
+           write(*,*) ceq(i) 
+         end do
+         write(*,*) "Increment MAE"
+         write(*,*) j*increment, abs(sum(cref-ceq))
+         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,uuunit)
+         uuunit=uuunit+1
+         write(*,*) "+------------------------------------------------+"
+         write(*,*) "BOT 0tau Coefficients backward:"
+         ceq = c_update_fbs(nv,q0,p0,qeq,peq,c0,Bcmplx,Bcmplx) 
+         do i = 1,nh
+           write(*,*) ceq(i) 
+         end do
+         write(*,*) "Increment MAE"
+         write(*,*) j*increment, abs(sum(cref-ceq))
+         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,uuunit)
+         uuunit=uuunit+1
+       end do
+      end subroutine
+         
+         
+     
 
       end module
