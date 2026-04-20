@@ -50,6 +50,17 @@ The same goes for the Hermite polynomials basis set.
    - [ ] Ammonia inversion 
 
 ### TO DO
+- [ ] Create a `do` loop for print trajectory:
+
+```
+do i = 1,nstep_print
+  do j = 1,10
+    does evolution
+  end do
+  print
+end do
+```
+
 - [x] **URGENT:** move the calculation of `Xn` integrals to `eofmotion_mod` and feed the integrals to `fun_V1` and `fun_V2` as input
 - [x] **URGENT:** do the same for `energy`: move the integrals above and feed them to `fun_V0` and `kin_energy` (and then to `fun_Ka` and `fun_Kb`)
 - [x] **URGENT:** feed them directly as $\mathbf{c}\mathcal{X}\mathbf{c}$

@@ -12,6 +12,8 @@ fort.*
 /Batista_coupled/
 /Propagation_Error/
 log*
+/TEST/
+*.png
 
 # Prerequisites
 *.d

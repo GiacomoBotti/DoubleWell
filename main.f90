@@ -72,7 +72,7 @@
       ceq(1) =1.0d0  !creal
     
       do i = 1,nh
-        ceq(i) = 1.d0/nh
+!        ceq(i) = 1.d0/nh
         write(*,*) ceq(i) 
       end do
 
@@ -82,12 +82,12 @@
       do i = 1,nv+1
 !         qeq(i) = i*dsqrt(2.d0)/3.d0
 !         peq(i) = i*dsqrt(3.d0)/7.d0
-         Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
+!         Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
          Bcmplx(i,i) = dsqrt(masses(i))
-         do j= i+1,nv+1
-           Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
-           Bcmplx(j,i) = Bcmplx(i,j)
-         end do   
+!         do j= i+1,nv+1
+!           Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
+!           Bcmplx(j,i) = Bcmplx(i,j)
+!         end do   
         write(*,*) Bcmplx(i,:)
       end do
 
@@ -101,84 +101,13 @@
 
 !.....Basis Projection..................................................
 
-      call check_projection(nv,qeq,peq,ceq,Bcmplx)
+!      call check_projection(nv,qeq,peq,ceq,Bcmplx)
 
-      stop
+!      stop
 
       q0(:) = qeq(:) 
       p0(:) = peq(:)
-
-      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,990)
-
-      c0 = c_update(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
-
-      write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Starting Coefficients:"
-
-      do i = 1,nh
-        write(*,*) c0(i) 
-      end do
-
-      call plot_wfn(nv,q0,p0,c0,Bcmplx,991)
-
-      c0 = c_update_fb(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
-
-      write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Starting Coefficients:"
-
-      do i = 1,nh
-        write(*,*) c0(i) 
-      end do
-
-      call plot_wfn(nv,q0,p0,c0,Bcmplx,992)
-
-      c0 = c_update_fbs(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
-
-      write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Starting Coefficients:"
-
-      do i = 1,nh
-        write(*,*) c0(i) 
-      end do
- 
-      call plot_wfn(nv,q0,p0,c0,Bcmplx,993)
-      ! GOING BACK
- 
-      write(*,*) "GOING BACK!"
-
-      ceq = c_update(nv,q0,p0,qeq,peq,c0,Bcmplx,Bcmplx) 
-
-      write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Starting Coefficients:"
-
-      do i = 1,nh
-        write(*,*) ceq(i) 
-      end do
-
-      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,994)
-
-      ceq = c_update_fb(nv,q0,p0,qeq,peq,c0,Bcmplx,Bcmplx) 
-
-      write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Starting Coefficients:"
-
-      do i = 1,nh
-        write(*,*) ceq(i) 
-      end do
-
-      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,995)
-
-      ceq = c_update_fbs(nv,q0,p0,qeq,peq,c0,Bcmplx,Bcmplx) 
-
-      write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Starting Coefficients:"
-
-      do i = 1,nh
-        write(*,*) ceq(i) 
-      end do
-
-      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,996)
-      stop
+      c0(:) = ceq(:)
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
@@ -207,10 +136,10 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      open(unit=1111,file="input",status="old",action="read")
-      read(1111,*)
-      read(1111,*) trj
-      close(1111)
+      open(unit=2222,file="input",status="old",action="read")
+      read(2222,*)
+      read(2222,*) trj
+      close(2222)
       !trj = [0,50,100]
       write(*,*) trj
 

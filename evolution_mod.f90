@@ -218,6 +218,7 @@
 !                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
 !       h = 0.d0
           do i = 1,4
+!          exit
              call KarplusTimeDer(nd,cj,qtoti,ptoti,Bcmplxi,&
                   &kq(:,i),kp(:,i),kb(:,:,i))             
              qtoti = qtotj + hvec(i)*kq(:,i)
@@ -238,6 +239,7 @@
 !          write(*,*) cj
 !          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
           cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+!          cj = c_update_fbs(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          write(*,*) "UPDATE OUT:"
 !          write(*,*) cj
           csq(:) = conjg(cj(:))*cj(:)
