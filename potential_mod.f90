@@ -9,10 +9,13 @@
 
       !real*8, parameter,public  :: gamma_const = 0.5d0
       real*8, parameter,public  :: gamma_const = 0.0d0
-      !real*8, parameter,public  :: eta_const = 10e+30!1.3544d0 
-      real*8, parameter,public  :: eta_const = 1.3544d0 
-      !real*8, parameter,public  :: sigma_const = 1.d0
-      real*8, parameter,public  :: sigma_const = -1.d0
+      real*8, parameter,public  :: eta_const = 10e+30!1.3544d0 
+      !real*8, parameter,public  :: eta_const = 1.3544d0 
+      real*8, parameter,public  :: sigma_const = 1.d0
+      !real*8, parameter,public  :: sigma_const = -1.d0
+      !real*8, parameter,public  :: sigma_const = 0.d0
+      !real*8, parameter,public  :: kappa_const = 0.d0
+      real*8, parameter,public  :: kappa_const = 1.d0
   
       ! Bath potential matrix dimensions
       integer,parameter,public :: nv = 1   
@@ -42,7 +45,8 @@
          Vcoupl(i-1,i) = 1.d0
        end do
 
-       Vmat = 0.5d0*Vharm + 0.5d0*gamma_const*Vcoupl
+       Vmat = 0.5d0*kappa_const*Vharm + 0.5d0*gamma_const*Vcoupl
+!       Vmat = 0.5d0*Vharm + 0.5d0*gamma_const*Vcoupl
 
        write(*,*) "Matrix potential generated"
  

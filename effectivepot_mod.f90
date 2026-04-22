@@ -129,13 +129,13 @@
        ! V elements
 !       Vx=Nsq*Y0*dot_product(cvec,Xcvec)
        Vxmat=Nsq*Y0*Xtot
-!       write(111,*) "Vx: ", Vx
+!       write(111,*) "Vx: ", Vxmat(1,1)
 !       Vxy=Nsq*Y0*gamma_const*dot_product(cvec,XYcvec)
        Vxymat=Nsq*Y0*gamma_const*XYtot
-!       write(111,*) "Vxy: ", Vxy
+!       write(111,*) "Vxy: ", Vxymat(1,1)
 !       Vy=Nsq*Y0*dot_product(cvec,Ycvec)
        Vymat=Nsq*Y0*Ytot
-!       write(111,*) "Vy: ", Vy
+!       write(111,*) "Vy: ", Vymat(1,1)
              
 !       Vx=0.d0
 !       Vxy=0.d0

@@ -47,6 +47,7 @@
       write(*,*) "Eta: ", eta_const
       write(*,*) "Sigma: ", sigma_const
       write(*,*) "Gamma: ", gamma_const
+      write(*,*) "Kappa: ", kappa_const
 
       write(*,*) "+---------------------------------------------------+"
 
@@ -56,6 +57,7 @@
 
       do i = 1,nv+1
         masses(i) = 1.d0
+        masses(i) = 1.1d0*i
         write(*,*) masses(i)
       end do
 
@@ -91,20 +93,25 @@
         write(*,*) Bcmplx(i,:)
       end do
 
-      qeq(1) = -2.d0*dsqrt(eta_const)
-!      qeq(1) = 2.08 
+!      qeq(1) = -2.d0*dsqrt(eta_const)
+!      qeq(1) = -2.3199137915 
+!      qeq(1) = -.23199137915 
 !      qeq(1) = 0.d0
+      qeq(1) = 1.d0
 !      qeq(2) = 0.d0 
 
-!      peq(:) = 0.d0
-!      peq(1) = 0.5d0
+      peq(:) = 0.d0
+!      peq(1) = 0.005d0
 
 !.....Basis Projection..................................................
 
 !      call check_projection(nv,qeq,peq,ceq,Bcmplx)
 
 !      stop
-
+      !q0(:) = 1.d0
+      !q0(1) = 1.d0
+      !p0(:) = 0.d0
+      !c0 = c_update(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
       q0(:) = qeq(:) 
       p0(:) = peq(:)
       c0(:) = ceq(:)
@@ -145,7 +152,7 @@
 
       call cpu_time(t0)
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
-      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
+!      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
       call cpu_time(t1)
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"

@@ -72,6 +72,7 @@
        call diagonalization(nd,Amat,LambdaMat,Tmat)
  
        dotq = matmul(invMassMat,ptot)
+       !dotq = matmul(ptot,invMassMat)
 
        ! Integrals
        Y0=int_Y0(nd,LambdaMat)
@@ -86,7 +87,6 @@
        V2 = fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X0)
        MB=matmul(invMassMat,Bcmplx)              
 !       dotB = -2*matmul(Bcmplx,MB) - V2/2.d0
-       prova=matmul(Bcmplx,MB)
        dotB = -(0.d0,1.d0)*matmul(Bcmplx,MB) + (0.d0,1.d0)*V2
 !       dotB =0.d0
 

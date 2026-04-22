@@ -17,10 +17,11 @@
        ! HUGE GRID
        real*8, parameter :: lwb=-10.d0
        real*8, parameter :: hgb=10.d0
-       integer*8, parameter :: nstep=500
+       integer*8, parameter :: nstep=1000
 
        private
        public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat
+       public :: int_PMat
 
        contains
 
@@ -365,5 +366,75 @@
      
        end function
 
+!......Batista reaction probability.....................................
+
+       function int_PMat(nd,q,Bmat) result(PMat)
+       ! nd: dimension of y
+       ! q: x variational parameter
+       ! Bmat: complex gaussian width
+       ! Pmat: reaction probability 
+        integer, intent(in) :: nd
+        real*8, intent(in) :: q
+        complex*16, dimension(nd+1,nd+1), intent(in) :: Bmat
+
+        integer :: i,pow
+        real*8 :: x,Gx,h,a,zero,Nsq,Y0
+        real*8, dimension(nd) :: avec
+        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+        real*8, dimension(nh,nh) :: integral,integrand,s,Hmat,PMat
+
+        Nsq=fun_Nsq(nd+1,real(Bmat))
+        call extractA(nd,real(Bmat),Amat,avec,a) 
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+        Y0=int_Y0(nd,LambdaMat)
+
+        !write(*,*) "MATRICES"
+        !write(*,*) Bmat(1,1), Bmat(2,2)
+        !write(*,*) a, Amat(1,1), avec(1)
+
+        zero = 0.d0
+        
+        h = (hgb-zero)/dfloat(nstep)
+ 
+        ! Compute integral in boundaries
+        integral(:,:) = 0.d0
+        ! Lower bound
+        x = zero 
+        Gx=fun_Gx(nd,a,avec,Amat,x,q)
+        Hmat=fun_Hmat(x,q,a)
+        integral=Gx*Hmat
+        ! Higher bound
+        x = hgb
+        Gx=fun_Gx(nd,a,avec,Amat,x,q)
+        Hmat=fun_Hmat(x,q,a)
+        integral=integral+Gx*Hmat
+        ! First step
+        x = zero+h
+        Gx=fun_Gx(nd,a,avec,Amat,x,q)
+        Hmat=fun_Hmat(x,q,a)
+        integral=integral+Gx*Hmat
+
+        s(:,:) = 0.d0
+        do i = 2, nstep-2, 2 !only even
+           x = zero + i*h
+           Gx=fun_Gx(nd,a,avec,Amat,x,q)
+           Hmat=fun_Hmat(x,q,a)
+           integrand = Gx*Hmat 
+           s = s + 2.d0*integrand ! even
+           x = x + h
+           Gx=fun_Gx(nd,a,avec,Amat,x,q)
+           Hmat=fun_Hmat(x,q,a)
+           integrand = Gx*Hmat
+           s = s + 4.d0*integrand ! odd
+        end do
+
+        integral = (integral + s)*h/3.d0
+ 
+        Pmat = Nsq*Y0*integral
+
+!        write(*,*) "power:", pow
+!        write(*,*) "Xn11:", XnMat(1,1)
+     
+       end function
        end module
      

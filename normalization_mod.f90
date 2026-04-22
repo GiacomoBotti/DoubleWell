@@ -65,10 +65,9 @@
 
 !       write(*,*) "S00"
 !       do i = 1,nh
-!         write(*,*) X0Mat(i,:)
+!         write(*,*) Nsq*Y0*X0Mat(i,:)
 !       end do
 
       end function
  
       end module
-

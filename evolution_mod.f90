@@ -50,15 +50,21 @@
        real*8,dimension(nd+1,4) :: kq,kp
        complex*16,dimension(nd+1,nd+1,4) :: kb
 
-       real*8 :: a,Y0
+       real*8 :: a,Y0,cPc
        real*8, dimension(nd) :: avec
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
        real*8, dimension(nd+1,nd+1) :: Bmat
        real*8, dimension(nh,nh) :: S00M,invS,X0Mat
 
        complex*16 :: cTau0c
-       complex*16, dimension(nh) :: Tau0c
-       complex*16, dimension(nh,nh) :: Tau0
+       complex*16, dimension(nh) :: Tau0c,Pc
+       complex*16, dimension(nh,nh) :: Tau0,Prob
+
+       integer :: bar_width,pos
+       real :: frac
+       character(len=50) :: bar
+
+       bar_width = 50
 
        ! trajectory parameters
        first = trj(1)
@@ -86,6 +92,7 @@
        open(unit=325,file="pbath_BOT.dat",status="unknown")
        open(unit=326,file="phase_BOT.dat",status="unknown")
        open(unit=327,file="correlation_BOT.dat",status="unknown")
+       open(unit=328,file="reaction_BOT.dat",status="unknown")
       write(*,*) "+---------------------------------------------------+"
        write(*,*) "Writing trajectory output on trajectory_BOT.dat"
        write(*,*) "Writing coefficients output on coefficients_BOT.dat"
@@ -94,6 +101,7 @@
        write(*,*) "Writing energy components on energy_BOT.dat"
        write(*,*) "Writing total phase on phase_BOT.dat"
        write(*,*) "Writing correlation function on correlation_BOT.dat"
+       write(*,*) "Writing reaction prob on reaction_BOT.dat"
       write(*,*) "+---------------------------------------------------+"
        h = dfloat(last-first)/dfloat(nstep)
        hvec = hvec*h
@@ -149,7 +157,14 @@
        write(327,*) "#Steps: ",nstep
        write(327,*) "#Timestep: ",h
        write(327,*) "#Normalization constant: ",N
-       write(327,*) "#Time ", "correlation: real & imaginary"
+       write(327,*) "#Time ", "correlation: real & imaginary & sqr"
+  
+       write(328,*) "#Evolution parameters:"
+       write(328,*) "#Range: ",first,last
+       write(328,*) "#Steps: ",nstep
+       write(328,*) "#Timestep: ",h
+       write(328,*) "#Normalization constant: ",N
+       write(328,*) "#Time ", "reaction probability"
 
        N = normalization(nd,q,cvec,dreal(Bcmplx))
        E0 = energy(nd,q0,p0,cvec,Bcmplx)
@@ -169,7 +184,7 @@
        write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
                     &aimag(Bcmplx(1,1))!,real(Bcmplx(1,3))
 
-       write(322,*) 0.d0, csq, dreal(cvec), dimag(cvec)
+       write(322,*) 0.d0, csq!, dreal(cvec), dimag(cvec)
 !       write(322,*) "#Time ","Real c ", "Immaginary c"
 !       write(322,*) 0.d0, dreal(cvec), dimag(cvec)
 
@@ -197,8 +212,14 @@
        cTau0c = dot_product(cj,Tau0c)
        !cTau0c=Tau0(1,1)
 
+       Prob = int_PMat(nd,qtotj(1),Bcmplxj)
+       Pc = matmul(Prob,cj)
+       cPc = dot_product(cj,Pc)
+
        write(327,*) 0.d0, real(cTau0c),aimag(cTau0c),&
                        real(cTau0c*conjg(cTau0c))
+
+       write(328,*) 0.d0, cPc 
 
        kq(:,:) = 0.d0
        kp(:,:) = 0.d0
@@ -206,6 +227,11 @@
        
        call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,998)
        do j = 1,nstep
+        frac = real(j) / real(nstep)
+        pos = int(bar_width * frac)
+        if (mod(j, nstep/100) == 0 .or. j == nstep) then
+        bar = repeat('#', pos) // repeat('-', bar_width - pos)
+        end if
 !       h = dfloat(last-first)/dfloat(nstep)
           time = j*h
           cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
@@ -237,8 +263,8 @@
           
 !          write(*,*) "UPDATE IN:"
 !          write(*,*) cj
-!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
-          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+!          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fbs(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          write(*,*) "UPDATE OUT:"
 !          write(*,*) cj
@@ -253,16 +279,21 @@
           cTau0c = dot_product(cj,Tau0c)
           !cTau0c=Tau0(1,1)
 
+          Prob = int_PMat(nd,qtotj(1),Bcmplxj)
+          !write(*,*) Prob(1,1)
+          Pc = matmul(Prob,cj)
+          cPc = dot_product(cj,Pc)
 
           write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
                       &,aimag(Bcmplxj(1,1))!,real(Bcmplxj(1,3))
 !          write(322,*) time, dreal(cj), dimag(cj)
-          write(322,*) time, csq, dreal(cj), dimag(cj)
+          write(322,*) time, csq!, dreal(cj), dimag(cj)
           write(323,*) time, qtotj(2:nd+1) 
           write(325,*) time, ptotj(2:nd+1) 
           write(326,*) time, phase 
           write(327,*) time,real(cTau0c),aimag(cTau0c),&
                        real(cTau0c*conjg(cTau0c))
+          write(328,*) time, cPc 
         
 
           ! DEBUG: prints tildeB at each step
@@ -274,6 +305,10 @@
           qtoti = qtotj  
           ptoti = ptotj
           Bcmplxi = Bcmplxj
+
+         write(*,'(A,F6.2,A)', advance='no') char(13)//'['//bar//'] ', &
+                    frac*100.0, '%'
+          
        end do
 
        write(*,*) "Last step:"
@@ -297,6 +332,8 @@
        close(324)
        close(325)
        close(326)
+       close(327)
+       close(328)
 
        end subroutine
 

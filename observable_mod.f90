@@ -31,6 +31,7 @@
          complex*16, dimension(nh), intent(in) :: cvec
          complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
+         integer :: i
          real*8 :: V0,T0,Hout,q,p
          real*8, dimension(nd) :: qvec,pvec
          complex*16, dimension(nh) :: Tc,Vc
@@ -67,7 +68,21 @@
 
          Hout = T0 + V0
 
-         write(324,*) Hout, T0, V0
+         write(324,*) "+++++++++++++++++++++++++++++"
+         write(324,*) Hout, T0, V0!0M(1,1)
+
+         write(324,*) "+++++++++++++++++++++++++++++"
+         do i = 1, nh
+           write(324,*) real(T00M(i,:) + V00M(i,:)) 
+         end do 
+         write(324,*) "+++++++++++++++++++++++++++++"
+         do i = 1, nh
+           write(324,*) real(T00M(i,:)) 
+         end do 
+         write(324,*) "+++++++++++++++++++++++++++++"
+         do i = 1, nh
+           write(324,*) real(V00M(i,:)) 
+         end do 
          
        end function
 
