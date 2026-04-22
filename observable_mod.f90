@@ -51,11 +51,18 @@
       
          ! Integrals
          Y0=int_Y0(nd,LambdaMat)
+
+         write(324,*) Y0 
+
          X4=int_XnMat(nd,4,a,avec,Amat,qtot(1))
          X3=int_XnMat(nd,3,a,avec,Amat,qtot(1))
          X2=int_XnMat(nd,2,a,avec,Amat,qtot(1))
          X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
          X0=int_XnMat(nd,0,a,avec,Amat,qtot(1))
+
+         write(324,*) "X4mat out"
+         write(324,*) X4(1,1)
+         
 
          T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)
          V00M = fun_V0(nd,qtot,cvec,real(tildeBmat),Y0,X4,X2,X1,X0) 

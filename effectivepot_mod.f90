@@ -117,8 +117,14 @@
        lin=X1mat-q*X0mat
        sqr=X2mat-2*q*X1mat+q*q*X0mat
 
+!       write(324,*) "X4mat in"
+!       write(324,*) X4mat(1,1)
+!       write(324,*) X4mat(1,1)*Nsq*Y0/16/eta_const
+!       write(324,*) Nsq, Y0
+
        ! Total Hermite Matrices
-       Xtot=(X4mat/(16.d0*eta_const))+sigma_const*X2mat/2.d0      
+!       write(*,*) eta_const
+       Xtot=(X4mat/16.d0/eta_const)+sigma_const*X2mat/2.d0      
 !       Xcvec=matmul(Xtot,cvec)
        XYtot=(qvec(1) +q*Aa(1))*X1mat - Aa(1)*X2mat
 !       XYcvec=matmul(XYtot,cvec)

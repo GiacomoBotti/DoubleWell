@@ -17,7 +17,7 @@
        ! HUGE GRID
        real*8, parameter :: lwb=-10.d0
        real*8, parameter :: hgb=10.d0
-       integer*8, parameter :: nstep=1000
+       integer*8, parameter :: nstep=500
 
        private
        public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat

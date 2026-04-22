@@ -5,7 +5,6 @@ butta
 *.agr
 *.eps
 fort.*
-/MAPLE_DEBUG/
 /USELESS/
 /2CHO_*/
 /PLOT_*/
