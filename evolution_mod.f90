@@ -24,7 +24,7 @@
 
 !......BOT evolution....................................................
 
-       subroutine bot_evo(nd,trj,q0,p0,c0,Bcmplx)
+       subroutine bot_evo(nd,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq)
        ! nd: bath dimension
        ! trj : trajectory parameters (first step, last step, nstep)
        ! q0 : initial gaussian center (x&y)
@@ -33,21 +33,21 @@
        ! Bcmplx : initial gaussian width matrix, real & imaginary
        integer, intent(in) :: nd
        integer*8, dimension(3), intent(in) :: trj
-       real*8, dimension(nd+1), intent(in) :: q0,p0
-       complex*16,dimension(nh), intent(in) :: c0 
+       real*8, dimension(nd+1), intent(in) :: q0,p0,qeq,peq
+       complex*16,dimension(nh), intent(in) :: c0,ceq 
        complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx 
 
        integer*8 :: i,j,first,last,nstep,k
-       real*8 :: h,time,N,E,q,p,E0,Nsq
+       real*8 :: h,time,N,E,q,p,E0,Nsq,Neq
        real*8,dimension(nh) :: csq,phase 
        real*8,dimension(nd) :: qvec,pvec 
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold 
-       real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
        complex*16,dimension(nd+1,nd+1) :: Bcmplxi,Bcmplxj,Bold
        
-       complex*16,dimension(nh) :: cvec,cj,ctemp
+       complex*16,dimension(nh) :: cvec,cj,ctemp,ceqN
 
        real*8,dimension(nd+1,4) :: kq,kp
+       real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
        complex*16,dimension(nd+1,nd+1,4) :: kb
 
        real*8 :: a,Y0,cPc
@@ -55,6 +55,7 @@
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
        real*8, dimension(nd+1,nd+1) :: Bmat
        real*8, dimension(nh,nh) :: S00M,invS,X0Mat
+       complex*16, dimension(nh,nh) :: H00M
 
        complex*16 :: cTau0c
        complex*16, dimension(nh) :: Tau0c,Pc
@@ -65,6 +66,7 @@
        character(len=50) :: bar
 
        bar_width = 50
+       hvec = hvec*h
 
        ! trajectory parameters
        first = trj(1)
@@ -104,9 +106,10 @@
        write(*,*) "Writing reaction prob on reaction_BOT.dat"
       write(*,*) "+---------------------------------------------------+"
        h = dfloat(last-first)/dfloat(nstep)
-       hvec = hvec*h
 
-       N = normalization(nd,q,c0,dreal(Bcmplx))
+       call normalization(nd,qeq(1),ceq,dreal(Bcmplx),S00M,Neq)
+       ceqN = ceq/dsqrt(Neq)
+       call normalization(nd,q,c0,dreal(Bcmplx),S00M,N)
        cvec= c0/dsqrt(N)
        csq(:) = conjg(cvec(:))*cvec(:)
        phase(:) = datan((aimag(cvec(:))/real(cvec(:))))
@@ -166,8 +169,8 @@
        write(328,*) "#Normalization constant: ",N
        write(328,*) "#Time ", "reaction probability"
 
-       N = normalization(nd,q,cvec,dreal(Bcmplx))
-       E0 = energy(nd,q0,p0,cvec,Bcmplx)
+       call normalization(nd,q,cvec,dreal(Bcmplx),S00M,N)
+       call energy(nd,q0,p0,cvec,Bcmplx,H00M,E0)
        E=E0
 
        write(*,*) "First step:"
@@ -207,8 +210,10 @@
  
        cj = cvec
 
-       Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
-       Tau0c = matmul(Tau0,cvec)
+       !Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
+       !Tau0c = matmul(Tau0,cvec)
+       Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Bcmplx)
+       Tau0c = matmul(Tau0,ceqN)
        cTau0c = dot_product(cj,Tau0c)
        !cTau0c=Tau0(1,1)
 
@@ -217,15 +222,19 @@
        cPc = dot_product(cj,Pc)
 
        write(327,*) 0.d0, real(cTau0c),aimag(cTau0c),&
-                       real(cTau0c*conjg(cTau0c))
+                       real(cTau0c*conjg(cTau0c))/N,&
+                       dsqrt(real(cTau0c*conjg(cTau0c)))
 
-       write(328,*) 0.d0, cPc 
+       write(328,*) 0.d0, cPc/dsqrt(N) 
 
        kq(:,:) = 0.d0
        kp(:,:) = 0.d0
        kb(:,:,:) = 0.d0
        
-       call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,998)
+       call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,N,998)
+
+! BEGIN TRAJECTORY CYCLE
+
        do j = 1,nstep
         frac = real(j) / real(nstep)
         pos = int(bar_width * frac)
@@ -234,32 +243,19 @@
         end if
 !       h = dfloat(last-first)/dfloat(nstep)
           time = j*h
-          cj = c_static(nd,h,qtotj,ptotj,cj,Bcmplxj)
-!          write(*,*) "STATIC OUT:"
-!          write(*,*) cj
-!          N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
-!          E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
-!          write(421,*) time,N,E/E0,qtotj(1),ptotj(1)&
-!                       &,real(Bcmplxj(1,1))&
-!                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
-!       h = 0.d0
-          do i = 1,4
-!          exit
-             call KarplusTimeDer(nd,cj,qtoti,ptoti,Bcmplxi,&
-                  &kq(:,i),kp(:,i),kb(:,:,i))             
-             qtoti = qtotj + hvec(i)*kq(:,i)
-             ptoti = ptotj + hvec(i)*kp(:,i)
-             Bcmplxi = Bcmplxj + hvec(i)*kb(:,:,i)
-          end do
+          cj = c_static(nd,h,cj,S00M,H00M)
           qold = qtotj
           pold = ptotj
           Bold = Bcmplxj
-          qtotj = qtotj&
-             &+h*(kq(:,1)+2.d0*kq(:,2)+2.d0*kq(:,3)+kq(:,4))/6.d0
-          ptotj = ptotj&
-             &+h*(kp(:,1)+2.d0*kp(:,2)+2.d0*kp(:,3)+kp(:,4))/6.d0
-          Bcmplxj = Bcmplxj&
-          &+h*(kb(:,:,1)+2.d0*kb(:,:,2)+2.d0*kb(:,:,3)+kb(:,:,4))/6.d0
+!          write(*,*) "STATIC OUT:"
+!          write(*,*) cj
+!          call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
+!          call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E)
+!          write(421,*) time,N,E/E0,qtotj(1),ptotj(1)&
+!                       &,real(Bcmplxj(1,1))&
+!                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
+!          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
+!          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
           
 !          write(*,*) "UPDATE IN:"
 !          write(*,*) cj
@@ -271,11 +267,13 @@
           csq(:) = conjg(cj(:))*cj(:)
           phase(:) = datan((aimag(cj(:))/real(cj(:))))
 
-          N = normalization(nd,qtotj(1),cj,dreal(Bcmplxj))
-          E = energy(nd,qtotj,ptotj,cj,Bcmplxj)
+          call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
+          call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E)
 
-          Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
-          Tau0c = matmul(Tau0,cvec)
+          !Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
+          !Tau0c = matmul(Tau0,cvec)
+          Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Bcmplx)
+          Tau0c = matmul(Tau0,ceqN)
           cTau0c = dot_product(cj,Tau0c)
           !cTau0c=Tau0(1,1)
 
@@ -292,8 +290,9 @@
           write(325,*) time, ptotj(2:nd+1) 
           write(326,*) time, phase 
           write(327,*) time,real(cTau0c),aimag(cTau0c),&
-                       real(cTau0c*conjg(cTau0c))
-          write(328,*) time, cPc 
+                       real(cTau0c*conjg(cTau0c))/N,&
+                       dsqrt(real(cTau0c*conjg(cTau0c))/N)
+          write(328,*) time, cPc/dsqrt(N) 
         
 
           ! DEBUG: prints tildeB at each step
@@ -324,7 +323,7 @@
        !  write(222,*) Bcmplxj(i,:)
        !end do
 
-       call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,999)
+       call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,N,999)
 
        close(321)
        close(322)

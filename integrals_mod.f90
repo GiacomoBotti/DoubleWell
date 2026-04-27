@@ -158,7 +158,7 @@
         Nsq = dsqrt(Bdet/(pi**ndim))
 !        write(*,*) "Nsq", Nsq
 
-!        Nsq = 1.d0
+        Nsq = 1.d0
 
        end function
 
@@ -220,7 +220,7 @@
         NiNj =((Bjdet/pi**ndim)*(Bidet/pi**ndim))**(1.d0/4.d0) 
 !        write(*,*) "NiNj", NiNj
 
-!        NiNj = 1.d0
+        NiNj = 1.d0
 
        end function
 

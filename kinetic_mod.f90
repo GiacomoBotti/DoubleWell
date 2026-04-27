@@ -369,6 +369,7 @@
         !intdlnGsq = dxlnGsq(nd,q,p,qvec,tildeBmat)  
         !intdyln = dylnGdylnG(nd,q,p,qvec,pvec,tildeBmat)  
         intKb = Kbath(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)  
+        !intKb(:,:) = 0.d0 !Kbath(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)  
         intKa = Kact(nd,q,p,qvec,tildeBmat,Y0,X2,X1,X0)  
 
 !        write(*,*) invMassMat

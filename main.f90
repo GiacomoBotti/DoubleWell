@@ -74,7 +74,6 @@
       ceq(1) =1.0d0  !creal
     
       do i = 1,nh
-!        ceq(i) = 1.d0/nh
         write(*,*) ceq(i) 
       end do
 
@@ -93,28 +92,37 @@
         write(*,*) Bcmplx(i,:)
       end do
 
-!      qeq(1) = -2.d0*dsqrt(eta_const)
-!      qeq(1) = -2.3199137915 
-!      qeq(1) = -.23199137915 
-!      qeq(1) = 0.d0
-      qeq(1) = 1.d0
-!      qeq(2) = 0.d0 
-
+      qeq(1) = -2.d0*dsqrt(eta_const) 
       peq(:) = 0.d0
-!      peq(1) = 0.005d0
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Initial q and p:"
+       
+      do i = 1,nv+1
+        write(*,*) qeq(i), peq(i)
+      end do
 
 !.....Basis Projection..................................................
 
 !      call check_projection(nv,qeq,peq,ceq,Bcmplx)
 
+      q0(:) = 0.d0
+      p0(:) = 0.d0
+
+      c0 = c_update(nv,q0,p0,qeq,peq,ceq,Bcmplx,Bcmplx) 
+    
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Projected coefficients"
+
+      do i = 1,nh
+        write(*,*) c0(i) 
+      end do
+      
+      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,111)
+      call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,222)
+
+ 
 !      stop
-      !q0(:) = 1.d0
-      !q0(1) = 1.d0
-      !p0(:) = 0.d0
-      !c0 = c_update(nv,qeq,peq,q0,p0,ceq,Bcmplx,Bcmplx) 
-      q0(:) = qeq(:) 
-      p0(:) = peq(:)
-      c0(:) = ceq(:)
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
@@ -147,12 +155,11 @@
       read(2222,*)
       read(2222,*) trj
       close(2222)
-      !trj = [0,50,100]
       write(*,*) trj
 
       call cpu_time(t0)
-      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
-!      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
+      call bot_evo(nv,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq)
+      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
       call cpu_time(t1)
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"

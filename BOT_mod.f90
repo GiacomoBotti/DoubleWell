@@ -24,18 +24,23 @@
 
 !......Coefficient update with static basis (analytical)................
 
-       function c_static(nd,h,qtot,ptot,cvec,tildeBmat) result(csout)
+       !function c_static(nd,h,qtot,ptot,cvec,tildeBmat) result(csout)
+       function c_static(nd,h,cvec,S00M,H00M) result(csout)
        ! nd: bath dimension 
        ! h : time-step size
+       ! S00M : overlap matrix
+       ! H00M : hamiltonian matrix
        ! q0: full position vector
        ! p0: full momenta vector
        ! tildeBmat: full complex gaussian width matrix
         implicit none
         integer, intent(in) :: nd
         real*8, intent(in) :: h
-        real*8, dimension(nd+1), intent(in) :: qtot,ptot
         complex*16, dimension(nh), intent(in) :: cvec
-        complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
+        real*8, dimension(nh,nh) :: S00M
+        complex*16, dimension(nh,nh) :: H00M
+        !real*8, dimension(nd+1), intent(in) :: qtot,ptot
+        !complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
         integer*8 :: i,lwork,nh8
         real*8 :: q,p,a,Nsq,Y0
@@ -45,7 +50,7 @@
         real*8, dimension(nd+1,nd+1) :: Bmat
         real*8, dimension(nh,nh) :: X4,X3,X2,X1,X0
         complex*16, dimension(nh) :: c,csout,expvec
-        complex*16, dimension(nh,nh) :: S00M,T00M,V00M,H00M
+        complex*16, dimension(nh,nh) :: T00M,V00M
         complex*16, dimension(nh,nh) :: Z,adjZ,B
 
         complex*16, dimension(2*nh-1) :: lapwork
@@ -64,27 +69,27 @@
 !          write(*,*) tildeBmat(i,:)
 !        end do
 
-        q = qtot(1)
-        p = ptot(1)
-        qvec = qtot(2:nd+1)
-        pvec = ptot(2:nd+1)
+        !q = qtot(1)
+        !p = ptot(1)
+        !qvec = qtot(2:nd+1)
+        !pvec = ptot(2:nd+1)
 
-        Bmat = real(tildeBmat)
+        !Bmat = real(tildeBmat)
 
-        Nsq=fun_Nsq(nd+1,Bmat)
-        call extractA(nd,Bmat,Amat,avec,a)
-        call diagonalization(nd,Amat,LambdaMat,Tmat)
-        Y0=int_Y0(nd,LambdaMat)
-        X4=int_XnMat(nd,4,a,avec,Amat,qtot(1))
-        X3=int_XnMat(nd,3,a,avec,Amat,qtot(1))
-        X2=int_XnMat(nd,2,a,avec,Amat,qtot(1))
-        X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
-        X0=int_XnMat(nd,0,a,avec,Amat,q)
+        !Nsq=fun_Nsq(nd+1,Bmat)
+        !call extractA(nd,Bmat,Amat,avec,a)
+        !call diagonalization(nd,Amat,LambdaMat,Tmat)
+        !Y0=int_Y0(nd,LambdaMat)
+        !X4=int_XnMat(nd,4,a,avec,Amat,qtot(1))
+        !X3=int_XnMat(nd,3,a,avec,Amat,qtot(1))
+        !X2=int_XnMat(nd,2,a,avec,Amat,qtot(1))
+        !X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
+        !X0=int_XnMat(nd,0,a,avec,Amat,q)
 
-        S00M = X0*Y0*Nsq 
-        T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)  
-        V00M = fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X2,X1,X0) 
-        H00M = T00M + V00M
+        !S00M = X0*Y0*Nsq 
+        !T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)  
+        !V00M = fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X2,X1,X0) 
+        !H00M = T00M + V00M
         ! Copy H00M so LAPACK can overwrite
         Z = H00M
         B = S00M
@@ -104,6 +109,12 @@
 !        do i = 1,nh
 !          write(*,*) H00M(i,:)
 !        end do
+!        write(*,*) "????????????"
+!        write(*,*) "H00M:"
+!        do i = 1,nh
+!          write(*,*) Z(i,:)
+!        end do
+
 
         call ZHEGV(1,'V','U',nh,Z,nh,B,nh,eigenv,&
                   &lapwork,lwork,rwork,info)

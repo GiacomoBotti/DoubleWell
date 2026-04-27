@@ -385,6 +385,7 @@
        integer :: i,j
        real*8 :: Nout
        real*8, dimension(nd+1,nd+1) :: Bmat
+       real*8, dimension(nh,nh) :: S00M
 
        do i = 1,nd+1
           Bmat(i,i) = i
@@ -405,7 +406,7 @@
        write(*,*) "------------------------------"
   
        do i = 1,10
-         Nout = normalization(nd,dfloat(i),cvec,Bmat)
+         call normalization(nd,dfloat(i),cvec,Bmat,S00M,Nout)
 
          write(*,*) "Norm at q = ", dfloat(i)
          write(*,*) Nout
@@ -506,7 +507,7 @@
        real*8 :: a,Y0
        real*8, dimension(nd) :: avec
        real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat
-       real*8, dimension(nh,nh) :: X4,X3,X2,X1,X0
+       real*8, dimension(nh,nh) :: X4,X3,X2,X1,X0,S00M
 
        complex*16, dimension(nh,nh) :: Hmat,Kmat,Tau
  
@@ -631,7 +632,7 @@
        
        cvec(:) = complex(1.d0,0.d0)
        
-       Nout = normalization(nd,q,cvec,real(Bmat))
+       call normalization(nd,q,cvec,real(Bmat),S00M,Nout)
 
       end subroutine  
 
@@ -814,7 +815,7 @@
        increment = 0.05d0
        uuunit = 1000
 
-       call plot_wfn(nv,qeq,peq,ceq,Bcmplx,uuunit)
+       call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,uuunit)
        uuunit=uuunit+1
  
        open(unit=2000,file="mae_BOT.dat",status='unknown')
@@ -831,7 +832,7 @@
            write(*,*) c0(i) 
          end do
          write(uuunit,*) "#BOT forward", j*increment
-         call plot_wfn(nv,q0,p0,c0,Bcmplx,uuunit)
+         call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,uuunit)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT fb Coefficients forward:"
@@ -840,7 +841,7 @@
            write(*,*) c0(i) 
          end do
          write(uuunit,*) "#BOT fb forward", j*increment
-         call plot_wfn(nv,q0,p0,c0,Bcmplx,uuunit)
+         call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,uuunit)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT fbs Coefficients forward:"
@@ -849,7 +850,7 @@
            write(*,*) c0(i) 
          end do
          write(uuunit,*) "#BOT fbs forward", j*increment
-         call plot_wfn(nv,q0,p0,c0,Bcmplx,uuunit)
+         call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,uuunit)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT Coefficients backward:"
@@ -860,7 +861,7 @@
          !write(*,*) "Increment MAE"
          write(uuunit,*) "#BOT backward", j*increment
          write(2000,*) j*increment, abs(sum(cref-ceq))/dfloat(nh)
-         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,uuunit)
+         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,uuunit)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT fb Coefficients backward:"
@@ -871,7 +872,7 @@
          !write(*,*) "Increment MAE"
          write(uuunit,*) "#BOT fb backward", j*increment
          write(2001,*) j*increment, abs(sum(cref-ceq))/dfloat(nh)
-         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,uuunit)
+         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,uuunit)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT fbs Coefficients backward:"
@@ -882,7 +883,7 @@
          !write(*,*) "Increment MAE"
          write(uuunit,*) "#BOT fbs backward", j*increment
          write(2002,*) j*increment, abs(sum(cref-ceq))/dfloat(nh)
-         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,uuunit)
+         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,uuunit)
          uuunit=uuunit+1
        end do
        close(2000)
