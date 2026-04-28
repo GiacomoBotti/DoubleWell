@@ -24,7 +24,7 @@
 
 !......BOT evolution....................................................
 
-       subroutine bot_evo(nd,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq)
+       subroutine bot_evo(nd,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq,Beq)
        ! nd: bath dimension
        ! trj : trajectory parameters (first step, last step, nstep)
        ! q0 : initial gaussian center (x&y)
@@ -35,7 +35,7 @@
        integer*8, dimension(3), intent(in) :: trj
        real*8, dimension(nd+1), intent(in) :: q0,p0,qeq,peq
        complex*16,dimension(nh), intent(in) :: c0,ceq 
-       complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx 
+       complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx,Beq 
 
        integer*8 :: i,j,first,last,nstep,k
        real*8 :: h,time,N,E,q,p,E0,Nsq,Neq
@@ -212,7 +212,7 @@
 
        !Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
        !Tau0c = matmul(Tau0,cvec)
-       Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Bcmplx)
+       Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
        Tau0c = matmul(Tau0,ceqN)
        cTau0c = dot_product(cj,Tau0c)
        !cTau0c=Tau0(1,1)
@@ -255,7 +255,7 @@
 !                       &,real(Bcmplxj(1,1))&
 !                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
-!          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
           
 !          write(*,*) "UPDATE IN:"
 !          write(*,*) cj
@@ -272,7 +272,7 @@
 
           !Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
           !Tau0c = matmul(Tau0,cvec)
-          Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Bcmplx)
+          Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
           Tau0c = matmul(Tau0,ceqN)
           cTau0c = dot_product(cj,Tau0c)
           !cTau0c=Tau0(1,1)

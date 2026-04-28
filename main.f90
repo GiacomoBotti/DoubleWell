@@ -26,6 +26,7 @@
       complex*16,dimension(nh) :: c0 !initial coefficient vector
       complex*16,dimension(nh) :: ceq !equilibrium coefficient vector
       complex*16,dimension(nv+1,nv+1) :: Bcmplx !initial width matrix
+      complex*16,dimension(nv+1,nv+1) :: Beq !equilibrium width matrix
       integer*8,dimension(3) :: trj
 
 !      call print_double_well_banner()
@@ -84,15 +85,16 @@
 !         qeq(i) = i*dsqrt(2.d0)/3.d0
 !         peq(i) = i*dsqrt(3.d0)/7.d0
 !         Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
-         Bcmplx(i,i) = dsqrt(masses(i))
+         Beq(i,i) = dsqrt(masses(i))
 !         do j= i+1,nv+1
 !           Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
 !           Bcmplx(j,i) = Bcmplx(i,j)
 !         end do   
-        write(*,*) Bcmplx(i,:)
+        write(*,*) Beq(i,:)
       end do
 
-      qeq(1) = -2.d0*dsqrt(eta_const) 
+!      qeq(1) = -2.d0*dsqrt(eta_const) 
+      qeq(1) = -2.31 
       peq(:) = 0.d0
 
       write(*,*) "+---------------------------------------------------+"
@@ -108,8 +110,11 @@
 
       q0(:) = 0.d0
       p0(:) = 0.d0
+!      q0(:) = qeq(:) 
+!      p0(:) = peq(:)
+      Bcmplx(:,:) = Beq(:,:)
 
-      c0 = c_update(nv,q0,p0,qeq,peq,ceq,Bcmplx,Bcmplx) 
+      c0 = c_update(nv,q0,p0,qeq,peq,ceq,Bcmplx,Beq) 
     
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Projected coefficients"
@@ -158,7 +163,7 @@
       write(*,*) trj
 
       call cpu_time(t0)
-      call bot_evo(nv,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq)
+      call bot_evo(nv,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq,Beq)
       call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
       call cpu_time(t1)
       write(*,*) "End of a successful run"

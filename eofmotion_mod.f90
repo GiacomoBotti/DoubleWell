@@ -84,7 +84,9 @@
 
        V2 = fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X0)
        MB=matmul(invMassMat,Bcmplx)              
+       ! confirmed with debug_karplus_width.mw
        dotB = -(0.d0,1.d0)*matmul(Bcmplx,MB) + (0.d0,1.d0)*V2
+!       dotB = +(0.d0,1.d0)*matmul(Bcmplx,MB) - (0.d0,1.d0)*V2
 !       dotB = 0.d0
 
       end subroutine
