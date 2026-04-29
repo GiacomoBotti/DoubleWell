@@ -5,8 +5,14 @@ butta
 *.agr
 *.eps
 fort.*
-/MAPLE_DEBUG/
 /USELESS/
+/2CHO_*/
+/PLOT_*/
+/Batista_coupled/
+/Propagation_Error/
+log*
+/TEST/
+*.png
 
 # Prerequisites
 *.d

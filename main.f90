@@ -11,15 +11,22 @@
       use eofmotion_module
       use check_module
       use evolution_module
+      use BOT_module
+      use observable_module
 
       implicit none
 
       integer :: i,j
-      real*8,dimension(nv+1) :: masses !Masses vector
+      real*8 :: t0,t1
+      real*8,dimension(nv+1) :: masses !masses vector
       real*8,dimension(nv+1) :: q0 !inital centers vector
       real*8,dimension(nv+1) :: p0 !initial momenta vector
-      complex*16,dimension(nh) :: c0 !Initial coefficient vector
-      complex*16,dimension(nv+1,nv+1) :: Bcmplx !Initial width matrix
+      real*8,dimension(nv+1) :: qeq !equilibrium centers vector
+      real*8,dimension(nv+1) :: peq !equilibrium momenta vector
+      complex*16,dimension(nh) :: c0 !initial coefficient vector
+      complex*16,dimension(nh) :: ceq !equilibrium coefficient vector
+      complex*16,dimension(nv+1,nv+1) :: Bcmplx !initial width matrix
+      complex*16,dimension(nv+1,nv+1) :: Beq !equilibrium width matrix
       integer*8,dimension(3) :: trj
 
 !      call print_double_well_banner()
@@ -34,68 +41,93 @@
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
 
-!.....Define initial conditions.........................................
+!.....Print potential constants.........................................
+
+      write(*,*) "Potential constants"
+
+      write(*,*) "Eta: ", eta_const
+      write(*,*) "Sigma: ", sigma_const
+      write(*,*) "Gamma: ", gamma_const
+      write(*,*) "Kappa: ", kappa_const
 
       write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Initial coefficients:"
-
-!      c0(:) =0.d0
-!      c0(1) =1.d0
-      c0(:) = complex(1.d0,1.d0)
-      c0(1) = complex(1.d0,1.d0)
-    
-      do i = 1,nh
-!        c0(i) = 1.d0/nh
-        write(*,*) c0(i) 
-      end do
-
-!      q0(:)=0.3d0
-!      p0(:)=0.3d0
-
-!      q0(1) = 1.5d0
-!      p0(1) = 1.0d0
- 
-      write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Initial Gaussian Width Matrix:"
-
-      do i = 1,nv+1
-         q0(i) = i*dsqrt(2.d0)/3.d0
-         p0(i) = i*dsqrt(3.d0)/7.d0
-         Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
-         do j= i+1,nv+1
-           Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
-           Bcmplx(j,i) = Bcmplx(i,j)
-         end do   
-         write(*,*) Bcmplx(i,:)
-      end do
-
-      q0(1) = 0.d0
-      p0(1) = 0.00001d0
-
-
-!      do i = 1,nv+1
-!         Bcmplx(i,i) = i+iu*i
-!         do j = i+1,nv+1
-!            Bcmplx(i,j) = (j+iu*j)/20.d0 !Gershgoring circle theorem
-!            Bcmplx(j,i) = Bcmplx(i,j)
-!         end do
-!         write(*,*) Bcmplx(i,:)
-!      end do
-
-!      Bcmplx(1,1) = complex(1.d0,1.d0)
 
 !.....Define masses vector..............................................
 
       write(*,*) "Masses vector:"
 
       do i = 1,nv+1
-        masses(i) = 1.1d0*i
+        masses(i) = 1.d0
+!        masses(i) = 1.1d0*i
         write(*,*) masses(i)
       end do
 
+!      masses(2) = masses(1) !WATCH OUT
+
       call MassesMat(masses)
 
+!.....Define initial conditions.........................................
+
       write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Equilibrium Coefficients:"
+
+      ceq(:) =0.d0
+      ceq(1) =1.0d0  !creal
+    
+      do i = 1,nh
+        write(*,*) ceq(i) 
+      end do
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Initial Gaussian Width Matrix:"
+
+      do i = 1,nv+1
+!         qeq(i) = i*dsqrt(2.d0)/3.d0
+!         peq(i) = i*dsqrt(3.d0)/7.d0
+!         Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
+         Beq(i,i) = dsqrt(masses(i))
+!         do j= i+1,nv+1
+!           Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
+!           Bcmplx(j,i) = Bcmplx(i,j)
+!         end do   
+        write(*,*) Beq(i,:)
+      end do
+
+!      qeq(1) = -2.d0*dsqrt(eta_const) 
+      qeq(1) = -2.31 
+      peq(:) = 0.d0
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Initial q and p:"
+       
+      do i = 1,nv+1
+        write(*,*) qeq(i), peq(i)
+      end do
+
+!.....Basis Projection..................................................
+
+!      call check_projection(nv,qeq,peq,ceq,Bcmplx)
+
+      q0(:) = 0.d0
+      p0(:) = 0.d0
+!      q0(:) = qeq(:) 
+!      p0(:) = peq(:)
+      Bcmplx(:,:) = Beq(:,:)
+
+      c0 = c_update(nv,q0,p0,qeq,peq,ceq,Bcmplx,Beq) 
+    
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Projected coefficients"
+
+      do i = 1,nh
+        write(*,*) c0(i) 
+      end do
+      
+      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,111)
+      call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,222)
+
+ 
+!      stop
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
@@ -124,13 +156,19 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      trj = [0,5,5000]
+      open(unit=2222,file="input",status="old",action="read")
+      read(2222,*)
+      read(2222,*) trj
+      close(2222)
       write(*,*) trj
 
-      call bot_evo(nv,trj,q0,p0,c0,Bcmplx)
-
+      call cpu_time(t0)
+      call bot_evo(nv,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq,Beq)
+      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
+      call cpu_time(t1)
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"
+      write(*,*) "I took ", t1-t0, "time"
       write(*,*) "+---------------------------------------------------+"
 
       end program

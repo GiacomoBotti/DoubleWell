@@ -17,7 +17,7 @@
 
 !.....Normalization.....................................................
 
-      function normalization(nd,q,cvec,Bmat) result(Nout)
+      subroutine normalization(nd,q,cvec,Bmat,S00M,Nout)
       ! nd: dimension of the bath
       ! q: center of the well gaussian
       ! cvec: vector of the coefficients
@@ -27,7 +27,8 @@
        complex*16, dimension(nh), intent(in) :: cvec
        real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
 
-       real*8 :: Nout
+       real*8, intent(out) :: Nout
+       real*8, dimension(nh,nh), intent(out) :: S00M
 
        integer :: i,j
        real*8 :: Nsq,Y0,a,qq
@@ -54,20 +55,22 @@
 !       write(*,*) cvec
 
        X0Mat=int_XnMat(nd,0,a,avec,Amat,qq)
-       X0c=matmul(X0Mat,cvec)
+
+       S00M = Nsq*Y0*X0Mat
+
+       X0c=matmul(S00M,cvec)
        cX0c=dot_product(cvec,X0c)
 !       X0c=matmul(X0Mat,test)
 !       cX0c=dot_product(test,X0c)
 
-       Nout = Nsq*Y0*dreal(cX0c)
+       Nout = dreal(cX0c)
 !       Nout = dot_product(cvec,cvec) 
 
 !       write(*,*) "S00"
 !       do i = 1,nh
-!         write(*,*) Y0*X0Mat(i,:)
+!         write(*,*) Nsq*Y0*X0Mat(i,:)
 !       end do
 
-      end function
+      end subroutine 
  
       end module
-

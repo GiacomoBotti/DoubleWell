@@ -33,7 +33,38 @@ The same goes for the Hermite polynomials basis set.
 
 ## NEW FRAMEWORK
 
+### TO RUN
+
+- [x] Uncoupled DW + HO
+   - [x] Start at bottom
+   - [x] Start at top
+- [ ] Numerical Stability tests
+   - [ ] No BOT
+   - [ ] BOT, only propagator on proj basis
+   - [ ] Full
+- [ ] Coupled system:
+   - [ ] QTAG
+   - [ ] Increasing $N_{h}$
+   - [ ] Quartic well
+   - [ ] Cubic well
+   - [ ] Ammonia inversion 
+
 ### TO DO
+- [ ] Create a `do` loop for print trajectory:
+
+```
+do i = 1,nstep_print
+  do j = 1,10
+    does evolution
+  end do
+  print
+end do
+```
+
+- [x] **URGENT:** move the calculation of `Xn` integrals to `eofmotion_mod` and feed the integrals to `fun_V1` and `fun_V2` as input
+- [x] **URGENT:** do the same for `energy`: move the integrals above and feed them to `fun_V0` and `kin_energy` (and then to `fun_Ka` and `fun_Kb`)
+- [x] **URGENT:** feed them directly as $\mathbf{c}\mathcal{X}\mathbf{c}$
+- [x] **URGENT:** test against a dynamics w/out this mod
 - [x] `Makefile` at Report
 - [x] `constants.f90` at Report
 - [x] `inversion_module.f90` at Report
@@ -49,6 +80,9 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
 - [x] `main.f90` at Report
+- [ ] Reaction probability
+- [ ] Mirror correlation
+- [ ] Gift script
    
 
 ### DONE
