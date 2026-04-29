@@ -13,7 +13,7 @@
       real*8, parameter,public  :: eta_const = 1.3544d0 
 !      real*8, parameter,public  :: sigma_const = 1.d0
       real*8, parameter,public  :: sigma_const = -1.d0
-      !real*8, parameter,public  :: sigma_const = 0.d0
+!      real*8, parameter,public  :: sigma_const = 0.d0
       !real*8, parameter,public  :: kappa_const = 0.d0
       real*8, parameter,public  :: kappa_const = 1.d0
   
