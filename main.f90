@@ -113,7 +113,7 @@
 !      q0(:) = qeq(:) 
 !      p0(:) = peq(:)
       Bcmplx(:,:) = Beq(:,:)
-      Bcmplx(1,1) = 0.56d0 
+!      Bcmplx(1,1) = 0.56d0 
 !      Beq(1,1) = 0.56d0
 
       c0 = c_update(nv,q0,p0,qeq,peq,ceq,Bcmplx,Beq) 

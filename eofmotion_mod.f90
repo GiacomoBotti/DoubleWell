@@ -217,7 +217,7 @@
        dotq = matmul(invMassMat,ppi)
        qi = qj + h*dotq 
        invBi=invgen(nd+1,Bi)
-       invBi=Bi
+       !invBi=Bi
        invB = invBi + iu*h*invMassMat
        Bi = invgen(nd+1,invB) 
        !Half V step

@@ -10,7 +10,7 @@
       implicit none
 
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 8 
+      integer,parameter,public :: nh = 15 
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Database of the coefficients
