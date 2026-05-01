@@ -192,7 +192,7 @@
        real*8, intent(in) :: h
        complex*16, dimension(nh), intent(in) :: cj
        real*8, dimension(nd+1) :: qj,pj,qi,ppi
-       complex*16, dimension(nd+1,nd+1) :: Bj,Bi,invB
+       complex*16, dimension(nd+1,nd+1) :: Bj,Bi,invB,invBi
 
        real*8, dimension(nd+1) :: V1,dotq
        real*8, dimension(nd+1,nd+1) :: V2,Bmat
@@ -216,7 +216,9 @@
        !Full T step
        dotq = matmul(invMassMat,ppi)
        qi = qj + h*dotq 
-       invB = Bi + iu*h*invMassMat
+       invBi=invgen(nd+1,Bi)
+       invBi=Bi
+       invB = invBi + iu*h*invMassMat
        Bi = invgen(nd+1,invB) 
        !Half V step
        call extractA(nd,dreal(Bi),Amat,avec,a)
@@ -229,7 +231,7 @@
        V1 = fun_V1(nd,qi,cj,dreal(Bi),Y0,X3,X2,X1,X0)
        V2 = fun_V2(nd,qi,cj,dreal(Bi),Y0,X2,X0)
        ppi = ppi - 0.5d0*h*V1
-       Bi = Bi +0.5d0*iu*h*V2
+       !Bi = Bi +0.5d0*iu*h*V2
        ! Finish
        qj = qi
        pj = ppi

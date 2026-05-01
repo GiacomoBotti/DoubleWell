@@ -17,7 +17,7 @@
        ! HUGE GRID
        real*8, parameter :: lwb=-10.d0
        real*8, parameter :: hgb=10.d0
-       integer*8, parameter :: nstep=500
+       integer*8, parameter :: nstep=1000
 
        private
        public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat
@@ -158,7 +158,7 @@
         Nsq = dsqrt(Bdet/(pi**ndim))
 !        write(*,*) "Nsq", Nsq
 
-        Nsq = 1.d0
+!        Nsq = 1.d0
 
        end function
 
@@ -220,7 +220,7 @@
         NiNj =((Bjdet/pi**ndim)*(Bidet/pi**ndim))**(1.d0/4.d0) 
 !        write(*,*) "NiNj", NiNj
 
-        NiNj = 1.d0
+!        NiNj = 1.d0
 
        end function
 

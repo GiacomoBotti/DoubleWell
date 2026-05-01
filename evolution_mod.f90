@@ -107,7 +107,7 @@
       write(*,*) "+---------------------------------------------------+"
        h = dfloat(last-first)/dfloat(nstep)
 
-       call normalization(nd,qeq(1),ceq,dreal(Bcmplx),S00M,Neq)
+       call normalization(nd,qeq(1),ceq,dreal(Beq),S00M,Neq)
        ceqN = ceq/dsqrt(Neq)
        call normalization(nd,q,c0,dreal(Bcmplx),S00M,N)
        cvec= c0/dsqrt(N)
