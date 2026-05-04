@@ -32,12 +32,12 @@
        ! c0 : initial coefficients 
        ! Bcmplx : initial gaussian width matrix, real & imaginary
        integer, intent(in) :: nd
-       integer*8, dimension(3), intent(in) :: trj
+       integer*8, dimension(4), intent(in) :: trj
        real*8, dimension(nd+1), intent(in) :: q0,p0,qeq,peq
        complex*16,dimension(nh), intent(in) :: c0,ceq 
        complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx,Beq 
 
-       integer*8 :: i,j,first,last,nstep,k
+       integer*8 :: i,j,first,last,nstep,k,nprint
        real*8 :: h,time,N,E,q,p,E0,Nsq,Neq
        real*8,dimension(nh) :: csq,phase 
        real*8,dimension(nd) :: qvec,pvec 
@@ -178,7 +178,6 @@
                     &"B(2,2) ", "B(1,3)"
        write(*,*) N, E/E0, q0(1), p0(1), real(Bcmplx(1,1)),&
                   &aimag(Bcmplx(1,1))!,real(Bcmplxj(1,3))
-!       write(*,*) time, dreal(cvec), dimag(cvec)
        write(*,*) csq
        write(*,*) q0(2:nd+1) 
 
@@ -188,8 +187,6 @@
                     &aimag(Bcmplx(1,1))!,real(Bcmplx(1,3))
 
        write(322,*) 0.d0, csq!, dreal(cvec), dimag(cvec)
-!       write(322,*) "#Time ","Real c ", "Immaginary c"
-!       write(322,*) 0.d0, dreal(cvec), dimag(cvec)
 
        write(323,*) 0.d0, q0(2:nd+1) 
 
@@ -204,18 +201,11 @@
        ptotj = p0
        Bcmplxj = Bcmplx
 
-       !do i = 1,nd+1
-       !  write(*,*) Bcmplxj(i,:)
-       !end do
- 
        cj = cvec
 
-       !Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
-       !Tau0c = matmul(Tau0,cvec)
        Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
        Tau0c = matmul(Tau0,ceqN)
        cTau0c = dot_product(cj,Tau0c)
-       !cTau0c=Tau0(1,1)
 
        Prob = int_PMat(nd,qtotj(1),Bcmplxj)
        Pc = matmul(Prob,cj)
@@ -225,6 +215,10 @@
                        real(cTau0c*conjg(cTau0c))/N,&
                        dsqrt(real(cTau0c*conjg(cTau0c)))
 
+      write(*,*) "+---------------------------------------------------+"
+       write(*,*) "Initial projection overlap (|C(0)|^2)" 
+       write(*,*) real(cTau0c*conjg(cTau0c))/N
+
        write(328,*) 0.d0, cPc/dsqrt(N) 
 
        kq(:,:) = 0.d0
@@ -233,96 +227,70 @@
        
        call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,N,998)
 
-! BEGIN TRAJECTORY CYCLE
+       nprint=nstep/trj(4)
+       time = dfloat(first)
+       !time = 0.d0
 
-       do j = 1,nstep
-        frac = real(j) / real(nstep)
-        pos = int(bar_width * frac)
-        if (mod(j, nstep/100) == 0 .or. j == nstep) then
-        bar = repeat('#', pos) // repeat('-', bar_width - pos)
-        end if
-!       h = dfloat(last-first)/dfloat(nstep)
-          time = j*h
+! BEGIN TRAJECTORY CYCLE
+       do k = 1,nprint
+       frac = real(k) / real(nprint)
+       pos = int(bar_width * frac)
+       if (mod(k, nprint/100) == 0 .or. j == nprint) then
+       bar = repeat('#', pos) // repeat('-', bar_width - pos)
+       end if
+       do j = 1,trj(4)
+          time = time + h
+          ! Static evolution of coefficents
           cj = c_static(nd,h,cj,S00M,H00M)
+          ! Variational evolution of parameters
           qold = qtotj
           pold = ptotj
           Bold = Bcmplxj
-!          write(*,*) "STATIC OUT:"
-!          write(*,*) cj
-!          call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
-!          call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E)
-!          write(421,*) time,N,E/E0,qtotj(1),ptotj(1)&
-!                       &,real(Bcmplxj(1,1))&
-!                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
           call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
-          
-!          write(*,*) "UPDATE IN:"
-!          write(*,*) cj
+          ! Projection of the coefficients
           cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fbs(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
-!          write(*,*) "UPDATE OUT:"
-!          write(*,*) cj
           csq(:) = conjg(cj(:))*cj(:)
-          phase(:) = datan((aimag(cj(:))/real(cj(:))))
-
+          ! Normalization and energy
           call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
           call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E)
+          !qtoti = qtotj  
+          !ptoti = ptotj
+          !Bcmplxi = Bcmplxj
+       end do !j
 
-          !Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
-          !Tau0c = matmul(Tau0,cvec)
-          Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
-          Tau0c = matmul(Tau0,ceqN)
-          cTau0c = dot_product(cj,Tau0c)
-          !cTau0c=Tau0(1,1)
+       phase(:) = datan((aimag(cj(:))/real(cj(:))))
+       Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
+       Tau0c = matmul(Tau0,ceqN)
+       cTau0c = dot_product(cj,Tau0c)
 
-          Prob = int_PMat(nd,qtotj(1),Bcmplxj)
-          !write(*,*) Prob(1,1)
-          Pc = matmul(Prob,cj)
-          cPc = dot_product(cj,Pc)
+       Prob = int_PMat(nd,qtotj(1),Bcmplxj)
+       Pc = matmul(Prob,cj)
+       cPc = dot_product(cj,Pc)
 
-          write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
-                      &,aimag(Bcmplxj(1,1))!,real(Bcmplxj(1,3))
-!          write(322,*) time, dreal(cj), dimag(cj)
-          write(322,*) time, csq!, dreal(cj), dimag(cj)
-          write(323,*) time, qtotj(2:nd+1) 
-          write(325,*) time, ptotj(2:nd+1) 
-          write(326,*) time, phase 
-          write(327,*) time,real(cTau0c),aimag(cTau0c),&
-                       real(cTau0c*conjg(cTau0c))/N,&
-                       dsqrt(real(cTau0c*conjg(cTau0c))/N)
-          write(328,*) time, cPc/dsqrt(N) 
-        
-
-          ! DEBUG: prints tildeB at each step
-          !write(444,*) "Time: ", time, "Nsq: ", Nsq
-          !do k = 1,nd+1
-          !   write(444,*) Bcmplxj(k,:)
-          !end do
-
-          qtoti = qtotj  
-          ptoti = ptotj
-          Bcmplxi = Bcmplxj
-
-         write(*,'(A,F6.2,A)', advance='no') char(13)//'['//bar//'] ', &
-                    frac*100.0, '%'
+      write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
+                  &,aimag(Bcmplxj(1,1))!,real(Bcmplxj(1,3))
+      write(322,*) time, csq!, dreal(cj), dimag(cj)
+      write(323,*) time, qtotj(2:nd+1) 
+      write(325,*) time, ptotj(2:nd+1) 
+      write(326,*) time, phase 
+      write(327,*) time,real(cTau0c),aimag(cTau0c),&
+                   real(cTau0c*conjg(cTau0c))/N,&
+                   dsqrt(real(cTau0c*conjg(cTau0c))/N)
+      write(328,*) time, cPc/dsqrt(N) 
+      
+      write(*,'(A,F6.2,A)', advance='no') char(13)//'['//bar//'] ', &
+                 frac*100.0, '%'
           
-       end do
+       end do !k
 
        write(*,*) "Last step:"
        write(*,*) N,E/E0, qtotj(1), ptotj(1),real(Bcmplxj(1,1)),&  
                   &aimag(Bcmplxj(1,1))
-!       write(*,*) time, dreal(cj), dimag(cj)
        write(*,*) time, csq
-!       write(*,*) time, qtotj(2:nd+1) 
-
-       !write(222,*) qtotj
-       !write(222,*) ptotj
-       !do i = 1,nd+1
-       !  write(222,*) Bcmplxj(i,:)
-       !end do
 
        call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,N,999)
 

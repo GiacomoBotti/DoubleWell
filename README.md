@@ -50,7 +50,7 @@ The same goes for the Hermite polynomials basis set.
    - [ ] Ammonia inversion 
 
 ### TO DO
-- [ ] Create a `do` loop for print trajectory:
+- [x] Create a `do` loop for print trajectory:
 
 ```
 do i = 1,nstep_print

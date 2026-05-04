@@ -27,7 +27,7 @@
       complex*16,dimension(nh) :: ceq !equilibrium coefficient vector
       complex*16,dimension(nv+1,nv+1) :: Bcmplx !initial width matrix
       complex*16,dimension(nv+1,nv+1) :: Beq !equilibrium width matrix
-      integer*8,dimension(3) :: trj
+      integer*8,dimension(4) :: trj
 
 !      call print_double_well_banner()
       call execute_command_line('cat banner.txt')
@@ -113,7 +113,9 @@
 !      q0(:) = qeq(:) 
 !      p0(:) = peq(:)
       Bcmplx(:,:) = Beq(:,:)
-!      Bcmplx(1,1) = 0.56d0 
+      Bcmplx(1,1) = 0.56d0 
+!      Bcmplx(1,1) = 1.256d0 
+      Bcmplx(1,1) = 0.856d0 
 !      Beq(1,1) = 0.56d0
 
       c0 = c_update(nv,q0,p0,qeq,peq,ceq,Bcmplx,Beq) 
