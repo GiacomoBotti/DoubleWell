@@ -107,7 +107,7 @@
       write(*,*) "+---------------------------------------------------+"
        h = dfloat(last-first)/dfloat(nstep)
 
-       call normalization(nd,qeq(1),ceq,dreal(Bcmplx),S00M,Neq)
+       call normalization(nd,qeq(1),ceq,dreal(Beq),S00M,Neq)
        ceqN = ceq/dsqrt(Neq)
        call normalization(nd,q,c0,dreal(Bcmplx),S00M,N)
        cvec= c0/dsqrt(N)
@@ -255,7 +255,8 @@
 !                       &,real(Bcmplxj(1,1))&
 !                       &,real(Bcmplxj(3,3)),real(Bcmplxj(1,3))
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
-          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+!          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
           
 !          write(*,*) "UPDATE IN:"
 !          write(*,*) cj

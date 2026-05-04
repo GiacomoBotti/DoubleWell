@@ -5,11 +5,13 @@
 
       module eofmotion_module
 
+      use constants
       use potential_module
       use basisset_module
       use effectivepot_module
       use integrals_module
       use matrix_module
+      use inversion_module
 
       implicit none
 
@@ -17,7 +19,7 @@
       real*8, dimension(nv+1,nv+1), public :: invMassMat
 
       private
-      public :: MassesMat,KarplusTimeDer,rungekutta,scprop 
+      public :: MassesMat,KarplusTimeDer,rungekutta,scprop,vtvprop 
 
       contains
 
@@ -180,6 +182,61 @@
        pj=ppi
        Bj=Bi
 
+      end subroutine
+
+!.....VTV propagator...................................................
+
+      subroutine vtvprop(nd,h,cj,qj,pj,Bj)
+      ! computes one step of VTV integrator, see J.L.Vanicek2023
+       integer, intent(in) :: nd
+       real*8, intent(in) :: h
+       complex*16, dimension(nh), intent(in) :: cj
+       real*8, dimension(nd+1) :: qj,pj,qi,ppi
+       complex*16, dimension(nd+1,nd+1) :: Bj,Bi,invB,invBi
+
+       real*8, dimension(nd+1) :: V1,dotq
+       real*8, dimension(nd+1,nd+1) :: V2,Bmat
+       real*8 :: a,Y0
+       real*8, dimension(nd) :: avec
+       real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat
+       real*8, dimension(nh,nh) :: X3,X2,X1,X0
+
+       !Half V step 
+       call extractA(nd,dreal(Bj),Amat,avec,a)
+       call diagonalization(nd,Amat,LambdaMat,Tmat)
+       Y0=int_Y0(nd,LambdaMat)
+       X3=int_XnMat(nd,3,a,avec,Amat,qj(1))
+       X2=int_XnMat(nd,2,a,avec,Amat,qj(1))
+       X1=int_XnMat(nd,1,a,avec,Amat,qj(1))
+       X0=int_XnMat(nd,0,a,avec,Amat,qj(1))
+       V1 = fun_V1(nd,qj,cj,dreal(Bj),Y0,X3,X2,X1,X0)
+       V2 = fun_V2(nd,qj,cj,dreal(Bj),Y0,X2,X0)
+       ppi = pj - 0.5d0*h*V1
+       Bi = Bj +0.5d0*iu*h*V2
+       !Full T step
+       dotq = matmul(invMassMat,ppi)
+       qi = qj + h*dotq 
+       invBi=invgen(nd+1,Bi)
+       !invBi=Bi
+       invB = invBi + iu*h*invMassMat
+       Bi = invgen(nd+1,invB) 
+       !Half V step
+       call extractA(nd,dreal(Bi),Amat,avec,a)
+       call diagonalization(nd,Amat,LambdaMat,Tmat)
+       Y0=int_Y0(nd,LambdaMat)
+       X3=int_XnMat(nd,3,a,avec,Amat,qi(1))
+       X2=int_XnMat(nd,2,a,avec,Amat,qi(1))
+       X1=int_XnMat(nd,1,a,avec,Amat,qi(1))
+       X0=int_XnMat(nd,0,a,avec,Amat,qi(1))
+       V1 = fun_V1(nd,qi,cj,dreal(Bi),Y0,X3,X2,X1,X0)
+       V2 = fun_V2(nd,qi,cj,dreal(Bi),Y0,X2,X0)
+       ppi = ppi - 0.5d0*h*V1
+       !Bi = Bi +0.5d0*iu*h*V2
+       ! Finish
+       qj = qi
+       pj = ppi
+       Bj = Bi
+       
       end subroutine
 
       end module

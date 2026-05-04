@@ -93,8 +93,8 @@
         write(*,*) Beq(i,:)
       end do
 
-!      qeq(1) = -2.d0*dsqrt(eta_const) 
-      qeq(1) = -2.31 
+      qeq(1) = -2.d0*dsqrt(eta_const) 
+!      qeq(1) = -2.31 
       peq(:) = 0.d0
 
       write(*,*) "+---------------------------------------------------+"
@@ -113,8 +113,17 @@
 !      q0(:) = qeq(:) 
 !      p0(:) = peq(:)
       Bcmplx(:,:) = Beq(:,:)
+!      Bcmplx(1,1) = 0.56d0 
+!      Beq(1,1) = 0.56d0
 
       c0 = c_update(nv,q0,p0,qeq,peq,ceq,Bcmplx,Beq) 
+    
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Projected Gaussian Width Matrix:"
+
+      do i = 1,nv+1
+        write(*,*) Bcmplx(i,:)
+      end do
     
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Projected coefficients"
@@ -123,7 +132,7 @@
         write(*,*) c0(i) 
       end do
       
-      call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,111)
+      call plot_wfn(nv,qeq,peq,ceq,Beq,1.d0,111)
       call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,222)
 
  

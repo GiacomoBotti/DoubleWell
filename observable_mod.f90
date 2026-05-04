@@ -113,7 +113,7 @@
          complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
          integer :: i,j
-         real*8 :: Nsq,N,phase,pol,herm
+         real*8 :: Nsq,N,phase,pol,herm,step
          real*8, dimension(nd+1) :: rvec,xvec
          complex*16 :: sqr,img,psi
          complex*16, dimension(nd+1) :: sqrvec
@@ -129,10 +129,11 @@
          write(*,*) "Plotting gaussian wfn on the y=0 cut"
          xvec(:) = 0.d0
          rvec(:) = 0.d0
-         xvec(1) = -5.d0 
+         xvec(1) = -10.d0 
+         step = -2*xvec(1)/500
         ! xvec(:) = -5.d0 
-         do i = 1,100
-            xvec(1) = xvec(1)+0.1d0 
+         do i = 1,500
+            xvec(1) = xvec(1)+step 
             !xvec(:) = xvec(:)+0.1d0 
             rvec(1) = xvec(1) - qtot(1)
             sqrvec = matmul(tildeBmat,rvec)
