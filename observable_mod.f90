@@ -5,6 +5,7 @@
        module observable_module
 
        use constants
+       use parameters_module
        use integrals_module
        use kinetic_module
        use effectivepot_module
@@ -79,34 +80,33 @@
 
          Hout = T0 + V0
 
-         !write(324,*) "+++++++++++++++++++++++++++++"
+!         write(324,*) "+++++++++++++++++++++++++++++"
          write(324,*) Hout, T0, V0!0M(1,1)
 
-         !write(324,*) "+++++++++++++++++++++++++++++"
-         !do i = 1, nh
-         !  write(324,*) real(T00M(i,:) + V00M(i,:)) 
-         !end do 
-         !write(324,*) "+++++++++++++++++++++++++++++"
-         !do i = 1, nh
-         !  write(324,*) real(T00M(i,:)) 
-         !end do 
-         !write(324,*) "+++++++++++++++++++++++++++++"
-         !do i = 1, nh
-         !  write(324,*) real(V00M(i,:)) 
-         !end do 
+!         write(324,*) "+++++++++++++++++++++++++++++"
+!         do i = 1, nh
+!           write(324,*) H00M(i,:) 
+!         end do 
+!         write(324,*) "+++++++++++++++++++++++++++++"
+!         do i = 1, nh
+!           write(324,*) T00M(i,:)
+!         end do 
+!         write(324,*) "+++++++++++++++++++++++++++++"
+!         do i = 1, nh
+!           write(324,*) V00M(i,:)
+!         end do 
          
        end subroutine 
 
 !......Plot wavefunction................................................
 
-       subroutine plot_wfn(nd,qtot,ptot,cvec,tildeBmat,norm,uuunit)
+       subroutine plot_wfn(nd,qtot,ptot,cvec,tildeBmat,norm)
        ! nd: bath dimension
        ! qtot: total position vector
        ! ptot: total momentum vector
        ! cvec: basis set coefficients vector
        ! tildeBmat: total complex gaussian width
-       ! uuunit: unit in which to print => fort.unit 
-         integer, intent(in) :: nd,uuunit
+         integer, intent(in) :: nd
          real*8, intent(in) :: norm
          real*8, dimension(nd+1), intent(in) :: qtot,ptot
          complex*16, dimension(nh), intent(in) :: cvec
@@ -126,7 +126,7 @@
          Nsq = fun_Nsq(nd+1,real(tildeBmat))
          N = dsqrt(Nsq)
 
-         write(*,*) "Plotting gaussian wfn on the y=0 cut"
+        ! write(*,*) "Plotting gaussian wfn on the y=0 cut"
          xvec(:) = 0.d0
          rvec(:) = 0.d0
          xvec(1) = -10.d0 
@@ -145,9 +145,12 @@
               pol = pol + cvec(j)*herm
             end do
             psi = zexp(-0.5d0*sqr + img)*pol*N/dsqrt(norm)
-            write(uuunit,*) xvec(1), real(psi), aimag(psi), &
+            write(111,*) xvec(1), real(psi), aimag(psi), &
                 & real(psi*dconjg(psi))
          end do
+
+         write(111,*) " " 
+         write(111,*) " " 
 
        end subroutine
 

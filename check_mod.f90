@@ -5,6 +5,7 @@
       module check_module
 
       use constants
+      use parameters_module
       use matrix_module 
       use potential_module
       use basisset_module
@@ -705,7 +706,7 @@
 
       w(:) = dsqrt(1.d0/masses(:))
 
-      write(777,*) '#Time ','q(1) ','B(1,1) ','|c|^2 ','phase'
+      write(777,*) '#Time ','q(1) ','B(1,1) ','|C(t)|^2 ','phase'
       write(778,*) '#x ','y ', 'Re(Psi) ','Im(Psi) '
 
       read(888,*) energy
@@ -813,10 +814,8 @@
        cref(:) = ceq(:)
   
        increment = 0.05d0
-       uuunit = 1000
 
-       call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,uuunit)
-       uuunit=uuunit+1
+       call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0)
  
        open(unit=2000,file="mae_BOT.dat",status='unknown')
        open(unit=2001,file="mae_BOT_fb.dat",status='unknown')
@@ -832,7 +831,7 @@
            write(*,*) c0(i) 
          end do
          write(uuunit,*) "#BOT forward", j*increment
-         call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,uuunit)
+         call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT fb Coefficients forward:"
@@ -841,7 +840,7 @@
            write(*,*) c0(i) 
          end do
          write(uuunit,*) "#BOT fb forward", j*increment
-         call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,uuunit)
+         call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT fbs Coefficients forward:"
@@ -850,7 +849,7 @@
            write(*,*) c0(i) 
          end do
          write(uuunit,*) "#BOT fbs forward", j*increment
-         call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,uuunit)
+         call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT Coefficients backward:"
@@ -861,7 +860,7 @@
          !write(*,*) "Increment MAE"
          write(uuunit,*) "#BOT backward", j*increment
          write(2000,*) j*increment, abs(sum(cref-ceq))/dfloat(nh)
-         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,uuunit)
+         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT fb Coefficients backward:"
@@ -872,7 +871,7 @@
          !write(*,*) "Increment MAE"
          write(uuunit,*) "#BOT fb backward", j*increment
          write(2001,*) j*increment, abs(sum(cref-ceq))/dfloat(nh)
-         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,uuunit)
+         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0)
          uuunit=uuunit+1
          write(*,*) "+------------------------------------------------+"
          write(*,*) "BOT fbs Coefficients backward:"
@@ -883,14 +882,12 @@
          !write(*,*) "Increment MAE"
          write(uuunit,*) "#BOT fbs backward", j*increment
          write(2002,*) j*increment, abs(sum(cref-ceq))/dfloat(nh)
-         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0,uuunit)
+         call plot_wfn(nv,qeq,peq,ceq,Bcmplx,1.d0)
          uuunit=uuunit+1
        end do
        close(2000)
        close(2001)
        close(2002)
       end subroutine
-              
-     
 
       end module

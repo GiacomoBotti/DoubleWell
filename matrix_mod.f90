@@ -5,9 +5,10 @@
 
       module matrix_module
 
+      use parameters_module
+
       implicit none
 
-      integer,public :: maxorder = 8
       private
       public :: diagonalization,momenta,extractA,determinant,trace
       public :: extracttildeA,det_cmplx

@@ -6,6 +6,7 @@
       module eofmotion_module
 
       use constants
+      use parameters_module
       use potential_module
       use basisset_module
       use effectivepot_module
@@ -209,8 +210,12 @@
        X2=int_XnMat(nd,2,a,avec,Amat,qj(1))
        X1=int_XnMat(nd,1,a,avec,Amat,qj(1))
        X0=int_XnMat(nd,0,a,avec,Amat,qj(1))
+       ! KARPLUS
        V1 = fun_V1(nd,qj,cj,dreal(Bj),Y0,X3,X2,X1,X0)
        V2 = fun_V2(nd,qj,cj,dreal(Bj),Y0,X2,X0)
+       ! HELLER
+       !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
+       !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)
        ppi = pj - 0.5d0*h*V1
        Bi = Bj +0.5d0*iu*h*V2
        !Full T step
@@ -228,10 +233,14 @@
        X2=int_XnMat(nd,2,a,avec,Amat,qi(1))
        X1=int_XnMat(nd,1,a,avec,Amat,qi(1))
        X0=int_XnMat(nd,0,a,avec,Amat,qi(1))
+       ! KARPLUS
        V1 = fun_V1(nd,qi,cj,dreal(Bi),Y0,X3,X2,X1,X0)
        V2 = fun_V2(nd,qi,cj,dreal(Bi),Y0,X2,X0)
+       ! HELLER
+       !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
+       !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)
        ppi = ppi - 0.5d0*h*V1
-       !Bi = Bi +0.5d0*iu*h*V2
+       Bi = Bi +0.5d0*iu*h*V2
        ! Finish
        qj = qi
        pj = ppi

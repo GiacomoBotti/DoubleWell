@@ -6,6 +6,7 @@
       module normalization_module
 
       use integrals_module
+      use parameters_module
       use basisset_module
       use matrix_module
 
@@ -57,6 +58,7 @@
        X0Mat=int_XnMat(nd,0,a,avec,Amat,qq)
 
        S00M = Nsq*Y0*X0Mat
+       !S00M = Y0*X0Mat
 
        X0c=matmul(S00M,cvec)
        cX0c=dot_product(cvec,X0c)

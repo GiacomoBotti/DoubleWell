@@ -5,6 +5,7 @@
        module kinetic_module
 
        use constants
+       use parameters_module
        use eofmotion_module
        use integrals_module
        use basisset_module
@@ -378,6 +379,7 @@
         !K00 = -(mx*(intdlnGsq+intdHdH+transpose(dconjg(intdlnG))+&
         !      &intdlnG) + intdyln)/2.d0
         K00 = -0.5d0*(mx*intKa+intKb)
+!        K00 = -0.5d0*mx*intKa
 
 !        write(111,*) "Ka: ", real(intKa(1,1)), aimag(intKa(1,1))
 !        write(111,*) "Kb: ", real(intKb(1,1)), aimag(intKb(1,1))

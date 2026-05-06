@@ -5,6 +5,7 @@
 
        module BOT_module
 
+       use parameters_module
        use basisset_module
        use kinetic_module
        use effectivepot_module

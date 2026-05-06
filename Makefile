@@ -9,8 +9,8 @@ lib = -llapack -lblas
 #obj= constants.o basisset_mod.o potential_mod.o matrix_mod.o tupowers_mod.o quadratic_mod.o\
 #     ypowers_mod.o polynomials_mod.o check_mod.o main.o
 
-obj= constants.o inversion_mod.o basisset_mod.o potential_mod.o matrix_mod.o integrals_mod.o\
-     quadratic_mod.o effectivepot_mod.o eofmotion_mod.o normalization_mod.o kinetic_mod.o\
+obj= constants.o parameters_mod.o inversion_mod.o basisset_mod.o potential_mod.o matrix_mod.o\
+     integrals_mod.o quadratic_mod.o effectivepot_mod.o eofmotion_mod.o normalization_mod.o kinetic_mod.o\
      observable_mod.o BOT_mod.o evolution_mod.o check_mod.o print_banner.o main.o
 
 compile: $(obj)
