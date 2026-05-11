@@ -81,7 +81,7 @@
          Hout = T0 + V0
 
 !         write(324,*) "+++++++++++++++++++++++++++++"
-         write(324,*) Hout, T0, V0!0M(1,1)
+         write(324,*) Hout, T0, V0, dreal(H00M(1,1))!0M(1,1)
 
 !         write(324,*) "+++++++++++++++++++++++++++++"
 !         do i = 1, nh
@@ -127,15 +127,15 @@
          N = dsqrt(Nsq)
 
         ! write(*,*) "Plotting gaussian wfn on the y=0 cut"
-         xvec(:) = 0.d0
+         xvec(:) = qtot(:) 
          rvec(:) = 0.d0
-         xvec(1) = -10.d0 
-         step = -2*xvec(1)/500
+         xvec(1) = -5.d0 
+         step = -2*xvec(1)/200
         ! xvec(:) = -5.d0 
-         do i = 1,500
+         do i = 1,200
             xvec(1) = xvec(1)+step 
             !xvec(:) = xvec(:)+0.1d0 
-            rvec(1) = xvec(1) - qtot(1)
+            rvec(:) = xvec(:) - qtot(:)
             sqrvec = matmul(tildeBmat,rvec)
             sqr = dot_product(rvec,sqrvec)
             img = iu*dot_product(ptot,rvec)
@@ -144,13 +144,37 @@
               herm = herm_pol(j,xvec(1),qtot(1),real(tildeBmat(1,1)))
               pol = pol + cvec(j)*herm
             end do
-            psi = zexp(-0.5d0*sqr + img)*pol*N/dsqrt(norm)
+            psi = zexp(-0.5d0*sqr + img)*pol!*N*dsqrt(norm)
             write(111,*) xvec(1), real(psi), aimag(psi), &
+                & real(psi*dconjg(psi))
+         end do
+
+         xvec(:) = qtot(:) 
+         rvec(:) = 0.d0
+         xvec(2) = -5.d0 
+         step = -2*xvec(2)/200
+        ! xvec(:) = -5.d0 
+         do i = 1,200
+            xvec(2) = xvec(2)+step 
+            !xvec(:) = xvec(:)+0.1d0 
+            rvec(:) = xvec(:) - qtot(:)
+            sqrvec = matmul(tildeBmat,rvec)
+            sqr = dot_product(rvec,sqrvec)
+            img = iu*dot_product(ptot,rvec)
+            pol = 0.d0
+            do j = 1,nh
+              herm = herm_pol(j,xvec(1),qtot(1),real(tildeBmat(1,1)))
+              pol = pol + cvec(j)*herm
+            end do
+            psi = zexp(-0.5d0*sqr + img)*pol!*N*dsqrt(norm)
+            write(222,*) xvec(2), real(psi), aimag(psi), &
                 & real(psi*dconjg(psi))
          end do
 
          write(111,*) " " 
          write(111,*) " " 
+         write(222,*) " " 
+         write(222,*) " " 
 
        end subroutine
 

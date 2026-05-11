@@ -160,6 +160,8 @@
 !        write(*,*) "Nsq", Nsq
 
 !        Nsq = 1.d0
+! SG NORMALIZATION
+        Nsq = dsqrt(Bmat(1,1)/pi) 
 
        end function
 
@@ -222,6 +224,7 @@
 !        write(*,*) "NiNj", NiNj
 
 !        NiNj = 1.d0
+        NiNj = (Bimat(1,1)*Bjmat(1,1)/(pi*pi))**(1.d0/4.d0)
 
        end function
 

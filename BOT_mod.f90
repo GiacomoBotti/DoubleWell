@@ -265,13 +265,15 @@
         complex*16, dimension(nh), intent(in) :: c
         complex*16, dimension(nd+1,nd+1), intent(in) :: Bb,Bk
 
-        integer :: i
-        real*8 :: a,q,Nsq,Y0
+        integer :: i,j,info
+        real*8 :: a,q,Nsq,Y0,reS,imS
         real*8, dimension(nd) :: avec 
         real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
         real*8, dimension(nd+1,nd+1) :: Bmat
         complex*16, dimension(nh) :: csupp,cout
-        complex*16, dimension(nh,nh) :: S00M,Tt0M,invS,X0Mat
+        complex*16, dimension(nh,nh) :: Aux,S00M,Tt0M,invS,X0Mat
+
+        external ZPOSV
 
         q = qb(1)
 
@@ -290,7 +292,21 @@
         Y0=int_Y0(nd,LambdaMat)
         X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
 
-        S00M = X0Mat*Y0*Nsq 
+        Aux = X0Mat*Y0*Nsq 
+        S00M = Aux
+
+! SG qtag.f line 1046 : cleaning new overlap (?)
+
+        do i = 1, nh
+          S00M(i,i) = Aux(i,i)*complex(1.d0,0.d0)
+          do j = i+1,nh
+            reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
+            imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
+            S00M(i,j) = reS+iu*imS
+            S00M(j,i) = conjg(S00M(i,j))
+          end do
+        end do
+            
 
 !        invS = invgen(nh,S00M) 
 
@@ -313,7 +329,11 @@
 !          write(*,*) S00M(i,:)
 !        end do
 
-        cout = linsys(nh,S00M,csupp) 
+!        cout = linsys(nh,S00M,csupp) 
+         
+         call zposv('U',nh,1,S00M,nh,csupp,nh,info)
+
+         cout = csupp
 
 !        write(*,*) "cout"
 !        write(*,*) cout

@@ -59,7 +59,7 @@
        real*8, dimension(nh,nh) :: S00M,invS,X0Mat
        complex*16, dimension(nh,nh) :: H00M
 
-       complex*16 :: cTau0c,cTauXc
+       complex*16 :: cTau0c,cTauXc,ckg
        complex*16, dimension(nh) :: Tau0c,Pc,TauXc
        complex*16, dimension(nh,nh) :: Tau0,Prob,TauX
 
@@ -214,12 +214,15 @@
 
        write(321,*) "#Time ","N ","E ","q ","p ","B(1,1) ",&
                     &"B(3,3) ", "B(1,3)"
-       write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
-                    &aimag(Bcmplx(1,1))!,real(Bcmplx(1,3))
+!       write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
+       write(321,*) 0.d0,N,E,q0(1), p0(1), real(Bcmplx(1,1)),&
+                    &aimag(Bcmplx(1,1)),real(Bcmplx(2,2)),&
+                    &aimag(Bcmplx(2,2))
 
        !write(322,*) 0.d0, csq!, dreal(cvec), dimag(cvec)
        !write(322,*) 0.d0, dsqrt(csq)!, dreal(cvec), dimag(cvec)
-       write(322,*) 0.d0, abs(cvec)!, dreal(cvec), dimag(cvec)
+       !write(322,*) 0.d0, abs(cvec)!, dreal(cvec), dimag(cvec)
+       write(322,*) 0.d0, dreal(cvec), dimag(cvec)
 
        write(323,*) 0.d0, q0(2:nd+1) 
 
@@ -267,11 +270,17 @@
        kp(:,:) = 0.d0
        kb(:,:,:) = 0.d0
        
+       write(111,*) "# starting wfn"
+       write(222,*) "# starting wfn"
        call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,N)
 
        nprint=nstep/trj(4)
        time = dfloat(first)
        !time = 0.d0
+       ckg = complex(0.d0,0.d0)
+       qold = qtotj
+       pold = ptotj
+       Bold = Bcmplxj
 
 ! BEGIN TRAJECTORY CYCLE
        do k = 1,nprint
@@ -282,6 +291,7 @@
        end if
        do j = 1,trj(4)
           time = time + h
+!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
           ! Static evolution of coefficents
           cj = c_static(nd,h,cj,S00M,H00M)
           ! Variational evolution of parameters
@@ -317,11 +327,14 @@
        TauXc = matmul(TauX,ceqN)
        cTauXc = dot_product(cj,TauXc)
 
-      write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
-                  &,aimag(Bcmplxj(1,1))!,real(Bcmplxj(1,3))
+      !write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
+      write(321,*) time,N,E,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
+                  &,aimag(Bcmplxj(1,1)),real(Bcmplxj(2,2))&
+                  &,aimag(Bcmplxj(2,2))
       !write(322,*) time, csq!, dreal(cj), dimag(cj)
       !write(322,*) time, dsqrt(csq)!, dreal(cj), dimag(cj)
-      write(322,*) time, abs(cj)!, dreal(cj), dimag(cj)
+      !write(322,*) time, abs(cj)!, dreal(cj), dimag(cj)
+      write(322,*) time, dreal(cj), dimag(cj)
       write(323,*) time, qtotj(2:nd+1) 
       write(325,*) time, ptotj(2:nd+1) 
       write(326,*) time, phase 
@@ -333,6 +346,8 @@
                    real(cTauXc*conjg(cTauXc))/N,&
                    dsqrt(real(cTauXc*conjg(cTauXc)))
       
+      write(111,*) "#", time 
+      write(222,*) "#", time 
       call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,N)
       write(*,'(A,F6.2,A)', advance='no') char(13)//'['//bar//'] ', &
                  frac*100.0, '%'
@@ -343,8 +358,6 @@
        write(*,*) N,E/E0, qtotj(1), ptotj(1),real(Bcmplxj(1,1)),&  
                   &aimag(Bcmplxj(1,1))
        write(*,*) time, csq
-
-       call plot_wfn(nd,qtotj,ptotj,cj,Bcmplxj,N)
 
        close(321)
        close(322)

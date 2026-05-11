@@ -42,7 +42,8 @@
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
 
-      open(unit=111,file='wfn_BOT.dat',status='unknown',action='write')
+      open(unit=111,file='wfx_BOT.dat',status='unknown',action='write')
+      open(unit=222,file='wfy_BOT.dat',status='unknown',action='write')
 
 !.....Print potential constants.........................................
 
@@ -154,6 +155,7 @@
 !      Bcmplx(1,1) = 0.666d0 
 !      Beq(1,1) = 0.56d0
 
+      c0 = ceq
       c0 = c_update(nv,q0,p0,qeq,peq,ceq,Bcmplx,Beq) 
     
       write(*,*) "+---------------------------------------------------+"
@@ -224,6 +226,7 @@
       write(*,*) "+---------------------------------------------------+"
 
       close(111)
+      close(222)
 
       end program
 
