@@ -50,6 +50,7 @@ The same goes for the Hermite polynomials basis set.
    - [ ] Ammonia inversion 
 
 ### TO DO
+- [ ] Set `Nsq` back to normal
 - [ ] Masking vector and matrix to "scale" dynamics of certain parameters
 - [ ] An easy way to do Gaussian-Average (Coalson) dynamics in the code
 - [ ] `\langle x \rnagle` and `\langle y \rangle` 
