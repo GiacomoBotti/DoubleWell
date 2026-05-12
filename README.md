@@ -38,10 +38,10 @@ The same goes for the Hermite polynomials basis set.
 - [x] Uncoupled DW + HO
    - [x] Start at bottom
    - [x] Start at top
-- [ ] Numerical Stability tests
-   - [ ] No BOT
-   - [ ] BOT, only propagator on proj basis
-   - [ ] Full
+- [x] Numerical Stability tests
+   - [x] No BOT
+   - [x] BOT, only propagator on proj basis
+   - [x] Full
 - [ ] Coupled system:
    - [ ] QTAG
    - [ ] Increasing $N_{h}$
@@ -50,6 +50,9 @@ The same goes for the Hermite polynomials basis set.
    - [ ] Ammonia inversion 
 
 ### TO DO
+- [ ] Masking vector and matrix to "scale" dynamics of certain parameters
+- [ ] An easy way to do Gaussian-Average (Coalson) dynamics in the code
+- [ ] `\langle x \rnagle` and `\langle y \rangle` 
 - [x] Create a `do` loop for print trajectory:
 
 ```

@@ -113,9 +113,9 @@
          complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
          integer :: i,j
-         real*8 :: Nsq,N,phase,pol,herm,step
+         real*8 :: Nsq,N,phase,herm,step
          real*8, dimension(nd+1) :: rvec,xvec
-         complex*16 :: sqr,img,psi
+         complex*16 :: sqr,img,psi,pol
          complex*16, dimension(nd+1) :: sqrvec
 
          !write(*,*) "Plotting gaussian wfn on the x=y cut"
@@ -128,13 +128,15 @@
 
         ! write(*,*) "Plotting gaussian wfn on the y=0 cut"
          xvec(:) = qtot(:) 
+         write(111,*) "#", qtot(:)
+         write(111,*) "#", tildeBmat(1,1),tildeBmat(1,2),tildeBmat(2,2) 
+         write(111,*) "#", cvec(:) 
          rvec(:) = 0.d0
          xvec(1) = -5.d0 
          step = -2*xvec(1)/200
         ! xvec(:) = -5.d0 
          do i = 1,200
             xvec(1) = xvec(1)+step 
-            !xvec(:) = xvec(:)+0.1d0 
             rvec(:) = xvec(:) - qtot(:)
             sqrvec = matmul(tildeBmat,rvec)
             sqr = dot_product(rvec,sqrvec)
@@ -144,16 +146,18 @@
               herm = herm_pol(j,xvec(1),qtot(1),real(tildeBmat(1,1)))
               pol = pol + cvec(j)*herm
             end do
-            psi = zexp(-0.5d0*sqr + img)*pol!*N*dsqrt(norm)
+            psi = zexp(-0.5d0*sqr + img)*pol*N!*dsqrt(norm)
             write(111,*) xvec(1), real(psi), aimag(psi), &
                 & real(psi*dconjg(psi))
          end do
 
          xvec(:) = qtot(:) 
+         write(222,*) "#", qtot(:)
+         write(222,*) "#", tildeBmat(1,1),tildeBmat(1,2),tildeBmat(2,2) 
+         write(222,*) "#", cvec(:) 
          rvec(:) = 0.d0
          xvec(2) = -5.d0 
          step = -2*xvec(2)/200
-        ! xvec(:) = -5.d0 
          do i = 1,200
             xvec(2) = xvec(2)+step 
             !xvec(:) = xvec(:)+0.1d0 
@@ -166,7 +170,7 @@
               herm = herm_pol(j,xvec(1),qtot(1),real(tildeBmat(1,1)))
               pol = pol + cvec(j)*herm
             end do
-            psi = zexp(-0.5d0*sqr + img)*pol!*N*dsqrt(norm)
+            psi = zexp(-0.5d0*sqr + img)*pol*N!*dsqrt(norm)
             write(222,*) xvec(2), real(psi), aimag(psi), &
                 & real(psi*dconjg(psi))
          end do
