@@ -200,12 +200,14 @@
        real*8 :: a,Y0
        real*8, dimension(nd) :: avec
        real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat
-       complex*16, dimension(nh) :: csg
+       complex*16, dimension(nh) :: cwork
        real*8, dimension(nh,nh) :: X3,X2,X1,X0
 
 
-       csg(:) = 0.d0
-       csg(1) = 1.d0       
+       ! Allows for Gaussian Average only
+       cwork(:) = coalvec(:)*cj(:) 
+       cwork(1) = cwork(1) + coalc
+       !write(*,*) cwork
        !Half V step 
        call extractA(nd,dreal(Bj),Amat,avec,a)
        call diagonalization(nd,Amat,LambdaMat,Tmat)
@@ -215,10 +217,10 @@
        X1=int_XnMat(nd,1,a,avec,Amat,qj(1))
        X0=int_XnMat(nd,0,a,avec,Amat,qj(1))
        ! KARPLUS
-       V1 = fun_V1(nd,qj,cj,dreal(Bj),Y0,X3,X2,X1,X0)
-       !V1 = fun_V1(nd,qj,csg,dreal(Bj),Y0,X3,X2,X1,X0)
-       V2 = fun_V2(nd,qj,cj,dreal(Bj),Y0,X2,X0)
-       !V2 = fun_V2(nd,qj,csg,dreal(Bj),Y0,X2,X0)
+       !V1 = fun_V1(nd,qj,cj,dreal(Bj),Y0,X3,X2,X1,X0)
+       V1 = fun_V1(nd,qj,cwork,dreal(Bj),Y0,X3,X2,X1,X0)
+       !V2 = fun_V2(nd,qj,cj,dreal(Bj),Y0,X2,X0)
+       V2 = fun_V2(nd,qj,cwork,dreal(Bj),Y0,X2,X0)
        ! HELLER
        !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
        !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)
@@ -240,10 +242,10 @@
        X1=int_XnMat(nd,1,a,avec,Amat,qi(1))
        X0=int_XnMat(nd,0,a,avec,Amat,qi(1))
        ! KARPLUS
-       V1 = fun_V1(nd,qi,cj,dreal(Bi),Y0,X3,X2,X1,X0)
-       !V1 = fun_V1(nd,qi,csg,dreal(Bi),Y0,X3,X2,X1,X0)
-       V2 = fun_V2(nd,qi,cj,dreal(Bi),Y0,X2,X0)
-       !V2 = fun_V2(nd,qi,csg,dreal(Bi),Y0,X2,X0)
+       !V1 = fun_V1(nd,qi,cj,dreal(Bi),Y0,X3,X2,X1,X0)
+       V1 = fun_V1(nd,qi,cwork,dreal(Bi),Y0,X3,X2,X1,X0)
+       !V2 = fun_V2(nd,qi,cj,dreal(Bi),Y0,X2,X0)
+       V2 = fun_V2(nd,qi,cwork,dreal(Bi),Y0,X2,X0)
        ! HELLER
        !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
        !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)

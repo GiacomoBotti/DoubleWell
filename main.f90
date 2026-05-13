@@ -17,7 +17,7 @@
 
       implicit none
 
-      integer :: i,j
+      integer :: i,j,coalson
       real*8 :: t0,t1
       real*8,dimension(nv+1) :: masses !masses vector
       real*8,dimension(nv+1) :: q0 !inital centers vector
@@ -36,13 +36,26 @@
       write(*,*) "|               MAIN CODE EXECUTION                 |"
       write(*,*) "+---------------------------------------------------+"
 
+      open(unit=111,file='wfx_BOT.dat',status='unknown',action='write')
+      open(unit=222,file='wfy_BOT.dat',status='unknown',action='write')
+      open(unit=2222,file="input",status="old",action="read")
+
+!.....Input reading.....................................................
+
+      read(2222,*)
+      read(2222,*) coalson
+      read(2222,*)
+      read(2222,*) trj
+      close(2222)
+
+!.....SETUP.............................................................
+
 ! TO BE SURE: GENERATE POTENTIAL MATRIX HERE
       call matrix_pot() 
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
-
-      open(unit=111,file='wfx_BOT.dat',status='unknown',action='write')
-      open(unit=222,file='wfy_BOT.dat',status='unknown',action='write')
+! DYNAMICS SETUP IT'S IMPORTANT
+      call dynamics_setup(coalson)
 
 !.....Print potential constants.........................................
 
@@ -204,10 +217,6 @@
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      open(unit=2222,file="input",status="old",action="read")
-      read(2222,*)
-      read(2222,*) trj
-      close(2222)
       write(*,*) trj
 
 ! FOR DEBUG PURPOSES ONLY, REMOVE IT AFTER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

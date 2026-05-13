@@ -50,10 +50,11 @@ The same goes for the Hermite polynomials basis set.
    - [ ] Ammonia inversion 
 
 ### TO DO
+- [x] An easy way to do Gaussian-Average (Coalson) dynamics in the code
+- [ ] Test it against analytical results (I need new SG, I think)
 - [ ] Clean up the code
 - [ ] Set `Nsq` back to normal
 - [ ] Masking vector and matrix to "scale" dynamics of certain parameters
-- [ ] An easy way to do Gaussian-Average (Coalson) dynamics in the code
 - [x] `Makefile` at Report
 - [x] `constants.f90` at Report
 - [x] `inversion_module.f90` at Report

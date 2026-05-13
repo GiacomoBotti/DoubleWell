@@ -28,5 +28,29 @@
       ! Kappa: bath coordinates quadratic constant 
 !      real*8, parameter,public  :: kappa_const = 0.d0
       real*8, parameter,public  :: kappa_const = 1.d0
+
+      real*8, public :: coalc
+      real*8, dimension(nh), public :: coalvec
+
+      contains 
+
+!.....DYNAMICS SETUP....................................................
+
+      subroutine dynamics_setup(coalson)
+      ! coalson: flag for using gaussian average
+      integer, intent(in) :: coalson
+
+       coalvec(:) = 1.d0
+       coalc = 0.d0
+
+       if (coalson.eq.1) then
+         coalvec(:) = 0.d0
+         coalc = 1.d0
+         write(*,*) "WATCH OUT, YOU OPTED FOR GAUSSIAN AVERAGE"
+         write(*,*) "coalc:", coalc
+         write(*,*) "coalvec", coalvec
+       end if
+
+      end subroutine
       
       end module 
