@@ -30,7 +30,6 @@
       complex*16,dimension(nv+1,nv+1) :: Beq !equilibrium width matrix
       integer*8,dimension(4) :: trj
 
-!      call print_double_well_banner()
       call execute_command_line('cat banner.txt')
 
       write(*,*) "+---------------------------------------------------+"
