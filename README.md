@@ -50,25 +50,10 @@ The same goes for the Hermite polynomials basis set.
    - [ ] Ammonia inversion 
 
 ### TO DO
+- [ ] Clean up the code
 - [ ] Set `Nsq` back to normal
 - [ ] Masking vector and matrix to "scale" dynamics of certain parameters
 - [ ] An easy way to do Gaussian-Average (Coalson) dynamics in the code
-- [ ] `\langle x \rnagle` and `\langle y \rangle` 
-- [x] Create a `do` loop for print trajectory:
-
-```
-do i = 1,nstep_print
-  do j = 1,10
-    does evolution
-  end do
-  print
-end do
-```
-
-- [x] **URGENT:** move the calculation of `Xn` integrals to `eofmotion_mod` and feed the integrals to `fun_V1` and `fun_V2` as input
-- [x] **URGENT:** do the same for `energy`: move the integrals above and feed them to `fun_V0` and `kin_energy` (and then to `fun_Ka` and `fun_Kb`)
-- [x] **URGENT:** feed them directly as $\mathbf{c}\mathcal{X}\mathbf{c}$
-- [x] **URGENT:** test against a dynamics w/out this mod
 - [x] `Makefile` at Report
 - [x] `constants.f90` at Report
 - [x] `inversion_module.f90` at Report
@@ -190,6 +175,22 @@ end do
    - [x] check $dt =0$
    - [x] check with parameters' $dt = 0$
    - [x] Remove $N^{2} =1$ and $N_{i}N_{j} =1$
+- [x] `\langle x \rnagle` and `\langle y \rangle` 
+- [x] Create a `do` loop for print trajectory:
+
+```
+do i = 1,nstep_print
+  do j = 1,10
+    does evolution
+  end do
+  print
+end do
+```
+
+- [x] **URGENT:** move the calculation of `Xn` integrals to `eofmotion_mod` and feed the integrals to `fun_V1` and `fun_V2` as input
+- [x] **URGENT:** do the same for `energy`: move the integrals above and feed them to `fun_V0` and `kin_energy` (and then to `fun_Ka` and `fun_Kb`)
+- [x] **URGENT:** feed them directly as $\mathbf{c}\mathcal{X}\mathbf{c}$
+- [x] **URGENT:** test against a dynamics w/out this mod
 
 ## OLD FRAMEWORK (TWO HERMITE)
 

@@ -14,6 +14,7 @@
        write(*,*) "Writing correlation function on correlation_BOT.dat"
        write(*,*) "Writing reaction prob on reaction_BOT.dat"
        write(*,*) "Writing cross correlation fun on crosscorr_BOT.dat"
+       write(*,*) "Writing first momenta on momenta_BOT.dat"
       write(*,*) "+---------------------------------------------------+"
 
        write(321,*) "#Evolution parameters:"
@@ -79,6 +80,13 @@
        write(329,*) "#Timestep: ",h
        write(329,*) "#Normalization constant: ",N
        write(329,*) "#Time ", "reaction probability"
+
+       write(330,*) "#Evolution parameters:"
+       write(330,*) "#Range: ",first,last
+       write(330,*) "#Steps: ",nstep
+       write(330,*) "#Timestep: ",h
+       write(330,*) "#Normalization constant: ",N
+       write(330,*) "#Time ", "<x>", "<y> ..."
 
        write(*,*) "First step:"
        write(*,*) "N ","E ","q ","p ","B(1,1) ",&

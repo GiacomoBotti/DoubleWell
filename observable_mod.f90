@@ -11,6 +11,7 @@
        use effectivepot_module
        use basisset_module
        use matrix_module
+       use inversion_module
 
        implicit none
 
@@ -21,7 +22,7 @@
 
 !......Analytical Hamiltonian...........................................
 
-       subroutine energy(nd,qtot,ptot,cvec,tildeBmat,H00M,Hout)
+       subroutine energy(nd,qtot,ptot,cvec,tildeBmat,H00M,Hout,Mx,My)
        ! nd: bath dimension
        ! qtot: total position vector
        ! ptot: total momentum vector
@@ -32,17 +33,18 @@
          complex*16, dimension(nh), intent(in) :: cvec
          complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
-         real*8, intent(out) :: Hout
+         real*8, intent(out) :: Hout,Mx
+         real*8, dimension(nd) :: My
          complex*16, dimension(nh,nh), intent(out) :: H00M
 
          integer :: i
-         real*8 :: V0,T0,q,p
-         real*8, dimension(nd) :: qvec,pvec
-         complex*16, dimension(nh) :: Tc,Vc
+         real*8 :: V0,T0,q,p,Nsq,cX1c,cX0c
+         real*8, dimension(nd) :: qvec,pvec,Aa
+         complex*16, dimension(nh) :: Tc,Vc,X1c,X0c
          complex*16, dimension(nh,nh) :: T00M,V00M
          real*8 :: a,Y0
          real*8, dimension(nd) :: avec
-         real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat
+         real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat,invA
          real*8, dimension(nh,nh) :: X4,X3,X2,X1,X0
 
          q=qtot(1)
@@ -52,6 +54,8 @@
 
          call extractA(nd,real(tildeBmat),Amat,avec,a)
          call diagonalization(nd,Amat,LambdaMat,Tmat)
+         invA = invgen_real(nd,Amat)
+         Nsq=fun_Nsq(nd+1,real(tildeBmat))
       
          ! Integrals
          Y0=int_Y0(nd,LambdaMat)
@@ -63,10 +67,8 @@
          X2=int_XnMat(nd,2,a,avec,Amat,qtot(1))
          X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
          X0=int_XnMat(nd,0,a,avec,Amat,qtot(1))
-
          !write(324,*) "X4mat out"
          !write(324,*) X4(1,1)
-         
 
          T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)
          V00M = fun_V0(nd,qtot,cvec,real(tildeBmat),Y0,X4,X2,X1,X0) 
@@ -96,6 +98,21 @@
 !           write(324,*) V00M(i,:)
 !         end do 
          
+!........Momenta
+
+         X0c = matmul(X0,cvec)
+         cX0c = dot_product(cvec,X0c)
+
+         X1c = matmul(X1,cvec)
+         cX1c = dot_product(cvec,X1c)
+
+         Aa = matmul(invA,avec)
+
+         Mx = Nsq*Y0*cX1c
+
+         My(:) = Nsq*Y0*(cX0c*qvec(:)+q*cX0c*Aa(:)-cX1c*Aa(:))
+
+
        end subroutine 
 
 !......Plot wavefunction................................................

@@ -40,9 +40,9 @@
        complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx,Beq 
 
        integer*8 :: i,j,first,last,nstep,k,nprint
-       real*8 :: h,time,N,E,q,p,E0,Nsq,Neq
+       real*8 :: h,time,N,E,q,p,E0,Nsq,Neq,Mx
        real*8,dimension(nh) :: csq,phase 
-       real*8,dimension(nd) :: qvec,pvec 
+       real*8,dimension(nd) :: qvec,pvec,My 
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold,qeqX 
        complex*16,dimension(nd+1,nd+1) :: Bcmplxi,Bcmplxj,Bold
        
@@ -98,6 +98,7 @@
        open(unit=327,file="correlation_BOT.dat",status="unknown")
        open(unit=328,file="reaction_BOT.dat",status="unknown")
        open(unit=329,file="crosscorr_BOT.dat",status="unknown")
+       open(unit=330,file="momenta_BOT.dat",status="unknown")
 
        h = dfloat(last-first)/dfloat(nstep)
 
@@ -111,7 +112,7 @@
        call print_banners(first,last,nstep,h,N)
 
        call normalization(nd,q,cvec,dreal(Bcmplx),S00M,N)
-       call energy(nd,q0,p0,cvec,Bcmplx,H00M,E0)
+       call energy(nd,q0,p0,cvec,Bcmplx,H00M,E0,Mx,My)
        E=E0
 
 !       write(*,*) "DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG"
@@ -181,6 +182,7 @@
        write(329,*) 0.d0, real(cTauXc),aimag(cTauXc),&
                        real(cTauXc*conjg(cTauXc))/N,&
                        dsqrt(real(cTauXc*conjg(cTauXc)))
+       write(330,*) 0.d0, Mx, My
 
       write(*,*) "+---------------------------------------------------+"
        write(*,*) "Initial projection overlap (|C(0)|^2)" 
@@ -229,7 +231,7 @@
           csq(:) = conjg(cj(:))*cj(:)
           ! Normalization and energy
           call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
-          call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E)
+          call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E,Mx,My)
           !qtoti = qtotj  
           !ptoti = ptotj
           !Bcmplxi = Bcmplxj
@@ -248,7 +250,7 @@
        TauXc = matmul(TauX,ceqN)
        cTauXc = dot_product(cj,TauXc)
 
-      !write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
+!      write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
       write(321,*) time,N,E,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
                   &,aimag(Bcmplxj(1,1)),real(Bcmplxj(2,2))&
                   &,aimag(Bcmplxj(2,2))
@@ -266,6 +268,7 @@
       write(329,*) time, real(cTauXc),aimag(cTauXc),&
                    real(cTauXc*conjg(cTauXc))/N,&
                    dsqrt(real(cTauXc*conjg(cTauXc)))
+      write(330,*) time, Mx, My
       
       write(111,*) "#", time 
       write(222,*) "#", time 
@@ -289,6 +292,7 @@
        close(327)
        close(328)
        close(329)
+       close(330)
 
        end subroutine
 
