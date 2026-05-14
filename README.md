@@ -54,7 +54,6 @@ The same goes for the Hermite polynomials basis set.
 - [ ] Test it against analytical results (I need new SG, I think)
 - [ ] Clean up the code
 - [ ] Set `Nsq` back to normal
-- [ ] Masking vector and matrix to "scale" dynamics of certain parameters
 - [x] `Makefile` at Report
 - [x] `constants.f90` at Report
 - [x] `inversion_module.f90` at Report
@@ -192,6 +191,7 @@ end do
 - [x] **URGENT:** do the same for `energy`: move the integrals above and feed them to `fun_V0` and `kin_energy` (and then to `fun_Ka` and `fun_Kb`)
 - [x] **URGENT:** feed them directly as $\mathbf{c}\mathcal{X}\mathbf{c}$
 - [x] **URGENT:** test against a dynamics w/out this mod
+- [x] Masking vector and matrix to "scale" dynamics of certain parameters
 
 ## OLD FRAMEWORK (TWO HERMITE)
 

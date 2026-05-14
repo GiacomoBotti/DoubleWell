@@ -17,7 +17,7 @@
 
       implicit none
 
-      integer :: i,j,coalson
+      integer :: i,j,coalson,scaling
       real*8 :: t0,t1
       real*8,dimension(nv+1) :: masses !masses vector
       real*8,dimension(nv+1) :: q0 !inital centers vector
@@ -43,7 +43,7 @@
 !.....Input reading.....................................................
 
       read(2222,*)
-      read(2222,*) coalson
+      read(2222,*) coalson,scaling
       read(2222,*)
       read(2222,*) trj
       close(2222)
@@ -55,7 +55,7 @@
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
 ! DYNAMICS SETUP IT'S IMPORTANT
-      call dynamics_setup(coalson)
+      call dynamics_setup(coalson,scaling)
 
 !.....Print potential constants.........................................
 

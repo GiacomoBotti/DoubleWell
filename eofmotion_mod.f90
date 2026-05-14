@@ -66,9 +66,14 @@
        real*8 :: a,Y0
        real*8, dimension(nd) :: avec
        real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat
+       complex*16, dimension(nh) :: cwork
        real*8, dimension(nh,nh) :: X3,X2,X1,X0
        complex*16, dimension(nd+1,nd+1) :: MB,prova
  
+       ! Allows for Gaussian Average only
+       cwork(:) = coalvec(:)*cvec(:) 
+       cwork(1) = cwork(1) + coalc
+
        Bmat = dreal(Bcmplx)
        call extractA(nd,Bmat,Amat,avec,a)
        call diagonalization(nd,Amat,LambdaMat,Tmat)
@@ -82,15 +87,23 @@
        X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
        X0=int_XnMat(nd,0,a,avec,Amat,qtot(1))
 
-       V1 = fun_V1(nd,qtot,cvec,Bmat,Y0,X3,X2,X1,X0)
+       V1 = fun_V1(nd,qtot,cwork,Bmat,Y0,X3,X2,X1,X0)
        dotp = - V1
 
-       V2 = fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X0)
+       V2 = fun_V2(nd,qtot,cwork,Bmat,Y0,X2,X0)
        MB=matmul(invMassMat,Bcmplx)              
        ! confirmed with debug_karplus_width.mw
        dotB = -(0.d0,1.d0)*matmul(Bcmplx,MB) + (0.d0,1.d0)*V2
 !       dotB = +(0.d0,1.d0)*matmul(Bcmplx,MB) - (0.d0,1.d0)*V2
 !       dotB = 0.d0
+
+       dotq(:) = scalvec(:)*dotq(:)
+       dotp(:) = scalvec(:)*dotp(:)
+       dotB(:,:) = scalmat(:,:)*dotB(:,:)
+
+!       write(*,*) dotq
+!       write(*,*) dotp
+!       write(*,*) dotB(1,1), dotB(1,2), dotB(2,2)
 
       end subroutine
 
@@ -202,7 +215,6 @@
        real*8, dimension(nd,nd) :: Amat,Tmat,LambdaMat
        complex*16, dimension(nh) :: cwork
        real*8, dimension(nh,nh) :: X3,X2,X1,X0
-
 
        ! Allows for Gaussian Average only
        cwork(:) = coalvec(:)*cj(:) 

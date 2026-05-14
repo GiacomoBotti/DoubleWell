@@ -31,17 +31,24 @@
 
       real*8, public :: coalc
       real*8, dimension(nh), public :: coalvec
+      real*8, dimension(nv+1), public :: scalvec
+      real*8, dimension(nv+1,nv+1), public :: scalmat
 
       contains 
 
 !.....DYNAMICS SETUP....................................................
 
-      subroutine dynamics_setup(coalson)
+      subroutine dynamics_setup(coalson,scaling)
       ! coalson: flag for using gaussian average
-      integer, intent(in) :: coalson
+       integer, intent(in) :: coalson,scaling
+
+       integer :: i
 
        coalvec(:) = 1.d0
        coalc = 0.d0
+
+       scalvec(:) = 1.d0
+       scalmat(:,:) = 1.d0
 
        if (coalson.eq.1) then
          coalvec(:) = 0.d0
@@ -49,6 +56,18 @@
          write(*,*) "WATCH OUT, YOU OPTED FOR GAUSSIAN AVERAGE"
          write(*,*) "coalc:", coalc
          write(*,*) "coalvec", coalvec
+       end if
+
+       if (scaling.eq.1) then
+         scalvec(1) = 0.d0
+         scalmat(1,:) = 0.d0
+         scalmat(:,1) = 0.d0
+         write(*,*) "WATCH OUT, YOU OPTED FOR SCALED DYNAMICS"
+         write(*,*) "scalvec:", scalvec
+         write(*,*) "scalmat:"
+         do i = 1,nv+1
+           write(*,*) scalmat(i,:)
+         end do
        end if
 
       end subroutine
