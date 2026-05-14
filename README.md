@@ -54,7 +54,7 @@ The same goes for the Hermite polynomials basis set.
 - [ ] Test it against analytical results (I need new SG, I think)
 - [ ] Clean up the code
 - [ ] Set `Nsq` back to normal
-- [x] `Makefile` at Report
+- [ ] `Makefile` at Report
 - [x] `constants.f90` at Report
 - [x] `inversion_module.f90` at Report
 - [ ] `basisset_module.f90` at Report
@@ -68,10 +68,7 @@ The same goes for the Hermite polynomials basis set.
 - [ ] `kinetic_module.f90` at Report
 - [ ] `observable_module.f90` at Report
 - [ ] `check_module.f90` at Report
-- [x] `main.f90` at Report
-- [ ] Reaction probability
-- [ ] Mirror correlation
-- [ ] Gift script
+- [ ] `main.f90` at Report
    
 
 ### DONE
@@ -107,7 +104,7 @@ The same goes for the Hermite polynomials basis set.
       - [x] Check $\mathbb{A}\mathbb{A}^{-1} \mathbf{a} =\mathbf{a}$
       - [x] compute 
       - [x] Check w/ MAPLE
-   - [ ] $<V_{y}>$ portion
+   - [x] $<V_{y}>$ portion
       - [x] update $\mathbf{u}^{T} \mathbb{W} \mathbf{u}$
          - [x] check?
       - [x] update $\mathbf{q}^{T} \mathbb{V} \mathbf{q}$
@@ -192,6 +189,9 @@ end do
 - [x] **URGENT:** feed them directly as $\mathbf{c}\mathcal{X}\mathbf{c}$
 - [x] **URGENT:** test against a dynamics w/out this mod
 - [x] Masking vector and matrix to "scale" dynamics of certain parameters
+- [x] Reaction probability
+- [x] Mirror correlation
+- [x] Gif script
 
 ## OLD FRAMEWORK (TWO HERMITE)
 
