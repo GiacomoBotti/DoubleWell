@@ -115,36 +115,16 @@
        call energy(nd,q0,p0,cvec,Bcmplx,H00M,E0,Mx,My)
        E=E0
 
-!       write(*,*) "DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG"
-!       write(*,*) "INITIAL MATRICES"
-!       write(*,*) "WIDTH MATRIX"
-!       do i = 1,nv+1
-!         write(*,*) Bcmplx(i,:)
-!       end do
-
-!       write(*,*) "S00M"
-!       do i = 1,nh
-!         write(*,*) S00M(i,:)
-!       end do
-!       write(*,*) "H00M"
-!       do i = 1,nh
-!         write(*,*) H00M(i,:)
-!       end do
-
-       write(*,*) N, E/E0, q0(1), p0(1), real(Bcmplx(1,1)),&
+       write(*,*) N, E, q0(1), p0(1), real(Bcmplx(1,1)),&
                   &aimag(Bcmplx(1,1))!,real(Bcmplxj(1,3))
        write(*,*) csq
        write(*,*) q0(2:nd+1) 
 
-!       write(321,*) 0.d0,N,E/E0,q0(1), p0(1), real(Bcmplx(1,1)),&
        write(321,*) 0.d0,N,E,q0(1), p0(1), real(Bcmplx(1,1)),&
                     &aimag(Bcmplx(1,1)),real(Bcmplx(2,2)),&
                     &aimag(Bcmplx(2,2))
 
-       !write(322,*) 0.d0, csq!, dreal(cvec), dimag(cvec)
-       !write(322,*) 0.d0, dsqrt(csq)!, dreal(cvec), dimag(cvec)
-       !write(322,*) 0.d0, abs(cvec)!, dreal(cvec), dimag(cvec)
-       write(322,*) 0.d0, dreal(cvec), dimag(cvec)
+       write(322,*) 0.d0, csq, dreal(cvec), dimag(cvec)
 
        write(323,*) 0.d0, q0(2:nd+1) 
 
@@ -199,7 +179,6 @@
 
        nprint=nstep/trj(4)
        time = dfloat(first)
-       !time = 0.d0
        ckg = complex(0.d0,0.d0)
        qold = qtotj
        pold = ptotj
@@ -214,7 +193,6 @@
        end if
        do j = 1,trj(4)
           time = time + h
-!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
           ! Static evolution of coefficents
           cj = c_static(nd,h,cj,S00M,H00M)
           ! Variational evolution of parameters
@@ -232,9 +210,6 @@
           ! Normalization and energy
           call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
           call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E,Mx,My)
-          !qtoti = qtotj  
-          !ptoti = ptotj
-          !Bcmplxi = Bcmplxj
        end do !j
 
        phase(:) = datan((aimag(cj(:))/real(cj(:))))
@@ -250,14 +225,10 @@
        TauXc = matmul(TauX,ceqN)
        cTauXc = dot_product(cj,TauXc)
 
-!      write(321,*) time,N,E/E0,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
       write(321,*) time,N,E,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
                   &,aimag(Bcmplxj(1,1)),real(Bcmplxj(2,2))&
                   &,aimag(Bcmplxj(2,2))
-      !write(322,*) time, csq!, dreal(cj), dimag(cj)
-      !write(322,*) time, dsqrt(csq)!, dreal(cj), dimag(cj)
-      !write(322,*) time, abs(cj)!, dreal(cj), dimag(cj)
-      write(322,*) time, dreal(cj), dimag(cj)
+      write(322,*) time, csq, dreal(cj), dimag(cj)
       write(323,*) time, qtotj(2:nd+1) 
       write(325,*) time, ptotj(2:nd+1) 
       write(326,*) time, phase 
@@ -279,7 +250,7 @@
        end do !k
 
        write(*,*) "Last step:"
-       write(*,*) N,E/E0, qtotj(1), ptotj(1),real(Bcmplxj(1,1)),&  
+       write(*,*) N,E, qtotj(1), ptotj(1),real(Bcmplxj(1,1)),&  
                   &aimag(Bcmplxj(1,1))
        write(*,*) time, csq
 

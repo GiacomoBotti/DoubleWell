@@ -89,17 +89,12 @@
 
         call extractA(nd,Bmat,Amat,avec,a)
         call extracttildeA(nd,tildeBmat,tildeAmat,tildeavec,tildea)
-        !call diagonalization(nd,Amat,LambdaMat,Tmat)
 
         invA = invgen_real(nd,Amat)
         invAa = matmul(invA,avec)
 
         invMy = invMassMat(2:nd+1,2:nd+1)
 
-        !Y0 = int_Y0(nd,LambdaMat)
-        !X0mat = int_XnMat(nd,0,a,avec,Amat,q)
-        !X1mat = int_XnMat(nd,1,a,avec,Amat,q)
-        !X2mat = int_XnMat(nd,2,a,avec,Amat,q)
         X0mat = X0
         X1mat = X1
         X2mat = X2
@@ -239,11 +234,6 @@
 
         invA = invgen_real(nd,Amat)
 
-        !Y0 = int_Y0(nd,LambdaMat)
-        !write(111,*) "Y0: ", Y0
-        !X0mat = int_XnMat(nd,0,a,avec,Amat,q)
-        !X1mat = int_XnMat(nd,1,a,avec,Amat,q)
-        !X2mat = int_XnMat(nd,2,a,avec,Amat,q)
         X0mat=X0
         X1mat=X1
         X2mat=X2
@@ -365,19 +355,12 @@
         complex*16, dimension(nh,nh) :: intdHdH,intdlnG
         complex*16, dimension(nh,nh) :: intdlnGsq,intdyln
 
-        !intdHdH = dxHdxH(nd,real(tildeBmat),q) 
-        !intdlnG = dxlnGdxHi(nd,q,p,qvec,tildeBmat)
-        !intdlnGsq = dxlnGsq(nd,q,p,qvec,tildeBmat)  
-        !intdyln = dylnGdylnG(nd,q,p,qvec,pvec,tildeBmat)  
         intKb = Kbath(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)  
-        !intKb(:,:) = 0.d0 !Kbath(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)  
         intKa = Kact(nd,q,p,qvec,tildeBmat,Y0,X2,X1,X0)  
 
 !        write(*,*) invMassMat
         mx = invMassMat(1,1)
 
-        !K00 = -(mx*(intdlnGsq+intdHdH+transpose(dconjg(intdlnG))+&
-        !      &intdlnG) + intdyln)/2.d0
         K00 = -0.5d0*(mx*intKa+intKb)
 !        K00 = -0.5d0*mx*intKa
 

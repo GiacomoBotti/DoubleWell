@@ -65,7 +65,7 @@
        write(327,*) "#Steps: ",nstep
        write(327,*) "#Timestep: ",h
        write(327,*) "#Normalization constant: ",N
-       write(327,*) "#Time ", "correlation: real & imaginary & sqr"
+       write(327,*) "#Time ", "correlation: re(C) & im(C) & |C|^2 & |C|"
   
        write(328,*) "#Evolution parameters:"
        write(328,*) "#Range: ",first,last
