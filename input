@@ -1,2 +1,30 @@
-#Start Stop Nstep
-0 5 100
+! Gaussian Average & Scaling & Frozen: 1 is ON
+0 0 0
+! Start Stop Nstep Nprint
+0 5 10000 50 
+&pot_param
+    eta_const   = 1.3544d0
+    sigma_const = -1.d0
+    gamma_const = 0.5d0
+    kappa_const = 1.d0
+/
+&inp_mass
+    masses = 1.5d0 4.5d0 
+/
+&equilibrium
+    ceq(1) = (0.45919157095202662,-8.14834718946430558E-003)
+    ceq(2) = (-0.61978342037299328,2.46232212017700389E-002)
+    ceq(3) = (0.48109453241877925,-4.73920543545408093E-002)
+    Beq(1,1) = (0.56d0,0.0d0)
+    Beq(1,2) = (0.2d0,0.3d0)
+    Beq(2,1) = (0.2d0,0.3d0)
+    Beq(2,2) = (2.d0,4.d0)
+    qeq(1) = -2.d0
+    qeq(2) = 0.2d0
+    peq(1) = 0.1d0
+    peq(2) = 0.3d0
+/
+&initial
+
+/
+

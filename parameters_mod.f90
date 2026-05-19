@@ -17,16 +17,11 @@
       integer, parameter, public :: maxorder = 8
       ! Gamma: coupling constant
       real*8, public  :: gamma_const = 0.5d0
-!      real*8, parameter,public  :: gamma_const = 0.0d0
       ! Eta: quartic constant
-!      real*8, parameter,public  :: eta_const = 10e+30!1.3544d0 
       real*8, public  :: eta_const = 1.3544d0 
       ! Sigma: active coordinate quadratic constant
-!      real*8, parameter,public  :: sigma_const = 1.d0
       real*8, public  :: sigma_const = -1.d0
-!      real*8, parameter,public  :: sigma_const = 0.d0
       ! Kappa: bath coordinates quadratic constant 
-!      real*8, parameter,public  :: kappa_const = 0.d0
       real*8, public  :: kappa_const = 1.d0
 
       real*8, public :: coalc
@@ -42,15 +37,6 @@
 
       namelist /pot_param/ eta_const,sigma_const,gamma_const,kappa_const
 
-
-       !read(2222,*) !x^4/16/eta
-       !read(2222,*) eta_const
-       !read(2222,*) !x^2 coeff
-       !read(2222,*) sigma_const
-       !read(2222,*) !coupling const
-       !read(2222,*) gamma_const
-       !read(2222,*) !y^2 coeff
-       !read(2222,*) kappa_const
        read(2222,nml=pot_param)
       
       end subroutine
