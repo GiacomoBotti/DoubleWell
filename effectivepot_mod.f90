@@ -6,6 +6,7 @@
       module effectivepot_module
 
       use constants
+      use parameters_module
       use matrix_module
       use basisset_module
       use potential_module
@@ -148,7 +149,7 @@
 !       Vy=0.d0
        V0mat = Vxmat+Vxymat+Vymat
 !       V0 = Vx+Vxy+Vy 
-!       write(111,*) "V0", V0
+!       write(1111,*) "V0", V0
         
       end function
 
@@ -223,7 +224,7 @@
        V1(2) = dy1V
        V1(3:nd+1) = V1prime(2:nd)
 
-!       write(111,*) "V1", V1(:)
+       write(1111,*) "V1", V1(:)
 
       end function
 
@@ -294,10 +295,10 @@
        V2(2,1) = V2(1,2) 
        V2(2:nd+1,2:nd+1) = 2.d0*Nsq*Y0*cX0c*Vmat
 
-!       write(*,*) "V2"
-!       do i = 1,nd+1
-!          write(*,*) V2(i,:)
-!       end do
+       write(1111,*) "V2"
+       do i = 1,nd+1
+          write(1111,*) V2(i,:)
+       end do
 
       end function
      

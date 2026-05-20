@@ -5,6 +5,7 @@
 
        module BOT_module
 
+       use parameters_module
        use basisset_module
        use kinetic_module
        use effectivepot_module
@@ -24,7 +25,6 @@
 
 !......Coefficient update with static basis (analytical)................
 
-       !function c_static(nd,h,qtot,ptot,cvec,tildeBmat) result(csout)
        function c_static(nd,h,cvec,S00M,H00M) result(csout)
        ! nd: bath dimension 
        ! h : time-step size
@@ -39,8 +39,6 @@
         complex*16, dimension(nh), intent(in) :: cvec
         real*8, dimension(nh,nh) :: S00M
         complex*16, dimension(nh,nh) :: H00M
-        !real*8, dimension(nd+1), intent(in) :: qtot,ptot
-        !complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
         integer*8 :: i,lwork,nh8
         real*8 :: q,p,a,Nsq,Y0
@@ -69,31 +67,9 @@
 !          write(*,*) tildeBmat(i,:)
 !        end do
 
-        !q = qtot(1)
-        !p = ptot(1)
-        !qvec = qtot(2:nd+1)
-        !pvec = ptot(2:nd+1)
-
-        !Bmat = real(tildeBmat)
-
-        !Nsq=fun_Nsq(nd+1,Bmat)
-        !call extractA(nd,Bmat,Amat,avec,a)
-        !call diagonalization(nd,Amat,LambdaMat,Tmat)
-        !Y0=int_Y0(nd,LambdaMat)
-        !X4=int_XnMat(nd,4,a,avec,Amat,qtot(1))
-        !X3=int_XnMat(nd,3,a,avec,Amat,qtot(1))
-        !X2=int_XnMat(nd,2,a,avec,Amat,qtot(1))
-        !X1=int_XnMat(nd,1,a,avec,Amat,qtot(1))
-        !X0=int_XnMat(nd,0,a,avec,Amat,q)
-
-        !S00M = X0*Y0*Nsq 
-        !T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)  
-        !V00M = fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X2,X1,X0) 
-        !H00M = T00M + V00M
         ! Copy H00M so LAPACK can overwrite
         Z = H00M
         B = S00M
-!        B = invgen(nh,S00M)
 
 !        write(*,*) "T00M:"
 !        do i = 1,nh
@@ -119,61 +95,18 @@
         call ZHEGV(1,'V','U',nh,Z,nh,B,nh,eigenv,&
                   &lapwork,lwork,rwork,info)
 
-!         write(*,*) info
         adjZ = dconjg(transpose(Z))
          
 !        call test_static(nh,S00M,H00M,Z,eigenv)
 
         c = cvec
-!        write(*,*) "IN" 
-!        write(*,*) c
         c = matmul(S00M,c)
-!        write(*,*) "Sc" 
-!        write(*,*) c
         c = matmul(adjZ,c) 
-       
-!        write(*,*) "Z^HSc" 
-!        write(*,*) c
-
-!        B(:,:) = 0.d0
         do i = 1,nh
           expvec(i) = zexp(-iu*eigenv(i)*h)*c(i)
-!          B(i,i) = zexp(-iu*eigenv(i)*h)
         end do
 
-!        B = matmul(B,adjZ)
-!        B = matmul(Z,B)
-
-!        write(*,*) "ZexpZ"
-!        do i = 1,nh
-!          write(*,*) B(i,:)
-!        end do
-
-!        write(*,*) "exp Z^HSc" 
-!        write(*,*) expvec 
         csout = matmul(Z,expvec)
-        
-!        csout = expvec
-!        write(*,*) "Zexp Z^HSc" 
-!        write(*,*) "c final"
-!        write(*,*) csout(:)
-
-!.......1H DEBUGGING....................................................
-
-!        write(*,*) "I am doing a 1H evolution!"
-       ! csout(1) = cvec(1)*zexp(-iu*H00M(1,1)*h)/S00M(1,1)
-      
-
-!        csout(:) = 0.d0
-!        do i= 1,nh
-!           csout(i) = cvec(i)*zexp(-iu*H00M(i,i)*h)!/S00M(i,i)
-!           csout(i) = cvec(i)*zexp(-iu*eigenv(i)*h)!/S00M(i,i)
-!        end do
-
-!        write(*,*) zexp(-iu*eigenv(1)*h), zexp(-iu*eigenv(2)*h)
-!        write(*,*) zexp(-iu*H00M(1,1)*h), zexp(-iu*H00M(2,2)*h)
-
-!        write(*,*) csout(:)
 
        end function
 
@@ -264,13 +197,15 @@
         complex*16, dimension(nh), intent(in) :: c
         complex*16, dimension(nd+1,nd+1), intent(in) :: Bb,Bk
 
-        integer :: i
-        real*8 :: a,q,Nsq,Y0
+        integer :: i,j,info
+        real*8 :: a,q,Nsq,Y0,reS,imS
         real*8, dimension(nd) :: avec 
         real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
         real*8, dimension(nd+1,nd+1) :: Bmat
         complex*16, dimension(nh) :: csupp,cout
-        complex*16, dimension(nh,nh) :: S00M,Tt0M,invS,X0Mat
+        complex*16, dimension(nh,nh) :: Aux,S00M,Tt0M,invS,X0Mat
+
+        external ZPOSV
 
         q = qb(1)
 
@@ -289,13 +224,21 @@
         Y0=int_Y0(nd,LambdaMat)
         X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
 
-        S00M = X0Mat*Y0*Nsq 
+        Aux = X0Mat*Y0*Nsq 
+        S00M = Aux
 
-!        invS = invgen(nh,S00M) 
+! SG qtag.f line 1046 : cleaning new overlap (?)
 
-!        write(*,*) "IN UPDATE"
-!        write(*,*) c
-
+        do i = 1, nh
+          S00M(i,i) = Aux(i,i)*complex(1.d0,0.d0)
+          do j = i+1,nh
+            reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
+            imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
+            S00M(i,j) = reS+iu*imS
+            S00M(j,i) = conjg(S00M(i,j))
+          end do
+        end do
+            
         Tt0M = int_TauMat(nd,qb,qk,pb,pk,Bb,Bk) 
         csupp = matmul(Tt0M,c)
  
@@ -312,19 +255,11 @@
 !          write(*,*) S00M(i,:)
 !        end do
 
-        cout = linsys(nh,S00M,csupp) 
+!        cout = linsys(nh,S00M,csupp) 
+         
+         call zposv('U',nh,1,S00M,nh,csupp,nh,info)
 
-!        write(*,*) "cout"
-!        write(*,*) cout
- 
-!        cout = matmul(invS,csupp)
-
-!.......1H DEBUGGING....................................................
-
-       ! write(*,*) "I am doing a 1H evolution!"
-       ! cout(:) = 0.d0
-       ! cout(1) = Tt0M(1,1)*c(1)/S00M(1,1)
-       ! write(*,*) cout(nh)
+         cout = csupp
 
        end function
 
@@ -356,8 +291,6 @@
 !        write(*,*) "I AM C UPDATE FB"
         q = qb(1)
         Bmat = real(Bb)
-
-!        write(*,*) q, Bmat(1,1)
 
         Nsq=fun_Nsq(nd+1,Bmat)
         call extractA(nd,Bmat,Amat,avec,a)
@@ -430,12 +363,6 @@
 !        end do
 
         csupp = matmul(summa,c)
-        !csupptest = matmul(St0M,c)
-
-       ! csuppdiff = csupp-csupptest 
-
-       ! write(*,*) "csuppdiff"
-       ! write(*,*) csuppdiff(:)
  
         cout = linsys(nh,S0tM,csupp) 
 
@@ -543,12 +470,6 @@
 !        end do
 
         csupp = matmul(summa,c)
-        !csupptest = matmul(St0M,c)
-
-       ! csuppdiff = csupp-csupptest 
-
-       ! write(*,*) "csuppdiff"
-       ! write(*,*) csuppdiff(:)
  
         cout = linsys(nh,S0tM,csupp) 
 

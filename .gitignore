@@ -13,6 +13,8 @@ fort.*
 log*
 /TEST/
 *.png
+*.zip
+*.old
 
 # Prerequisites
 *.d

@@ -6,6 +6,7 @@
       module quadratic_module
       
       use matrix_module
+      use parameters_module
       use potential_module
 
       implicit none

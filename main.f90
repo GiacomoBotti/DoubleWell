@@ -6,6 +6,7 @@
       program doublewell
 
       use constants
+      use parameters_module
       use potential_module
       use basisset_module
       use eofmotion_module
@@ -16,7 +17,7 @@
 
       implicit none
 
-      integer :: i,j
+      integer :: i,j,coalson,scaling,frozen,stationary
       real*8 :: t0,t1
       real*8,dimension(nv+1) :: masses !masses vector
       real*8,dimension(nv+1) :: q0 !inital centers vector
@@ -29,17 +30,42 @@
       complex*16,dimension(nv+1,nv+1) :: Beq !equilibrium width matrix
       integer*8,dimension(4) :: trj
 
-!      call print_double_well_banner()
+      namelist /setup/ trj, coalson, scaling, frozen, stationary
+      namelist /inp_mass/ masses
+      namelist /equilibrium/ qeq, peq, ceq, Beq
+      namelist /initial/ q0, p0, Bcmplx 
+
       call execute_command_line('cat banner.txt')
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "|               MAIN CODE EXECUTION                 |"
       write(*,*) "+---------------------------------------------------+"
 
+      open(unit=111,file='wfx_BOT.dat',status='unknown',action='write')
+      open(unit=222,file='wfy_BOT.dat',status='unknown',action='write')
+      open(unit=2222,file="input",status="old",action="read")
+
+!.....Input reading.....................................................
+
+      trj = [0, 1, 100, 1]
+      coalson = 0
+      scaling = 0
+      frozen = 0
+      stationary = 0
+      read(2222,nml=setup)
+
+!.....Potential parameters reading......................................
+
+      call potential_setup() 
+
+!.....SETUP.............................................................
+
 ! TO BE SURE: GENERATE POTENTIAL MATRIX HERE
       call matrix_pot() 
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
+! DYNAMICS SETUP IT'S IMPORTANT
+      call dynamics_setup(coalson,scaling,frozen,stationary)
 
 !.....Print potential constants.........................................
 
@@ -56,24 +82,32 @@
 
       write(*,*) "Masses vector:"
 
+      masses(:) = 1.d0
+      masses(1) = 1.5d0
+      masses(2) = 4.5d0
+      read(2222,nml=inp_mass)
       do i = 1,nv+1
-        masses(i) = 1.d0
-!        masses(i) = 1.1d0*i
         write(*,*) masses(i)
       end do
-
-!      masses(2) = masses(1) !WATCH OUT
 
       call MassesMat(masses)
 
 !.....Define initial conditions.........................................
 
+      ! Boring default
+      ceq(:) =1.d0
+      qeq(:) =0.d0
+      peq(:) =0.d0
+      Beq(:,:) = 0.d0
+      do i = 1, nv+1
+        Beq(i,i) = dsqrt(masses(i))
+      end do
+
+      read(2222,nml=equilibrium)
+
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Equilibrium Coefficients:"
 
-      ceq(:) =0.d0
-      ceq(1) =1.0d0  !creal
-    
       do i = 1,nh
         write(*,*) ceq(i) 
       end do
@@ -82,20 +116,8 @@
       write(*,*) "Initial Gaussian Width Matrix:"
 
       do i = 1,nv+1
-!         qeq(i) = i*dsqrt(2.d0)/3.d0
-!         peq(i) = i*dsqrt(3.d0)/7.d0
-!         Bcmplx(i,i) = (i+i)*(1+i/100.d0) + iu*(i+i)*(1+i/40.d0)/10.d0
-         Beq(i,i) = dsqrt(masses(i))
-!         do j= i+1,nv+1
-!           Bcmplx(i,j) = (i+j)/40.d0 + iu*(i+j)/30.d0
-!           Bcmplx(j,i) = Bcmplx(i,j)
-!         end do   
         write(*,*) Beq(i,:)
       end do
-
-      qeq(1) = -2.d0*dsqrt(eta_const) 
-!      qeq(1) = -2.31 
-      peq(:) = 0.d0
 
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial q and p:"
@@ -106,20 +128,23 @@
 
 !.....Basis Projection..................................................
 
-!      call check_projection(nv,qeq,peq,ceq,Bcmplx)
-
-      q0(:) = 0.d0
-      p0(:) = 0.d0
-!      q0(:) = qeq(:) 
-!      p0(:) = peq(:)
+      ! Boring defaults
+      q0(:) = qeq(:) 
+      p0(:) = peq(:)
       Bcmplx(:,:) = Beq(:,:)
-      Bcmplx(1,1) = 0.56d0 
-!      Bcmplx(1,1) = 1.256d0 
-      Bcmplx(1,1) = 0.856d0 
-!      Beq(1,1) = 0.56d0
+      c0(:) = ceq(:) ! safeguard
+
+      read(2222,nml=initial)
 
       c0 = c_update(nv,q0,p0,qeq,peq,ceq,Bcmplx,Beq) 
     
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Projected coefficients"
+
+      do i = 1,nh
+        write(*,*) c0(i) 
+      end do
+
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Projected Gaussian Width Matrix:"
 
@@ -128,17 +153,14 @@
       end do
     
       write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Projected coefficients"
-
-      do i = 1,nh
-        write(*,*) c0(i) 
+      write(*,*) "Projected q and p:"
+       
+      do i = 1,nv+1
+        write(*,*) q0(i), p0(i)
       end do
       
-      call plot_wfn(nv,qeq,peq,ceq,Beq,1.d0,111)
-      call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0,222)
-
- 
-!      stop
+      call plot_wfn(nv,qeq,peq,ceq,Beq,1.d0)
+      call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
@@ -162,15 +184,14 @@
 !      call check_shiftedoverlap(nv)
 !.....Check K and S as SG...............................................
 !      call check_KSnum(nv)
+!.....Check projection..................................................
+!      call check_projection(nv,qeq,peq,ceq,Bcmplx)
 !.....Evolution.........................................................
 
+      close(2222)
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Start       ", "Stop       ", "Lenght     "  
-      open(unit=2222,file="input",status="old",action="read")
-      read(2222,*)
-      read(2222,*) trj
-      close(2222)
+      write(*,*) "Start    ", "Stop    ", "Lenght  ", "Print "  
       write(*,*) trj
 
       call cpu_time(t0)
@@ -181,6 +202,9 @@
       write(*,*) "Have a nice day"
       write(*,*) "I took ", t1-t0, "time"
       write(*,*) "+---------------------------------------------------+"
+
+      close(111)
+      close(222)
 
       end program
 

@@ -6,13 +6,10 @@
       module basisset_module
 
       use constants
+      use parameters_module
 
       implicit none
 
-      !Number of Hermite polynomials
-      integer,parameter,public :: nh = 15 
-      !Maximum order of x for the Hermite pol. in database
-      integer, parameter, public :: max_x = nh+1  
       !Database of the coefficients
       real*8, dimension(nh,max_x), public :: Mherm
 
@@ -83,6 +80,7 @@
        Hofx = 0.d0
        do i = 1,max_x
          Hofx = Hofx + Mherm(npol,i)*(dsqrt(alpha)*(x-q))**(i-1)
+         !Hofx = Hofx + Mherm(npol,i)*(dsqrt(2.d0*alpha)*(x-q))**(i-1)
          !Hofx = Hofx + Mherm(npol,i)*((x-q))**(i-1)
        end do
 
