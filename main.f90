@@ -17,7 +17,7 @@
 
       implicit none
 
-      integer :: i,j,coalson,scaling,frozen
+      integer :: i,j,coalson,scaling,frozen,stationary
       real*8 :: t0,t1
       real*8,dimension(nv+1) :: masses !masses vector
       real*8,dimension(nv+1) :: q0 !inital centers vector
@@ -30,9 +30,10 @@
       complex*16,dimension(nv+1,nv+1) :: Beq !equilibrium width matrix
       integer*8,dimension(4) :: trj
 
+      namelist /setup/ trj, coalson, scaling, frozen, stationary
       namelist /inp_mass/ masses
       namelist /equilibrium/ qeq, peq, ceq, Beq
-      namelist /initial/ q0, p0, c0, Bcmplx 
+      namelist /initial/ q0, p0, Bcmplx 
 
       call execute_command_line('cat banner.txt')
 
@@ -46,10 +47,12 @@
 
 !.....Input reading.....................................................
 
-      read(2222,*)
-      read(2222,*) coalson,scaling,frozen
-      read(2222,*)
-      read(2222,*) trj
+      trj = [0, 1, 100, 1]
+      coalson = 0
+      scaling = 0
+      frozen = 0
+      stationary = 0
+      read(2222,nml=setup)
 
 !.....Potential parameters reading......................................
 
@@ -62,7 +65,7 @@
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
 ! DYNAMICS SETUP IT'S IMPORTANT
-      call dynamics_setup(coalson,scaling,frozen)
+      call dynamics_setup(coalson,scaling,frozen,stationary)
 
 !.....Print potential constants.........................................
 
@@ -129,7 +132,7 @@
       q0(:) = qeq(:) 
       p0(:) = peq(:)
       Bcmplx(:,:) = Beq(:,:)
-      c0(:) = ceq(:)
+      c0(:) = ceq(:) ! safeguard
 
       read(2222,nml=initial)
 
@@ -188,7 +191,7 @@
       close(2222)
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Start       ", "Stop       ", "Lenght     "  
+      write(*,*) "Start    ", "Stop    ", "Lenght  ", "Print "  
       write(*,*) trj
 
       call cpu_time(t0)

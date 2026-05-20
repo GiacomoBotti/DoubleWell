@@ -10,7 +10,7 @@
       ! Bath potential matrix dimensions
       integer,parameter,public :: nv = 1   
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 1 
+      integer,parameter,public :: nh = 3 
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Maximum order of y momenta
@@ -44,11 +44,11 @@
 
 !.....DYNAMICS SETUP....................................................
 
-      subroutine dynamics_setup(coalson,scaling,frozen)
+      subroutine dynamics_setup(coalson,scaling,frozen,stationary)
       ! coalson: flag for using gaussian average
       ! scaling: flag for scaled parameters dynamics
       ! frozen: flag for frozen gaussian dynamics
-       integer, intent(in) :: coalson,scaling,frozen
+       integer, intent(in) :: coalson,scaling,frozen,stationary
 
        integer :: i
 
@@ -82,6 +82,18 @@
        if (frozen.eq.1) then
          scalmat(:,:) = 0.d0
          write(*,*) "WATCH OUT, YOU OPTED FOR FROZEN G. DYNAMICS"
+         write(*,*) "(It only works for SCP propagator)"
+         write(*,*) "            (right now)           "
+         write(*,*) "scalmat:"
+         do i = 1,nv+1
+           write(*,*) scalmat(i,:)
+         end do
+       end if
+
+       if (stationary.eq.1) then
+         scalvec(:) = 0.d0
+         scalmat(:,:) = 0.d0
+         write(*,*) "WATCH OUT, YOU OPTED FOR STATIONARY B. DYNAMICS"
          write(*,*) "(It only works for SCP propagator)"
          write(*,*) "            (right now)           "
          write(*,*) "scalmat:"
