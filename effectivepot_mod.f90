@@ -224,7 +224,7 @@
        V1(2) = dy1V
        V1(3:nd+1) = V1prime(2:nd)
 
-       write(1111,*) "V1", V1(:)
+       !write(1111,*) "V1", V1(:)
 
       end function
 
@@ -295,10 +295,10 @@
        V2(2,1) = V2(1,2) 
        V2(2:nd+1,2:nd+1) = 2.d0*Nsq*Y0*cX0c*Vmat
 
-       write(1111,*) "V2"
-       do i = 1,nd+1
-          write(1111,*) V2(i,:)
-       end do
+       !write(1111,*) "V2"
+       !do i = 1,nd+1
+       !   write(1111,*) V2(i,:)
+       !end do
 
       end function
      

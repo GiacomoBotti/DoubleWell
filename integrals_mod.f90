@@ -12,13 +12,6 @@
 
        implicit none
 
-       !real*8, parameter :: lwb=-5.d0
-       !real*8, parameter :: hgb=5.d0
-       !integer*8, parameter :: nstep=200
-       ! HUGE GRID
-       real*8, parameter :: lwb=-10.d0
-       real*8, parameter :: hgb=10.d0
-       integer*8, parameter :: nstep=1000
 
        private
        public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat
@@ -98,7 +91,7 @@
         real*8, dimension(nh,nh) :: integral,integrand,s,Hmat,XnMat
 
         
-        h = (hgb-lwb)/dfloat(nstep)
+        h = (hgb-lwb)/dfloat(gstep)
  
         ! Compute integral in boundaries
         integral(:,:) = 0.d0
@@ -119,7 +112,7 @@
         integral=integral+Gx*Hmat*x**pow
 
         s(:,:) = 0.d0
-        do i = 2, nstep-2, 2 !only even
+        do i = 2, gstep-2, 2 !only even
            x = lwb + i*h
            Gx=fun_Gx(nd,a,avec,Amat,x,q)
            Hmat=fun_Hmat(x,q,a)
@@ -159,9 +152,9 @@
         Nsq = dsqrt(Bdet/(pi**ndim))
 !        write(*,*) "Nsq", Nsq
 
-!        Nsq = 1.d0
+        Nsq = 1.d0
 ! SG NORMALIZATION
-        Nsq = dsqrt(Bmat(1,1)/pi) 
+!        Nsq = dsqrt(Bmat(1,1)/pi) 
 
        end function
 
@@ -223,8 +216,9 @@
         NiNj =((Bjdet/pi**ndim)*(Bidet/pi**ndim))**(1.d0/4.d0) 
 !        write(*,*) "NiNj", NiNj
 
-!        NiNj = 1.d0
-        NiNj = (Bimat(1,1)*Bjmat(1,1)/(pi*pi))**(1.d0/4.d0)
+        NiNj = 1.d0
+! SG normalization
+!        NiNj = (Bimat(1,1)*Bjmat(1,1)/(pi*pi))**(1.d0/4.d0)
 
        end function
 
@@ -327,7 +321,7 @@
 !        write(*,*) "detAtot: ", detAtot
         norm = zsqrt(((2*pi)**nd)/detAtot)
 
-        h = (hgb-lwb)/dfloat(nstep)
+        h = (hgb-lwb)/dfloat(gstep)
  
         ! Compute integral in boundaries
         integral(:,:) = 0.d0
@@ -348,7 +342,7 @@
         integral=integral+Sb*HiHjmat
 
         s(:,:) = 0.d0
-        do i = 2, nstep-2, 2 !only even
+        do i = 2, gstep-2, 2 !only even
            x = lwb + i*h
            Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
            HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
@@ -398,7 +392,7 @@
 
         zero = 0.d0
         
-        h = (hgb-zero)/dfloat(nstep)
+        h = (hgb-zero)/dfloat(gstep)
  
         ! Compute integral in boundaries
         integral(:,:) = 0.d0
@@ -419,7 +413,7 @@
         integral=integral+Gx*Hmat
 
         s(:,:) = 0.d0
-        do i = 2, nstep-2, 2 !only even
+        do i = 2, gstep-2, 2 !only even
            x = zero + i*h
            Gx=fun_Gx(nd,a,avec,Amat,x,q)
            Hmat=fun_Hmat(x,q,a)

@@ -8,9 +8,9 @@
       save
 
       ! Bath potential matrix dimensions
-      integer,parameter,public :: nv = 1   
+      integer,parameter,public :: nv = 1
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 3 
+      integer,parameter,public :: nh = 9 
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Maximum order of y momenta
@@ -24,10 +24,13 @@
       ! Kappa: bath coordinates quadratic constant 
       real*8, public  :: kappa_const = 1.d0
 
-      real*8, public :: coalc
+      real*8, public :: coalc,ffact
       real*8, dimension(nh), public :: coalvec
       real*8, dimension(nv+1), public :: scalvec
       real*8, dimension(nv+1,nv+1), public :: scalmat
+      real*8, public :: lwb=-12.d0
+      real*8, public :: hgb=12.d0
+      integer*8, public :: gstep=500
 
       contains 
 
@@ -40,7 +43,16 @@
        read(2222,nml=pot_param)
       
       end subroutine
-       
+
+!.....GRID SETUP........................................................
+
+      subroutine grid_setup()
+
+      namelist /grid/ lwb,hgb,gstep
+
+       read(2222,nml=grid)
+
+      end subroutine
 
 !.....DYNAMICS SETUP....................................................
 
@@ -51,12 +63,27 @@
        integer, intent(in) :: coalson,scaling,frozen,stationary
 
        integer :: i
+       real*8, dimension(nv+1) :: scalv
+       real*8, dimension(nv+1,nv+1) :: scalm
+
+       namelist /scaling_factors/ scalv,scalm
+
+       scalvec(:) = 1.d0
+       scalmat(:,:) = 1.d0
+
+       ! Default
+       scalv = scalvec
+       scalm = scalmat
+       scalv(1) = 0.d0
+       scalm(1,1) = 0.d0
+       
+       read(2222,nml=scaling_factors)
 
        coalvec(:) = 1.d0
        coalc = 0.d0
 
-       scalvec(:) = 1.d0
-       scalmat(:,:) = 1.d0
+
+       ffact = 0.d0
 
        if (coalson.eq.1) then
          coalvec(:) = 0.d0
@@ -67,9 +94,8 @@
        end if
 
        if (scaling.eq.1) then
-         scalvec(1) = 0.d0
-         scalmat(1,:) = 0.d0
-         scalmat(:,1) = 0.d0
+         scalvec = scalv
+         scalmat = scalm
          write(*,*) "WATCH OUT, YOU OPTED FOR SCALED DYNAMICS"
          write(*,*) "(It only works for SCP propagator)"
          write(*,*) "scalvec:", scalvec
@@ -82,12 +108,11 @@
        if (frozen.eq.1) then
          scalmat(:,:) = 0.d0
          write(*,*) "WATCH OUT, YOU OPTED FOR FROZEN G. DYNAMICS"
-         write(*,*) "(It only works for SCP propagator)"
-         write(*,*) "            (right now)           "
          write(*,*) "scalmat:"
          do i = 1,nv+1
            write(*,*) scalmat(i,:)
          end do
+         ffact = 1.d0
        end if
 
        if (stationary.eq.1) then

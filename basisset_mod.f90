@@ -76,6 +76,7 @@
        
        integer :: i
        real*8 :: Hofx,fact,Hnorm
+ 
 
        Hofx = 0.d0
        do i = 1,max_x

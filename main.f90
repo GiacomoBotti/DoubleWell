@@ -58,17 +58,6 @@
 
       call potential_setup() 
 
-!.....SETUP.............................................................
-
-! TO BE SURE: GENERATE POTENTIAL MATRIX HERE
-      call matrix_pot() 
-! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
-      call GenHermMat()
-! DYNAMICS SETUP IT'S IMPORTANT
-      call dynamics_setup(coalson,scaling,frozen,stationary)
-
-!.....Print potential constants.........................................
-
       write(*,*) "Potential constants"
 
       write(*,*) "Eta: ", eta_const
@@ -78,13 +67,19 @@
 
       write(*,*) "+---------------------------------------------------+"
 
+!.....SETUP.............................................................
+
+! TO BE SURE: GENERATE POTENTIAL MATRIX HERE
+      call matrix_pot() 
+! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
+      call GenHermMat()
+
+
 !.....Define masses vector..............................................
 
       write(*,*) "Masses vector:"
 
       masses(:) = 1.d0
-      masses(1) = 1.5d0
-      masses(2) = 4.5d0
       read(2222,nml=inp_mass)
       do i = 1,nv+1
         write(*,*) masses(i)
@@ -95,7 +90,8 @@
 !.....Define initial conditions.........................................
 
       ! Boring default
-      ceq(:) =1.d0
+      ceq(:) =0.d0
+      ceq(1) =1.d0
       qeq(:) =0.d0
       peq(:) =0.d0
       Beq(:,:) = 0.d0
@@ -115,7 +111,7 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
 
-      do i = 1,nv+1
+      do i = 1,2
         write(*,*) Beq(i,:)
       end do
 
@@ -148,7 +144,7 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Projected Gaussian Width Matrix:"
 
-      do i = 1,nv+1
+      do i = 1,2
         write(*,*) Bcmplx(i,:)
       end do
     
@@ -161,6 +157,21 @@
       
       call plot_wfn(nv,qeq,peq,ceq,Beq,1.d0)
       call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
+
+!.....Print simulation parameters.......................................
+
+      ! GRID SETUP
+      call grid_setup()
+
+      write(*,*) "+---------------------------------------------------+"
+      write(*,*) "Simulation Parameters"
+      write(*,*) "Basis dimension: ", nh
+      write(*,*) "Bath dimension: ", nv
+      write(*,*) "Grid from: ",lwb," to ",hgb," with ",gstep," steps"
+      write(*,*) "+---------------------------------------------------+"
+
+! DYNAMICS SETUP IT'S IMPORTANT
+      call dynamics_setup(coalson,scaling,frozen,stationary)
 
 !.....Check Diagonalization.............................................
 !      call check_diagonalization(nv)
