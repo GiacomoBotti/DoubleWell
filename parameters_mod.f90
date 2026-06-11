@@ -10,7 +10,7 @@
       ! Bath potential matrix dimensions
       integer,parameter,public :: nv = 1
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 9 
+      integer,parameter,public :: nh = 12 
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Maximum order of y momenta
@@ -24,6 +24,7 @@
       ! Kappa: bath coordinates quadratic constant 
       real*8, public  :: kappa_const = 1.d0
 
+      integer, public :: coalmode
       real*8, public :: coalc,ffact
       real*8, dimension(nh), public :: coalvec
       real*8, dimension(nv+1), public :: scalvec
@@ -85,12 +86,14 @@
 
        ffact = 0.d0
 
-       if (coalson.eq.1) then
+       if (coalson.ne.0) then
          coalvec(:) = 0.d0
          coalc = 1.d0
+         coalmode = coalson
          write(*,*) "WATCH OUT, YOU OPTED FOR GAUSSIAN AVERAGE"
          write(*,*) "coalc:", coalc
          write(*,*) "coalvec", coalvec
+         write(*,*) "coalmode", coalmode
        end if
 
        if (scaling.eq.1) then

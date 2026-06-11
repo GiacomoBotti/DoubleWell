@@ -71,8 +71,9 @@
        complex*16, dimension(nd+1,nd+1) :: MB,prova
  
        ! Allows for Gaussian Average only
+       ! or average only on coalmode basis function
        cwork(:) = coalvec(:)*cvec(:) 
-       cwork(1) = cwork(1) + coalc
+       cwork(coalmode) = cwork(coalmode) + coalc
 
        Bmat = dreal(Bcmplx)
        call extractA(nd,Bmat,Amat,avec,a)
@@ -232,14 +233,16 @@
        ! HELLER
        !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
        !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)
-       ppi = pj - 0.5d0*h*V1
+       ppi(:) = pj(:) - 0.5d0*h*V1(:)!*scalvec(:)
        Bi = Bj +0.5d0*iu*h*V2*(1.d0-ffact)
+       !Bi(:,:) = Bj(:,:) +0.5d0*iu*h*V2(:,:)*scalmat(:,:)
        !Full T step
        dotq = matmul(invMassMat,ppi)
-       qi = qj + h*dotq 
+       qi(:) = qj(:) + h*dotq(:)!*scalvec(:) 
        invBi=invgen(nd+1,Bi)
        !invBi=Bi
-       invB = invBi + iu*h*invMassMat*(1.d0 -ffact)
+       invB(:,:) = invBi(:,:) + iu*h*invMassMat(:,:)*(1.d0 -ffact)
+       !invB(:,:) = invBi(:,:) + iu*h*invMassMat(:,:)*scalmat(:,:)
        Bi = invgen(nd+1,invB) 
        !Half V step
        call extractA(nd,dreal(Bi),Amat,avec,a)
@@ -255,8 +258,9 @@
        ! HELLER
        !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
        !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)
-       ppi = ppi - 0.5d0*h*V1
+       ppi(:) = ppi(:) - 0.5d0*h*V1(:)!*scalvec(:)
        Bi = Bi +0.5d0*iu*h*V2*(1.d0 -ffact)
+       !Bi(:,:) = Bi(:,:) +0.5d0*iu*h*V2(:,:)*scalmat(:,:)
        ! Finish
        qj = qi
        pj = ppi

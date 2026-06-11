@@ -200,8 +200,8 @@
           pold = ptotj
           Bold = Bcmplxj
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
-!          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
-          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+!          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
           ! Projection of the coefficients
           cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)

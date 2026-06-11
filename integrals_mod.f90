@@ -283,7 +283,7 @@
         h0j=-0.5d0*alphaj*(x-qj(1))**2+iu*pj(1)*(x-qj(1))&
             -0.5d0*qjAjqj+prodj
 
-        Sb=exp(+0.5d0*gAg+h0i+h0j)
+        Sb=zexp(+0.5d0*gAg+h0i+h0j)
 
        end function
 
