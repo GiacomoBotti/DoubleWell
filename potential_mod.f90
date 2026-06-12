@@ -11,7 +11,7 @@
       real*8, dimension(nv,nv),public :: Vmat 
 
       private
-      public :: matrix_pot
+      public :: matrix_pot,write_potential2D
       contains
 
 !.....MATRIX POTENTIAL..................................................
@@ -38,6 +38,37 @@
 !       Vmat = 0.5d0*Vharm + 0.5d0*gamma_const*Vcoupl
 
        write(*,*) "Matrix potential generated"
+ 
+      end subroutine
+
+!.....PLOT POTENTIAL....................................................
+
+      subroutine write_potential2D()
+      
+       integer :: i,j
+       real*8 :: x,y,grid,V
+
+       x = lwb
+       y = lwb
+
+       grid = -2.d0*lwb/100.d0
+
+       open(unit=999,file='pot.dat',status='replace',action='write')
+
+       do i = 1, 101
+         y = lwb +(i-1)*grid
+         do j = 1, 101
+           x = lwb + (j-1)*grid
+           V = x**4/16.d0/eta_const+sigma_const*x**2/2.d0 &
+             &+ gamma_const*x*y +&
+             & kappa_const*y**2/2.d0 
+           write(999,'(3ES24.16)') x, y, V
+         end do
+         write(999,*) 
+         flush(999)
+       end do
+  
+      close(999)
  
       end subroutine
 
