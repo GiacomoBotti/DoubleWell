@@ -74,6 +74,11 @@
 ! TO BE SURE: GENERATE HERMITE COEFFICIENT MATRIX HERE
       call GenHermMat()
 
+!.....Plot potential....................................................
+
+      if(nv.eq.1) then
+        call write_potential2D
+      end if 
 
 !.....Define masses vector..............................................
 

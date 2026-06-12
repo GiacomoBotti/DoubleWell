@@ -82,6 +82,7 @@
 
        coalvec(:) = 1.d0
        coalc = 0.d0
+       coalmode = 1
 
 
        ffact = 0.d0
