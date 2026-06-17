@@ -101,7 +101,7 @@
          scalvec = scalv
          scalmat = scalm
          write(*,*) "WATCH OUT, YOU OPTED FOR SCALED DYNAMICS"
-         write(*,*) "(It only works for SCP propagator)"
+         write(*,*) "(It works differently for SCP and VTV prop)"
          write(*,*) "scalvec:", scalvec
          write(*,*) "scalmat:"
          do i = 1,nv+1

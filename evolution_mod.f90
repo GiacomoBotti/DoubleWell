@@ -154,7 +154,8 @@
        write(328,*) 0.d0, cPc/dsqrt(N) 
 
        qeqX(:) = qeq(:)
-       qeqX(1) = -qeq(1)
+       !qeqX(1) = -qeq(1)
+       qeqX(:) = -qeq(:)
 
        TauX = int_TauMat(nd,qtotj,qeqX,ptotj,peq,Bcmplxj,Beq)
        TauXc = matmul(TauX,ceqN)
@@ -202,6 +203,10 @@
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
           call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+          ! Selective freezing
+          qtotj(:) = scalvec(:)*qtotj(:)+(1.d0-scalvec(:))*qold
+          ptotj(:) = scalvec(:)*ptotj(:)+(1.d0-scalvec(:))*pold
+         Bcmplxj(:,:)=scalmat(:,:)*Bcmplxj+(1.d0-scalmat(:,:))*Bold(:,:)
           ! Projection of the coefficients
           cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
