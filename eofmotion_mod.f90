@@ -154,7 +154,7 @@
        complex*16, dimension(nd+1,nd+1) :: Bj,Bi,Biold,Bav
        real*8, dimension(nd+1,nd+1) :: sqB
 
-       integer*8 :: maxcycle=50  
+       integer*8 :: maxcycle=20  
        real*8 :: thr = 1.d-5
        real*8 :: error
        real*8,dimension(nd+1,4) :: kq,kp
@@ -216,8 +216,10 @@
        real*8, dimension(nh,nh) :: X3,X2,X1,X0
 
        ! Allows for Gaussian Average only
+       !cwork(:) = coalvec(:)*cj(:) 
+       !cwork(1) = cwork(1) + coalc
        cwork(:) = coalvec(:)*cj(:) 
-       cwork(1) = cwork(1) + coalc
+       cwork(coalmode) = cwork(coalmode) + coalc
        !write(*,*) cwork
        !Half V step 
        call extractA(nd,dreal(Bj),Amat,avec,a)
