@@ -33,6 +33,73 @@ The same goes for the Hermite polynomials basis set.
 
 ## NEW FRAMEWORK
 
+### CONVERGENCE TEST
+
+Using SCP+BOT
+
+- [ ] Harmonic Oscillator: frozen $x$ and $y$, initial Gaussian start with small displacement, and Coalson Dynamics
+   - [x] $\gamma = 0.0$
+      - [x] 4 Hermite polynomials
+      - [x] 6 Hermite polynomials
+      - [x] 8 Hermite polynomials
+      - [x] 10 Hermite polynomials
+      - [x] 12 Hermite polynomials
+      - [x] 14 Hermite polynomials
+      - [x] 16 Hermite polynomials
+   - [x] $\gamma = 0.1$
+      - [x] 4 Hermite polynomials
+      - [x] 8 Hermite polynomials
+      - [x] 12 Hermite polynomials
+      - [x] 16 Hermite polynomials
+   - [ ] $\gamma = 0.2$
+      - [ ] 4 Hermite polynomials
+      - [ ] 6 Hermite polynomials
+      - [ ] 8 Hermite polynomials
+      - [ ] 10 Hermite polynomials
+      - [ ] 12 Hermite polynomials
+      - [ ] 14 Hermite polynomials
+      - [ ] 16 Hermite polynomials
+- [ ] Harmonic Oscillator: frozen $x$ and diagonal $y$, initial Gaussian start with small displacement, and Coalson Dynamics
+   - [x] $\gamma = 0.0$ -> $\mathbb{B}_{yy}$ is evolving and the norm is not conserved
+      - [x] 4 Hermite polynomials 
+      - [x] 8 Hermite polynomials
+      - [x] 12 Hermite polynomials
+      - [x] 16 Hermite polynomials
+   - [x] $\gamma = 0.1$
+      - [x] 4 Hermite polynomials
+      - [x] 8 Hermite polynomials
+      - [x] 12 Hermite polynomials
+      - [x] 16 Hermite polynomials
+   - [ ] $\gamma = 0.2$
+      - [ ] 4 Hermite polynomials
+      - [ ] 6 Hermite polynomials
+      - [ ] 8 Hermite polynomials
+      - [ ] 10 Hermite polynomials
+      - [ ] 12 Hermite polynomials
+      - [ ] 14 Hermite polynomials
+      - [ ] 16 Hermite polynomials
+- [ ] Harmonic Oscillator: frozen $x$ and coupled $y$, initial Gaussian start with small displacement, and Coalson Dynamics
+   - [x] $\gamma = 0.0$
+      - [x] 4 Hermite polynomials
+      - [x] 8 Hermite polynomials
+      - [x] 12 Hermite polynomials
+      - [x] 16 Hermite polynomials
+   - [x] $\gamma = 0.1$
+      - [x] 4 Hermite polynomials
+      - [x] 8 Hermite polynomials
+      - [x] 12 Hermite polynomials
+      - [x] 16 Hermite polynomials
+   - [ ] $\gamma = 0.2$
+      - [ ] 4 Hermite polynomials
+      - [ ] 6 Hermite polynomials
+      - [ ] 8 Hermite polynomials
+      - [ ] 10 Hermite polynomials
+      - [ ] 12 Hermite polynomials
+      - [ ] 14 Hermite polynomials
+      - [ ] 16 Hermite polynomials
+- [ ] Double Well: same as above, but the initial start is always the $q_{x}=0$ projection of the [0.8,0.2] state on 4 Hermite polynomials
+
+
 ### TO RUN
 
 - [x] Uncoupled DW + HO
@@ -51,7 +118,7 @@ The same goes for the Hermite polynomials basis set.
 
 ### TO DO
 - [x] An easy way to do Gaussian-Average (Coalson) dynamics in the code
-- [ ] Test it against analytical results (I need new SG, I think)
+- [x] Test it against analytical results (I need new SG, I think)
 - [x] Clean up the code
 - [x] Set `Nsq` back to normal
 - [ ] `Makefile` at Report

@@ -201,8 +201,8 @@
           pold = ptotj
           Bold = Bcmplxj
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
-!          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
-          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+!          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
           ! Selective freezing
           qtotj(:) = scalvec(:)*qtotj(:)+(1.d0-scalvec(:))*qold
           ptotj(:) = scalvec(:)*ptotj(:)+(1.d0-scalvec(:))*pold
