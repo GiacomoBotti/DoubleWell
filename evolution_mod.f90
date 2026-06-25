@@ -141,8 +141,8 @@
 
        cj = cvec
 
-       Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
-       Tau0c = matmul(Tau0,ceqN)
+       Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
+       Tau0c = matmul(Tau0,cvec)
        cTau0c = dot_product(cj,Tau0c)
        write(327,*) 0.d0, real(cTau0c),aimag(cTau0c),&
                        real(cTau0c*conjg(cTau0c))/N,&
@@ -218,8 +218,8 @@
        end do !j
 
        phase(:) = datan((aimag(cj(:))/real(cj(:))))
-       Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
-       Tau0c = matmul(Tau0,ceqN)
+       Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
+       Tau0c = matmul(Tau0,cvec)
        cTau0c = dot_product(cj,Tau0c)
 
        Prob = int_PMat(nd,qtotj(1),Bcmplxj)
