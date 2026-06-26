@@ -90,7 +90,8 @@ Using SCP+BOT
       - [x] 8 Hermite polynomials
       - [x] 12 Hermite polynomials
       - [x] 16 Hermite polynomials
-- [ ] Double Well: same as above, but the initial start is always the $q_{x}=0$ projection of the [0.8,0.2] state on 4 Hermite polynomials
+- [x] Double Well: same as above, but the initial start is always the $q_{x}=0$ projection of the [0.8,0.2] state on 4 Hermite polynomials
+- [ ] Double Well: as above, but with $y$ basis stationary
 
 
 ### TO RUN
