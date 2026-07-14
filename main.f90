@@ -212,7 +212,7 @@
 
       call cpu_time(t0)
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq,Beq)
-      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
+!      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
       call cpu_time(t1)
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"

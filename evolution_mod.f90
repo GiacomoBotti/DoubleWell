@@ -46,7 +46,7 @@
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold,qeqX 
        complex*16,dimension(nd+1,nd+1) :: Bcmplxi,Bcmplxj,Bold
        
-       complex*16,dimension(nh) :: cvec,cj,ctemp,ceqN
+       complex*16,dimension(nh) :: cvec,cj,ctemp,ceqN,cold,ci
 
        real*8,dimension(nd+1,4) :: kq,kp
        real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
@@ -56,7 +56,7 @@
        real*8, dimension(nd) :: avec
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
        real*8, dimension(nd+1,nd+1) :: Bmat
-       real*8, dimension(nh,nh) :: S00M,invS,X0Mat
+       real*8, dimension(nh,nh) :: S00M,invS,X0Mat,Sc,Sprev
        complex*16, dimension(nh,nh) :: H00M
 
        complex*16 :: cTau0c,cTauXc,ckg
@@ -114,15 +114,17 @@
        call normalization(nd,q,cvec,dreal(Bcmplx),S00M,N)
        call energy(nd,q0,p0,cvec,Bcmplx,H00M,E0,Mx,My)
        E=E0
+       Sc=S00M
 
-       write(*,*) N, E, q0(1), p0(1), real(Bcmplx(1,1)),&
+       write(*,*) N, E/N, q0(1), p0(1), real(Bcmplx(1,1)),&
                   &aimag(Bcmplx(1,1))!,real(Bcmplxj(1,3))
        write(*,*) csq
        write(*,*) q0(2:nd+1) 
 
        write(321,*) 0.d0,N,E,q0(1), p0(1), real(Bcmplx(1,1)),&
                     &aimag(Bcmplx(1,1)),real(Bcmplx(2,2)),&
-                    &aimag(Bcmplx(2,2))
+                    &aimag(Bcmplx(2,2)),&
+                    &real(Bcmplx(1,2)*conjg(Bcmplx(1,2)))
 
        write(322,*) 0.d0, csq, dreal(cvec), dimag(cvec)
 
@@ -132,9 +134,6 @@
 
        write(326,*) 0.d0, phase
 
-       qtoti = q0
-       ptoti = p0
-       Bcmplxi = Bcmplx
        qtotj = q0
        ptotj = p0
        Bcmplxj = Bcmplx
@@ -184,6 +183,12 @@
        qold = qtotj
        pold = ptotj
        Bold = Bcmplxj
+       cold = cj
+       ! Previous step variables 
+       qtoti = qold
+       ptoti = pold
+       Bcmplxi = Bold
+       ci = cj
 
 ! BEGIN TRAJECTORY CYCLE
        do k = 1,nprint
@@ -195,11 +200,18 @@
        do j = 1,trj(4)
           time = time + h
           ! Static evolution of coefficents
-          cj = c_static(nd,h,cj,S00M,H00M)
+          !cj = c_static(nd,h,cj,S00M,H00M)
+          !cj = c_static(nd,h,cj,Sc,H00M) ! Uses S00M at t=0 ALWAYS
+          ! Previous step variables 
+          qtoti = qold
+          ptoti = pold
+          Bcmplxi = Bold
+          ci = cold
           ! Variational evolution of parameters
           qold = qtotj
           pold = ptotj
           Bold = Bcmplxj
+          cold = cj
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
           call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
@@ -208,13 +220,17 @@
           ptotj(:) = scalvec(:)*ptotj(:)+(1.d0-scalvec(:))*pold
          Bcmplxj(:,:)=scalmat(:,:)*Bcmplxj+(1.d0-scalmat(:,:))*Bold(:,:)
           ! Projection of the coefficients
-          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+          !!!!!!!!!cj = c_update(nd,qold,pold,qold,pold,cj,Bold,Bold)
 !          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fbs(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+          cj=c_update_full(nd,h,qold,qtotj,qtoti,pold,ptotj,ptoti,&
+             &Bold,Bcmplxj,Bcmplxi,cold,ci) 
           csq(:) = conjg(cj(:))*cj(:)
           ! Normalization and energy
           call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
           call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E,Mx,My)
+          write(4321,*) ci(1),cold(1),cj(1)
        end do !j
 
        phase(:) = datan((aimag(cj(:))/real(cj(:))))
@@ -230,9 +246,11 @@
        TauXc = matmul(TauX,ceqN)
        cTauXc = dot_product(cj,TauXc)
 
-      write(321,*) time,N,E,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
+      write(321,*) time,N,E/N,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
                   &,aimag(Bcmplxj(1,1)),real(Bcmplxj(2,2))&
-                  &,aimag(Bcmplxj(2,2))
+                  &,aimag(Bcmplxj(2,2)),&
+                  &real(Bcmplxj(1,2)*conjg(Bcmplxj(1,2)))
+                  !&Bcmplxj(1,2)
       write(322,*) time, csq, dreal(cj), dimag(cj)
       write(323,*) time, qtotj(2:nd+1) 
       write(325,*) time, ptotj(2:nd+1) 
