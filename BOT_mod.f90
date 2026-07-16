@@ -540,6 +540,19 @@
           end do
         end do
 
+! Hermitizing H00M too, why not 
+        Aux(:,:) = H00M(:,:)
+
+        do i = 1, nh
+          H00M(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
+          do j = i+1,nh
+            reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
+            imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
+            H00M(i,j) = reS+iu*imS
+            H00M(j,i) = conjg(H00M(i,j))
+          end do
+        end do
+
        ! cexpo = c_static(nd,h,c0,dreal(S00M),H00M)
         summa = S0tM - St0M -2*h*iu*H00M
        ! summa = -iu*sumS -2*h*iu*H00M

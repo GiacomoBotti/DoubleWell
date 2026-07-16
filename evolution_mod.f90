@@ -197,6 +197,15 @@
        if (mod(k, nprint/100) == 0 .or. j == nprint) then
        bar = repeat('#', pos) // repeat('-', bar_width - pos)
        end if
+       !if (k.eq.nprint/2) then
+       !   h = -h
+       !   write(*,*) "I AM GOING BACKWARD"
+       !   write(*,*) "I AM GOING BACKWARD"
+       !   write(*,*) "I AM GOING BACKWARD"
+       !   write(*,*) "I AM GOING BACKWARD"
+       !   write(*,*) "I AM GOING BACKWARD"
+       !   write(*,*) "I AM GOING BACKWARD"
+       !end if
        do j = 1,trj(4)
           time = time + h
           ! Static evolution of coefficents
@@ -213,8 +222,8 @@
           Bold = Bcmplxj
           cold = cj
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
-          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
-!          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+!          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
           ! Selective freezing
           qtotj(:) = scalvec(:)*qtotj(:)+(1.d0-scalvec(:))*qold
           ptotj(:) = scalvec(:)*ptotj(:)+(1.d0-scalvec(:))*pold
