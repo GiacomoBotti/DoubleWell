@@ -34,13 +34,13 @@
        ! c0 : initial coefficients 
        ! Bcmplx : initial gaussian width matrix, real & imaginary
        integer, intent(in) :: nd
-       integer*8, dimension(4), intent(in) :: trj
+       integer*8, dimension(5), intent(in) :: trj
        real*8, dimension(nd+1), intent(in) :: q0,p0,qeq,peq
        complex*16,dimension(nh), intent(in) :: c0,ceq 
        complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx,Beq 
 
        integer*8 :: i,j,first,last,nstep,k,nprint
-       real*8 :: h,time,N,E,q,p,E0,Nsq,Neq,Mx
+       real*8 :: h,time,N,E,q,p,E0,Nsq,Neq,Mx,back
        real*8,dimension(nh) :: csq,phase 
        real*8,dimension(nd) :: qvec,pvec,My 
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold,qeqX 
@@ -68,7 +68,6 @@
        character(len=50) :: bar
 
        bar_width = 50
-       hvec = hvec*h
 
        ! trajectory parameters
        first = trj(1)
@@ -101,6 +100,8 @@
        open(unit=330,file="momenta_BOT.dat",status="unknown")
 
        h = dfloat(last-first)/dfloat(nstep)
+       back = -h/trj(5)
+       write(*,*) back, trj(5)
 
        call normalization(nd,qeq(1),ceq,dreal(Beq),S00M,Neq)
        ceqN = ceq/dsqrt(Neq)
@@ -184,11 +185,34 @@
        pold = ptotj
        Bold = Bcmplxj
        cold = cj
-       ! Previous step variables 
+
        qtoti = qold
        ptoti = pold
        Bcmplxi = Bold
        ci = cj
+       
+! SHORT BACKPROPAGATION  
+
+       write(*,*) "Backpropagating for"
+       write(*,*) trj(5)
+       write(*,*) "Steps"
+       do j = 1,trj(5)
+         time = time + back
+         !write(*,*) time
+         ci = c_static(nd,back,ci,S00M,H00M)
+         ! Variational evolution of parameters
+         qold = qtoti
+         pold = ptoti
+         Bold = Bcmplxi
+         cold = ci
+         call vtvprop(nd,back,ci,qtoti,ptoti,Bcmplxi)
+         qtoti(:) = scalvec(:)*qtoti(:)+(1.d0-scalvec(:))*qold
+         ptoti(:) = scalvec(:)*ptoti(:)+(1.d0-scalvec(:))*pold
+         Bcmplxi(:,:)=scalmat(:,:)*Bcmplxi+(1.d0-scalmat(:,:))*Bold(:,:)
+         ci = c_update(nd,qtoti,ptoti,qold,pold,ci,Bcmplxi,Bold)
+         call normalization(nd,qtoti(1),ci,dreal(Bcmplxi),S00M,N)
+         call energy(nd,qtoti,ptoti,ci,Bcmplxi,H00M,E,Mx,My)
+       end do
 
 ! BEGIN TRAJECTORY CYCLE
        do k = 1,nprint

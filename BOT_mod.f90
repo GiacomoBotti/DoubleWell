@@ -555,7 +555,7 @@
 
        ! cexpo = c_static(nd,h,c0,dreal(S00M),H00M)
         summa = S0tM - St0M -2*h*iu*H00M
-       ! summa = -iu*sumS -2*h*iu*H00M
+       !summa = -iu*sumS -2*h*iu*H00M
        ! summa = S0tM - St0M 
         csupp = matmul(summa,c0) + matmul(S00M,tc)! +2.d0*(cexpo - c0)
  
