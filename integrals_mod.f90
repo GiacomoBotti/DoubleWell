@@ -96,7 +96,7 @@
         ! Compute integral in boundaries
         integral(:,:) = 0.d0
         ! Lower bound
-        x = lwb
+        x =  lwb
         Gx=fun_Gx(nd,a,avec,Amat,x,q)
         Hmat=fun_Hmat(x,q,a)
         integral=Gx*Hmat*x**pow

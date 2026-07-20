@@ -100,6 +100,11 @@
        dotp(:) = scalvec(:)*dotp(:)
        dotB(:,:) = scalmat(:,:)*dotB(:,:)
 
+! TEST TEST TEST TEST TEST TEST TEST
+       
+       !dotB(1,2) =complex(0.d0,aimag(dotB(1,2)))
+       !dotB(2,1) =complex(0.d0,aimag(dotB(2,1)))
+
 !       write(*,*) dotq
 !       write(*,*) dotp
 !       write(*,*) dotB(1,1), dotB(1,2), dotB(2,2)

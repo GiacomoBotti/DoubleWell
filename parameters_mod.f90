@@ -10,7 +10,7 @@
       ! Bath potential matrix dimensions
       integer,parameter,public :: nv = 1
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 12 
+      integer,parameter,public :: nh = 3 
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Maximum order of y momenta
@@ -101,7 +101,7 @@
          scalvec = scalv
          scalmat = scalm
          write(*,*) "WATCH OUT, YOU OPTED FOR SCALED DYNAMICS"
-         write(*,*) "(It only works for SCP propagator)"
+         write(*,*) "(It works differently for SCP and VTV prop)"
          write(*,*) "scalvec:", scalvec
          write(*,*) "scalmat:"
          do i = 1,nv+1

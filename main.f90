@@ -28,7 +28,7 @@
       complex*16,dimension(nh) :: ceq !equilibrium coefficient vector
       complex*16,dimension(nv+1,nv+1) :: Bcmplx !initial width matrix
       complex*16,dimension(nv+1,nv+1) :: Beq !equilibrium width matrix
-      integer*8,dimension(4) :: trj
+      integer*8,dimension(5) :: trj
 
       namelist /setup/ trj, coalson, scaling, frozen, stationary
       namelist /inp_mass/ masses
@@ -47,7 +47,7 @@
 
 !.....Input reading.....................................................
 
-      trj = [0, 1, 100, 1]
+      trj = [0, 1, 100, 1, 0]
       coalson = 0
       scaling = 0
       frozen = 0
@@ -207,12 +207,12 @@
       close(2222)
       write(*,*) "WE ARE RUNNING"
       write(*,*) "+---------------------------------------------------+"
-      write(*,*) "Start    ", "Stop    ", "Lenght  ", "Print "  
+      write(*,*) "Start    ", "Stop    ", "Lenght  ", "Print ", "Back" 
       write(*,*) trj
 
       call cpu_time(t0)
       call bot_evo(nv,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq,Beq)
-      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
+!      call coherent_calc(nv,trj,q0,p0,masses,c0,Bcmplx)
       call cpu_time(t1)
       write(*,*) "End of a successful run"
       write(*,*) "Have a nice day"

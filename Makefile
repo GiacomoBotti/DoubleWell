@@ -1,5 +1,5 @@
 fc=gfortran
-myflgs = -fno-automatic -O3 -fcheck=bounds
+myflgs = -fno-automatic -O3 -ftree-vectorize -fcheck=bounds
 lib = -llapack -lblas
 
 #obj= constants.o inversion_mod.o potential_mod.o basisset_mod.o integral_mod.o integral_lha_mod.o\

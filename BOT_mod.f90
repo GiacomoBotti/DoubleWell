@@ -12,6 +12,7 @@
        use integrals_module
        use inversion_module
        use matrix_module
+       use observable_module
        use constants
 
        implicit none
@@ -19,7 +20,7 @@
        integer*8 :: info
 
        private
-       public :: c_static,c_update,c_update_fb,c_update_fbs
+       public ::c_static,c_update,c_update_fb,c_update_fbs,c_update_full
 
        contains
 
@@ -70,6 +71,10 @@
         ! Copy H00M so LAPACK can overwrite
         Z = H00M
         B = S00M
+!        B(:,:) = 0.d0
+!        do i = 1,nh
+!          B(i,i) = 1.d0
+!        end do
 
 !        write(*,*) "T00M:"
 !        do i = 1,nh
@@ -472,6 +477,89 @@
         csupp = matmul(summa,c)
  
         cout = linsys(nh,S0tM,csupp) 
+
+       end function
+
+!......Numerical update of c............................................
+
+       function c_update_full(nd,h,q0,qt,tq,p0,pt,tp,B0,Bt,tB,c0,tc) &
+        & result(cout)
+        ! nd: dimensions of the bath
+        ! h: timestep
+        ! q0,qt,tq: gaussian center at t, t+dt, t-dt
+        ! p0,pt,tp: gaussian momentum at t, t+dt, t-dt
+        ! B0,Bt,tB: gaussian width at t, t+dt, t-dt
+        ! c0,tc: coefficients at t, t-dt
+        integer, intent(in) :: nd
+        real*8 :: h
+        real*8, dimension(nd+1), intent(in) :: q0,qt,tq,p0,pt,tp 
+        complex*16, dimension(nh), intent(in) :: c0,tc
+        complex*16, dimension(nd+1,nd+1), intent(in) :: B0,Bt,tB
+
+        integer :: i,j
+        real*8 :: a,q,Nsq,Y0,reS,imS
+        real*8, dimension(nd) :: avec 
+        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+        real*8, dimension(nd+1,nd+1) :: Bmat
+        complex*16, dimension(nh) :: csupp,cout,cexpo
+        complex*16, dimension(nh,nh) :: S00M,St0M,sumS,X0Mat,S0tM
+        complex*16, dimension(nh,nh) :: prod1,prod2,summa,H00M,Aux
+        real*8 :: E0,Mx
+        real*8, dimension(nd) :: My
+
+        ! S00M
+        q = q0(1)
+        Bmat = real(B0)
+
+        Nsq=fun_Nsq(nd+1,Bmat)
+        call extractA(nd,Bmat,Amat,avec,a)
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+        Y0=int_Y0(nd,LambdaMat)
+        X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
+
+        S00M = X0Mat*Y0*Nsq 
+
+        ! S0t
+        St0M = int_TauMat(nd,q0,qt,p0,pt,B0,Bt)
+        !St0M = int_TauMat(nd,qt,qt,pt,p0,Bt,B0)
+        ! S0-t
+        S0tM = int_TauMat(nd,q0,tq,p0,tp,B0,tB)
+        ! H00M
+        call energy(nd,q0,p0,c0,B0,H00M,E0,Mx,My)
+
+! SG qtag.f line 1046 : cleaning new overlap (?)
+        Aux(:,:) =- iu*(St0M-S0tM)
+
+        do i = 1, nh
+          sumS(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
+          do j = i+1,nh
+            reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
+            imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
+            sumS(i,j) = reS+iu*imS
+            sumS(j,i) = conjg(sumS(i,j))
+          end do
+        end do
+
+! Hermitizing H00M too, why not 
+        Aux(:,:) = H00M(:,:)
+
+        do i = 1, nh
+          H00M(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
+          do j = i+1,nh
+            reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
+            imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
+            H00M(i,j) = reS+iu*imS
+            H00M(j,i) = conjg(H00M(i,j))
+          end do
+        end do
+
+       ! cexpo = c_static(nd,h,c0,dreal(S00M),H00M)
+        summa = S0tM - St0M -2*h*iu*H00M
+       !summa = -iu*sumS -2*h*iu*H00M
+       ! summa = S0tM - St0M 
+        csupp = matmul(summa,c0) + matmul(S00M,tc)! +2.d0*(cexpo - c0)
+ 
+        cout = linsys(nh,S00M,csupp) 
 
        end function
        end module

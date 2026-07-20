@@ -22,8 +22,9 @@
        write(321,*) "#Steps: ",nstep
        write(321,*) "#Timestep: ",h
        write(321,*) "#Normalization constant: ",N
-       write(321,*) "#Time ","N ","E ","q ","p ","B(1,1) ",&
-                    &"B(3,3) ", "B(1,3)"
+       write(321,*) "#Time ","N ","E ","q ","p ","Re B(1,1) ",&
+                    &"Im B(1,1) ","Re B(2,2) ","Im B(2,2) ",&
+                    & "|B(1,2)|^2"
 
        write(322,*) "#Evolution parameters:"
        write(322,*) "#Range: ",first,last

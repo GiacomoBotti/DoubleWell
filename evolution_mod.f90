@@ -34,19 +34,19 @@
        ! c0 : initial coefficients 
        ! Bcmplx : initial gaussian width matrix, real & imaginary
        integer, intent(in) :: nd
-       integer*8, dimension(4), intent(in) :: trj
+       integer*8, dimension(5), intent(in) :: trj
        real*8, dimension(nd+1), intent(in) :: q0,p0,qeq,peq
        complex*16,dimension(nh), intent(in) :: c0,ceq 
        complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx,Beq 
 
        integer*8 :: i,j,first,last,nstep,k,nprint
-       real*8 :: h,time,N,E,q,p,E0,Nsq,Neq,Mx
+       real*8 :: h,time,N,E,q,p,E0,Nsq,Neq,Mx,back
        real*8,dimension(nh) :: csq,phase 
        real*8,dimension(nd) :: qvec,pvec,My 
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold,qeqX 
        complex*16,dimension(nd+1,nd+1) :: Bcmplxi,Bcmplxj,Bold
        
-       complex*16,dimension(nh) :: cvec,cj,ctemp,ceqN
+       complex*16,dimension(nh) :: cvec,cj,ctemp,ceqN,cold,ci
 
        real*8,dimension(nd+1,4) :: kq,kp
        real*8,dimension(4) :: hvec = [0.5d0,0.5d0,1.d0,0.d0]
@@ -56,7 +56,7 @@
        real*8, dimension(nd) :: avec
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
        real*8, dimension(nd+1,nd+1) :: Bmat
-       real*8, dimension(nh,nh) :: S00M,invS,X0Mat
+       real*8, dimension(nh,nh) :: S00M,invS,X0Mat,Sc,Sprev
        complex*16, dimension(nh,nh) :: H00M
 
        complex*16 :: cTau0c,cTauXc,ckg
@@ -68,7 +68,6 @@
        character(len=50) :: bar
 
        bar_width = 50
-       hvec = hvec*h
 
        ! trajectory parameters
        first = trj(1)
@@ -101,6 +100,8 @@
        open(unit=330,file="momenta_BOT.dat",status="unknown")
 
        h = dfloat(last-first)/dfloat(nstep)
+       back = -h/trj(5)
+       write(*,*) back, trj(5)
 
        call normalization(nd,qeq(1),ceq,dreal(Beq),S00M,Neq)
        ceqN = ceq/dsqrt(Neq)
@@ -114,15 +115,17 @@
        call normalization(nd,q,cvec,dreal(Bcmplx),S00M,N)
        call energy(nd,q0,p0,cvec,Bcmplx,H00M,E0,Mx,My)
        E=E0
+       Sc=S00M
 
-       write(*,*) N, E, q0(1), p0(1), real(Bcmplx(1,1)),&
+       write(*,*) N, E/N, q0(1), p0(1), real(Bcmplx(1,1)),&
                   &aimag(Bcmplx(1,1))!,real(Bcmplxj(1,3))
        write(*,*) csq
        write(*,*) q0(2:nd+1) 
 
        write(321,*) 0.d0,N,E,q0(1), p0(1), real(Bcmplx(1,1)),&
                     &aimag(Bcmplx(1,1)),real(Bcmplx(2,2)),&
-                    &aimag(Bcmplx(2,2))
+                    &aimag(Bcmplx(2,2)),&
+                    &real(Bcmplx(1,2)*conjg(Bcmplx(1,2)))
 
        write(322,*) 0.d0, csq, dreal(cvec), dimag(cvec)
 
@@ -132,17 +135,14 @@
 
        write(326,*) 0.d0, phase
 
-       qtoti = q0
-       ptoti = p0
-       Bcmplxi = Bcmplx
        qtotj = q0
        ptotj = p0
        Bcmplxj = Bcmplx
 
        cj = cvec
 
-       Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
-       Tau0c = matmul(Tau0,ceqN)
+       Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
+       Tau0c = matmul(Tau0,cvec)
        cTau0c = dot_product(cj,Tau0c)
        write(327,*) 0.d0, real(cTau0c),aimag(cTau0c),&
                        real(cTau0c*conjg(cTau0c))/N,&
@@ -154,7 +154,8 @@
        write(328,*) 0.d0, cPc/dsqrt(N) 
 
        qeqX(:) = qeq(:)
-       qeqX(1) = -qeq(1)
+       !qeqX(1) = -qeq(1)
+       qeqX(:) = -qeq(:)
 
        TauX = int_TauMat(nd,qtotj,qeqX,ptotj,peq,Bcmplxj,Beq)
        TauXc = matmul(TauX,ceqN)
@@ -183,6 +184,35 @@
        qold = qtotj
        pold = ptotj
        Bold = Bcmplxj
+       cold = cj
+
+       qtoti = qold
+       ptoti = pold
+       Bcmplxi = Bold
+       ci = cj
+       
+! SHORT BACKPROPAGATION  
+
+       write(*,*) "Backpropagating for"
+       write(*,*) trj(5)
+       write(*,*) "Steps"
+       do j = 1,trj(5)
+         time = time + back
+         !write(*,*) time
+         ci = c_static(nd,back,ci,S00M,H00M)
+         ! Variational evolution of parameters
+         qold = qtoti
+         pold = ptoti
+         Bold = Bcmplxi
+         cold = ci
+         call vtvprop(nd,back,ci,qtoti,ptoti,Bcmplxi)
+         qtoti(:) = scalvec(:)*qtoti(:)+(1.d0-scalvec(:))*qold
+         ptoti(:) = scalvec(:)*ptoti(:)+(1.d0-scalvec(:))*pold
+         Bcmplxi(:,:)=scalmat(:,:)*Bcmplxi+(1.d0-scalmat(:,:))*Bold(:,:)
+         ci = c_update(nd,qtoti,ptoti,qold,pold,ci,Bcmplxi,Bold)
+         call normalization(nd,qtoti(1),ci,dreal(Bcmplxi),S00M,N)
+         call energy(nd,qtoti,ptoti,ci,Bcmplxi,H00M,E,Mx,My)
+       end do
 
 ! BEGIN TRAJECTORY CYCLE
        do k = 1,nprint
@@ -191,30 +221,54 @@
        if (mod(k, nprint/100) == 0 .or. j == nprint) then
        bar = repeat('#', pos) // repeat('-', bar_width - pos)
        end if
+       if (k.eq.nprint/2) then
+          h = -h
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+       end if
        do j = 1,trj(4)
           time = time + h
           ! Static evolution of coefficents
-          cj = c_static(nd,h,cj,S00M,H00M)
+          !cj = c_static(nd,h,cj,S00M,H00M)
+          !cj = c_static(nd,h,cj,Sc,H00M) ! Uses S00M at t=0 ALWAYS
+          ! Previous step variables 
+          qtoti = qold
+          ptoti = pold
+          Bcmplxi = Bold
+          ci = cold
           ! Variational evolution of parameters
           qold = qtotj
           pold = ptotj
           Bold = Bcmplxj
+          cold = cj
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
           call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+          ! Selective freezing
+          qtotj(:) = scalvec(:)*qtotj(:)+(1.d0-scalvec(:))*qold
+          ptotj(:) = scalvec(:)*ptotj(:)+(1.d0-scalvec(:))*pold
+         Bcmplxj(:,:)=scalmat(:,:)*Bcmplxj+(1.d0-scalmat(:,:))*Bold(:,:)
           ! Projection of the coefficients
-          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+          !!!!!!!!!cj = c_update(nd,qold,pold,qold,pold,cj,Bold,Bold)
 !          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fbs(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+          cj=c_update_full(nd,h,qold,qtotj,qtoti,pold,ptotj,ptoti,&
+             &Bold,Bcmplxj,Bcmplxi,cold,ci) 
           csq(:) = conjg(cj(:))*cj(:)
           ! Normalization and energy
           call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
           call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E,Mx,My)
+          write(4321,*) ci(1),cold(1),cj(1)
        end do !j
 
        phase(:) = datan((aimag(cj(:))/real(cj(:))))
-       Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
-       Tau0c = matmul(Tau0,ceqN)
+       Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
+       Tau0c = matmul(Tau0,cvec)
        cTau0c = dot_product(cj,Tau0c)
 
        Prob = int_PMat(nd,qtotj(1),Bcmplxj)
@@ -225,9 +279,11 @@
        TauXc = matmul(TauX,ceqN)
        cTauXc = dot_product(cj,TauXc)
 
-      write(321,*) time,N,E,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
+      write(321,*) time,N,E/N,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
                   &,aimag(Bcmplxj(1,1)),real(Bcmplxj(2,2))&
-                  &,aimag(Bcmplxj(2,2))
+                  &,aimag(Bcmplxj(2,2)),&
+                  &real(Bcmplxj(1,2)*conjg(Bcmplxj(1,2)))
+                  !&Bcmplxj(1,2)
       write(322,*) time, csq, dreal(cj), dimag(cj)
       write(323,*) time, qtotj(2:nd+1) 
       write(325,*) time, ptotj(2:nd+1) 

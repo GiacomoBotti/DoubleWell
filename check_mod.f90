@@ -711,7 +711,7 @@
 
       read(888,*) energy
 
-      !write(*,*) "I AM COHERENT"
+      write(*,*) "I AM COHERENT"
  
      ! write(*,*) energy, 0.5d0*(w(1) + w(2))
 
