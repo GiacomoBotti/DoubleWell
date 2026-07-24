@@ -101,9 +101,6 @@
 
        h = dfloat(last-first)/dfloat(nstep)
        back = -h/trj(5)
-       
-      write(*,*) "+---------------------------------------------------+"
-       write(*,*) "Backpropagating with: step, no steps"
        write(*,*) back, trj(5)
 
        call normalization(nd,qeq(1),ceq,dreal(Beq),S00M,Neq)
@@ -130,7 +127,7 @@
                     &aimag(Bcmplx(2,2)),&
                     &real(Bcmplx(1,2)*conjg(Bcmplx(1,2)))
 
-       write(322,*) 0.d0, dsqrt(csq), dreal(cvec), dimag(cvec)
+       write(322,*) 0.d0, csq, dreal(cvec), dimag(cvec)
 
        write(323,*) 0.d0, q0(2:nd+1) 
 
@@ -224,19 +221,19 @@
        if (mod(k, nprint/100) == 0 .or. j == nprint) then
        bar = repeat('#', pos) // repeat('-', bar_width - pos)
        end if
-       !if (k.eq.nprint/2) then
-       !   h = -h
-       !   write(*,*) "I AM GOING BACKWARD"
-       !   write(*,*) "I AM GOING BACKWARD"
-       !   write(*,*) "I AM GOING BACKWARD"
-       !   write(*,*) "I AM GOING BACKWARD"
-       !   write(*,*) "I AM GOING BACKWARD"
-       !   write(*,*) "I AM GOING BACKWARD"
-       !end if
+       if (k.eq.nprint/2) then
+          h = -h
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+          write(*,*) "I AM GOING BACKWARD"
+       end if
        do j = 1,trj(4)
           time = time + h
           ! Static evolution of coefficents
-          cj = c_static(nd,h,cj,S00M,H00M)
+          !cj = c_static(nd,h,cj,S00M,H00M)
           !cj = c_static(nd,h,cj,Sc,H00M) ! Uses S00M at t=0 ALWAYS
           ! Previous step variables 
           qtoti = qold
@@ -250,23 +247,18 @@
           cold = cj
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
-!          call scprop_der(nd,h,cj,qtotj,ptotj,Bcmplxj)
           call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
-!          call scprop_der_coef(nd,h,cj,qtotj,ptotj,Bcmplxj)
           ! Selective freezing
           qtotj(:) = scalvec(:)*qtotj(:)+(1.d0-scalvec(:))*qold
           ptotj(:) = scalvec(:)*ptotj(:)+(1.d0-scalvec(:))*pold
          Bcmplxj(:,:)=scalmat(:,:)*Bcmplxj+(1.d0-scalmat(:,:))*Bold(:,:)
           ! Projection of the coefficients
-          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
           !!!!!!!!!cj = c_update(nd,qold,pold,qold,pold,cj,Bold,Bold)
 !          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fbs(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
-!          cj=c_update_full(nd,h,qold,qtotj,qtoti,pold,ptotj,ptoti,&
-!             &Bold,Bcmplxj,Bcmplxi,cold,ci) 
-! TEST TEST TEST TEST TEST
-          !cj(1) = cj(1) + sum(cj(4:nh))
-          !cj(6:nh) = 0.d0
+          cj=c_update_full(nd,h,qold,qtotj,qtoti,pold,ptotj,ptoti,&
+             &Bold,Bcmplxj,Bcmplxi,cold,ci) 
           csq(:) = conjg(cj(:))*cj(:)
           ! Normalization and energy
           call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
@@ -292,7 +284,7 @@
                   &,aimag(Bcmplxj(2,2)),&
                   &real(Bcmplxj(1,2)*conjg(Bcmplxj(1,2)))
                   !&Bcmplxj(1,2)
-      write(322,*) time, dsqrt(csq), dreal(cj), dimag(cj)
+      write(322,*) time, csq, dreal(cj), dimag(cj)
       write(323,*) time, qtotj(2:nd+1) 
       write(325,*) time, ptotj(2:nd+1) 
       write(326,*) time, phase 

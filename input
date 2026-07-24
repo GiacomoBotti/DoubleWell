@@ -28,9 +28,9 @@
     p0(1) = 0.d0
 /
 &grid
-    lwb = -120.d0
-    hgb = 120.d0
-    gstep = 10000
+    lwb = -10.d0
+    hgb = 10.d0
+    gstep = 1024!000
 /
 &scaling_factors
     scalv = 200.d0 300.d0

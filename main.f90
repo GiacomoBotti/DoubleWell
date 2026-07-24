@@ -203,6 +203,7 @@
 !.....Check projection..................................................
 !      call check_projection(nv,qeq,peq,ceq,Bcmplx)
 !.....Evolution.........................................................
+!      stop
 
       close(2222)
       write(*,*) "WE ARE RUNNING"

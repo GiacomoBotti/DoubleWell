@@ -129,6 +129,10 @@
  
         XnMat = integral
 
+        where (abs(XnMat).le.1d-15)
+           XnMat = complex(0.d0,0.d0)
+        end where
+
 !        write(*,*) "power:", pow
 !        write(*,*) "Xn11:", XnMat(1,1)
      
@@ -224,7 +228,7 @@
 
 !......Sb function......................................................
 
-       function fun_Sb(nd,x,qi,qj,pi,pj,Bimat,Bjmat) result(Sb)
+       function fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat) result(Sb)
        ! nd: bath dimensions
        ! x: active mode coordinate
        ! qi: total gaussian center vector (bra)
@@ -235,7 +239,7 @@
        ! Bjmat: complex gaussian width matrix (ket)
         integer, intent(in) :: nd
         real*8, intent(in) :: x
-        real*8, dimension(nd+1), intent(in) :: qi,qj,pi,pj
+        real*8, dimension(nd+1), intent(in) :: qi,qj,ppi,pj
         complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
 
         integer :: i,j
@@ -248,7 +252,7 @@
         complex*16, dimension(nd) :: qjAj,Ag,veci,vecj
         complex*16, dimension(nd,nd) :: Ai,Aj,Atot,invAtot
 
-        pbi=pi(2:nd+1)
+        pbi=ppi(2:nd+1)
         pbj=pj(2:nd+1)
         qbi=qi(2:nd+1)
         qbj=qj(2:nd+1)
@@ -274,7 +278,7 @@
         veci = (x-qi(1))*dconjg(aveci) + iu*pbi
         prodi = dot_product(qbi,veci)
 
-        h0i=-0.5d0*dconjg(alphai)*(x-qi(1))**2-iu*pi(1)*(x-qi(1))&
+        h0i=-0.5d0*dconjg(alphai)*(x-qi(1))**2-iu*ppi(1)*(x-qi(1))&
             -0.5d0*qiAiqi+prodi
 
         vecj = (x-qj(1))*avecj - iu*pbj
@@ -284,6 +288,8 @@
             -0.5d0*qjAjqj+prodj
 
         Sb=zexp(+0.5d0*gAg+h0i+h0j)
+        !Sb=complex(dexp(-(313*x**2)/700)*dsqrt(15.d0)/(5.d0*dsqrt(pi)),&
+        !      &0.d0) 
 
        end function
 
@@ -358,6 +364,10 @@
         integral = (integral + s)*h/3.d0
  
         TauMat = integral*NiNj*norm
+
+        where (abs(TauMat).le.1d-15)
+           TauMat = complex(0.d0,0.d0)
+        end where
 
 !        write(*,*) "power:", pow
 !        write(*,*) "Xn11:", XnMat(1,1)

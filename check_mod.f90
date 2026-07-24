@@ -15,6 +15,7 @@
       use kinetic_module
       use BOT_module
       use observable_module
+      use inversion_module
 
       implicit none
 
@@ -254,16 +255,21 @@
        integer, intent(in) :: nd
 
        integer :: i,j
-       real*8 :: a,q
-       real*8, dimension(nd) :: avec 
-       real*8, dimension(nd,nd) :: Amat
+       real*8 :: a,q,aLa
+       real*8, dimension(nd) :: avec,vec1
+       real*8, dimension(nd,nd) :: Amat,LambdaMat,invLambda,Tmat
        real*8, dimension(nd+1,nd+1) :: Bmat
-       real*8, dimension(nh,nh) :: XnMat
+       real*8, dimension(nh,nh) :: XnMat,Xinv
 
-       Bmat(:,:) = 0.1d0
-       Bmat(1,:) = 0.5d0
-       Bmat(:,1) = 0.5d0
-       Bmat(1,1) = 1.d0
+       !Bmat(:,:) = 0.1d0
+       !Bmat(1,:) = 0.5d0
+       !Bmat(:,1) = 0.5d0
+       !Bmat(1,1) = 1.d0
+       Bmat(:,:) = 0.d0
+       Bmat(1,1) = 3.d0/5.d0 
+       Bmat(1,2) = 1.d0
+       Bmat(2,1) = 1.d0
+       Bmat(2,2) = 7.d0
 
        write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
        write(*,*) "# HELLO I'M CHECK_XNMAT"
@@ -289,16 +295,61 @@
 
        write(*,*) "------------------------------"
        write(*,*) "a: ", a
-         
-       do i = 1,4
-         q = dfloat(i)/2.d0
+
+       call diagonalization(nd,Amat,LambdaMat,Tmat)
+        
+       invLambda(:,:) = 0.d0
+
+       do i = 1,nd
+         invLambda(i,i) = 1.d0/LambdaMat(i,i)
+       end do
+
+       vec1=matmul(invLambda,avec)
+
+       aLa=dot_product(avec,vec1)
+
+       write(*,*) "------------------------------"
+       write(*,*) "aLa: ", aLa
+
+       do i = 1,1!4
+         q = 0.d0!dfloat(i)/2.d0
          write(*,*) "------------------------------"
          write(*,*) "q: ", q
-         XnMat = int_XnMat(nd,4,a,avec,Amat,q)
-         do j = 1,nh
-           write(*,*) XnMat(j,:)
-         end do
+         XnMat = int_XnMat(nd,0,a,avec,Amat,q)
+         !do j = 1,nh
+         !  write(*,*) XnMat(j,:)
+         !end do
        end do
+
+       XnMat(:,:) = XnMat(:,:)/XnMat(1,1)
+
+       Xinv = invgen_real(nh,XnMat)
+
+       write(*,*) "------------------------------"
+       write(*,*) "S(1,1)"
+       write(*,*) XnMat(1,1)
+       write(*,*) "S(11,11)   ", "S(11,18)   ", "S(18,18)"
+       !write(*,*) XnMat(11,11), XnMat(11,18), XnMat(18,18)
+       write(*,*) "S(12,12)   ", "S(12,18)   ", "S(18,18)"
+       !write(*,*) XnMat(12,12), XnMat(12,18), XnMat(18,18)
+       write(*,*) "First column of XnMat^{-1}"
+       write(*,*) Xinv(:,1)
+       write(*,*) "Last column of XnMat^{-1}"
+       write(*,*) Xinv(:,nh)
+
+       XnMat(:,:) = matmul(Xinv,XnMat)
+
+       write(*,*) "------------------------------"
+       write(*,*) "S^{-1}S(1,1)"
+       write(*,*) XnMat(1,1)
+       write(*,*) "S^{-1}S(11,11) ", "S^{-1}S(11,18) ", "S^{-1}S(18,18)"
+       !write(*,*) XnMat(11,11), XnMat(11,18), XnMat(18,18)
+       write(*,*) "S^{-1}S(12,12) ", "S^{-1}S(12,18) ", "S^{-1}S(18,18)"
+       !write(*,*) XnMat(12,12), XnMat(12,18), XnMat(18,18)
+       write(*,*) "First column of S^{-1}S"
+       write(*,*) XnMat(:,1)
+       write(*,*) "Last column of S^{-1}S"
+       write(*,*) XnMat(:,nh)
 
       end subroutine
 
@@ -422,10 +473,12 @@
        integer, intent(in) :: nd
 
        integer :: i,j
-       real*8 :: Nsq,NiNj
+       real*8 :: Nsq,NiNj,x,a
        real*8,dimension(nd+1) :: qi,qj,ppi,pj 
+       real*8,dimension(nd) :: avec 
+       real*8,dimension(nd,nd) :: Amat 
        complex*16,dimension(nd+1,nd+1) :: Bimat,Bjmat
-       complex*16,dimension(nh,nh) :: TauMat
+       complex*16,dimension(nh,nh) :: TauMat,invTauMat,XnMat
 
        complex*16 :: Sb
 
@@ -445,15 +498,26 @@
           end do
        end do
 
+      ! Bimat(1,1) = 3.d0/5.d0 
+      ! Bimat(1,2) = 1.d0
+      ! Bimat(2,1) = 1.d0
+      ! Bimat(2,2) = 7.d0
+
+      ! Bjmat(1,1) = 3.d0/5.d0 
+      ! Bjmat(1,2) = 1.d0
+      ! Bjmat(2,1) = 1.d0
+      ! Bjmat(2,2) = 700.d0/107.d0 -7.d0
+      Bjmat(:,:) = Bimat(:,:) +1.d0/100.d0 +iu/100.d0
+
        write(*,*) "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-       write(*,*) "# HELLO I'M CHECK_NORM"
-       write(*,*) "Bi matrix"
+       write(*,*) "# HELLO I'M CHECK_SHIFTEDOVERLAP"
+       write(*,*) "B0 matrix"
      
        do i = 1,nd+1
           write(*,*) Bimat(i,:)
        end do
 
-       write(*,*) "Bj matrix"
+       write(*,*) "Bt matrix"
      
        do i = 1,nd+1
           write(*,*) Bjmat(i,:)
@@ -474,21 +538,70 @@
 
        qj(1) = 1.d0
        qi(1) = 0.7d0 
+ 
+       qj(:) = qi(:) + 1.d0/100.d0
+       pj(:) = ppi(:) + 1.d0/100.d0
 
        write(*,*) "------------------------------"
-       
-       Sb = fun_Sb(nd,1.5d0,qi,qj,ppi,pj,Bimat,Bjmat)
-       write(*,*) "Sb: ", Sb
+       write(*,*) "q0:"
+       write(*,*) qi
+       write(*,*) "p0:"
+       write(*,*) ppi
+       write(*,*) "qt:"
+       write(*,*) qj
+       write(*,*) "pt:"
+       write(*,*) pj
+
+       !qj(:) = 0.d0
+       !qi(:) = 0.d0
+       !pj(:) = 0.d0
+       !ppi(:) = 0.d0
+
+       write(*,*) "------------------------------"
+       x = 1.d0
+       write(*,*) "x: ", x
+       Sb = fun_Sb(nd,x,qi,qi,ppi,ppi,Bimat,Bimat)
+       write(*,*) "Sb 00: ", Sb
+       Sb = fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+       write(*,*) "Sb 0t: ", Sb
+       x = 0.d0
+       write(*,*) "x: ", x
+       Sb = fun_Sb(nd,x,qi,qi,ppi,ppi,Bimat,Bimat)
+       write(*,*) "Sb 00: ", Sb
+       Sb = fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
+       write(*,*) "Sb 0t: ", Sb
 
        write(*,*) "------------------------------"
 
        TauMat = int_TauMat(nd,qi,qi,ppi,ppi,Bimat,Bimat)
+       TauMat = TauMat(:,:)/TauMat(1,1)
+       !call extractA(nd,real(Bimat),Amat,avec,a)
+       !XnMat = int_XnMat(nd,0,a,avec,Amat,qi(1))
+       !XnMat = XnMat(:,:)/XnMat(1,1)
  
-       write(*,*) "TauMat(1,1): ", TauMat(1,1)
+       write(*,*) "S00M: "
+       !do i = 1, nh
+       !  write(*,*) real(TauMat(i,:)) 
+       !end do
+
+       invTauMat = invgen(nh,TauMat)
+       !invTauMat(:,:) = invTauMat(:,:)/invTauMat(1,1)
 
        TauMat = int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat)
- 
-       write(*,*) "TauMat(1,1): ", TauMat(1,1)
+       TauMat = TauMat(:,:)/TauMat(1,1)
+
+       !write(*,*) "S0tM: "
+       !do i = 1, nh
+       !  write(*,*) TauMat(i,:) 
+       !end do
+
+       TauMat = matmul(invTauMat,TauMat)
+
+       write(*,*) "First column of S^{-1}S0t"
+       write(*,*) TauMat(:,1)
+       write(*,*) "Last column of S^{-1}S0t"
+       write(*,*) TauMat(:,nh)
+        
     
 
       end subroutine

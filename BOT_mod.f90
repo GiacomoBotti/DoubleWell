@@ -14,6 +14,7 @@
        use matrix_module
        use observable_module
        use constants
+       use eofmotion_module
 
        implicit none
 
@@ -21,6 +22,7 @@
 
        private
        public ::c_static,c_update,c_update_fb,c_update_fbs,c_update_full
+       public :: scprop_der_coef
 
        contains
 
@@ -555,11 +557,137 @@
 
        ! cexpo = c_static(nd,h,c0,dreal(S00M),H00M)
         summa = S0tM - St0M -2*h*iu*H00M
+       ! summa = 2.d0*S00M - St0M -h*iu*H00M
+       ! summa = -S0tM + St0M -2*h*iu*H00M
        !summa = -iu*sumS -2*h*iu*H00M
        ! summa = S0tM - St0M 
         csupp = matmul(summa,c0) + matmul(S00M,tc)! +2.d0*(cexpo - c0)
+       ! csupp = matmul(summa,c0) !+ matmul(S00M,tc)! +2.d0*(cexpo - c0)
  
         cout = linsys(nh,S00M,csupp) 
 
        end function
+
+!.....Self-consistent propagator with derivatives convergence and coeff.
+
+      subroutine scprop_der_coef(nd,h,cj,qj,pj,Bj)
+      ! Does one self-consistent progator step with derivatives conv
+       integer, intent(in) :: nd
+       real*8, intent(in) :: h
+       complex*16, dimension(nh) :: cj
+       real*8, dimension(nd+1) :: qj,pj,qi,ppi,qiold,piold,qav,pav
+       real*8, dimension(nd+1) :: sqq,sqp 
+       complex*16, dimension(nd+1,nd+1) :: Bj,Bi,Biold,Bav
+       real*8, dimension(nd+1,nd+1) :: sqB
+
+       integer :: i
+       integer*8 :: maxcycle=2  
+       real*8 :: thr = 1.d+5
+       real*8 :: error
+       real*8,dimension(nd+1,4) :: kq,kp
+       complex*16,dimension(nd+1,nd+1,4) :: kb
+       ! For the coefficients 
+       real*8 :: a,q,Nsq,Y0,reS,imS
+       real*8, dimension(nd) :: avec 
+       real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+       real*8, dimension(nd+1,nd+1) :: Bmat
+       complex*16, dimension(nh) :: csupp,ci
+       complex*16, dimension(nh,nh) :: S00M,St0M,sumS,X0Mat,S0tM
+       complex*16, dimension(nh,nh) :: prod1,prod2,summa,H00M,Aux
+       real*8 :: E0,Mx
+       real*8, dimension(nd) :: My
+
+       qi = qj
+       ppi = pj
+       Bi = Bj
+       ci = cj
+
+       ! S00M
+       q = qj(1)
+       Bmat = real(Bj)
+
+       Nsq=fun_Nsq(nd+1,Bmat)
+       call extractA(nd,Bmat,Amat,avec,a)
+       call diagonalization(nd,Amat,LambdaMat,Tmat)
+       Y0=int_Y0(nd,LambdaMat)
+       X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
+
+       S00M = X0Mat*Y0*Nsq 
+       ! H00M
+       call energy(nd,qj,pj,cj,Bj,H00M,E0,Mx,My)
+
+       call KarplusTimeDer(nd,cj,qj,pj,Bj,&
+            &kq(:,1),kp(:,1),kb(:,:,1))             
+
+       kq(:,2) = kq(:,1)
+       kp(:,2) = kp(:,1)
+       kb(:,:,2) = kb(:,:,1)
+
+       do i = 1,maxcycle
+         write(*,*) i,kq(2,2)
+
+         !qi = qj + h*(kq(:,2)+kq(:,1))*0.5d0
+         !ppi = pj + h*(kp(:,2)+kp(:,1))*0.5d0
+         !Bi = Bj + h*(kb(:,:,2)+kb(:,:,1))*0.5d0
+         ! derivatives at midpoint 
+         qi = qj + h*(kq(:,2))*0.0d0
+         ppi = pj + h*(kp(:,2))*0.0d0
+         Bi = Bj + h*(kb(:,:,2))*0.0d0
+         ! S0t
+         !St0M = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
+         !summa = 2.d0*S00M - St0M -iu*h*H00M
+         ! midpoint
+         !summa = 2.d0*S00M - St0M -0.5d0*iu*h*H00M
+         !csupp = matmul(summa,cj)
+         !ci = linsys(nh,S00M,csupp)
+         !write(*,*) i,h,ci(1),St0M(1,1),csupp(1)
+
+         call KarplusTimeDer(nd,cj,qi,ppi,Bi,&
+              &kq(:,3),kp(:,3),kb(:,:,3))             
+ 
+         !Convergence on parameters 
+         !sqq = (qiold-qi)**2
+         !sqp = (piold-ppi)**2
+         !sqB = (Biold-Bi)*conjg(Biold-Bi)
+         !Convergence on derivatives
+         sqq = (kq(:,3)-kq(:,2))**2
+         sqp = (kp(:,3)-kp(:,2))**2
+         sqB = (kb(:,:,3)-kb(:,:,2))*conjg(kb(:,:,3)-kb(:,:,2))
+
+         error = dsqrt(sum(sqq) + sum(sqp) + sum(sqB))
+
+         kq(:,2) = kq(:,3)
+         kp(:,2) = kp(:,3)
+         kb(:,:,2) = kb(:,:,3)
+
+         if(error.le.thr) then
+           qi = qj + h*kq(:,2)
+           ppi = pj + h*kp(:,2)
+           Bi = Bj + h*kb(:,:,2)
+           !qi = qj + h*(kq(:,2)+kq(:,1))*0.5d0
+           !ppi = pj + h*(kp(:,2)+kp(:,1))*0.5d0
+           !Bi = Bj + h*(kb(:,:,2)+kb(:,:,1))*0.5d0
+           ! S0t
+           !St0M = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
+           !summa = 2.d0*S00M + St0M -iu*h*H00M
+           !csupp = matmul(summa,cj)
+           !ci = linsys(nh,S00M,csupp)
+           write(*,*) "I exit at ", i
+           exit
+         end if
+       end do
+      
+           ! S0t
+           St0M = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
+           summa = 2.d0*S00M + St0M -iu*h*H00M
+           csupp = matmul(summa,cj)
+           ci = linsys(nh,S00M,csupp)
+           write(*,*) ci(1)
+       qj=qi
+       pj=ppi
+       Bj=Bi
+       !cj=ci
+
+      end subroutine
+
        end module

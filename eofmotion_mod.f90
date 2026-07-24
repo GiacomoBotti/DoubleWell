@@ -13,6 +13,7 @@
       use integrals_module
       use matrix_module
       use inversion_module
+      !use observable_module 
 
       implicit none
 
@@ -21,6 +22,7 @@
 
       private
       public :: MassesMat,KarplusTimeDer,rungekutta,scprop,vtvprop 
+      public :: scprop_der
 
       contains
 
@@ -273,6 +275,82 @@
        pj = ppi
        Bj = Bi
        
+      end subroutine
+
+!.....Self-consistent propagator with derivatives convergence...........
+
+      subroutine scprop_der(nd,h,cj,qj,pj,Bj)
+      ! Does one self-consistent progator step with derivatives conv
+       integer, intent(in) :: nd
+       real*8, intent(in) :: h
+       complex*16, dimension(nh), intent(in) :: cj
+       real*8, dimension(nd+1) :: qj,pj,qi,ppi,qiold,piold,qav,pav
+       real*8, dimension(nd+1) :: sqq,sqp 
+       complex*16, dimension(nd+1,nd+1) :: Bj,Bi,Biold,Bav
+       real*8, dimension(nd+1,nd+1) :: sqB
+
+       integer*8 :: maxcycle=20  
+       real*8 :: thr = 1.d-5
+       real*8 :: error
+       real*8,dimension(nd+1,4) :: kq,kp
+       complex*16,dimension(nd+1,nd+1,4) :: kb
+
+       qi = qj
+       ppi = pj
+       Bi = Bj
+
+       call KarplusTimeDer(nd,cj,qj,pj,Bj,&
+            &kq(:,1),kp(:,1),kb(:,:,1))             
+
+       kq(:,2) = kq(:,1)
+       kp(:,2) = kp(:,1)
+       kb(:,:,2) = kb(:,:,1)
+
+       do i = 1,maxcycle
+
+        ! qi = qj + h*(kq(:,2)+kq(:,1))*0.5d0
+        ! ppi = pj + h*(kp(:,2)+kp(:,1))*0.5d0
+        ! Bi = Bj + h*(kb(:,:,2)+kb(:,:,1))*0.5d0
+         ! derivatives at midpoint 
+         qi = qj + h*(kq(:,2))*0.5d0
+         ppi = pj + h*(kp(:,2))*0.5d0
+         Bi = Bj + h*(kb(:,:,2))*0.5d0
+
+         call KarplusTimeDer(nd,cj,qi,ppi,Bi,&
+              &kq(:,3),kp(:,3),kb(:,:,3))             
+ 
+         !Convergence on parameters 
+         !sqq = (qiold-qi)**2
+         !sqp = (piold-ppi)**2
+         !sqB = (Biold-Bi)*conjg(Biold-Bi)
+         !Convergence on derivatives
+         sqq = (kq(:,2)-kq(:,3))**2
+         sqp = (kp(:,2)-kp(:,3))**2
+         sqB = (kb(:,:,2)-kb(:,:,3))*conjg(kb(:,:,2)-kb(:,:,3))
+
+         error = dsqrt(sum(sqq) + sum(sqp) + sum(sqB))
+ 
+         !write(*,*) i
+         kq(:,2) = kq(:,3)
+         kp(:,2) = kp(:,3)
+         kb(:,:,2) = kb(:,:,3)
+
+         if(error.le.thr) then
+           qi = qj + h*kq(:,2)
+           ppi = pj + h*kp(:,2)
+           Bi = Bj + h*kb(:,:,2)
+           !qi = qj + h*(kq(:,2)+kq(:,1))*0.5d0
+           !ppi = pj + h*(kp(:,2)+kp(:,1))*0.5d0
+           !Bi = Bj + h*(kb(:,:,2)+kb(:,:,1))*0.5d0
+          ! write(*,*) "I get out at", i
+           exit
+         end if
+       end do
+      
+       qj=qi
+       pj=ppi
+       Bj=Bi
+
       end subroutine
 
       end module
