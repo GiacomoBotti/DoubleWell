@@ -236,7 +236,7 @@
        do j = 1,trj(4)
           time = time + h
           ! Static evolution of coefficents
-          cj = c_static(nd,h,cj,S00M,H00M)
+!          cj = c_static(nd,h,cj,S00M,H00M)
           !cj = c_static(nd,h,cj,Sc,H00M) ! Uses S00M at t=0 ALWAYS
           ! Previous step variables 
           qtoti = qold
@@ -251,19 +251,22 @@
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop_der(nd,h,cj,qtotj,ptotj,Bcmplxj)
-          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
+          call pece_param(nd,h,cj,qtotj,ptotj,Bcmplxj)
+!          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop_der_coef(nd,h,cj,qtotj,ptotj,Bcmplxj)
           ! Selective freezing
-          qtotj(:) = scalvec(:)*qtotj(:)+(1.d0-scalvec(:))*qold
-          ptotj(:) = scalvec(:)*ptotj(:)+(1.d0-scalvec(:))*pold
-         Bcmplxj(:,:)=scalmat(:,:)*Bcmplxj+(1.d0-scalmat(:,:))*Bold(:,:)
+!          qtotj(:) = scalvec(:)*qtotj(:)+(1.d0-scalvec(:))*qold
+!          ptotj(:) = scalvec(:)*ptotj(:)+(1.d0-scalvec(:))*pold
+!         Bcmplxj(:,:)=scalmat(:,:)*Bcmplxj+(1.d0-scalmat(:,:))*Bold(:,:)
           ! Projection of the coefficients
-          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
+!          cj = c_update(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
           !!!!!!!!!cj = c_update(nd,qold,pold,qold,pold,cj,Bold,Bold)
 !          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fbs(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
-!          cj=c_update_full(nd,h,qold,qtotj,qtoti,pold,ptotj,ptoti,&
-!             &Bold,Bcmplxj,Bcmplxi,cold,ci) 
+          cj=c_update_full(nd,h,qold,qtotj,qtoti,pold,ptotj,ptoti,&
+             &Bold,Bcmplxj,Bcmplxi,cold,ci) 
+!           call pece_coef(nd,h,cj,qtotj,ptotj,Bcmplxj,qtoti,ptoti,&
+!                &Bcmplxi,ci)
 ! TEST TEST TEST TEST TEST
           !cj(1) = cj(1) + sum(cj(4:nh))
           !cj(6:nh) = 0.d0
@@ -271,8 +274,11 @@
           ! Normalization and energy
           call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
           call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E,Mx,My)
-          write(4321,*) ci(1),cold(1),cj(1)
+          !write(4321,*) ci(1),cold(1),cj(1)
        end do !j
+! TEST TEST TEST TEST TEST
+      !    cj=c_update_full(nd,h,qold,qtotj,qtoti,pold,ptotj,ptoti,&
+       !      &Bold,Bcmplxj,Bcmplxi,cold,ci) 
 
        phase(:) = datan((aimag(cj(:))/real(cj(:))))
        Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)

@@ -22,7 +22,7 @@
 
        private
        public ::c_static,c_update,c_update_fb,c_update_fbs,c_update_full
-       public :: scprop_der_coef
+       public :: pece_coef
 
        contains
 
@@ -570,30 +570,29 @@
 
 !.....Self-consistent propagator with derivatives convergence and coeff.
 
-      subroutine scprop_der_coef(nd,h,cj,qj,pj,Bj)
+      subroutine pece_coef(nd,h,cj,qj,pj,Bj,tq,tp,tB,tc)
       ! Does one self-consistent progator step with derivatives conv
        integer, intent(in) :: nd
        real*8, intent(in) :: h
-       complex*16, dimension(nh) :: cj
-       real*8, dimension(nd+1) :: qj,pj,qi,ppi,qiold,piold,qav,pav
-       real*8, dimension(nd+1) :: sqq,sqp 
-       complex*16, dimension(nd+1,nd+1) :: Bj,Bi,Biold,Bav
-       real*8, dimension(nd+1,nd+1) :: sqB
+       complex*16, dimension(nh) :: cj,tc
+       real*8, dimension(nd+1) :: qj,pj,qi,ppi,tq,tp
+       complex*16, dimension(nd+1,nd+1) :: Bj,Bi,tB
 
-       integer :: i
-       integer*8 :: maxcycle=2  
+       integer :: i,j,k
+       integer*8 :: maxcycle=1 
        real*8 :: thr = 1.d+5
        real*8 :: error
        real*8,dimension(nd+1,4) :: kq,kp
        complex*16,dimension(nd+1,nd+1,4) :: kb
-       ! For the coefficients 
+       ! For the coefficients hip hip hurrah
        real*8 :: a,q,Nsq,Y0,reS,imS
        real*8, dimension(nd) :: avec 
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
        real*8, dimension(nd+1,nd+1) :: Bmat
        complex*16, dimension(nh) :: csupp,ci
-       complex*16, dimension(nh,nh) :: S00M,St0M,sumS,X0Mat,S0tM
+       complex*16, dimension(nh,nh) :: S00M,St,X0Mat,tS,Stp,Stc
        complex*16, dimension(nh,nh) :: prod1,prod2,summa,H00M,Aux
+       complex*16, dimension(nh,nh) :: Htt,Httc 
        real*8 :: E0,Mx
        real*8, dimension(nd) :: My
 
@@ -602,92 +601,130 @@
        Bi = Bj
        ci = cj
 
+       ! S0-tM 
+       tS = int_TauMat(nd,qj,tq,pj,tp,Bj,tB)
+
        ! S00M
        q = qj(1)
        Bmat = real(Bj)
-
        Nsq=fun_Nsq(nd+1,Bmat)
        call extractA(nd,Bmat,Amat,avec,a)
        call diagonalization(nd,Amat,LambdaMat,Tmat)
        Y0=int_Y0(nd,LambdaMat)
        X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
-
        S00M = X0Mat*Y0*Nsq 
+
        ! H00M
        call energy(nd,qj,pj,cj,Bj,H00M,E0,Mx,My)
+       ! Hermitizing H00M too, why not 
+       Aux(:,:) = H00M(:,:)
+
+       do i = 1, nh
+         H00M(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
+         do j = i+1,nh
+           reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
+           imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
+           H00M(i,j) = reS+iu*imS
+           H00M(j,i) = conjg(H00M(i,j))
+         end do
+       end do
 
        call KarplusTimeDer(nd,cj,qj,pj,Bj,&
             &kq(:,1),kp(:,1),kb(:,:,1))             
 
-       kq(:,2) = kq(:,1)
-       kp(:,2) = kp(:,1)
-       kb(:,:,2) = kb(:,:,1)
+       ! Predictor (Lambda tilde) 
+       qi = qj + h*(kq(:,1))
+       ppi = pj + h*(kp(:,1))
+       Bi = Bj + h*(kb(:,:,1))
 
-       do i = 1,maxcycle
-         write(*,*) i,kq(2,2)
+       ! Coeff predictor step uses S0t(lambda tilde)
+       ! and H00M
+       Stp = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
 
-         !qi = qj + h*(kq(:,2)+kq(:,1))*0.5d0
-         !ppi = pj + h*(kp(:,2)+kp(:,1))*0.5d0
-         !Bi = Bj + h*(kb(:,:,2)+kb(:,:,1))*0.5d0
-         ! derivatives at midpoint 
-         qi = qj + h*(kq(:,2))*0.0d0
-         ppi = pj + h*(kp(:,2))*0.0d0
-         Bi = Bj + h*(kb(:,:,2))*0.0d0
-         ! S0t
-         !St0M = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
-         !summa = 2.d0*S00M - St0M -iu*h*H00M
-         ! midpoint
-         !summa = 2.d0*S00M - St0M -0.5d0*iu*h*H00M
-         !csupp = matmul(summa,cj)
-         !ci = linsys(nh,S00M,csupp)
-         !write(*,*) i,h,ci(1),St0M(1,1),csupp(1)
+       summa = tS - Stp -2*h*iu*H00M
+       csupp = matmul(summa,cj) + matmul(S00M,tc)
+       ci = linsys(nh,S00M,csupp) 
 
-         call KarplusTimeDer(nd,cj,qi,ppi,Bi,&
-              &kq(:,3),kp(:,3),kb(:,:,3))             
- 
-         !Convergence on parameters 
-         !sqq = (qiold-qi)**2
-         !sqp = (piold-ppi)**2
-         !sqB = (Biold-Bi)*conjg(Biold-Bi)
-         !Convergence on derivatives
-         sqq = (kq(:,3)-kq(:,2))**2
-         sqp = (kp(:,3)-kp(:,2))**2
-         sqB = (kb(:,:,3)-kb(:,:,2))*conjg(kb(:,:,3)-kb(:,:,2))
+       !do k = 1,maxcycle
+       call KarplusTimeDer(nd,ci,qi,ppi,Bi,&
+            &kq(:,2),kp(:,2),kb(:,:,2))             
 
-         error = dsqrt(sum(sqq) + sum(sqp) + sum(sqB))
+       ! Corrector (Lambda hat)
+       qi = qj + h*(kq(:,1)+kq(:,2))*0.5d0
+       ppi = pj + h*(kp(:,1)+kp(:,2))*0.5d0
+       Bi = Bj + h*(kb(:,:,1)+kb(:,:,2))*0.5d0
 
-         kq(:,2) = kq(:,3)
-         kp(:,2) = kp(:,3)
-         kb(:,:,2) = kb(:,:,3)
+       ! Coeff corrector step uses S0t(lambda hat)
+       ! and Htt(lambda hat)
+       ! Stc and Httc
+       Stc = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
+       call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,My)
+       ! Hermitizing Httc too, why not 
+       Aux(:,:) = Httc(:,:)
 
-         if(error.le.thr) then
-           qi = qj + h*kq(:,2)
-           ppi = pj + h*kp(:,2)
-           Bi = Bj + h*kb(:,:,2)
-           !qi = qj + h*(kq(:,2)+kq(:,1))*0.5d0
-           !ppi = pj + h*(kp(:,2)+kp(:,1))*0.5d0
-           !Bi = Bj + h*(kb(:,:,2)+kb(:,:,1))*0.5d0
-           ! S0t
-           !St0M = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
-           !summa = 2.d0*S00M + St0M -iu*h*H00M
-           !csupp = matmul(summa,cj)
-           !ci = linsys(nh,S00M,csupp)
-           write(*,*) "I exit at ", i
-           exit
-         end if
+       do i = 1, nh
+         Httc(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
+         do j = i+1,nh
+           reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
+           imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
+           Httc(i,j) = reS+iu*imS
+           Httc(j,i) = conjg(Httc(i,j))
+         end do
        end do
-      
-           ! S0t
-           St0M = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
-           summa = 2.d0*S00M + St0M -iu*h*H00M
-           csupp = matmul(summa,cj)
-           ci = linsys(nh,S00M,csupp)
-           write(*,*) ci(1)
+       summa = tS -0.5d0*(Stp+Stc) -h*iu*(H00M+Httc) ! ver 1
+       !summa = tS -0.5d0*(Stp+Stc) -h*iu*H00M ! ver 2
+       csupp = matmul(summa,cj) + matmul(S00M,tc)
+       !csupp = csupp -h*iu*matmul(Httc,ci) ! ver 2
+       ci = linsys(nh,S00M,csupp) 
+
+       call KarplusTimeDer(nd,ci,qi,ppi,Bi,&
+            &kq(:,3),kp(:,3),kb(:,:,3))             
+
+       ! Evaluator (Lambda t)
+       qi = qj + h*(kq(:,1)+kq(:,3))*0.5d0
+       ppi = pj + h*(kp(:,1)+kp(:,3))*0.5d0
+       Bi = Bj + h*(kb(:,:,1)+kb(:,:,3))*0.5d0
+
+       ! Coeff evaluator step uses S0t(lambda t)
+       ! and Htt(lambda t)
+       ! St and Htt
+       St = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
+       call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,My)
+       ! Hermitizing Htt too, why not 
+       Aux(:,:) = Htt(:,:)
+
+       do i = 1, nh
+         Htt(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
+         do j = i+1,nh
+           reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
+           imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
+           Htt(i,j) = reS+iu*imS
+           Htt(j,i) = conjg(Htt(i,j))
+         end do
+       end do
+       summa = tS -0.5d0*(Stp+St) -h*iu*(H00M+Htt) ! ver 1
+       !summa = tS -0.5d0*(Stp+St) -h*iu*H00M ! ver 2
+       csupp = matmul(summa,cj) + matmul(S00M,tc)
+       !csupp = csupp -h*iu*matmul(Htt,ci) ! ver 2
+       ci = linsys(nh,S00M,csupp) 
+
+      ! end do ! CE cycles
+
+       ! Ver 3: last coefficient step is still Euler 
+       !summa = tS -St -2.d0*h*iu*H00M 
+       !csupp = matmul(summa,cj) + matmul(S00M,tc)
+       !ci = linsys(nh,S00M,csupp) 
+
+       ! Ver 4: last coefficient step is Euler w/ average 
+       !summa = tS -(St+Stp+Stc)/3.d0 -2.d0*h*iu*(H00M+Httc+Htt)/3.d0 
+       !csupp = matmul(summa,cj) + matmul(S00M,tc)
+       !ci = linsys(nh,S00M,csupp) 
+
        qj=qi
        pj=ppi
        Bj=Bi
-       !cj=ci
+       cj=ci
 
-      end subroutine
+      end subroutine 
 
-       end module
+      end module

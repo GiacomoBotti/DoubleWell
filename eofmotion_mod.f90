@@ -22,7 +22,7 @@
 
       private
       public :: MassesMat,KarplusTimeDer,rungekutta,scprop,vtvprop 
-      public :: scprop_der
+      public :: scprop_der,pece_param
 
       contains
 
@@ -347,6 +347,58 @@
          end if
        end do
       
+       qj=qi
+       pj=ppi
+       Bj=Bi
+
+      end subroutine
+
+!.....PECE propagator for the parameters only..........................
+
+      subroutine pece_param(nd,h,cj,qj,pj,Bj)
+      ! Does one PECE progator step for the parameters
+       integer, intent(in) :: nd
+       real*8, intent(in) :: h
+       complex*16, dimension(nh), intent(in) :: cj
+       real*8, dimension(nd+1) :: qj,pj,qi,ppi,qiold,piold,qav,pav
+       real*8, dimension(nd+1) :: sqq,sqp 
+       complex*16, dimension(nd+1,nd+1) :: Bj,Bi,Biold,Bav
+       real*8, dimension(nd+1,nd+1) :: sqB
+
+       integer*8 :: maxcycle=20  
+       real*8 :: thr = 1.d-5
+       real*8 :: error
+       real*8,dimension(nd+1,4) :: kq,kp
+       complex*16,dimension(nd+1,nd+1,4) :: kb
+
+       qi = qj
+       ppi = pj
+       Bi = Bj
+
+       call KarplusTimeDer(nd,cj,qj,pj,Bj,&
+            &kq(:,1),kp(:,1),kb(:,:,1))             
+
+       ! Predictor (Lambda tilde) 
+       qi = qj + h*(kq(:,1))
+       ppi = pj + h*(kp(:,1))
+       Bi = Bj + h*(kb(:,:,1))
+
+       call KarplusTimeDer(nd,cj,qi,ppi,Bi,&
+            &kq(:,2),kp(:,2),kb(:,:,2))             
+
+       ! Corrector (Lambda hat)
+       qi = qj + h*(kq(:,1)+kq(:,2))*0.5d0
+       ppi = pj + h*(kp(:,1)+kp(:,2))*0.5d0
+       Bi = Bj + h*(kb(:,:,1)+kb(:,:,2))*0.5d0
+
+       call KarplusTimeDer(nd,cj,qi,ppi,Bi,&
+            &kq(:,3),kp(:,3),kb(:,:,3))             
+
+       ! Evaluator (Lambda t)
+       qi = qj + h*(kq(:,1)+kq(:,3))*0.5d0
+       ppi = pj + h*(kp(:,1)+kp(:,3))*0.5d0
+       Bi = Bj + h*(kb(:,:,1)+kb(:,:,3))*0.5d0
+
        qj=qi
        pj=ppi
        Bj=Bi

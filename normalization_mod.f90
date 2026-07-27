@@ -72,7 +72,7 @@
 !       do i = 1,nh
 !         write(*,*) Nsq*Y0*X0Mat(i,:)
 !       end do
-       write(1234,*) X0mat(1,3)
+       !write(1234,*) X0mat(1,3)
 
       end subroutine 
  
