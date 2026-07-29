@@ -251,7 +251,7 @@
 !          call rungekutta(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop_der(nd,h,cj,qtotj,ptotj,Bcmplxj)
-          call pece_param(nd,h,cj,qtotj,ptotj,Bcmplxj)
+!          call pece_param(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call vtvprop(nd,h,cj,qtotj,ptotj,Bcmplxj)
 !          call scprop_der_coef(nd,h,cj,qtotj,ptotj,Bcmplxj)
           ! Selective freezing
@@ -263,10 +263,10 @@
           !!!!!!!!!cj = c_update(nd,qold,pold,qold,pold,cj,Bold,Bold)
 !          cj = c_update_fb(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
 !          cj = c_update_fbs(nd,qtotj,ptotj,qold,pold,cj,Bcmplxj,Bold)
-          cj=c_update_full(nd,h,qold,qtotj,qtoti,pold,ptotj,ptoti,&
-             &Bold,Bcmplxj,Bcmplxi,cold,ci) 
-!           call pece_coef(nd,h,cj,qtotj,ptotj,Bcmplxj,qtoti,ptoti,&
-!                &Bcmplxi,ci)
+!          cj=c_update_full(nd,h,qold,qtotj,qtoti,pold,ptotj,ptoti,&
+!             &Bold,Bcmplxj,Bcmplxi,cold,ci) 
+           call pece_coef(nd,h,cj,qtotj,ptotj,Bcmplxj,qtoti,ptoti,&
+                &Bcmplxi,ci)
 ! TEST TEST TEST TEST TEST
           !cj(1) = cj(1) + sum(cj(4:nh))
           !cj(6:nh) = 0.d0
