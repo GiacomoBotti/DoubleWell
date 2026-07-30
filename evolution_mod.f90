@@ -236,7 +236,7 @@
        do j = 1,trj(4)
           time = time + h
           ! Static evolution of coefficents
-!          cj = c_static(nd,h,cj,S00M,H00M)
+          !cj = c_static(nd,h,cj,S00M,H00M)
           !cj = c_static(nd,h,cj,Sc,H00M) ! Uses S00M at t=0 ALWAYS
           ! Previous step variables 
           qtoti = qold

@@ -579,8 +579,8 @@
        complex*16, dimension(nd+1,nd+1) :: Bj,Bi,tB
 
        integer :: i,j,k
-       integer*8 :: maxcycle=1 
-       real*8 :: thr = 1.d+5
+       integer*8 :: maxcycle=10 
+       real*8 :: thr = 1.d-10
        real*8 :: error
        real*8,dimension(nd+1,4) :: kq,kp
        complex*16,dimension(nd+1,nd+1,4) :: kb
@@ -589,10 +589,10 @@
        real*8, dimension(nd) :: avec 
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
        real*8, dimension(nd+1,nd+1) :: Bmat
-       complex*16, dimension(nh) :: csupp,ci
+       complex*16, dimension(nh) :: csupp,ci,ck
        complex*16, dimension(nh,nh) :: S00M,St,X0Mat,tS,Stp,Stc
        complex*16, dimension(nh,nh) :: prod1,prod2,summa,H00M,Aux
-       complex*16, dimension(nh,nh) :: Htt,Httc 
+       complex*16, dimension(nh,nh) :: Htt,Httc,S00av,ttH
        real*8 :: E0,Mx
        real*8, dimension(nd) :: My
 
@@ -601,10 +601,12 @@
        Bi = Bj
        ci = cj
 
-       ! S0-tM 
+       ! <f(0)|f(-t)> 
        tS = int_TauMat(nd,qj,tq,pj,tp,Bj,tB)
+       ! <f(-t)|f(0)> 
+       !tS = int_TauMat(nd,tq,qj,tp,pj,tB,Bj)
 
-       ! S00M
+       ! <f(0)|f(0)>
        q = qj(1)
        Bmat = real(Bj)
        Nsq=fun_Nsq(nd+1,Bmat)
@@ -614,111 +616,157 @@
        X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
        S00M = X0Mat*Y0*Nsq 
 
-       ! H00M
+       ! <f(0)|Hf(0)>
        call energy(nd,qj,pj,cj,Bj,H00M,E0,Mx,My)
-       ! Hermitizing H00M too, why not 
-       Aux(:,:) = H00M(:,:)
+       ! <f(-t)|Hf(-t)>
+       call energy(nd,tq,tp,tc,tB,ttH,E0,Mx,My)
 
-       do i = 1, nh
-         H00M(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
-         do j = i+1,nh
-           reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
-           imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
-           H00M(i,j) = reS+iu*imS
-           H00M(j,i) = conjg(H00M(i,j))
-         end do
-       end do
-
+       ! Let's try BOT
+       !ci = c_static(nd,h,cj,real(S00M),H00M)
        call KarplusTimeDer(nd,cj,qj,pj,Bj,&
             &kq(:,1),kp(:,1),kb(:,:,1))             
-
-       ! Predictor (Lambda tilde) 
+        
+       !~~~~~~~~~~~~~~~~~~~~~~~~~~!
+       ! Predictor (Lambda tilde) !
+       !~~~~~~~~~~~~~~~~~~~~~~~~~~!
+ 
        qi = qj + h*(kq(:,1))
        ppi = pj + h*(kp(:,1))
        Bi = Bj + h*(kb(:,:,1))
 
+       kq(:,4) = kq(:,1)
+       kp(:,4) = kp(:,1)
+       kb(:,:,4) = kb(:,:,1)
+
        ! Coeff predictor step uses S0t(lambda tilde)
        ! and H00M
+       ! <f(0)|f(t)> at lambda tilde
        Stp = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
-
        summa = tS - Stp -2*h*iu*H00M
+
+       ! --- Zhao2023 Eq 13
+       !summa =-0.5d0*(Stp -transpose(Stp)+tS-transpose(tS)) -2*h*iu*H00M
        csupp = matmul(summa,cj) + matmul(S00M,tc)
        ci = linsys(nh,S00M,csupp) 
+       ! Let's try BOT
+       !ci = c_update(nd,qi,ppi,qj,pj,cj,Bi,Bj)
 
-       !do k = 1,maxcycle
-       call KarplusTimeDer(nd,ci,qi,ppi,Bi,&
-            &kq(:,2),kp(:,2),kb(:,:,2))             
+       ck = ci
 
-       ! Corrector (Lambda hat)
-       qi = qj + h*(kq(:,1)+kq(:,2))*0.5d0
-       ppi = pj + h*(kp(:,1)+kp(:,2))*0.5d0
-       Bi = Bj + h*(kb(:,:,1)+kb(:,:,2))*0.5d0
+       write(2345,*) "START"
+       write(2345,*) "entering parameters:"
+       write(2345,*) qi(2),ppi(2),Bi(2,2),Bi(1,2)
+       write(2345,*) "entering coefficients:"
+       write(2345,*) ci
 
-       ! Coeff corrector step uses S0t(lambda hat)
-       ! and Htt(lambda hat)
-       ! Stc and Httc
-       Stc = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
-       call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,My)
-       ! Hermitizing Httc too, why not 
-       Aux(:,:) = Httc(:,:)
+       !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
+       ! Corrector - Evaluator SC cycle !
+       !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
 
-       do i = 1, nh
-         Httc(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
-         do j = i+1,nh
-           reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
-           imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
-           Httc(i,j) = reS+iu*imS
-           Httc(j,i) = conjg(Httc(i,j))
-         end do
-       end do
-       summa = tS -0.5d0*(Stp+Stc) -h*iu*(H00M+Httc) ! ver 1
-       !summa = tS -0.5d0*(Stp+Stc) -h*iu*H00M ! ver 2
-       csupp = matmul(summa,cj) + matmul(S00M,tc)
-       !csupp = csupp -h*iu*matmul(Httc,ci) ! ver 2
-       ci = linsys(nh,S00M,csupp) 
+       do k = 1,maxcycle
 
-       call KarplusTimeDer(nd,ci,qi,ppi,Bi,&
-            &kq(:,3),kp(:,3),kb(:,:,3))             
+          call KarplusTimeDer(nd,ci,qi,ppi,Bi,&
+               &kq(:,2),kp(:,2),kb(:,:,2))             
 
-       ! Evaluator (Lambda t)
-       qi = qj + h*(kq(:,1)+kq(:,3))*0.5d0
-       ppi = pj + h*(kp(:,1)+kp(:,3))*0.5d0
-       Bi = Bj + h*(kb(:,:,1)+kb(:,:,3))*0.5d0
+          write(2345,*) "first derivatives (diff):"
+          write(2345,*) k,kq(2,2) - kq(2,1),&
+                      & kp(2,2) - kp(2,1),&
+                      & kb(2,2,2) - kb(2,2,1) 
 
-       ! Coeff evaluator step uses S0t(lambda t)
-       ! and Htt(lambda t)
-       ! St and Htt
-       St = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
-       call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,My)
-       ! Hermitizing Htt too, why not 
-       Aux(:,:) = Htt(:,:)
+          ! Corrector (Lambda hat)
+          qi = qj + h*(kq(:,1)+kq(:,2))*0.5d0
+          ppi = pj + h*(kp(:,1)+kp(:,2))*0.5d0
+          Bi = Bj + h*(kb(:,:,1)+kb(:,:,2))*0.5d0
 
-       do i = 1, nh
-         Htt(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
-         do j = i+1,nh
-           reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
-           imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
-           Htt(i,j) = reS+iu*imS
-           Htt(j,i) = conjg(Htt(i,j))
-         end do
-       end do
-       summa = tS -0.5d0*(Stp+St) -h*iu*(H00M+Htt) ! ver 1
-       !summa = tS -0.5d0*(Stp+St) -h*iu*H00M ! ver 2
-       csupp = matmul(summa,cj) + matmul(S00M,tc)
-       !csupp = csupp -h*iu*matmul(Htt,ci) ! ver 2
-       ci = linsys(nh,S00M,csupp) 
+          ! I average S00M
+          q = qi(1)
+          Bmat = real(Bi)
+          Nsq=fun_Nsq(nd+1,Bmat)
+          call extractA(nd,Bmat,Amat,avec,a)
+          call diagonalization(nd,Amat,LambdaMat,Tmat)
+          Y0=int_Y0(nd,LambdaMat)
+          X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
+          S00av = (S00M +X0Mat*Y0*Nsq)/2.d0
+          !S00av = S00M
 
-      ! end do ! CE cycles
+          ! Coeff corrector step uses S0t(lambda hat)
+          ! and Htt(lambda hat)
+          ! <f(0)|f(t)> at lambda hat
+          Stc = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
+          ! <f(t)|Hf(t)> at lambda hat
+          call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,My)
+          ! --- midpoint-like
+          !summa = tS -0.5d0*(Stp+Stc) -h*iu*(H00M+Httc) ! ver 1
+          !csupp = matmul(summa,cj) + matmul(S00av,tc)
+          !ci = linsys(nh,S00av,csupp) 
+          ! --- last-attempt 
+          summa = tS - Stc -iu*h*(ttH+Httc)
+          csupp = (tc + ci)/2.d0
+          csupp = matmul(summa,csupp)
+          ci = linsys(nh,S00M,csupp)
+          ci = ci + tc
 
-       ! Ver 3: last coefficient step is still Euler 
-       !summa = tS -St -2.d0*h*iu*H00M 
-       !csupp = matmul(summa,cj) + matmul(S00M,tc)
-       !ci = linsys(nh,S00M,csupp) 
+          call KarplusTimeDer(nd,ci,qi,ppi,Bi,&
+               &kq(:,3),kp(:,3),kb(:,:,3))             
 
-       ! Ver 4: last coefficient step is Euler w/ average 
-       !summa = tS -(St+Stp+Stc)/3.d0 -2.d0*h*iu*(H00M+Httc+Htt)/3.d0 
-       !csupp = matmul(summa,cj) + matmul(S00M,tc)
-       !ci = linsys(nh,S00M,csupp) 
+          ! Evaluator (Lambda t)
+          qi = qj + h*(kq(:,1)+kq(:,3))*0.5d0
+          ppi = pj + h*(kp(:,1)+kp(:,3))*0.5d0
+          Bi = Bj + h*(kb(:,:,1)+kb(:,:,3))*0.5d0
+
+          ! I average S00M
+          q = qi(1)
+          Bmat = real(Bi)
+          Nsq=fun_Nsq(nd+1,Bmat)
+          call extractA(nd,Bmat,Amat,avec,a)
+          call diagonalization(nd,Amat,LambdaMat,Tmat)
+          Y0=int_Y0(nd,LambdaMat)
+          X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
+          S00av = (S00M +X0Mat*Y0*Nsq)/2.d0
+          !S00av = S00M
+
+          ! Coeff evaluator step uses S0t(lambda t)
+          ! and Htt(lambda t)
+          ! <f(0)|f(t)> at lambda t
+          St = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
+          ! <f(t)|Hf(t)>
+          call energy(nd,qi,ppi,ci,Bi,Htt,E0,Mx,My)
+          ! --- midpoint-like
+          !summa = tS -0.5d0*(Stp+St) -h*iu*(H00M+Htt) ! ver 1
+          !csupp = matmul(summa,cj) + matmul(S00av,tc)
+          !ci = linsys(nh,S00av,csupp) 
+          ! --- last-attempt 
+          summa = tS - St -iu*h*(ttH+Htt)
+          csupp = (tc + ci)/2.d0
+          csupp = matmul(summa,csupp)
+          ci = linsys(nh,S00M,csupp)
+          ci = ci + tc
+
+          write(2345,*) k, ck
+          write(2345,*) k, ci
+          write(2345,*) k, abs(sum(dreal(ck-ci)))
+          error = abs(sum(kq(:,4)-kq(:,3))) &
+                & + abs(sum(kp(:,4)-kp(:,3))) &
+                & + abs(sum(kb(:,:,4)-kb(:,:,3))) &
+                & + abs(sum(dreal(ck-ci)))
+
+          if(error.le.thr) then
+             write(2345,*) "I exit at ", k
+             exit
+          end if
+
+          kq(:,4) = kq(:,3)
+          kp(:,4) = kp(:,3)
+          kb(:,:,4) = kb(:,:,3)
+          ck = ci
+
+       end do ! CE cycles
+
+       write(2345,*) "exiting parameters:"
+       write(2345,*) qi(2),ppi(2),Bi(2,2),Bi(1,2)
+       write(2345,*) "exiting coefficients:"
+       write(2345,*) ci
+       write(2345,*) "STOP"
 
        qj=qi
        pj=ppi
