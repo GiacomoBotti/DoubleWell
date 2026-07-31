@@ -530,17 +530,17 @@
         call energy(nd,q0,p0,c0,B0,H00M,E0,Mx,My)
 
 ! SG qtag.f line 1046 : cleaning new overlap (?)
-        Aux(:,:) =- iu*(St0M-S0tM)
+      !  Aux(:,:) =- iu*(St0M-S0tM)
 
-        do i = 1, nh
-          sumS(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
-          do j = i+1,nh
-            reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
-            imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
-            sumS(i,j) = reS+iu*imS
-            sumS(j,i) = conjg(sumS(i,j))
-          end do
-        end do
+      !  do i = 1, nh
+      !    sumS(i,i) = Aux(i,i)*complex(1.d0,0.d0) 
+      !    do j = i+1,nh
+      !      reS = dreal(Aux(i,j)+Aux(j,i))/2.d0
+      !      imS = dimag(Aux(i,j)-Aux(j,i))/2.d0
+      !      sumS(i,j) = reS+iu*imS
+      !      sumS(j,i) = conjg(sumS(i,j))
+      !    end do
+      !  end do
 
 ! Hermitizing H00M too, why not 
         Aux(:,:) = H00M(:,:)
@@ -561,10 +561,11 @@
        ! summa = -S0tM + St0M -2*h*iu*H00M
        !summa = -iu*sumS -2*h*iu*H00M
        ! summa = S0tM - St0M 
-        csupp = matmul(summa,c0) + matmul(S00M,tc)! +2.d0*(cexpo - c0)
+        csupp = matmul(summa,c0) !+ matmul(S00M,tc)! +2.d0*(cexpo - c0)
        ! csupp = matmul(summa,c0) !+ matmul(S00M,tc)! +2.d0*(cexpo - c0)
  
         cout = linsys(nh,S00M,csupp) 
+        cout = cout + tc
 
        end function
 
@@ -646,8 +647,9 @@
 
        ! --- Zhao2023 Eq 13
        !summa =-0.5d0*(Stp -transpose(Stp)+tS-transpose(tS)) -2*h*iu*H00M
-       csupp = matmul(summa,cj) + matmul(S00M,tc)
+       csupp = matmul(summa,cj) !+ matmul(S00M,tc)
        ci = linsys(nh,S00M,csupp) 
+       ci = ci + tc
        ! Let's try BOT
        !ci = c_update(nd,qi,ppi,qj,pj,cj,Bi,Bj)
 
@@ -696,14 +698,14 @@
           ! <f(t)|Hf(t)> at lambda hat
           call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,My)
           ! --- midpoint-like
-          !summa = tS -0.5d0*(Stp+Stc) -h*iu*(H00M+Httc) ! ver 1
-          !csupp = matmul(summa,cj) + matmul(S00av,tc)
-          !ci = linsys(nh,S00av,csupp) 
+          summa = tS -0.5d0*(Stp+Stc) -h*iu*(H00M+Httc) ! ver 1
+          csupp = matmul(summa,cj) !+ matmul(S00av,tc)
+          ci = linsys(nh,S00av,csupp) 
           ! --- last-attempt 
-          summa = tS - Stc -iu*h*(ttH+Httc)
-          csupp = (tc + ci)/2.d0
-          csupp = matmul(summa,csupp)
-          ci = linsys(nh,S00M,csupp)
+          !summa = tS - Stc -iu*h*(ttH+Httc)
+          !csupp = (tc + ci)/2.d0
+          !csupp = matmul(summa,csupp)
+          !ci = linsys(nh,S00M,csupp)
           ci = ci + tc
 
           call KarplusTimeDer(nd,ci,qi,ppi,Bi,&
@@ -732,14 +734,14 @@
           ! <f(t)|Hf(t)>
           call energy(nd,qi,ppi,ci,Bi,Htt,E0,Mx,My)
           ! --- midpoint-like
-          !summa = tS -0.5d0*(Stp+St) -h*iu*(H00M+Htt) ! ver 1
-          !csupp = matmul(summa,cj) + matmul(S00av,tc)
-          !ci = linsys(nh,S00av,csupp) 
+          summa = tS -0.5d0*(Stp+St) -h*iu*(H00M+Htt) ! ver 1
+          csupp = matmul(summa,cj) !+ matmul(S00av,tc)
+          ci = linsys(nh,S00av,csupp) 
           ! --- last-attempt 
-          summa = tS - St -iu*h*(ttH+Htt)
-          csupp = (tc + ci)/2.d0
-          csupp = matmul(summa,csupp)
-          ci = linsys(nh,S00M,csupp)
+          !summa = tS - St -iu*h*(ttH+Htt)
+          !csupp = (tc + ci)/2.d0
+          !csupp = matmul(summa,csupp)
+          !ci = linsys(nh,S00M,csupp)
           ci = ci + tc
 
           write(2345,*) k, ck
