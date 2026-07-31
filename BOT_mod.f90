@@ -22,7 +22,7 @@
 
        private
        public ::c_static,c_update,c_update_fb,c_update_fbs,c_update_full
-       public :: pece_coef
+       public :: pece_coef,c_update_full2
 
        contains
 
@@ -569,6 +569,62 @@
 
        end function
 
+!......Numerical update of c (midpoint).................................
+
+       function c_update_full2(nd,h,q0,qt,tq,p0,pt,tp,B0,Bt,tB,c0,tc) &
+        & result(cout)
+        ! nd: dimensions of the bath
+        ! h: timestep
+        ! q0,qt,tq: gaussian center at t, t+dt, t-dt
+        ! p0,pt,tp: gaussian momentum at t, t+dt, t-dt
+        ! B0,Bt,tB: gaussian width at t, t+dt, t-dt
+        ! c0,tc: coefficients at t, t-dt
+        integer, intent(in) :: nd
+        real*8 :: h
+        real*8, dimension(nd+1), intent(in) :: q0,qt,tq,p0,pt,tp 
+        complex*16, dimension(nh), intent(in) :: c0,tc
+        complex*16, dimension(nd+1,nd+1), intent(in) :: B0,Bt,tB
+
+        integer :: i,j
+        real*8 :: a,q,Nsq,Y0,reS,imS
+        real*8, dimension(nd) :: avec 
+        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+        real*8, dimension(nd+1,nd+1) :: Bmat
+        complex*16, dimension(nh) :: csupp,cout,cexpo
+        complex*16, dimension(nh,nh) :: S00M,St0M,sumS,X0Mat,S0tM
+        complex*16, dimension(nh,nh) :: prod1,prod2,summa,H00M,HttM
+        real*8 :: E0,Mx
+        real*8, dimension(nd) :: My
+
+        ! S00M
+        q = q0(1)
+        Bmat = real(B0)
+
+        Nsq=fun_Nsq(nd+1,Bmat)
+        call extractA(nd,Bmat,Amat,avec,a)
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+        Y0=int_Y0(nd,LambdaMat)
+        X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
+
+        S00M = X0Mat*Y0*Nsq 
+
+        ! <f(0)|f(t)> 
+        St0M = int_TauMat(nd,q0,qt,p0,pt,B0,Bt)
+        ! <f(0)|f(-t)> 
+        S0tM = int_TauMat(nd,q0,tq,p0,tp,B0,tB)
+        ! <f(0)|Hf(0)>
+        call energy(nd,q0,p0,c0,B0,H00M,E0,Mx,My)
+        ! <f(t)|Hf(t)>
+        call energy(nd,qt,pt,c0,Bt,HttM,E0,Mx,My)
+
+        summa = S0tM -St0M -h*iu*(H00M+HttM) ! ver 1
+        csupp = matmul(summa,c0) 
+ 
+        cout = linsys(nh,S00M,csupp) 
+        cout = cout + tc
+
+       end function
+
 !.....Self-consistent propagator with derivatives convergence and coeff.
 
       subroutine pece_coef(nd,h,cj,qj,pj,Bj,tq,tp,tB,tc)
@@ -655,11 +711,11 @@
 
        ck = ci
 
-       write(2345,*) "START"
-       write(2345,*) "entering parameters:"
-       write(2345,*) qi(2),ppi(2),Bi(2,2),Bi(1,2)
-       write(2345,*) "entering coefficients:"
-       write(2345,*) ci
+!       write(2345,*) "START"
+!       write(2345,*) "entering parameters:"
+!       write(2345,*) qi(2),ppi(2),Bi(2,2),Bi(1,2)
+!       write(2345,*) "entering coefficients:"
+!       write(2345,*) ci
 
        !~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!
        ! Corrector - Evaluator SC cycle !
@@ -670,10 +726,10 @@
           call KarplusTimeDer(nd,ci,qi,ppi,Bi,&
                &kq(:,2),kp(:,2),kb(:,:,2))             
 
-          write(2345,*) "first derivatives (diff):"
-          write(2345,*) k,kq(2,2) - kq(2,1),&
-                      & kp(2,2) - kp(2,1),&
-                      & kb(2,2,2) - kb(2,2,1) 
+!          write(2345,*) "first derivatives (diff):"
+!          write(2345,*) k,kq(2,2) - kq(2,1),&
+!                      & kp(2,2) - kp(2,1),&
+!                      & kb(2,2,2) - kb(2,2,1) 
 
           ! Corrector (Lambda hat)
           qi = qj + h*(kq(:,1)+kq(:,2))*0.5d0
@@ -689,7 +745,7 @@
           Y0=int_Y0(nd,LambdaMat)
           X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
           S00av = (S00M +X0Mat*Y0*Nsq)/2.d0
-          !S00av = S00M
+          S00av = S00M
 
           ! Coeff corrector step uses S0t(lambda hat)
           ! and Htt(lambda hat)
@@ -697,8 +753,10 @@
           Stc = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
           ! <f(t)|Hf(t)> at lambda hat
           call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,My)
+          ! --- finite differences
+          summa = tS - Stc -2*h*iu*H00M
           ! --- midpoint-like
-          summa = tS -0.5d0*(Stp+Stc) -h*iu*(H00M+Httc) ! ver 1
+          !summa = tS -0.5d0*(Stp+Stc) -h*iu*(H00M+Httc) ! ver 1
           csupp = matmul(summa,cj) !+ matmul(S00av,tc)
           ci = linsys(nh,S00av,csupp) 
           ! --- last-attempt 
@@ -725,7 +783,7 @@
           Y0=int_Y0(nd,LambdaMat)
           X0Mat=int_XnMat(nd,0,a,avec,Amat,q)
           S00av = (S00M +X0Mat*Y0*Nsq)/2.d0
-          !S00av = S00M
+          S00av = S00M
 
           ! Coeff evaluator step uses S0t(lambda t)
           ! and Htt(lambda t)
@@ -733,8 +791,10 @@
           St = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
           ! <f(t)|Hf(t)>
           call energy(nd,qi,ppi,ci,Bi,Htt,E0,Mx,My)
+          ! --- finite differences 
+          summa = tS - St -2*h*iu*H00M
           ! --- midpoint-like
-          summa = tS -0.5d0*(Stp+St) -h*iu*(H00M+Htt) ! ver 1
+          !summa = tS -0.5d0*(Stp+St) -h*iu*(H00M+Htt) ! ver 1
           csupp = matmul(summa,cj) !+ matmul(S00av,tc)
           ci = linsys(nh,S00av,csupp) 
           ! --- last-attempt 
@@ -744,16 +804,16 @@
           !ci = linsys(nh,S00M,csupp)
           ci = ci + tc
 
-          write(2345,*) k, ck
-          write(2345,*) k, ci
-          write(2345,*) k, abs(sum(dreal(ck-ci)))
+!          write(2345,*) k, ck
+!          write(2345,*) k, ci
+!          write(2345,*) k, abs(sum(dreal(ck-ci)))
           error = abs(sum(kq(:,4)-kq(:,3))) &
                 & + abs(sum(kp(:,4)-kp(:,3))) &
                 & + abs(sum(kb(:,:,4)-kb(:,:,3))) &
                 & + abs(sum(dreal(ck-ci)))
 
           if(error.le.thr) then
-             write(2345,*) "I exit at ", k
+!             write(2345,*) "I exit at ", k
              exit
           end if
 
@@ -764,11 +824,11 @@
 
        end do ! CE cycles
 
-       write(2345,*) "exiting parameters:"
-       write(2345,*) qi(2),ppi(2),Bi(2,2),Bi(1,2)
-       write(2345,*) "exiting coefficients:"
-       write(2345,*) ci
-       write(2345,*) "STOP"
+!       write(2345,*) "exiting parameters:"
+!       write(2345,*) qi(2),ppi(2),Bi(2,2),Bi(1,2)
+!       write(2345,*) "exiting coefficients:"
+!       write(2345,*) ci
+!       write(2345,*) "STOP"
 
        qj=qi
        pj=ppi
