@@ -162,6 +162,7 @@
       
       call plot_wfn(nv,qeq,peq,ceq,Beq,1.d0)
       call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
+      !stop
 
 !.....Print simulation parameters.......................................
 

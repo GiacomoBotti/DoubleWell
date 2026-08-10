@@ -22,7 +22,8 @@
 
 !......Analytical Hamiltonian...........................................
 
-       subroutine energy(nd,qtot,ptot,cvec,tildeBmat,H00M,Hout,Mx,My)
+       subroutine energy(nd,qtot,ptot,cvec,tildeBmat,H00M,Hout,&
+                  &Mx,Mx2,My)
        ! nd: bath dimension
        ! qtot: total position vector
        ! ptot: total momentum vector
@@ -33,14 +34,14 @@
          complex*16, dimension(nh), intent(in) :: cvec
          complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
-         real*8, intent(out) :: Hout,Mx
+         real*8, intent(out) :: Hout,Mx,Mx2
          real*8, dimension(nd) :: My
          complex*16, dimension(nh,nh), intent(out) :: H00M
 
          integer :: i
-         real*8 :: V0,T0,q,p,Nsq,cX1c,cX0c
+         real*8 :: V0,T0,q,p,Nsq,cX1c,cX0c,cX2c
          real*8, dimension(nd) :: qvec,pvec,Aa
-         complex*16, dimension(nh) :: Tc,Vc,X1c,X0c
+         complex*16, dimension(nh) :: Tc,Vc,X1c,X0c,X2c
          complex*16, dimension(nh,nh) :: T00M,V00M
          real*8 :: a,Y0
          real*8, dimension(nd) :: avec
@@ -83,7 +84,7 @@
          Hout = T0 + V0
 
 !         write(324,*) "+++++++++++++++++++++++++++++"
-         write(324,*) Hout, T0, V0, dreal(H00M(1,1))!0M(1,1)
+         write(324,*) Hout, T0, V0, dreal(H00M(1,1))
 
 !         write(324,*) "+++++++++++++++++++++++++++++"
 !         do i = 1, nh
@@ -106,9 +107,13 @@
          X1c = matmul(X1,cvec)
          cX1c = dot_product(cvec,X1c)
 
+         X2c = matmul(X2,cvec)
+         cX2c = dot_product(cvec,X2c)
+
          Aa = matmul(invA,avec)
 
          Mx = Nsq*Y0*cX1c
+         Mx2 = Nsq*Y0*cX2c
 
          My(:) = Nsq*Y0*(cX0c*qvec(:)+q*cX0c*Aa(:)-cX1c*Aa(:))
 
