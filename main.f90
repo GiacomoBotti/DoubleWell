@@ -60,10 +60,11 @@
 
       write(*,*) "Potential constants"
 
-      write(*,*) "Eta: ", eta_const
+      write(*,*) "Eta:   ", eta_const
       write(*,*) "Sigma: ", sigma_const
       write(*,*) "Gamma: ", gamma_const
       write(*,*) "Kappa: ", kappa_const
+      write(*,*) "Bath:  ", bath_const
 
       write(*,*) "+---------------------------------------------------+"
 
@@ -116,7 +117,7 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
 
-      do i = 1,2
+      do i = 1,nv
         write(*,*) Beq(i,:)
       end do
 
@@ -149,7 +150,7 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Projected Gaussian Width Matrix:"
 
-      do i = 1,2
+      do i = 1,nv
         write(*,*) Bcmplx(i,:)
       end do
     
