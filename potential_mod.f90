@@ -26,15 +26,16 @@
        Vharm(:,:) = 0.d0
        Vcoupl(:,:) = 0.d0
 
-       Vharm(1,1) = 1.d0
+       Vharm(1,1) = kappa_const(1)
     
        do i = 2,nv
-         Vharm(i,i) = 1.d0
-         Vcoupl(i,i-1) = 1.d0
-         Vcoupl(i-1,i) = 1.d0
+         Vharm(i,i) = kappa_const(i)
+         Vcoupl(i,i-1) = bath_const(i-1)
+         Vcoupl(i-1,i) = bath_const(i-1)
        end do
 
-       Vmat = 0.5d0*kappa_const*Vharm + 0.5d0*bath_const*Vcoupl
+!       Vmat = 0.5d0*kappa_const*Vharm + 0.5d0*bath_const*Vcoupl
+       Vmat = 0.5d0*Vharm + 0.5d0*Vcoupl
 !       Vmat = 0.5d0*Vharm + 0.5d0*gamma_const*Vcoupl
 
        write(*,*) "Matrix potential generated"
@@ -61,7 +62,7 @@
            x = lwb + (j-1)*grid
            V = x**4/16.d0/eta_const+sigma_const*x**2/2.d0 &
              &+ gamma_const*x*y +&
-             & kappa_const*y**2/2.d0 
+             & kappa_const(1)*y**2/2.d0 
            write(999,'(3ES24.16)') x, y, V
          end do
          write(999,*) 

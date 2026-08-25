@@ -1,0 +1,731 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Worksheet>
+<Version major="2023" minor="2"/>
+<Label-Scheme value="2" prefix=""/>
+<View-Properties presentation="false" autoexpanding_sections="true" UserProfileName="Maple Default Profile" NumericFormat-ApplyInteger="true" NumericFormat-ApplyRational="true" NumericFormat-ApplyExponent="false" editable="true">
+</View-Properties>
+<MapleNet-Properties prettyprint="3" warnlevel="3" compactdisplay="false" preplot="" helpbrowser="standard" displayprecision="-1" echo="1" scientificx="true" unitattributes="&quot;fontweight&quot; = &quot;bold&quot;" imaginaryunit="I" longdelim="true" elisiontermsthreshold="10000" elisiondigitsafter="100" elisiondigitsbefore="100" plotdevice="inline" errorbreak="1" plotoptions="" plotdriver="opengl" quiet="false" elisiontermsbefore="100" elisiontermsafter="100" historytimestamp="false" screenwidth="79" indentamount="4" plotoutput="terminal" screenpixelheight="1440" rtablesize="[10, 10]" useclientjvm="true" format="worksheet" labelwidth="20" postplot="" typesetting="extended" ansi="false" ansicolor="[]" elisiondigitsthreshold="10000" showassumed="1" ansilprint="false" trailingsemicolon="true" errorcursor="false" labelling="true" screenheight="25" prompt="&gt; " verboseproc="1" latexwidth="8.0" ShowLabels="true"/>
+<Styles>
+<Font name="" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Heading 1" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="18" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Warning" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[0,0,255]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="2D Output" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,255]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Heading 4" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="true" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Line Printed Output" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[0,0,255]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Heading 2" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="16" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Maple Output" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="2D Inert Output" background="[255,255,255]" bold="false" executable="true" family="Times New Roman" foreground="[144,144,144]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Heading 3" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="true" opaque="false" readonly="false" size="14" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Diagnostic" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[40,120,40]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Ordered List 1" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Maple Input" background="[255,255,255]" bold="false" executable="true" family="Intel One Mono Medium" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="14" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Text Output" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[0,0,255]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Ordered List 2" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Ordered List 3" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Ordered List 4" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Ordered List 5" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Annotation Title" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="18" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Header and Footer" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="10" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="HyperlinkError" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[255,0,255]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="true" strikethrough="false" placeholder="false"/>
+<Font name="Atomic Variable" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[175,0,175]" italic="true" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="HyperlinkWarning" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[0,0,255]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="true" strikethrough="false" placeholder="false"/>
+<Font name="Dictionary Hyperlink" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[147,0,15]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="true" strikethrough="false" placeholder="false"/>
+<Font name="2D Math" background="[255,255,255]" bold="false" executable="true" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Bullet Item" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Maple Plot" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Annotation Text" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="List Item" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Dash Item" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="2D Input" background="[255,255,255]" bold="false" executable="true" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Error" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[255,0,255]" italic="false" opaque="false" readonly="true" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Title" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="18" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Text" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Normal" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Caption Reference" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Code" background="[255,255,255]" bold="false" executable="false" family="Courier New" foreground="[255,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Maple Input Placeholder" background="[255,255,255]" bold="true" executable="true" family="Courier New" foreground="[200,0,200]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="true"/>
+<Font name="Equation Label" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Author" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="GIacomo" background="[255,255,255]" bold="false" executable="false" family="Intel One Mono Medium" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="14" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Font name="Hyperlink" background="[255,255,255]" bold="false" executable="false" family="Times New Roman" foreground="[0,128,128]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="true" strikethrough="false" placeholder="false"/>
+<Font name="Caption Text" background="[255,255,255]" bold="true" executable="false" family="Times New Roman" foreground="[0,0,0]" italic="false" opaque="false" readonly="false" size="12" subscript="false" superscript="false" underline="false" strikethrough="false" placeholder="false"/>
+<Layout name="Heading 1" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="8" spacebelow="4" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Warning" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Heading 4" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Line Printed Output" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="any" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Heading 2" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="8" spacebelow="2" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Maple Output" alignment="centred" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.3" spaceabove="0" spacebelow="0" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Heading 3" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Diagnostic" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="any" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Ordered List 1" alignment="left" bullet="numeric" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="3" spacebelow="3" linebreak="space" pagebreak-before="false" initial="-1" bulletsuffix="."/>
+<Layout name="Text Output" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="newline" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Ordered List 2" alignment="left" bullet="alphabetic" firstindent="0" leftmargin="36" rightmargin="0" linespacing="0.0" spaceabove="3" spacebelow="3" linebreak="space" pagebreak-before="false" initial="-1" bulletsuffix="."/>
+<Layout name="Ordered List 3" alignment="left" bullet="roman" firstindent="0" leftmargin="72" rightmargin="0" linespacing="0.0" spaceabove="3" spacebelow="3" linebreak="space" pagebreak-before="false" initial="-1" bulletsuffix="."/>
+<Layout name="Ordered List 4" alignment="left" bullet="ALPHABETIC" firstindent="0" leftmargin="108" rightmargin="0" linespacing="0.0" spaceabove="3" spacebelow="3" linebreak="space" pagebreak-before="false" initial="-1" bulletsuffix="."/>
+<Layout name="Ordered List 5" alignment="left" bullet="ROMAN" firstindent="0" leftmargin="144" rightmargin="0" linespacing="0.0" spaceabove="3" spacebelow="3" linebreak="space" pagebreak-before="false" initial="-1" bulletsuffix="."/>
+<Layout name="Annotation Title" alignment="centred" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="12" spacebelow="12" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="HyperlinkError" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="HyperlinkWarning" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Bullet Item" alignment="left" bullet="dot" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="3" spacebelow="3" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Maple Plot" alignment="centred" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="List Item" alignment="left" bullet="indent" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="3" spacebelow="3" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Dash Item" alignment="left" bullet="dash" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="3" spacebelow="3" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Error" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Title" alignment="centred" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="12" spacebelow="12" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Normal" alignment="left" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="0" spacebelow="0" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Layout name="Author" alignment="centred" bullet="none" firstindent="0" leftmargin="0" rightmargin="0" linespacing="0.0" spaceabove="8" spacebelow="8" linebreak="space" pagebreak-before="false" initial="0" bulletsuffix=""/>
+<Pencil-style name="Pencil 1" pen-color="[0,0,0]" pen-height="1.0" pen-width="1.0" pen-opacity="1.0"/>
+<Pencil-style name="Pencil 2" pen-color="[0,0,255]" pen-height="1.0" pen-width="1.0" pen-opacity="1.0"/>
+<Pencil-style name="Pencil 3" pen-color="[0,0,0]" pen-height="3.0" pen-width="3.0" pen-opacity="1.0"/>
+<Pencil-style name="Pencil 4" pen-color="[0,0,255]" pen-height="3.0" pen-width="3.0" pen-opacity="1.0"/>
+<Pencil-style name="Pencil 5" pen-color="[255,0,0]" pen-height="5.0" pen-width="5.0" pen-opacity="1.0"/>
+<Highlighter-style name="Highlighter 5" pen-color="[255,255,0]" pen-height="48.0" pen-width="48.0" pen-opacity="0.8"/>
+<Highlighter-style name="Highlighter 3" pen-color="[51,255,0]" pen-height="24.0" pen-width="24.0" pen-opacity="0.8"/>
+<Highlighter-style name="Highlighter 4" pen-color="[0,255,255]" pen-height="32.0" pen-width="32.0" pen-opacity="0.8"/>
+<Highlighter-style name="Highlighter 1" pen-color="[255,153,255]" pen-height="12.0" pen-width="8.0" pen-opacity="0.8"/>
+<Highlighter-style name="Highlighter 2" pen-color="[255,204,0]" pen-height="14.0" pen-width="14.0" pen-opacity="0.8"/>
+</Styles>
+<Startup-Code startupcode=""/>
+<Task-table>
+	<Task-category name="&lt;default&gt;"/>
+</Task-table>
+<Task/>
+<Group labelreference="L1" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal">restart:
+
+with(LinearAlgebra):
+with(plots):</Text-field>
+</Input>
+</Group>
+<Group labelreference="L2" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 1. Model parameters
+# ============================================================
+
+# All coefficients are in atomic units.
+# Coordinates x,y_i are in sqrt(me) * bohr.
+
+eta := 1.72e6:
+
+sigma := 1.57544962e-4:
+gamma1 := 2.21864154e-6:
+
+gamma2 := 2.76109459e-5:
+gamma3 := 7.68629295e-5:
+gamma4 := 1.56842605e-5:
+
+delta1 := 2.87260443e-5:
+delta2 := 1.40109428e-4:
+delta3 := 8.54424711e-5:
+delta4 := 3.12946454e-5:
+</Text-field>
+</Input>
+</Group>
+<Group hide-input="false" labelreference="L3" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 2. Harmonic Hessian of the 5D model
+#
+# Coordinates:
+#     [x, y1, y2, y3, y4]
+#
+# V_harm =
+#     sigma*x^2/2
+#   + gamma1*x*y1
+#   + gamma2*y1*y2
+#   + gamma3*y2*y3
+#   + gamma4*y3*y4
+#   + delta1*y1^2/2 + ... + delta4*y4^2/2
+# ============================================================
+
+H := Matrix([
+    [sigma,  gamma1,   0,       0,       0],
+    [gamma1,  delta1,  gamma2,  0,       0],
+    [0,      gamma2,  delta2,  gamma3,  0],
+    [0,      0,       gamma3,  delta3,  gamma4],
+    [0,      0,       0,       gamma4,  delta4]
+]):
+
+H := evalf(H):
+
+<Font encoding="UTF-8">printf(&quot;Model Hessian:\134n&quot;):
+</Font>print(H):</Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">Model Hessian:
+</Text-field>
+</Output>
+<Output><Text-field style="2D Output" layout="Maple Output"><Equation executable="false" style="2D Output" display="LUkqbWNvbXBsZXRlRzYjL0krbW9kdWxlbmFtZUc2IkksVHlwZXNldHRpbmdHSShfc3lzbGliR0YnNiQtSShtZmVuY2VkR0YkNigtSSVtcm93R0YkNiYtSSdtdGFibGVHRiQ2Oy1JJG10ckdGJDYsLUkkbXRkR0YkNiotSSNtbkdGJDYkUS8wLjAwMDE1NzU0NDk2MkYnLyUsbWF0aHZhcmlhbnRHUSdub3JtYWxGJy8lK2ZvcmVncm91bmRHUShbMCwwLDBdRicvJSlyZWFkb25seUdRJmZhbHNlRicvJSlyb3dhbGlnbkdRIUYnLyUsY29sdW1uYWxpZ25HRkkvJStncm91cGFsaWduR0ZJLyUocm93c3BhbkdRIjFGJy8lK2NvbHVtbnNwYW5HRlAtRjg2Ki1GLzYmLUY7NiRRKzIuMjE4NjQxNTRGJ0Y+LUkjbW9HRiQ2LVEoJnRpbWVzO0YnRj4vJSZmZW5jZUdGRi8lKnNlcGFyYXRvckdGRi8lKXN0cmV0Y2h5R0ZGLyUqc3ltbWV0cmljR0ZGLyUobGFyZ2VvcEdGRi8lLm1vdmFibGVsaW1pdHNHRkYvJSdhY2NlbnRHRkYvJSdsc3BhY2VHUSwwLjIyMjIyMjJlbUYnLyUncnNwYWNlR0Zoby1JJW1zdXBHRiQ2Ji1GOzYkUSMxMEYnRj4tRjs2JFErJnVtaW51czA7NkYnRj4vJTFzdXBlcnNjcmlwdHNoaWZ0R1EiMEYnL0krbXNlbWFudGljc0dGJFEiXkYnRj5GQUZERkdGSkZMRk5GUS1GODYqLUY7NiRRIzAuRidGPkZBRkRGR0ZKRkxGTkZRRmpwRmpwRkFGREZHRkpGTC1GNTYsRlMtRjg2Ki1GOzYkUTAwLjAwMDAyODcyNjA0NDNGJ0Y+RkFGREZHRkpGTEZORlEtRjg2Ki1GOzYkUTAwLjAwMDAyNzYxMDk0NTlGJ0Y+RkFGREZHRkpGTEZORlFGanBGanBGQUZERkdGSkZMLUY1NixGanBGZnEtRjg2Ki1GOzYkUS8wLjAwMDE0MDEwOTQyOEYnRj5GQUZERkdGSkZMRk5GUS1GODYqLUY7NiRRMDAuMDAwMDc2ODYyOTI5NUYnRj5GQUZERkdGSkZMRk5GUUZqcEZBRkRGR0ZKRkwtRjU2LEZqcEZqcEZici1GODYqLUY7NiRRMDAuMDAwMDg1NDQyNDcxMUYnRj5GQUZERkdGSkZMRk5GUS1GODYqLUY7NiRRMDAuMDAwMDE1Njg0MjYwNUYnRj5GQUZERkdGSkZMRk5GUUZBRkRGR0ZKRkwtRjU2LEZqcEZqcEZqcEZecy1GODYqLUY7NiRRMDAuMDAwMDMxMjk0NjQ1NEYnRj5GQUZERkdGSkZMRk5GUUZBRkRGR0ZKRkxGQUZELyUmYWxpZ25HUSVheGlzRicvRkhRKWJhc2VsaW5lRicvRktRJ2NlbnRlckYnL0ZNUSd8ZnJsZWZ0fGhyRicvJS9hbGlnbm1lbnRzY29wZUdRJXRydWVGJy8lLGNvbHVtbndpZHRoR1ElYXV0b0YnLyUmd2lkdGhHRmh0LyUrcm93c3BhY2luZ0dRJjEuMGV4RicvJS5jb2x1bW5zcGFjaW5nR1EmMC44ZW1GJy8lKXJvd2xpbmVzR1Elbm9uZUYnLyUsY29sdW1ubGluZXNHRmN1LyUmZnJhbWVHRmN1LyUtZnJhbWVzcGFjaW5nR1EsMC40ZW1+MC41ZXhGJy8lKmVxdWFscm93c0dGRi8lLWVxdWFsY29sdW1uc0dGRi8lLWRpc3BsYXlzdHlsZUdGRi8lJXNpZGVHUSZyaWdodEYnLyUwbWlubGFiZWxzcGFjaW5nR0ZgdUZBRkRGPkY+L0ZocFEnTWF0cml4RicvJSVvcGVuR1EnJmxzcWI7RicvJSZjbG9zZUdRJyZyc3FiO0YnRmZ2LUYsNiktRi82Ji1GMjY7LUY1Ni0tRjg2Ky1GOzYnRj1GQUZELyUwZm9udF9zdHlsZV9uYW1lR0ZJRj5GQUZERmp3RkdGSkZMRk5GUS1GODYrLUY7NidRMTAuMDAwMDAyMjE4NjQxNTRGJ0ZBRkRGandGPkZBRkRGandGR0ZKRkxGTkZRLUY4NistRjs2J0ZecUZBRkRGandGPkZBRkRGandGR0ZKRkxGTkZRRmF4RmF4RkFGRC9GW3hRIUYnRkdGSkZMLUY1Ni1GXHgtRjg2Ky1GOzYnRmVxRkFGREZqd0Y+RkFGREZqd0ZHRkpGTEZORlEtRjg2Ky1GOzYnRmpxRkFGREZqd0Y+RkFGREZqd0ZHRkpGTEZORlFGYXhGYXhGQUZERmV4RkdGSkZMLUY1Ni1GYXhGXXktRjg2Ky1GOzYnRmFyRkFGREZqd0Y+RkFGREZqd0ZHRkpGTEZORlEtRjg2Ky1GOzYnRmZyRkFGREZqd0Y+RkFGREZqd0ZHRkpGTEZORlFGYXhGQUZERmV4RkdGSkZMLUY1Ni1GYXhGYXhGZ3ktRjg2Ky1GOzYnRl1zRkFGREZqd0Y+RkFGREZqd0ZHRkpGTEZORlEtRjg2Ky1GOzYnRmJzRkFGREZqd0Y+RkFGREZqd0ZHRkpGTEZORlFGQUZERmV4RkdGSkZMLUY1Ni1GYXhGYXhGYXhGYXotRjg2Ky1GOzYnRmlzRkFGREZqd0Y+RkFGREZqd0ZHRkpGTEZORlFGQUZERmV4RkdGSkZMRkFGREZqc0ZddEZfdEZhdEZjdEZmdEZpdEZbdUZedUZhdUZkdUZmdUZodUZbdkZddkZfdkZhdkZkdkZBRkRGPkZBRkRGandGPi9GaXZRIltGJy9GXHdRIl1GJw==">LV9JLFR5cGVzZXR0aW5nRzYkJSpwcm90ZWN0ZWRHSShfc3lzbGliRzYiSSxtcHJpbnRzbGFzaEdGKDYkNyMtSSdSVEFCTEVHRig2JSI1K1QqUnAkW0dPKm8kLUknTUFUUklYR0YoNiM3JzcnLUkjbW5HNiRGJi9JK21vZHVsZW5hbWVHRihGJDYjUS8wLjAwMDE1NzU0NDk2MkYoLUklbXJvd0dGNzYlLUY2NiNRKzIuMjE4NjQxNTRGKC1JI21vR0Y3NiNRKCZ0aW1lcztGKC1JJW1zdXBHRjc2JS1GNjYjUSMxMEYoLUY2NiNRKyZ1bWludXMwOzZGKC9JK21zZW1hbnRpY3NHRjdRIl5GKC1GNjYjUSMwLkYoRlJGUjcnRjwtRjY2I1EwMC4wMDAwMjg3MjYwNDQzRigtRjY2I1EwMC4wMDAwMjc2MTA5NDU5RihGUkZSNydGUkZZLUY2NiNRLzAuMDAwMTQwMTA5NDI4RigtRjY2I1EwMC4wMDAwNzY4NjI5Mjk1RihGUjcnRlJGUkZqbi1GNjYjUTAwLjAwMDA4NTQ0MjQ3MTFGKC1GNjYjUTAwLjAwMDAxNTY4NDI2MDVGKDcnRlJGUkZSRmFvLUY2NiNRMDAuMDAwMDMxMjk0NjQ1NEYoSSdNYXRyaXhHRiU3Iy1GaG82Iy9JJCVpZEdGKEYv</Equation></Text-field>
+</Output>
+</Group>
+<Group hide-input="false" labelreference="L4" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 3. Diagonalize the Hessian
+# ============================================================
+
+lambda := Eigenvalues(H):
+
+
+cm1_per_au := 219474.6313705:
+
+<Font encoding="UTF-8">printf(&quot;\134nModel harmonic frequencies (cm^-1):\134n&quot;):
+</Font>
+for i from 1 to RowDimension(lambda) do
+    freq := sqrt(evalf(Re(lambda[i]))) * cm1_per_au:
+<Font encoding="UTF-8">    printf(&quot;  %12.6f\134n&quot;, freq):
+</Font>end do:</Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">
+Model harmonic frequencies (cm^-1):
+   2755.084644
+   3087.257064
+   1561.501550
+    673.120514
+   1153.929741
+</Text-field>
+</Output>
+</Group>
+<Group labelreference="L5" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 4. Bath matrix K
+# ============================================================
+
+K := Matrix([
+    [delta1, gamma2, 0,      0],
+    [gamma2, delta2, gamma3, 0],
+    [0,      gamma3, delta3, gamma4],
+    [0,      0,      gamma4, delta4]
+]):
+
+K := evalf(K):
+
+e1 := Vector([1, 0, 0, 0]):
+
+z := LinearSolve(K, e1):
+
+Kinv11 := evalf(z[1]):
+
+<Font encoding="UTF-8">printf(&quot;\134n(K^(-1))_11 = %.12e\134n&quot;, Kinv11):
+</Font>
+krel := evalf(sigma - gamma1^2*Kinv11):
+
+<Font encoding="UTF-8">printf(&quot;Bare system curvature sigma = %.12e\134n&quot;, sigma):
+printf(&quot;Relaxed curvature krel       = %.12e\134n&quot;, krel):
+</Font>
+freq_rel_cm :=
+    evalf(sqrt(krel) * cm1_per_au):
+
+<Font encoding="UTF-8">printf(&quot;Relaxed harmonic frequency = %.6f cm^-1\134n&quot;,
+</Font>       freq_rel_cm):</Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">
+(K^(-1))_11 = 5.950108446127e+04
+Bare system curvature sigma = 1.575449620000e-04
+Relaxed curvature krel       = 1.572520756300e-04
+Relaxed harmonic frequency = 2752.216040 cm^-1
+</Text-field>
+</Output>
+</Group>
+<Group hide-input="false" labelreference="L6" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 5. Relaxed harmonic curvature
+#
+# Minimizing over y gives
+#
+# V_rel,harm(x)
+#     = 1/2 [sigma - gamma^2 (K^-1)_11] x^2
+# ============================================================
+
+krel := sigma - gamma1^2*Kinv11:
+
+<Font encoding="UTF-8">printf(&quot;\134nBare system curvature sigma = %g\134n&quot;, sigma):
+printf(&quot;Relaxed curvature krel       = %g\134n&quot;, krel):
+</Font>
+freq_rel_cm := sqrt(krel)*cm1_per_au:
+
+<Font encoding="UTF-8">printf(&quot;Relaxed harmonic frequency = %12.6f cm^-1\134n&quot;,
+</Font>       freq_rel_cm):</Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">
+Bare system curvature sigma = 0.000157545
+Relaxed curvature krel       = 0.000157252
+Relaxed harmonic frequency =  2752.216040 cm^-1
+</Text-field>
+</Output>
+</Group>
+<Group labelreference="L7" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 6. Relaxed quartic model
+#
+# V_rel(x) =
+#     x^4/(16*eta) + 1/2*krel*x^2
+#
+# This is the energy relative to the equilibrium minimum.
+# ============================================================
+
+Vrel := x -&gt; x^4/(16*eta) + krel*x^2/2:</Text-field>
+</Input>
+</Group>
+<Group labelreference="L8" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 7. Conversion from C-H distance to mass-weighted coordinate
+#
+# x = sqrt(mu) * (r - re)
+#
+# r is supplied in Angstrom.
+# x is in sqrt(me) * bohr.
+# ============================================================
+
+# Masses in atomic mass units
+mC_u := 12.011:
+mH_u := 1.00784:
+
+mu_u := mC_u*mH_u/(mC_u + mH_u):
+
+# 1 u = 1822.88848621 me
+u_to_me := 1822.88848621:
+
+mu := mu_u*u_to_me:
+
+# Angstrom -&gt; bohr
+angstrom_to_bohr := 1.88972612546:
+
+# Equilibrium C-H distance
+re_A := 1.12339224:
+
+<Font encoding="UTF-8">printf(&quot;\134nReduced mass = %12.8f u\134n&quot;, mu_u):
+printf(&quot;Reduced mass = %12.8f me\134n&quot;, mu):
+printf(&quot;Equilibrium r = %12.8f Angstrom\134n&quot;, re_A):
+</Font>
+
+x_of_r := r -&gt;
+    sqrt(mu) * (r - re_A) * angstrom_to_bohr:</Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">
+Reduced mass =   0.92981911 u
+Reduced mass = 1694.95655200 me
+Equilibrium r =   1.12339224 Angstrom
+</Text-field>
+</Output>
+</Group>
+<Group labelreference="L9" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 8. Generate scan points
+#
+# Here I use the tight scan interval:
+#
+#       1.00 -- 1.25 Angstrom
+#       step = 0.01 Angstrom
+#
+# Change these three numbers if desired.
+# ============================================================
+
+rmin := 1.00:
+rmax := 1.25:
+dr := 0.01:
+npoints := round((rmax-rmin)/dr):
+
+r_scan := [seq(evalf(rmin + i*dr), i=0..npoints)]:
+
+<Font encoding="UTF-8">printf(&quot;\134nNumber of scan points = %d\134n&quot;, nops(r_scan)):
+printf(&quot;First point = %.8f Angstrom\134n&quot;, r_scan[1]):
+printf(&quot;Last point  = %.8f Angstrom\134n&quot;, r_scan[-1]):</Font></Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">
+Number of scan points = 26
+First point = 1.00000000 Angstrom
+Last point  = 1.25000000 Angstrom
+</Text-field>
+</Output>
+</Group>
+<Group hide-input="false" labelreference="L10" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 9. Generate model energies
+#
+# Energy is measured relative to the minimum:
+#
+#       Delta E_model(r) = V_rel(x(r))
+#
+# Convert Hartree -&gt; eV for easier comparison with an energy
+# profile plotted in eV.
+# ============================================================
+
+r_scan[1]:
+r_scan[2]:
+r_scan[26]:
+
+Eh_to_eV := 27.211386245988:
+
+model_data := []:
+
+for i from 1 to nops(r_scan) do
+
+    r := r_scan[i]:
+
+    xval := x_of_r(r):
+
+    E_au := Vrel(xval):
+    E_eV := E_au * Eh_to_eV:
+
+    model_data :=
+        [op(model_data), [r, xval, E_au, E_eV]]:
+
+end do:</Text-field>
+</Input>
+</Group>
+<Group hide-input="false" labelreference="L11" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 10. Print the generated points
+#
+# Columns:
+# r(Angstrom)    x(sqrt(me)*bohr)    DeltaE(Hartree)    DeltaE(eV)
+# ============================================================
+
+<Font encoding="UTF-8">printf(&quot;\134n&quot;):
+printf(&quot;# r_Angstrom x_sqrtme_bohr DeltaE_Hartree DeltaE_eV\134n&quot;):
+</Font>
+model_data:
+
+for row in model_data do
+<Font encoding="UTF-8">    printf(&quot;%12.6f %18.10f %18.10e %18.10e\134n&quot;,
+</Font>           row[1], row[2], row[3], row[4]):
+end do:</Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">
+# r_Angstrom x_sqrtme_bohr DeltaE_Hartree DeltaE_eV
+    1.000000      -9.5998843360   7.5546150006e-03   2.0557154672e-01
+    1.010000      -8.8218869230   6.3392141416e-03   1.7249880450e-01
+    1.020000      -8.0438895120   5.2395619938e-03   1.4257574517e-01
+    1.030000      -7.2658921010   4.2521953859e-03   1.1570813104e-01
+    1.040000      -6.4878946880   3.3739706509e-03   9.1810418565e-02
+    1.050000      -5.7098972770   2.6020636314e-03   7.0805758510e-02
+    1.060000      -4.9318998640   1.9339696656e-03   5.2625995557e-02
+    1.070000      -4.1539024530   1.3675036009e-03   3.7211668678e-02
+    1.080000      -3.3759050420   9.0079978426e-04   2.4512010860e-02
+    1.090000      -2.5979076290   5.3231206712e-04   1.4484949262e-02
+    1.100000      -1.8199102180   2.6081380579e-04   7.0971052078e-03
+    1.110000      -1.0419128060   8.5397857577e-05   2.3237940871e-03
+    1.120000      -0.2639153940   5.4765847975e-06   1.4902546423e-04
+    1.130000       0.5140820178   2.0781852452e-05   5.6550301398e-04
+    1.140000       1.2920794300   1.3136502906e-04   3.5746245449e-03
+    1.150000       2.0700768410   3.3759698618e-04   9.1864819865e-03
+    1.160000       2.8480742540   6.4016809980e-04   1.7419861426e-02
+    1.170000       3.6260716650   1.0400882471e-03   2.8302243022e-02
+    1.180000       4.4040690760   1.5386868107e-03   4.1869801119e-02
+    1.190000       5.1820664890   2.1376126771e-03   5.8167404201e-02
+    1.200000       5.9600639000   2.8388342316e-03   7.7248614763e-02
+    1.210000       6.7380613130   3.6446393710e-03   9.9175689651e-02
+    1.220000       7.5160587240   4.5576354848e-03   1.2401957954e-01
+    1.230000       8.2940561360   5.5807494766e-03   1.5185992955e-01
+    1.240000       9.0720535480   6.7172277462e-03   1.8278507870e-01
+    1.250000       9.8500509600   7.9706361987e-03   2.1689206023e-01
+</Text-field>
+</Output>
+</Group>
+<Group labelreference="L12" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 11. Write the model data to a file
+# ============================================================
+
+outfile := &quot;quartic_model_vs_scan.dat&quot;:
+
+fd := fopen(outfile, WRITE):
+
+fprintf(fd,
+<Font encoding="UTF-8">&quot;# r_Angstrom DeltaE_Hartree DeltaE_eV\134n&quot;):
+</Font>
+for row in model_data do
+
+    fprintf(fd,
+<Font encoding="UTF-8">            &quot;% .10f % .12e % .12e\134n&quot;,
+</Font>            row[1], row[3], row[4]):
+
+end do:
+
+fclose(fd):
+
+<Font encoding="UTF-8">printf(&quot;\134nWrote %s\134n&quot;, outfile):</Font></Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">
+Wrote quartic_model_vs_scan.dat
+</Text-field>
+</Output>
+</Group>
+<Group labelreference="L13" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"><Font encoding="UTF-8"># ============================================================
+# 12. Read tight ORCA scan
+# ============================================================
+
+orca_file := &quot;scan_tight.dat&quot;:
+
+orca_data := readdata(
+    orca_file,
+    2
+):
+
+printf(&quot;\134nNumber of ORCA points = %d\134n&quot;, nops(orca_data)):
+
+Eopt := -69.139475816359:
+
+orca_shifted := []:
+
+for row in orca_data do
+
+    r := row[1]:
+    E := row[2]:
+
+    dE := E - Eopt:
+
+    orca_shifted :=
+        [op(orca_shifted), [r, dE]]:
+
+end do:</Font></Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">
+Number of ORCA points = 26
+</Text-field>
+</Output>
+</Group>
+<Group hide-input="false" labelreference="L14" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"><Font encoding="UTF-8"># ============================================================
+# 13. Write shifted ORCA scan
+# ============================================================
+
+orca_out := &quot;scan_tight_shifted.dat&quot;:
+
+fd := fopen(orca_out, WRITE):
+
+fprintf(fd, &quot;# r_Angstrom DeltaE_Hartree DeltaE_eV\134n&quot;):
+
+
+for row in orca_shifted do
+
+    r := row[1]:
+    dE := row[2]:
+    dE_eV := evalf(dE * Eh_to_eV):
+
+    fprintf(fd,
+            &quot;% .10f % .12e % .12e\134n&quot;,
+            r,
+            dE,
+            dE*Eh_to_eV):
+
+end do:
+
+fclose(fd):
+
+printf(&quot;Wrote %s\134n&quot;, orca_out)</Font></Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">Wrote scan_tight_shifted.dat
+</Text-field>
+</Output>
+</Group>
+<Group labelreference="L15" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 14. Prepare plotting data
+# ============================================================
+
+r_orca := Vector(
+    [seq(orca_shifted[i][1], i=1..nops(orca_shifted))]
+):
+
+E_orca := Vector(
+    [seq(orca_shifted[i][2]*Eh_to_eV,
+         i=1..nops(orca_shifted))]
+):
+
+r_model := Vector(
+    [seq(model_data[i][1], i=1..nops(model_data))]
+):
+
+E_model := Vector(
+    [seq(model_data[i][4], i=1..nops(model_data))]
+):</Text-field>
+</Input>
+</Group>
+<Group labelreference="L16" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 15. Plot ORCA scan and quartic model in Hartree
+# ============================================================
+
+p_orca := pointplot(
+    [seq(
+        [orca_shifted[i][1], orca_shifted[i][2]],
+        i=1..nops(orca_shifted)
+    )],
+    symbol=solidcircle,
+    symbolsize=8,
+    color=blue,
+    legend=&quot;ORCA relaxed scan&quot;
+):
+
+p_model := pointplot(
+    [seq(
+        [model_data[i][1], model_data[i][3]],
+        i=1..nops(model_data)
+    )],
+    connect=true,
+    symbol=solidcircle,
+    symbolsize=4,
+    color=red,
+    thickness=2,
+    legend=&quot;Quartic model&quot;
+):
+
+display(
+    [p_orca, p_model],
+    labels=[&quot;r_CH (Angstrom)&quot;, &quot;Delta E (Hartree)&quot;],
+    title=&quot;Tight ORCA scan vs quartic model&quot;,
+    legendstyle=[location=right]
+);</Text-field>
+</Input>
+<Output><Text-field style="Maple Plot" layout="Maple Plot"><Plot height="496.0" originalheight="496.0" type="two-dimensional" width="1500.0" originalwidth="1500.0" plot-scale="1.0" plot-xtrans="0.0" plot-ytrans="0.0" gridlinevisibility="1" legendvisibility="true" input="">NiwtJSdQT0lOVFNHNj83JCQiIzUhIiIkIid4XCgqISIpNyQkIiQsIiEiIyQiJ24hMykhIik3JCQiJC0iISIjJCInQC5tISIpNyQkIiQuIiEiIyQiJ1wxYCEiKTckJCIkLyIhIiMkIic7IT0lISIpNyQkIiQwIiEiIyQiJ1I5SyEiKTckJCIkMSIhIiMkIiciKSpSIyEiKTckJCIkMiIhIiMkIidiRjwhIik3JCQiJDMiISIjJCInOCo9IiEiKTckJCIkNCIhIiMkIiZedyghIik3JCQiIzYhIiIkIiYvI1shIik3JCQiJDYiISIjJCImVilIISIpNyQkIiQ3IiEiIyQiJng9IyEiKTckJCIkOCIhIiMkIiZYTyMhIik3JCQiJDkiISIjJCImQlgkISIpNyQkIiQ6IiEiIyQiJjlSJiEiKTckJCIkOyIhIiMkIiZfNykhIik3JCQiJDwiISIjJCInKSpmNiEiKTckJCIkPSIhIiMkIidVdzohIik3JCQiJD4iISIjJCInJnAwIyEiKTckJCIjNyEiIiQiJydwZiMhIik3JCQiJEAiISIjJCInLiM+JCEiKTckJCIkQSIhIiMkIicoeiRRISIpNyQkIiRCIiEiIyQiJ3dJWCEiKTckJCIkQyIhIiMkIidlbV8hIik3JCQiJEQiISIjJCInd1RnISIpLSUnTEVHRU5ERzYjLSUpX1RZUEVTRVRHNiMtSSVtcm93RzYjL0krbW9kdWxlbmFtZUc2IkksVHlwZXNldHRpbmdHSShfc3lzbGliRzYiNjYtSSNtc0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkc2IjYjUTJPUkNBfnJlbGF4ZWR+c2NhbjYiLyUnZmFtaWx5R1EwVGltZXN+TmV3flJvbWFuNiIvJSVzaXplR1EjMTI2Ii8lJWJvbGRHUSZmYWxzZTYiLyUnaXRhbGljR1EmZmFsc2U2Ii8lKnVuZGVybGluZUdRJmZhbHNlNiIvJS5zdHJpa2V0aHJvdWdoR1EmZmFsc2U2Ii8lKnN1YnNjcmlwdEdRJmZhbHNlNiIvJSxzdXBlcnNjcmlwdEdRJmZhbHNlNiIvJStmb3JlZ3JvdW5kR1EoWzAsMCwwXTYiLyUrYmFja2dyb3VuZEdRLlsyNTUsMjU1LDI1NV02Ii8lJ29wYXF1ZUdRJmZhbHNlNiIvJStleGVjdXRhYmxlR1EmZmFsc2U2Ii8lKXJlYWRvbmx5R1EmZmFsc2U2Ii8lKWNvbXBvc2VkR1EmZmFsc2U2Ii8lKmNvbnZlcnRlZEdRJmZhbHNlNiIvJStpbXNlbGVjdGVkR1EmZmFsc2U2Ii8lLHBsYWNlaG9sZGVyR1EmZmFsc2U2Ii8lNnNlbGVjdGlvbi1wbGFjZWhvbGRlckdRJmZhbHNlNiIvJSxtYXRodmFyaWFudEdRJ25vcm1hbDYiLSUmQ09MT1JHNiYlJFJHQkckIiIhISIiJCIiISEiIiQiIzUhIiItJSdTWU1CT0xHNiQlLV9TT0xJRENJUkNMRUciIiktJSdDVVJWRVNHNic3PDckJCIjNSEiIiQiMSg0WDErOlliKCEjPTckJCIkLCIhIiMkIjFAKmU6OTkjUmohIz03JCQiJC0iISIjJCIyd2RQUSo+Y1JfISM+NyQkIiQuIiEiIyQiMUBnJGZRJj5fVSEjPTckJCIkLyIhIiMkIjFOPCU0bHFSUCQhIz03JCQiJDAiISIjJCIyJT1nT0pPMS1FISM+NyQkIiQxIiEiIyQiMjMkUWJsJ3BSJD4hIz43JCQiJDIiISIjJCIyTSZSJTRnLnZPIiEjPjckJCIkMyIhIiMkIjBsZUQleSp6KyohIz03JCQiJDQiISIjJCIvJT43bj9KSyYhIzw3JCQiIzYhIiIkIjIkKm9cejBRIjNFISM/NyQkIiQ2IiEiIyQiMS9GbGRkeVImKSEjPzckJCIkNyIhIiMkIjFGeF8oeiVld2EhI0A3JCQiJDgiISIjJCIyRillPlhfPXk/ISNANyQkIiQ5IiEiIyQiMlojKmUwSF1PSiIhIz83JCQiJDoiISIjJCIxMTkjPScpcGZQJCEjPjckJCIkOyIhIiMkIjFpLCwpKjRvLGshIz43JCQiJDwiISIjJCIydWQkNFojKTNTNSEjPjckJCIkPSIhIiMkIjJRb1kyIm9vUTohIz43JCQiJD4iISIjJCIyLjUpNHhFaFBAISM+NyQkIiM3ISIiJCIyWXltOkJNKVFHISM+NyQkIiRAIiEiIyQiMjBJZzRQUllrJCEjPjckJCIkQSIhIiMkIjFDW3klW053YiUhIz03JCQiJEIiISIjJCIwI3ppdyVcMmUmISM8NyQkIiRDIiEiIyQiMS4zPll4QTxuISM9NyQkIiREIiEiIyQiMXZNbik+TzEoeiEjPS0lJ0xFR0VOREc2Iy0lKV9UWVBFU0VURzYjLUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkc2IjY2LUkjbXNHNiMvSSttb2R1bGVuYW1lRzYiSSxUeXBlc2V0dGluZ0dJKF9zeXNsaWJHNiI2I1EuUXVhcnRpY35tb2RlbDYiLyUnZmFtaWx5R1EwVGltZXN+TmV3flJvbWFuNiIvJSVzaXplR1EjMTI2Ii8lJWJvbGRHUSZmYWxzZTYiLyUnaXRhbGljR1EmZmFsc2U2Ii8lKnVuZGVybGluZUdRJmZhbHNlNiIvJS5zdHJpa2V0aHJvdWdoR1EmZmFsc2U2Ii8lKnN1YnNjcmlwdEdRJmZhbHNlNiIvJSxzdXBlcnNjcmlwdEdRJmZhbHNlNiIvJStmb3JlZ3JvdW5kR1EoWzAsMCwwXTYiLyUrYmFja2dyb3VuZEdRLlsyNTUsMjU1LDI1NV02Ii8lJ29wYXF1ZUdRJmZhbHNlNiIvJStleGVjdXRhYmxlR1EmZmFsc2U2Ii8lKXJlYWRvbmx5R1EmZmFsc2U2Ii8lKWNvbXBvc2VkR1EmZmFsc2U2Ii8lKmNvbnZlcnRlZEdRJmZhbHNlNiIvJStpbXNlbGVjdGVkR1EmZmFsc2U2Ii8lLHBsYWNlaG9sZGVyR1EmZmFsc2U2Ii8lNnNlbGVjdGlvbi1wbGFjZWhvbGRlckdRJmZhbHNlNiIvJSxtYXRodmFyaWFudEdRJ25vcm1hbDYiLSUmQ09MT1JHNiYlJFJHQkckIiM1ISIiJCIiISEiIiQiIiEhIiItJSdTWU1CT0xHNiQlLV9TT0xJRENJUkNMRUciIiUtJSpUSElDS05FU1NHNiMiIiMtJiUmX0FYSVNHNiMiIiI2Ji0lJkNPTE9SRzYmJSRSR0JHJCIiISEiIiQiIiEhIiIkIiIhISIiLSUqTElORVNUWUxFRzYjIiIhLSUqVEhJQ0tORVNTRzYjIiIhLSUtVFJBTlNQQVJFTkNZRzYjJCIiISEiIi0mJSZfQVhJU0c2IyIiIzYmLSUmQ09MT1JHNiYlJFJHQkckIiIhISIiJCIiISEiIiQiIiEhIiItJSpMSU5FU1RZTEVHNiMiIiEtJSpUSElDS05FU1NHNiMiIiEtJS1UUkFOU1BBUkVOQ1lHNiMkIiIhISIiLSUrQVhFU0xBQkVMU0c2JFEwcl9DSH4oQW5nc3Ryb20pNiJRMkRlbHRhfkV+KEhhcnRyZWUpNiItJSZUSVRMRUc2JC0lKV9UWVBFU0VURzYjLUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkc2IjY3LUkjbXNHNiMvSSttb2R1bGVuYW1lRzYiSSxUeXBlc2V0dGluZ0dJKF9zeXNsaWJHNiI2I1FBVGlnaHR+T1JDQX5zY2FufnZzfnF1YXJ0aWN+bW9kZWw2Ii8lJ2ZhbWlseUdRLURlamFWdX5TZXJpZjYiLyUlc2l6ZUdRIzEyNiIvJSVib2xkR1EmZmFsc2U2Ii8lJ2l0YWxpY0dRJmZhbHNlNiIvJSp1bmRlcmxpbmVHUSZmYWxzZTYiLyUuc3RyaWtldGhyb3VnaEdRJmZhbHNlNiIvJSpzdWJzY3JpcHRHUSZmYWxzZTYiLyUsc3VwZXJzY3JpcHRHUSZmYWxzZTYiLyUrZm9yZWdyb3VuZEdRKFswLDAsMF02Ii8lK2JhY2tncm91bmRHUS5bMjU1LDI1NSwyNTVdNiIvJSdvcGFxdWVHUSZmYWxzZTYiLyUrZXhlY3V0YWJsZUdRJmZhbHNlNiIvJSlyZWFkb25seUdRJmZhbHNlNiIvJSljb21wb3NlZEdRJmZhbHNlNiIvJSpjb252ZXJ0ZWRHUSZmYWxzZTYiLyUraW1zZWxlY3RlZEdRJmZhbHNlNiIvJSxwbGFjZWhvbGRlckdRJmZhbHNlNiIvJTZzZWxlY3Rpb24tcGxhY2Vob2xkZXJHUSZmYWxzZTYiLyUwZm9udF9zdHlsZV9uYW1lR1ElVGV4dDYiLyUsbWF0aHZhcmlhbnRHUSdub3JtYWw2Ii0lLVRSQU5TUEFSRU5DWUc2IyQiIiEhIiItJS1fTEVHRU5EU1RZTEVHNiMtJSpfTE9DQVRJT05HNiMlJ19SSUdIVEctJSlfVklTSUJMRUc2IyIiIi0lJVJPT1RHNictJSlCT1VORFNfWEc2IyQiJTVBISIiLSUpQk9VTkRTX1lHNiMkIiQhRyEiIi0lLUJPVU5EU19XSURUSEc2IyQiJSF5JiEiIi0lLkJPVU5EU19IRUlHSFRHNiMkIiVnVCEiIi0lKUNISUxEUkVORzYiLSUrQU5OT1RBVElPTkc2Jy0lKUJPVU5EU19YRzYjJCIjNSEiIi0lKUJPVU5EU19ZRzYjJCIiISEiIi0lLUJPVU5EU19XSURUSEc2IyQiJitdIiEiIi0lLkJPVU5EU19IRUlHSFRHNiMkIiVnXCEiIi0lKUNISUxEUkVORzYiRzYi</Plot></Text-field>
+</Output>
+</Group>
+<Group hide-input="false" labelreference="L17" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"><Font encoding="UTF-8"># ============================================================
+# 16. Quadratic interpolation around scan minimum
+# ============================================================
+
+rr := 'rr':
+
+i_near := 1:
+dmin := abs(orca_data[1][1] - re_A):
+
+for i from 2 to nops(orca_data) do
+    d := abs(orca_data[i][1] - re_A):
+
+    if d &lt; dmin then
+        dmin := d:
+        i_near := i:
+    end if:
+end do:
+
+i1 := i_near-1:
+i2 := i_near:
+i3 := i_near+1:
+
+r1 := orca_data[i1][1]:
+r2 := orca_data[i2][1]:
+r3 := orca_data[i3][1]:
+
+E1 := orca_data[i1][2]:
+E2 := orca_data[i2][2]:
+E3 := orca_data[i3][2]:
+
+# Construct the unique quadratic passing through the 3 points
+a, b, c := 'a', 'b', 'c':
+
+eq1 := a*r1^2 + b*r1 + c = E1:
+eq2 := a*r2^2 + b*r2 + c = E2:
+eq3 := a*r3^2 + b*r3 + c = E3:
+
+abc := solve({eq1,eq2,eq3}, {a,b,c}):
+
+p := subs(abc, a*rr^2 + b*rr + c):
+
+# Minimum of quadratic: dp/dr = 0
+r_scan_min := solve(diff(p,rr)=0, rr):
+
+E_scan_min := evalf(subs(rr=r_scan_min,p)):
+
+printf(&quot;Scan minimum r = %.10f Angstrom\134n&quot;,
+       evalf(r_scan_min)):
+
+printf(&quot;Scan minimum E = %.12f Hartree\134n&quot;,
+       evalf(E_scan_min)):</Font></Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">Scan minimum r = 1.1231836860 Angstrom
+Scan minimum E = -69.139261980000 Hartree
+</Text-field>
+</Output>
+</Group>
+<Group labelreference="L41" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 17. Shift again and plot
+# ============================================================
+orca_shifted2 := []:
+
+for row in orca_data do
+
+    r := row[1]:
+    E := row[2]:
+
+    dE := E - E_scan_min:
+
+    orca_shifted2 :=
+        [op(orca_shifted2), [r, dE]]:
+
+end do:
+
+p_orca := pointplot(
+    [seq(
+        [orca_shifted2[i][1], orca_shifted2[i][2]],
+        i=1..nops(orca_shifted2)
+    )],
+    symbol=solidcircle,
+    symbolsize=8,
+    color=blue,
+    legend=&quot;ORCA relaxed scan&quot;
+):
+
+p_model := pointplot(
+    [seq(
+        [model_data[i][1], model_data[i][3]],
+        i=1..nops(model_data)
+    )],
+    connect=true,
+    symbol=solidcircle,
+    symbolsize=4,
+    color=red,
+    thickness=2,
+    legend=&quot;Quartic model&quot;
+):
+
+display(
+    [p_orca, p_model],
+    labels=[&quot;r_CH (Angstrom)&quot;, &quot;Delta E (Hartree)&quot;],
+    title=&quot;Tight ORCA scan vs quartic model&quot;,
+    legendstyle=[location=right]
+);</Text-field>
+</Input>
+<Output><Text-field style="Maple Plot" layout="Maple Plot"><Plot height="498.0" originalheight="498.0" type="two-dimensional" width="1542.0" originalwidth="1542.0" plot-scale="1.0" plot-xtrans="0.0" plot-ytrans="0.0" gridlinevisibility="1" legendvisibility="true" input="">NiwtJSdQT0lOVFNHNj83JCQiIzUhIiIkIickZmAqISIpNyQkIiQsIiEiIyQiJyRvJ3khIik3JCQiJC0iISIjJCInUCpRJyEiKTckJCIkLiIhIiMkIidsIzQmISIpNyQkIiQvIiEiIyQiJ0ttUiEiKTckJCIkMCIhIiMkIidiK0khIik3JCQiJDEiISIjJCInKGY9IyEiKTckJCIkMiIhIiMkIidyODohIik3JCQiJDMiISIjJCImSHYqISIpNyQkIiQ0IiEiIyQiJm5pJiEiKTckJCIjNiEiIiQiJSNvIyEiKDckJCIkNiIhIiMkIiVmJSkhIik3JCQiJDciISIjJCIkJFwhIik3JCQiJDgiISIjJCIlaEEhIik3JCQiJDkiISIjJCImUkoiISIpNyQkIiQ6IiEiIyQiJWBLISIoNyQkIiQ7IiEiIyQiJm8pZiEiKTckJCIkPCIhIiMkIiY5WSohIik3JCQiJD0iISIjJCInZWk4ISIpNyQkIiQ+IiEiIyQiJzZWPSEiKTckJCIjNyEiIiQiJzckUSMhIik3JCQiJEAiISIjJCInPnlIISIpNyQkIiRBIiEiIyQiJzhDTyEiKTckJCIkQiIhIiMkIicjcEolISIpNyQkIiRDIiEiIyQiJ3VfXSEiKTckJCIkRCIhIiMkIicjeiNlISIpLSUnTEVHRU5ERzYjLSUpX1RZUEVTRVRHNiMtSSVtcm93RzYjL0krbW9kdWxlbmFtZUc2IkksVHlwZXNldHRpbmdHSShfc3lzbGliRzYiNjYtSSNtc0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkc2IjYjUTJPUkNBfnJlbGF4ZWR+c2NhbjYiLyUnZmFtaWx5R1EwVGltZXN+TmV3flJvbWFuNiIvJSVzaXplR1EjMTI2Ii8lJWJvbGRHUSZmYWxzZTYiLyUnaXRhbGljR1EmZmFsc2U2Ii8lKnVuZGVybGluZUdRJmZhbHNlNiIvJS5zdHJpa2V0aHJvdWdoR1EmZmFsc2U2Ii8lKnN1YnNjcmlwdEdRJmZhbHNlNiIvJSxzdXBlcnNjcmlwdEdRJmZhbHNlNiIvJStmb3JlZ3JvdW5kR1EoWzAsMCwwXTYiLyUrYmFja2dyb3VuZEdRLlsyNTUsMjU1LDI1NV02Ii8lJ29wYXF1ZUdRJmZhbHNlNiIvJStleGVjdXRhYmxlR1EmZmFsc2U2Ii8lKXJlYWRvbmx5R1EmZmFsc2U2Ii8lKWNvbXBvc2VkR1EmZmFsc2U2Ii8lKmNvbnZlcnRlZEdRJmZhbHNlNiIvJStpbXNlbGVjdGVkR1EmZmFsc2U2Ii8lLHBsYWNlaG9sZGVyR1EmZmFsc2U2Ii8lNnNlbGVjdGlvbi1wbGFjZWhvbGRlckdRJmZhbHNlNiIvJSxtYXRodmFyaWFudEdRJ25vcm1hbDYiLSUmQ09MT1JHNiYlJFJHQkckIiIhISIiJCIiISEiIiQiIzUhIiItJSdTWU1CT0xHNiQlLV9TT0xJRENJUkNMRUciIiktJSdDVVJWRVNHNic3PDckJCIjNSEiIiQiMSg0WDErOlliKCEjPTckJCIkLCIhIiMkIjFAKmU6OTkjUmohIz03JCQiJC0iISIjJCIyd2RQUSo+Y1JfISM+NyQkIiQuIiEiIyQiMUBnJGZRJj5fVSEjPTckJCIkLyIhIiMkIjFOPCU0bHFSUCQhIz03JCQiJDAiISIjJCIyJT1nT0pPMS1FISM+NyQkIiQxIiEiIyQiMjMkUWJsJ3BSJD4hIz43JCQiJDIiISIjJCIyTSZSJTRnLnZPIiEjPjckJCIkMyIhIiMkIjBsZUQleSp6KyohIz03JCQiJDQiISIjJCIvJT43bj9KSyYhIzw3JCQiIzYhIiIkIjIkKm9cejBRIjNFISM/NyQkIiQ2IiEiIyQiMS9GbGRkeVImKSEjPzckJCIkNyIhIiMkIjFGeF8oeiVld2EhI0A3JCQiJDgiISIjJCIyRillPlhfPXk/ISNANyQkIiQ5IiEiIyQiMlojKmUwSF1PSiIhIz83JCQiJDoiISIjJCIxMTkjPScpcGZQJCEjPjckJCIkOyIhIiMkIjFpLCwpKjRvLGshIz43JCQiJDwiISIjJCIydWQkNFojKTNTNSEjPjckJCIkPSIhIiMkIjJRb1kyIm9vUTohIz43JCQiJD4iISIjJCIyLjUpNHhFaFBAISM+NyQkIiM3ISIiJCIyWXltOkJNKVFHISM+NyQkIiRAIiEiIyQiMjBJZzRQUllrJCEjPjckJCIkQSIhIiMkIjFDW3klW053YiUhIz03JCQiJEIiISIjJCIwI3ppdyVcMmUmISM8NyQkIiRDIiEiIyQiMS4zPll4QTxuISM9NyQkIiREIiEiIyQiMXZNbik+TzEoeiEjPS0lJ0xFR0VOREc2Iy0lKV9UWVBFU0VURzYjLUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkc2IjY2LUkjbXNHNiMvSSttb2R1bGVuYW1lRzYiSSxUeXBlc2V0dGluZ0dJKF9zeXNsaWJHNiI2I1EuUXVhcnRpY35tb2RlbDYiLyUnZmFtaWx5R1EwVGltZXN+TmV3flJvbWFuNiIvJSVzaXplR1EjMTI2Ii8lJWJvbGRHUSZmYWxzZTYiLyUnaXRhbGljR1EmZmFsc2U2Ii8lKnVuZGVybGluZUdRJmZhbHNlNiIvJS5zdHJpa2V0aHJvdWdoR1EmZmFsc2U2Ii8lKnN1YnNjcmlwdEdRJmZhbHNlNiIvJSxzdXBlcnNjcmlwdEdRJmZhbHNlNiIvJStmb3JlZ3JvdW5kR1EoWzAsMCwwXTYiLyUrYmFja2dyb3VuZEdRLlsyNTUsMjU1LDI1NV02Ii8lJ29wYXF1ZUdRJmZhbHNlNiIvJStleGVjdXRhYmxlR1EmZmFsc2U2Ii8lKXJlYWRvbmx5R1EmZmFsc2U2Ii8lKWNvbXBvc2VkR1EmZmFsc2U2Ii8lKmNvbnZlcnRlZEdRJmZhbHNlNiIvJStpbXNlbGVjdGVkR1EmZmFsc2U2Ii8lLHBsYWNlaG9sZGVyR1EmZmFsc2U2Ii8lNnNlbGVjdGlvbi1wbGFjZWhvbGRlckdRJmZhbHNlNiIvJSxtYXRodmFyaWFudEdRJ25vcm1hbDYiLSUmQ09MT1JHNiYlJFJHQkckIiM1ISIiJCIiISEiIiQiIiEhIiItJSdTWU1CT0xHNiQlLV9TT0xJRENJUkNMRUciIiUtJSpUSElDS05FU1NHNiMiIiMtJiUmX0FYSVNHNiMiIiI2Ji0lJkNPTE9SRzYmJSRSR0JHJCIiISEiIiQiIiEhIiIkIiIhISIiLSUqTElORVNUWUxFRzYjIiIhLSUqVEhJQ0tORVNTRzYjIiIhLSUtVFJBTlNQQVJFTkNZRzYjJCIiISEiIi0mJSZfQVhJU0c2IyIiIzYmLSUmQ09MT1JHNiYlJFJHQkckIiIhISIiJCIiISEiIiQiIiEhIiItJSpMSU5FU1RZTEVHNiMiIiEtJSpUSElDS05FU1NHNiMiIiEtJS1UUkFOU1BBUkVOQ1lHNiMkIiIhISIiLSUrQVhFU0xBQkVMU0c2JFEwcl9DSH4oQW5nc3Ryb20pNiJRMkRlbHRhfkV+KEhhcnRyZWUpNiItJSZUSVRMRUc2JC0lKV9UWVBFU0VURzYjLUklbXJvd0c2Iy9JK21vZHVsZW5hbWVHNiJJLFR5cGVzZXR0aW5nR0koX3N5c2xpYkc2IjY3LUkjbXNHNiMvSSttb2R1bGVuYW1lRzYiSSxUeXBlc2V0dGluZ0dJKF9zeXNsaWJHNiI2I1FBVGlnaHR+T1JDQX5zY2FufnZzfnF1YXJ0aWN+bW9kZWw2Ii8lJ2ZhbWlseUdRLURlamFWdX5TZXJpZjYiLyUlc2l6ZUdRIzEyNiIvJSVib2xkR1EmZmFsc2U2Ii8lJ2l0YWxpY0dRJmZhbHNlNiIvJSp1bmRlcmxpbmVHUSZmYWxzZTYiLyUuc3RyaWtldGhyb3VnaEdRJmZhbHNlNiIvJSpzdWJzY3JpcHRHUSZmYWxzZTYiLyUsc3VwZXJzY3JpcHRHUSZmYWxzZTYiLyUrZm9yZWdyb3VuZEdRKFswLDAsMF02Ii8lK2JhY2tncm91bmRHUS5bMjU1LDI1NSwyNTVdNiIvJSdvcGFxdWVHUSZmYWxzZTYiLyUrZXhlY3V0YWJsZUdRJmZhbHNlNiIvJSlyZWFkb25seUdRJmZhbHNlNiIvJSljb21wb3NlZEdRJmZhbHNlNiIvJSpjb252ZXJ0ZWRHUSZmYWxzZTYiLyUraW1zZWxlY3RlZEdRJmZhbHNlNiIvJSxwbGFjZWhvbGRlckdRJmZhbHNlNiIvJTZzZWxlY3Rpb24tcGxhY2Vob2xkZXJHUSZmYWxzZTYiLyUwZm9udF9zdHlsZV9uYW1lR1ElVGV4dDYiLyUsbWF0aHZhcmlhbnRHUSdub3JtYWw2Ii0lLVRSQU5TUEFSRU5DWUc2IyQiIiEhIiItJS1fTEVHRU5EU1RZTEVHNiMtJSpfTE9DQVRJT05HNiMlJ19SSUdIVEctJSlfVklTSUJMRUc2IyIiIi0lJVJPT1RHNictJSlCT1VORFNfWEc2IyQiJVNAISIiLSUpQk9VTkRTX1lHNiMkIiQrJCEiIi0lLUJPVU5EU19XSURUSEc2IyQiJDUkISIiLSUuQk9VTkRTX0hFSUdIVEc2IyQiJStVISIiLSUpQ0hJTERSRU5HNiItJStBTk5PVEFUSU9ORzYnLSUpQk9VTkRTX1hHNiMkIiM1ISIiLSUpQk9VTkRTX1lHNiMkIiIhISIiLSUtQk9VTkRTX1dJRFRIRzYjJCImP2EiISIiLSUuQk9VTkRTX0hFSUdIVEc2IyQiJSEpXCEiIi0lKUNISUxEUkVORzYiRzYi</Plot></Text-field>
+</Output>
+</Group>
+<Group labelreference="L57" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"># ============================================================
+# 18. Write shifted ORCA scan 2
+# ============================================================
+
+orca_out2 := &quot;scan_tight_shifted_scanmin.dat&quot;:
+
+fd := fopen(orca_out2, WRITE):
+
+<Font encoding="UTF-8">fprintf(fd, &quot;# r_Angstrom DeltaE_Hartree DeltaE_eV\134n&quot;):
+</Font>
+
+for row in orca_shifted2 do
+
+    r := row[1]:
+    dE := row[2]:
+    dE_eV := evalf(dE * Eh_to_eV):
+
+    fprintf(fd,
+<Font encoding="UTF-8">            &quot;% .10f % .12e % .12e\134n&quot;,
+</Font>            r,
+            dE,
+            dE*Eh_to_eV):
+
+end do:
+
+fclose(fd):
+
+<Font encoding="UTF-8">printf(&quot;Wrote %s\134n&quot;, orca_out2)</Font></Text-field>
+</Input>
+<Output><Text-field style="Line Printed Output" layout="Line Printed Output">Wrote scan_tight_shifted_scanmin.dat
+</Text-field>
+</Output>
+</Group>
+<Group labelreference="L87" drawlabel="true" applyint="true" applyrational="true" applyexponent="false">
+<Input><Text-field prompt="&gt; " style="Maple Input" layout="Normal"></Text-field>
+</Input>
+</Group>
+</Worksheet>

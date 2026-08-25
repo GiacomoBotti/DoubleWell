@@ -117,7 +117,7 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
 
-      do i = 1,nv
+      do i = 1,nv+1
         write(*,*) Beq(i,:)
       end do
 
@@ -150,7 +150,7 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Projected Gaussian Width Matrix:"
 
-      do i = 1,nv
+      do i = 1,nv+1
         write(*,*) Bcmplx(i,:)
       end do
     
