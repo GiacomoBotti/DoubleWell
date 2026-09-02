@@ -155,6 +155,7 @@
          write(111,*) "#", cvec(:) 
          rvec(:) = 0.d0
          xvec(1) = -10.d0  
+         xvec(1) = lwb  
          step = -2*xvec(1)/200
         ! xvec(:) = -5.d0 
          do i = 1,200

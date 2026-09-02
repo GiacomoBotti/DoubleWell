@@ -161,8 +161,6 @@
         write(*,*) q0(i), p0(i)
       end do
       
-      call plot_wfn(nv,qeq,peq,ceq,Beq,1.d0)
-      call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
       !stop
 
 !.....Print simulation parameters.......................................
@@ -176,6 +174,11 @@
       write(*,*) "Bath dimension: ", nv
       write(*,*) "Grid from: ",lwb," to ",hgb," with ",gstep," steps"
       write(*,*) "+---------------------------------------------------+"
+
+!.....Print initial wavefunctions
+
+      call plot_wfn(nv,qeq,peq,ceq,Beq,1.d0)
+      call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
 
 ! DYNAMICS SETUP IT'S IMPORTANT
       call dynamics_setup(coalson,scaling,frozen,stationary)
