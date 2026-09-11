@@ -8,21 +8,24 @@
       save
 
       ! Bath potential matrix dimensions
-      integer,parameter,public :: nv = 1
+      integer,parameter,public :: nv = 4
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 7 
+      integer,parameter,public :: nh = 9 
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Maximum order of y momenta
       integer, parameter, public :: maxorder = 8
       ! Gamma: coupling constant
       real*8, public  :: gamma_const = 0.5d0
+      ! Bath: bath coupling constant
+      ! Must be nv-dimensional otherwise nv =1 breaks 
+      real*8, dimension(nv), public  :: bath_const  
       ! Eta: quartic constant
       real*8, public  :: eta_const = 1.3544d0 
       ! Sigma: active coordinate quadratic constant
       real*8, public  :: sigma_const = -1.d0
       ! Kappa: bath coordinates quadratic constant 
-      real*8, public  :: kappa_const = 1.d0
+      real*8, dimension(nv), public  :: kappa_const
 
       integer, public :: coalmode
       real*8, public :: coalc,ffact
@@ -38,8 +41,15 @@
 !.....POTENTIAL SETUP...................................................
 
       subroutine potential_setup()
+      
 
-      namelist /pot_param/ eta_const,sigma_const,gamma_const,kappa_const
+      namelist /pot_param/ eta_const,sigma_const,gamma_const,&
+                           kappa_const,bath_const
+
+       bath_const(:) = 0.1d0
+       bath_const(nv) = 0.d0
+ 
+       kappa_const(:) = 1.d0
 
        read(2222,nml=pot_param)
       

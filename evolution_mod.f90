@@ -40,7 +40,7 @@
        complex*16,dimension(nd+1,nd+1), intent(in) :: Bcmplx,Beq 
 
        integer*8 :: i,j,first,last,nstep,k,nprint
-       real*8 :: h,time,N,E,q,p,E0,Nsq,Neq,Mx,back
+       real*8 :: h,time,N,E,q,p,E0,Nsq,Neq,Mx,back,Mx2
        real*8,dimension(nh) :: csq,phase 
        real*8,dimension(nd) :: qvec,pvec,My 
        real*8,dimension(nd+1) :: qtoti,ptoti,qtotj,ptotj,qold,pold,qeqX 
@@ -108,6 +108,8 @@
 
        call normalization(nd,qeq(1),ceq,dreal(Beq),S00M,Neq)
        ceqN = ceq/dsqrt(Neq)
+      write(*,*) "+---------------------------------------------------+"
+       write(*,*) "S00M(1,1): ", S00M(1,1)
        call normalization(nd,q,c0,dreal(Bcmplx),S00M,N)
        cvec= c0/dsqrt(N)
        csq(:) = conjg(cvec(:))*cvec(:)
@@ -116,7 +118,7 @@
        call print_banners(first,last,nstep,h,N)
 
        call normalization(nd,q,cvec,dreal(Bcmplx),S00M,N)
-       call energy(nd,q0,p0,cvec,Bcmplx,H00M,E0,Mx,My)
+       call energy(nd,q0,p0,cvec,Bcmplx,H00M,E0,Mx,Mx2,My)
        E=E0
        Sc=S00M
 
@@ -128,7 +130,9 @@
        write(321,*) 0.d0,N,E,q0(1), p0(1), real(Bcmplx(1,1)),&
                     &aimag(Bcmplx(1,1)),real(Bcmplx(2,2)),&
                     &aimag(Bcmplx(2,2)),&
-                    &real(Bcmplx(1,2)*conjg(Bcmplx(1,2)))
+                    &real(Bcmplx(1,2)*conjg(Bcmplx(1,2))),&
+                    &S00M(nh,nh),real(H00M(nh,nh))
+      write(322,*) time, dsqrt(csq), dreal(cj), dimag(cj)
 
        write(322,*) 0.d0, dsqrt(csq), dreal(cvec), dimag(cvec)
 
@@ -143,6 +147,14 @@
        Bcmplxj = Bcmplx
 
        cj = cvec
+
+       Tau0 = int_TauMat(nd,qtotj,qeq,ptotj,peq,Bcmplxj,Beq)
+       Tau0c = matmul(Tau0,ceqN)
+       cTau0c = dot_product(cj,Tau0c)
+
+      write(*,*) "+---------------------------------------------------+"
+       write(*,*) "Initial projection overlap (|C(0)|^2)" 
+       write(*,*) real(cTau0c*conjg(cTau0c))/N
 
        Tau0 = int_TauMat(nd,qtotj,q0,ptotj,p0,Bcmplxj,Bcmplx)
        Tau0c = matmul(Tau0,cvec)
@@ -166,11 +178,8 @@
        write(329,*) 0.d0, real(cTauXc),aimag(cTauXc),&
                        real(cTauXc*conjg(cTauXc))/N,&
                        dsqrt(real(cTauXc*conjg(cTauXc)))
-       write(330,*) 0.d0, Mx, My
+      write(330,*) 0.d0, Mx, N*Mx2-Mx**2, My
 
-      write(*,*) "+---------------------------------------------------+"
-       write(*,*) "Initial projection overlap (|C(0)|^2)" 
-       write(*,*) real(cTau0c*conjg(cTau0c))/N
 
 
        kq(:,:) = 0.d0
@@ -194,11 +203,10 @@
        Bcmplxi = Bold
        ci = cj
        
+       !stop
 ! SHORT BACKPROPAGATION  
 
-       write(*,*) "Backpropagating for"
-       write(*,*) trj(5)
-       write(*,*) "Steps"
+       write(*,*) "Backpropagating for ",trj(5)," steps"
        do j = 1,trj(5)
          time = time + back
          !write(*,*) time
@@ -208,13 +216,13 @@
          pold = ptoti
          Bold = Bcmplxi
          cold = ci
-         call vtvprop(nd,back,ci,qtoti,ptoti,Bcmplxi)
+         call scpece_param(nd,back,ci,qtoti,ptoti,Bcmplxi)
          qtoti(:) = scalvec(:)*qtoti(:)+(1.d0-scalvec(:))*qold
          ptoti(:) = scalvec(:)*ptoti(:)+(1.d0-scalvec(:))*pold
          Bcmplxi(:,:)=scalmat(:,:)*Bcmplxi+(1.d0-scalmat(:,:))*Bold(:,:)
          ci = c_update(nd,qtoti,ptoti,qold,pold,ci,Bcmplxi,Bold)
          call normalization(nd,qtoti(1),ci,dreal(Bcmplxi),S00M,N)
-         call energy(nd,qtoti,ptoti,ci,Bcmplxi,H00M,E,Mx,My)
+         call energy(nd,qtoti,ptoti,ci,Bcmplxi,H00M,E,Mx,Mx2,My)
        end do
 
 ! BEGIN TRAJECTORY CYCLE
@@ -276,7 +284,7 @@
           csq(:) = conjg(cj(:))*cj(:)
           ! Normalization and energy
           call normalization(nd,qtotj(1),cj,dreal(Bcmplxj),S00M,N)
-          call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E,Mx,My)
+          call energy(nd,qtotj,ptotj,cj,Bcmplxj,H00M,E,Mx,Mx2,My)
           !write(4321,*) ci(1),cold(1),cj(1)
        end do !j
 ! TEST TEST TEST TEST TEST
@@ -299,8 +307,8 @@
       write(321,*) time,N,E/N,qtotj(1),ptotj(1),real(Bcmplxj(1,1))&
                   &,aimag(Bcmplxj(1,1)),real(Bcmplxj(2,2))&
                   &,aimag(Bcmplxj(2,2)),&
-                  &real(Bcmplxj(1,2)*conjg(Bcmplxj(1,2)))
-                  !&Bcmplxj(1,2)
+                  &real(Bcmplxj(1,2)*conjg(Bcmplxj(1,2))),&
+                  &S00M(nh,nh),real(H00M(nh,nh))
       write(322,*) time, dsqrt(csq), dreal(cj), dimag(cj)
       write(323,*) time, qtotj(2:nd+1) 
       write(325,*) time, ptotj(2:nd+1) 
@@ -312,7 +320,7 @@
       write(329,*) time, real(cTauXc),aimag(cTauXc),&
                    real(cTauXc*conjg(cTauXc))/N,&
                    dsqrt(real(cTauXc*conjg(cTauXc)))
-      write(330,*) time, Mx, My
+      write(330,*) time, Mx, N*Mx2-Mx**2, My
       
       write(111,*) "#", time 
       write(222,*) "#", time 

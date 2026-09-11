@@ -216,12 +216,12 @@
 
         q = qb(1)
 
-!        write(*,*) "I AM C UPDATE"
+        !write(*,*) "I AM C UPDATE"
 
-!        write(*,*) qb
-!        write(*,*) pb
-!        write(*,*) qk
-!        write(*,*) pk
+        !write(*,*) qb
+        !write(*,*) pb
+        !write(*,*) qk
+        !write(*,*) pk
 
         Bmat = real(Bb)
 
@@ -248,14 +248,17 @@
             
         Tt0M = int_TauMat(nd,qb,qk,pb,pk,Bb,Bk) 
         csupp = matmul(Tt0M,c)
- 
-!        write(*,*) "TtOMc"
-!        write(*,*) csupp
+
+!        write(*,*) "c0"
+!        write(*,*) c
 
 !        write(*,*) "Tt0M:"
 !        do i = 1,nh
 !          write(*,*) Tt0M(i,:)
 !        end do
+ 
+!        write(*,*) "TtOMc"
+!        write(*,*) csupp
 
 !        write(*,*) "S00M:"
 !        do i = 1,nh
@@ -264,10 +267,9 @@
 
 !        cout = linsys(nh,S00M,csupp) 
          
-         call zposv('U',nh,1,S00M,nh,csupp,nh,info)
+        call zposv('U',nh,1,S00M,nh,csupp,nh,info)
 
-         cout = csupp
-
+        cout = csupp
        end function
 
 !......Analytical update of electronic coefficients (FB).................
@@ -506,7 +508,7 @@
         complex*16, dimension(nh) :: csupp,cout,cexpo
         complex*16, dimension(nh,nh) :: S00M,St0M,sumS,X0Mat,S0tM
         complex*16, dimension(nh,nh) :: prod1,prod2,summa,H00M,Aux
-        real*8 :: E0,Mx
+        real*8 :: E0,Mx,Mx2
         real*8, dimension(nd) :: My
 
         ! S00M
@@ -527,7 +529,7 @@
         ! S0-t
         S0tM = int_TauMat(nd,q0,tq,p0,tp,B0,tB)
         ! H00M
-        call energy(nd,q0,p0,c0,B0,H00M,E0,Mx,My)
+        call energy(nd,q0,p0,c0,B0,H00M,E0,Mx,Mx2,My)
 
 ! SG qtag.f line 1046 : cleaning new overlap (?)
       !  Aux(:,:) =- iu*(St0M-S0tM)
@@ -593,7 +595,7 @@
         complex*16, dimension(nh) :: csupp,cout,cexpo
         complex*16, dimension(nh,nh) :: S00M,St0M,sumS,X0Mat,S0tM
         complex*16, dimension(nh,nh) :: prod1,prod2,summa,H00M,HttM
-        real*8 :: E0,Mx
+        real*8 :: E0,Mx,Mx2
         real*8, dimension(nd) :: My
 
         ! S00M
@@ -613,9 +615,9 @@
         ! <f(0)|f(-t)> 
         S0tM = int_TauMat(nd,q0,tq,p0,tp,B0,tB)
         ! <f(0)|Hf(0)>
-        call energy(nd,q0,p0,c0,B0,H00M,E0,Mx,My)
+        call energy(nd,q0,p0,c0,B0,H00M,E0,Mx,Mx2,My)
         ! <f(t)|Hf(t)>
-        call energy(nd,qt,pt,c0,Bt,HttM,E0,Mx,My)
+        call energy(nd,qt,pt,c0,Bt,HttM,E0,Mx,Mx2,My)
 
         summa = S0tM -St0M -h*iu*(H00M+HttM) ! ver 1
         csupp = matmul(summa,c0) 
@@ -650,7 +652,7 @@
        complex*16, dimension(nh,nh) :: S00M,St,X0Mat,tS,Stp,Stc
        complex*16, dimension(nh,nh) :: prod1,prod2,summa,H00M,Aux
        complex*16, dimension(nh,nh) :: Htt,Httc,S00av,ttH
-       real*8 :: E0,Mx
+       real*8 :: E0,Mx,Mx2
        real*8, dimension(nd) :: My
 
        qi = qj
@@ -674,9 +676,9 @@
        S00M = X0Mat*Y0*Nsq 
 
        ! <f(0)|Hf(0)>
-       call energy(nd,qj,pj,cj,Bj,H00M,E0,Mx,My)
+       call energy(nd,qj,pj,cj,Bj,H00M,E0,Mx,Mx2,My)
        ! <f(-t)|Hf(-t)>
-       call energy(nd,tq,tp,tc,tB,ttH,E0,Mx,My)
+       call energy(nd,tq,tp,tc,tB,ttH,E0,Mx,Mx2,My)
 
        ! Let's try BOT
        !ci = c_static(nd,h,cj,real(S00M),H00M)
@@ -752,7 +754,7 @@
           ! <f(0)|f(t)> at lambda hat
           Stc = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
           ! <f(t)|Hf(t)> at lambda hat
-          call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,My)
+          call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,Mx2,My)
           ! --- finite differences
           summa = tS - Stc -2*h*iu*H00M
           ! --- midpoint-like
@@ -790,7 +792,7 @@
           ! <f(0)|f(t)> at lambda t
           St = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
           ! <f(t)|Hf(t)>
-          call energy(nd,qi,ppi,ci,Bi,Htt,E0,Mx,My)
+          call energy(nd,qi,ppi,ci,Bi,Htt,E0,Mx,Mx2,My)
           ! --- finite differences 
           summa = tS - St -2*h*iu*H00M
           ! --- midpoint-like

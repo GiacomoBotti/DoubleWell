@@ -24,7 +24,7 @@
        write(321,*) "#Normalization constant: ",N
        write(321,*) "#Time ","N ","E ","q ","p ","Re B(1,1) ",&
                     &"Im B(1,1) ","Re B(2,2) ","Im B(2,2) ",&
-                    & "|B(1,2)|^2"
+                    & "|B(1,2)|^2 ","S00M(nh,nh) ","H00M(nh,nh) "
 
        write(322,*) "#Evolution parameters:"
        write(322,*) "#Range: ",first,last
@@ -87,7 +87,7 @@
        write(330,*) "#Steps: ",nstep
        write(330,*) "#Timestep: ",h
        write(330,*) "#Normalization constant: ",N
-       write(330,*) "#Time ", "<x>", "<y> ..."
+       write(330,*) "#Time ", "<x> ", "<x>**2 - <x**2> ", "<y> ..."
 
        write(*,*) "First step:"
        write(*,*) "N ","E ","q ","p ","B(1,1) ",&

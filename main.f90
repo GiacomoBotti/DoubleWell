@@ -60,10 +60,11 @@
 
       write(*,*) "Potential constants"
 
-      write(*,*) "Eta: ", eta_const
+      write(*,*) "Eta:   ", eta_const
       write(*,*) "Sigma: ", sigma_const
       write(*,*) "Gamma: ", gamma_const
       write(*,*) "Kappa: ", kappa_const
+      write(*,*) "Bath:  ", bath_const
 
       write(*,*) "+---------------------------------------------------+"
 
@@ -116,7 +117,7 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Initial Gaussian Width Matrix:"
 
-      do i = 1,2
+      do i = 1,nv+1
         write(*,*) Beq(i,:)
       end do
 
@@ -149,7 +150,7 @@
       write(*,*) "+---------------------------------------------------+"
       write(*,*) "Projected Gaussian Width Matrix:"
 
-      do i = 1,2
+      do i = 1,nv+1
         write(*,*) Bcmplx(i,:)
       end do
     
@@ -160,8 +161,7 @@
         write(*,*) q0(i), p0(i)
       end do
       
-      call plot_wfn(nv,qeq,peq,ceq,Beq,1.d0)
-      call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
+      !stop
 
 !.....Print simulation parameters.......................................
 
@@ -174,6 +174,11 @@
       write(*,*) "Bath dimension: ", nv
       write(*,*) "Grid from: ",lwb," to ",hgb," with ",gstep," steps"
       write(*,*) "+---------------------------------------------------+"
+
+!.....Print initial wavefunctions
+
+      call plot_wfn(nv,qeq,peq,ceq,Beq,1.d0)
+      call plot_wfn(nv,q0,p0,c0,Bcmplx,1.d0)
 
 ! DYNAMICS SETUP IT'S IMPORTANT
       call dynamics_setup(coalson,scaling,frozen,stationary)
