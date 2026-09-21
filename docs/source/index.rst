@@ -1,0 +1,26 @@
+.. DoubleWell documentation master file, created by
+   sphinx-quickstart on Wed Sep 16 10:49:58 2026.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+DoubleWell documentation
+========================
+
+.. image:: well.svg
+   :width: 60% 
+   :align: center
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Contents:
+
+   README.md
+   files
+   Acknowledgements.md
+
+DoubleWell Files
+==========================================
+
+You find the repository `here <https://github.com/giacomande95-oss/dragonball-vispec.git>`_
+
+Read the paper `here <https://doi.org/10.1063/5.0297591>`_

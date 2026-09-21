@@ -18,11 +18,12 @@
 !.....Diagonalization with LAPACK.......................................
 
       subroutine diagonalization(nd,Amat,LambdaMat,Tmat) 
+      ! Diagonalizes a matrix
+
       ! nd: dimension of the matrices
       ! Amat: Gaussian width matrix (precision)
       ! LambdaMat: diagonal matrix
       ! Tmat: eigenvector matrix
-
        integer, intent(in) :: nd
        real*8, dimension(nd,nd), intent(in) :: Amat
  
@@ -51,11 +52,12 @@
 !.....Momenta of a factorized central normal distribution...............
 
       function momenta(nd,LambdaMat) result(MomMat)
+      ! Computes the momenta of a factorized central normal distribution
+      ! Each column of MomMat contains the i-th component momenta
+
       ! nd: dimension of the matrices
       ! LambdaMat: diagonal matrix
       ! MomMat: matrix of the momenta
-      ! Each column of MomMat contains the i-th component momenta
-
        integer, intent(in) :: nd
 
        integer :: i,j
@@ -92,11 +94,12 @@
 !.....Extract Amat and avec.............................................
 
       subroutine extractA(nd,Bmat,Amat,avec,a)
+      ! Extract bath width matrix and correlation vector
+
       ! nd: dimension of the matrices
       ! Bmat: total gaussian width matrix
       ! Amat: bath gaussian width matrix
       ! avec: system-bath gaussian width vector
-      
        integer, intent(in) :: nd
        real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
 
@@ -120,6 +123,8 @@
 !.....Determinant of a matrix...........................................
  
       function determinant(ndim,Bmat) result(Bdet)
+      ! Computes the determinant of a matrix
+
       ! nd: dimension of the Bmat matrix CAREFUL!
       ! Bmat: matrix
       ! Bidet: I miss it
@@ -145,11 +150,13 @@
 !.....Extract complex Amat and avec.....................................
 
       subroutine extracttildeA(nd,tildeBmat,tildeAmat,tildeavec,tildea)
+      ! Extract bath width matrix and correlation vector for a complex
+      ! width 
+
       ! nd: dimension of the matrices
       ! tildeBmat: total gaussian width matrix (COMPLEX)
       ! tildeAmat: bath gaussian width matrix (COMPLEX)
       ! tildeavec: system-bath gaussian width vector (COMPLEX)
-      
        integer, intent(in) :: nd
        complex*16, dimension(nd+1,nd+1), intent(in) :: tildeBmat
 
@@ -173,6 +180,8 @@
 !.....Compute the trace of a generic matrix.............................
 
       function trace(nd,Mat) result(traceMat)
+      ! Computes the trace of a generic matrix
+
       ! nd: matrix dimension
       ! Mat: matrix
       ! traceMat: trace of the matrix
@@ -194,10 +203,11 @@
 !.....Diagonalization with LAPACK (complex).............................
 
       function det_cmplx(nd,Amat) result(detAmat) 
+      ! Diagonalizes a complex matrix
+
       ! nd: dimension of the matrices
       ! Amat: complex matrix matrix (precision)
       ! detAmat: determinant
-
        integer, intent(in) :: nd
        complex*16, dimension(nd,nd), intent(in) :: Amat
  

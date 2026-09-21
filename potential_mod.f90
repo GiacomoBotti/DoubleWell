@@ -17,7 +17,7 @@
 !.....MATRIX POTENTIAL..................................................
      
       subroutine matrix_pot()
-      ! Vmat: matrix part of the potential
+      ! Builds the bath potential matrix 
       
        integer :: i
        real*8, dimension(nv,nv) :: Vharm
@@ -45,6 +45,7 @@
 !.....PLOT POTENTIAL....................................................
 
       subroutine write_potential2D()
+      ! Writes the 2D potential to be plotted
       
        integer :: i,j
        real*8 :: x,y,grid,V

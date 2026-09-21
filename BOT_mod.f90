@@ -29,6 +29,8 @@
 !......Coefficient update with static basis (analytical)................
 
        function c_static(nd,h,cvec,S00M,H00M) result(csout)
+       ! Static update of the coefficients
+
        ! nd: bath dimension 
        ! h : time-step size
        ! S00M : overlap matrix
@@ -121,6 +123,8 @@
 !......TEST STATIC EVOLUTION............................................
 
        subroutine test_static(nd,S,H,Z,eigenv)
+       ! Tests for the static update
+
        ! nd : matrices dimensions
        ! S : overlap matrix
        ! H : hamiltonian matrix
@@ -191,6 +195,8 @@
 !......Analytical update of electronic coefficients.....................
 
        function c_update(nd,qb,pb,qk,pk,c,Bb,Bk) result(cout)
+       ! Projection of the coefficients on the time-evolved basis
+
        ! nd : bath dimension
        ! qb : full position vector (Bra)
        ! pb : full momentum vector (Bra)
@@ -275,6 +281,8 @@
 !......Analytical update of electronic coefficients (FB).................
 
        function c_update_fb(nd,qb,pb,qk,pk,c,Bb,Bk) result(cout)
+       ! Updates the coefficients with forward-backward scheme
+
        ! nd : bath dimension
        ! qb : full position vector (Bra)
        ! pb : full momentum vector (Bra)
@@ -380,6 +388,9 @@
 !......Analytical update of electronic coefficients (FB - Schr).........
 
        function c_update_fbs(nd,qb,pb,qk,pk,c,Bb,Bk) result(cout)
+       ! Updates the coefficients with forward-backwards Schroedinger
+       ! scheme
+
        ! nd : bath dimension
        ! qb : full position vector (Bra)
        ! pb : full momentum vector (Bra)
@@ -488,6 +499,9 @@
 
        function c_update_full(nd,h,q0,qt,tq,p0,pt,tp,B0,Bt,tB,c0,tc) &
         & result(cout)
+        ! Computes finite-differences time-dependent Schroedinger
+        ! equation 
+
         ! nd: dimensions of the bath
         ! h: timestep
         ! q0,qt,tq: gaussian center at t, t+dt, t-dt
@@ -563,7 +577,7 @@
        ! summa = -S0tM + St0M -2*h*iu*H00M
        !summa = -iu*sumS -2*h*iu*H00M
        ! summa = S0tM - St0M 
-        csupp = matmul(summa,c0) !+ matmul(S00M,tc)! +2.d0*(cexpo - c0)
+        csupp = matmul(summa,c0) 
        ! csupp = matmul(summa,c0) !+ matmul(S00M,tc)! +2.d0*(cexpo - c0)
  
         cout = linsys(nh,S00M,csupp) 
@@ -575,6 +589,9 @@
 
        function c_update_full2(nd,h,q0,qt,tq,p0,pt,tp,B0,Bt,tB,c0,tc) &
         & result(cout)
+        ! Computes mid-point-like time-dependent Schroedinger
+        ! equation 
+
         ! nd: dimensions of the bath
         ! h: timestep
         ! q0,qt,tq: gaussian center at t, t+dt, t-dt
@@ -630,7 +647,7 @@
 !.....Self-consistent propagator with derivatives convergence and coeff.
 
       subroutine pece_coef(nd,h,cj,qj,pj,Bj,tq,tp,tB,tc)
-      ! Does one self-consistent progator step with derivatives conv
+      ! Does one self-consistent propagator step with derivatives conv
        integer, intent(in) :: nd
        real*8, intent(in) :: h
        complex*16, dimension(nh) :: cj,tc
@@ -705,7 +722,7 @@
 
        ! --- Zhao2023 Eq 13
        !summa =-0.5d0*(Stp -transpose(Stp)+tS-transpose(tS)) -2*h*iu*H00M
-       csupp = matmul(summa,cj) !+ matmul(S00M,tc)
+       csupp = matmul(summa,cj) 
        ci = linsys(nh,S00M,csupp) 
        ci = ci + tc
        ! Let's try BOT
@@ -759,7 +776,7 @@
           summa = tS - Stc -2*h*iu*H00M
           ! --- midpoint-like
           !summa = tS -0.5d0*(Stp+Stc) -h*iu*(H00M+Httc) ! ver 1
-          csupp = matmul(summa,cj) !+ matmul(S00av,tc)
+          csupp = matmul(summa,cj) 
           ci = linsys(nh,S00av,csupp) 
           ! --- last-attempt 
           !summa = tS - Stc -iu*h*(ttH+Httc)
@@ -797,7 +814,7 @@
           summa = tS - St -2*h*iu*H00M
           ! --- midpoint-like
           !summa = tS -0.5d0*(Stp+St) -h*iu*(H00M+Htt) ! ver 1
-          csupp = matmul(summa,cj) !+ matmul(S00av,tc)
+          csupp = matmul(summa,cj) 
           ci = linsys(nh,S00av,csupp) 
           ! --- last-attempt 
           !summa = tS - St -iu*h*(ttH+Htt)

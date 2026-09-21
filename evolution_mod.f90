@@ -27,6 +27,9 @@
 !......BOT evolution....................................................
 
        subroutine bot_evo(nd,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq,Beq)
+       ! Performs the dynamics, print the output "e ti fa pure il 
+       ! caffe"
+
        ! nd: bath dimension
        ! trj : trajectory parameters (first step, last step, nstep)
        ! q0 : initial gaussian center (x&y)

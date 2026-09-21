@@ -29,6 +29,8 @@
 !.....Matrix of the masses..............................................
 
       subroutine MassesMat(masses)
+      ! Generates Wilson G matrix
+
       ! masses: vector of the masses
       ! invMassMat: Matrix of the inverted masses
        real*8, dimension(nv+1), intent(in) :: masses  
@@ -47,6 +49,8 @@
 !.....C&K equations of motion...........................................
 
       subroutine KarplusTimeDer(nd,cvec,qtot,ptot,Bcmplx,dotq,dotp,dotB)
+      ! Computes the Coalson Karplus VGWP equations of motion
+ 
       ! nd: dimension of bath
       ! cvec: vector of the basis coefficients
       ! qtot: gaussian center position vector (x&y)
@@ -207,7 +211,7 @@
 !.....VTV propagator...................................................
 
       subroutine vtvprop(nd,h,cj,qj,pj,Bj)
-      ! computes one step of VTV integrator, see J.L.Vanicek2023
+      ! computes one step of VTV integrator, see Vanicek2023
        integer, intent(in) :: nd
        real*8, intent(in) :: h
        complex*16, dimension(nh), intent(in) :: cj
@@ -242,12 +246,12 @@
        ! HELLER
        !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
        !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)
-       ppi(:) = pj(:) - 0.5d0*h*V1(:)!*scalvec(:)
+       ppi(:) = pj(:) - 0.5d0*h*V1(:)
        Bi = Bj +0.5d0*iu*h*V2*(1.d0-ffact)
        !Bi(:,:) = Bj(:,:) +0.5d0*iu*h*V2(:,:)*scalmat(:,:)
        !Full T step
        dotq = matmul(invMassMat,ppi)
-       qi(:) = qj(:) + h*dotq(:)!*scalvec(:) 
+       qi(:) = qj(:) + h*dotq(:) 
        invBi=invgen(nd+1,Bi)
        !invBi=Bi
        invB(:,:) = invBi(:,:) + iu*h*invMassMat(:,:)*(1.d0 -ffact)
@@ -267,7 +271,7 @@
        ! HELLER
        !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
        !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)
-       ppi(:) = ppi(:) - 0.5d0*h*V1(:)!*scalvec(:)
+       ppi(:) = ppi(:) - 0.5d0*h*V1(:)
        Bi = Bi +0.5d0*iu*h*V2*(1.d0 -ffact)
        !Bi(:,:) = Bi(:,:) +0.5d0*iu*h*V2(:,:)*scalmat(:,:)
        ! Finish
@@ -280,7 +284,8 @@
 !.....Self-consistent propagator with derivatives convergence...........
 
       subroutine scprop_der(nd,h,cj,qj,pj,Bj)
-      ! Does one self-consistent progator step with derivatives conv
+      ! Does one self-consistent progator step with derivatives 
+      ! convergence
        integer, intent(in) :: nd
        real*8, intent(in) :: h
        complex*16, dimension(nh), intent(in) :: cj

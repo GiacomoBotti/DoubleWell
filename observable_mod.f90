@@ -24,6 +24,8 @@
 
        subroutine energy(nd,qtot,ptot,cvec,tildeBmat,H00M,Hout,&
                   &Mx,Mx2,My)
+       ! Computes the Hamiltonian matrix and variables momenta
+
        ! nd: bath dimension
        ! qtot: total position vector
        ! ptot: total momentum vector
@@ -123,6 +125,8 @@
 !......Plot wavefunction................................................
 
        subroutine plot_wfn(nd,qtot,ptot,cvec,tildeBmat,norm)
+       ! Prints the wavefunction
+
        ! nd: bath dimension
        ! qtot: total position vector
        ! ptot: total momentum vector

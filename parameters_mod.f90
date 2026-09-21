@@ -8,9 +8,9 @@
       save
 
       ! Bath potential matrix dimensions
-      integer,parameter,public :: nv = 4
+      integer,parameter,public :: nv = 1
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 9 
+      integer,parameter,public :: nh = 13
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Maximum order of y momenta
@@ -41,6 +41,7 @@
 !.....POTENTIAL SETUP...................................................
 
       subroutine potential_setup()
+      ! Reads the potential part of the namelist
       
 
       namelist /pot_param/ eta_const,sigma_const,gamma_const,&
@@ -58,6 +59,7 @@
 !.....GRID SETUP........................................................
 
       subroutine grid_setup()
+      ! Reads the integration grid part of the namelist
 
       namelist /grid/ lwb,hgb,gstep
 
@@ -68,9 +70,12 @@
 !.....DYNAMICS SETUP....................................................
 
       subroutine dynamics_setup(coalson,scaling,frozen,stationary)
+      ! Sets up the dynamics
+
       ! coalson: flag for using gaussian average
       ! scaling: flag for scaled parameters dynamics
       ! frozen: flag for frozen gaussian dynamics
+      ! stationary: flag for stationary gaussian dynamics
        integer, intent(in) :: coalson,scaling,frozen,stationary
 
        integer :: i

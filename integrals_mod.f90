@@ -22,6 +22,8 @@
 !......Y0 integral......................................................
        
        function int_Y0(nd,LambdaMat) result(Y0)
+       ! Computes Y0 integral
+
        ! nd: dimensions
        ! LambdaMat: Diagonalized Bath Gaussian width
         integer, intent(in) :: nd
@@ -45,6 +47,8 @@
 !......Gx function......................................................
 
        function fun_Gx(nd,a,avec,Amat,x,q) result(Gx)
+       ! Computes tempered x Gaussian distribution
+
        ! nd: dimension of y
        ! a: x gaussian width
        ! avec: xy gaussian width vector
@@ -74,6 +78,8 @@
 !......Xnij integral....................................................
 
        function int_XnMat(nd,pow,a,avec,Amat,q) result(XnMat)
+       ! Computes the expectation value of x^n
+
        ! nd: dimension of y
        ! pow: power of x
        ! a: x gaussian width
@@ -141,6 +147,8 @@
 !......N^2 factor.......................................................
 
        function fun_Nsq(ndim,Bmat) result(Nsq)
+       ! Computes normalization factor
+ 
        ! ndim: dimension of the Bmat
        ! Bmat: fullD Gaussian width matrix (x & y)
        ! Nsq: square of the normalization factor
@@ -165,6 +173,8 @@
 !......Gx function......................................................
 
        function fun_Gx2(nd,a,avec,Amat,x,q) result(Gx)
+       ! Another way to compute the tempered x Gaussian distribution
+
        ! nd: dimension of y
        ! a: x gaussian width
        ! avec: xy gaussian width vector
@@ -201,6 +211,8 @@
 !......NiNj factor......................................................
 
        function fun_NiNj(ndim,Bimat,Bjmat) result(NiNj)
+       ! Computes the normalization factor for the time-shifted overlap
+
        ! ndim: dimension of the Bmat
        ! Bimat: fullD Gaussian width matrix (x & y) BRA
        ! Bjmat: fullD Gaussian width matrix (x & y) KET
@@ -229,6 +241,8 @@
 !......Sb function......................................................
 
        function fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat) result(Sb)
+       ! Computes the exponential function in the time-shifted overlap
+
        ! nd: bath dimensions
        ! x: active mode coordinate
        ! qi: total gaussian center vector (bra)
@@ -296,6 +310,8 @@
 !......Time-shifted overlap.............................................
 
        function int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat) result(TauMat)
+       ! Computes the time-shifed overlap
+
        ! nd: bath dimensions
        ! x: active mode coordinate
        ! qi: total gaussian center vector (bra)
@@ -377,6 +393,8 @@
 !......Batista reaction probability.....................................
 
        function int_PMat(nd,q,Bmat) result(PMat)
+       ! Computes reaction probability (x>0)
+
        ! nd: dimension of y
        ! q: x variational parameter
        ! Bmat: complex gaussian width
