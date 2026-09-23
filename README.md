@@ -527,4 +527,4 @@ The corresponding calls are present but commented out in `main.f90`. They can be
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the GPL-3.0 License. See [LICENSE](LICENSE) for details.

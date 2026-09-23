@@ -21,6 +21,12 @@ DoubleWell documentation
 DoubleWell Files
 ==========================================
 
-You find the repository `here <https://github.com/giacomande95-oss/dragonball-vispec.git>`_
+You find the repository `here <https://>`_
 
-Read the paper `here <https://doi.org/10.1063/5.0297591>`_
+The paper is submitted
+
+License
+========
+This project is distributed under the MIT License. See the
+`LICENSE <https://github.com//GiacomoBotti/DoubleWell/blob/main/LICENSE>`_
+file for details.
