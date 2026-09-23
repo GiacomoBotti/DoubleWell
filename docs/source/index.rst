@@ -27,6 +27,6 @@ The paper is submitted
 
 License
 ========
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE)
-for details.
+This project is distributed under the MIT License. See the
+`LICENSE <https://github.com//GiacomoBotti/DoubleWell/blob/main/LICENSE>`_
+file for details.

@@ -524,3 +524,7 @@ The corresponding calls are present but commented out in `main.f90`. They can be
 - `banner.txt` is required by the startup command `cat banner.txt`.
 - The current production evolution path in `evolution_mod.f90` uses `pece_coef`; alternative propagators are retained in the source as commented calls.
 - BLAS and LAPACK are required for the linear-algebra routines used throughout the code.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
