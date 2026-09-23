@@ -1,0 +1,2179 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fortran API &mdash; DoubleWell 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Acknowledgements and Contacts" href="Acknowledgements.html" />
+    <link rel="prev" title="DOUBLEWELL" href="README.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            DoubleWell
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">DOUBLEWELL</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fortran API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#main">Main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#constants">Constants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#potential">Potential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inversion">Inversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basis-set">Basis Set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#matrix">Matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#integrals">Integrals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quadratic">Quadratic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#effectivepot">Effectivepot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#normalization">Normalization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eofmotion">Eofmotion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kinetic">Kinetic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#observable">Observable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bot">BOT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evolution">Evolution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#check">Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#prints">Prints</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Acknowledgements.html">Acknowledgements and Contacts</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DoubleWell</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Fortran API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/files.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fortran-api">
+<h1>Fortran API<a class="headerlink" href="#fortran-api" title="Link to this heading"></a></h1>
+<section id="main">
+<h2>Main<a class="headerlink" href="#main" title="Link to this heading"></a></h2>
+<dl>
+<dt class="sig sig-object f" id="f/doublewell">
+<span class="property"><span class="pre">program</span>&#160; </span><span class="sig-name descname"><span class="pre">doublewell</span></span><a class="headerlink" href="#f/doublewell" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Use <span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a>, <a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a>, <a class="reference internal" href="#f/potential_module" title="f/potential_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">potential_module</span></code></a>, <a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a>, <a class="reference internal" href="#f/eofmotion_module" title="f/eofmotion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">eofmotion_module</span></code></a>, <a class="reference internal" href="#f/check_module" title="f/check_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">check_module</span></code></a>, <a class="reference internal" href="#f/evolution_module" title="f/evolution_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">evolution_module</span></code></a>, <a class="reference internal" href="#f/bot_module" title="f/bot_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">bot_module</span></code></a>, <a class="reference internal" href="#f/observable_module" title="f/observable_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">observable_module</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<section id="constants">
+<h3>Constants<a class="headerlink" href="#constants" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/constants">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/constants/bohr_radius" title="f/constants/bohr_radius"><code class="xref f f-var docutils literal notranslate"><span class="pre">bohr_radius</span></code></a>, <a class="reference internal" href="#f/constants/cnorm_tascivr" title="f/constants/cnorm_tascivr"><code class="xref f f-var docutils literal notranslate"><span class="pre">cnorm_tascivr</span></code></a>, <a class="reference internal" href="#f/constants/ha2cmm1" title="f/constants/ha2cmm1"><code class="xref f f-var docutils literal notranslate"><span class="pre">ha2cmm1</span></code></a>, <a class="reference internal" href="#f/constants/ha2ev" title="f/constants/ha2ev"><code class="xref f f-var docutils literal notranslate"><span class="pre">ha2ev</span></code></a>, <a class="reference internal" href="#f/constants/ha2k" title="f/constants/ha2k"><code class="xref f f-var docutils literal notranslate"><span class="pre">ha2k</span></code></a>, <a class="reference internal" href="#f/constants/iu" title="f/constants/iu"><code class="xref f f-var docutils literal notranslate"><span class="pre">iu</span></code></a>, <a class="reference internal" href="#f/constants/nwchem_toauvel" title="f/constants/nwchem_toauvel"><code class="xref f f-var docutils literal notranslate"><span class="pre">nwchem_toauvel</span></code></a>, <a class="reference internal" href="#f/constants/pi" title="f/constants/pi"><code class="xref f f-var docutils literal notranslate"><span class="pre">pi</span></code></a>, <a class="reference internal" href="#f/constants/toautime" title="f/constants/toautime"><code class="xref f f-var docutils literal notranslate"><span class="pre">toautime</span></code></a>, <a class="reference internal" href="#f/constants/toauvel" title="f/constants/toauvel"><code class="xref f f-var docutils literal notranslate"><span class="pre">toauvel</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Variables</p>
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/bohr_radius">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">bohr_radius</span></span><a class="headerlink" href="#f/constants/bohr_radius" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>0.52917721067</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/cnorm_tascivr">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">cnorm_tascivr</span></span><a class="headerlink" href="#f/constants/cnorm_tascivr" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>logical</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>.true.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/ha2cmm1">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">ha2cmm1</span></span><a class="headerlink" href="#f/constants/ha2cmm1" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>219474.625d0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/ha2ev">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">ha2ev</span></span><a class="headerlink" href="#f/constants/ha2ev" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>27.2114d0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/ha2k">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">ha2k</span></span><a class="headerlink" href="#f/constants/ha2k" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>315775.1293573255</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/iu">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">iu</span></span><a class="headerlink" href="#f/constants/iu" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>complex</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>complex(0.d0,1.d0)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/nwchem_toauvel">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">nwchem_toauvel</span></span><a class="headerlink" href="#f/constants/nwchem_toauvel" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1.d0/21.87676d0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/pi">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">pi</span></span><a class="headerlink" href="#f/constants/pi" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>4.d0*datan(1.d0)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/toautime">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">toautime</span></span><a class="headerlink" href="#f/constants/toautime" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>4.1341d4</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/constants/toauvel">
+<span class="sig-prename descclassname"><span class="pre">constants/</span></span><span class="sig-name descname"><span class="pre">toauvel</span></span><a class="headerlink" href="#f/constants/toauvel" title="Link to this definition"></a></dt>
+<dd><p>/21.87676d0</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1.d0</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/parameters_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/parameters_module/bath_const" title="f/parameters_module/bath_const"><code class="xref f f-var docutils literal notranslate"><span class="pre">bath_const</span></code></a>, <a class="reference internal" href="#f/parameters_module/coalc" title="f/parameters_module/coalc"><code class="xref f f-var docutils literal notranslate"><span class="pre">coalc</span></code></a>, <a class="reference internal" href="#f/parameters_module/coalmode" title="f/parameters_module/coalmode"><code class="xref f f-var docutils literal notranslate"><span class="pre">coalmode</span></code></a>, <a class="reference internal" href="#f/parameters_module/coalvec" title="f/parameters_module/coalvec"><code class="xref f f-var docutils literal notranslate"><span class="pre">coalvec</span></code></a>, <a class="reference internal" href="#f/parameters_module/eta_const" title="f/parameters_module/eta_const"><code class="xref f f-var docutils literal notranslate"><span class="pre">eta_const</span></code></a>, <a class="reference internal" href="#f/parameters_module/ffact" title="f/parameters_module/ffact"><code class="xref f f-var docutils literal notranslate"><span class="pre">ffact</span></code></a>, <a class="reference internal" href="#f/parameters_module/gamma_const" title="f/parameters_module/gamma_const"><code class="xref f f-var docutils literal notranslate"><span class="pre">gamma_const</span></code></a>, <a class="reference internal" href="#f/parameters_module/gstep" title="f/parameters_module/gstep"><code class="xref f f-var docutils literal notranslate"><span class="pre">gstep</span></code></a>, <a class="reference internal" href="#f/parameters_module/hgb" title="f/parameters_module/hgb"><code class="xref f f-var docutils literal notranslate"><span class="pre">hgb</span></code></a>, <a class="reference internal" href="#f/parameters_module/kappa_const" title="f/parameters_module/kappa_const"><code class="xref f f-var docutils literal notranslate"><span class="pre">kappa_const</span></code></a>, <a class="reference internal" href="#f/parameters_module/lwb" title="f/parameters_module/lwb"><code class="xref f f-var docutils literal notranslate"><span class="pre">lwb</span></code></a>, <a class="reference internal" href="#f/parameters_module/max_x" title="f/parameters_module/max_x"><code class="xref f f-var docutils literal notranslate"><span class="pre">max_x</span></code></a>, <a class="reference internal" href="#f/parameters_module/maxorder" title="f/parameters_module/maxorder"><code class="xref f f-var docutils literal notranslate"><span class="pre">maxorder</span></code></a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh"><code class="xref f f-var docutils literal notranslate"><span class="pre">nh</span></code></a>, <a class="reference internal" href="#f/parameters_module/nv" title="f/parameters_module/nv"><code class="xref f f-var docutils literal notranslate"><span class="pre">nv</span></code></a>, <a class="reference internal" href="#f/parameters_module/scalmat" title="f/parameters_module/scalmat"><code class="xref f f-var docutils literal notranslate"><span class="pre">scalmat</span></code></a>, <a class="reference internal" href="#f/parameters_module/scalvec" title="f/parameters_module/scalvec"><code class="xref f f-var docutils literal notranslate"><span class="pre">scalvec</span></code></a>, <a class="reference internal" href="#f/parameters_module/sigma_const" title="f/parameters_module/sigma_const"><code class="xref f f-var docutils literal notranslate"><span class="pre">sigma_const</span></code></a></p>
+</dd>
+<dt class="field-even">Routines<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#f/parameters_module/dynamics_setup" title="f/parameters_module/dynamics_setup"><code class="xref f f-func docutils literal notranslate"><span class="pre">dynamics_setup()</span></code></a>, <a class="reference internal" href="#f/parameters_module/grid_setup" title="f/parameters_module/grid_setup"><code class="xref f f-func docutils literal notranslate"><span class="pre">grid_setup()</span></code></a>, <a class="reference internal" href="#f/parameters_module/potential_setup" title="f/parameters_module/potential_setup"><code class="xref f f-func docutils literal notranslate"><span class="pre">potential_setup()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Variables</p>
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/bath_const">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">bath_const</span></span><a class="headerlink" href="#f/parameters_module/bath_const" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real(1)</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/coalc">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">coalc</span></span><a class="headerlink" href="#f/parameters_module/coalc" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/coalmode">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">coalmode</span></span><a class="headerlink" href="#f/parameters_module/coalmode" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/coalvec">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">coalvec</span></span><a class="headerlink" href="#f/parameters_module/coalvec" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real(13)</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/eta_const">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">eta_const</span></span><a class="headerlink" href="#f/parameters_module/eta_const" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1.3544d0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/ffact">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">ffact</span></span><a class="headerlink" href="#f/parameters_module/ffact" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/gamma_const">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">gamma_const</span></span><a class="headerlink" href="#f/parameters_module/gamma_const" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>0.5d0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/gstep">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">gstep</span></span><a class="headerlink" href="#f/parameters_module/gstep" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>500</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/hgb">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">hgb</span></span><a class="headerlink" href="#f/parameters_module/hgb" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>12.d0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/kappa_const">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">kappa_const</span></span><a class="headerlink" href="#f/parameters_module/kappa_const" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real(1)</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/lwb">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">lwb</span></span><a class="headerlink" href="#f/parameters_module/lwb" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>-12.d0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/max_x">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">max_x</span></span><a class="headerlink" href="#f/parameters_module/max_x" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public, parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>14</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/maxorder">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">maxorder</span></span><a class="headerlink" href="#f/parameters_module/maxorder" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public, parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>8</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/nh">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">nh</span></span><a class="headerlink" href="#f/parameters_module/nh" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public, parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>13</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/nv">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">nv</span></span><a class="headerlink" href="#f/parameters_module/nv" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public, parameter</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/scalmat">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">scalmat</span></span><a class="headerlink" href="#f/parameters_module/scalmat" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real(2, 2)</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/scalvec">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">scalvec</span></span><a class="headerlink" href="#f/parameters_module/scalvec" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real(2)</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/parameters_module/sigma_const">
+<span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">sigma_const</span></span><a class="headerlink" href="#f/parameters_module/sigma_const" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+<dt class="field-odd">Default<span class="colon">:</span></dt>
+<dd class="field-odd"><p>-1.d0</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/parameters_module/potential_setup">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">potential_setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#f/parameters_module/potential_setup" title="Link to this definition"></a></dt>
+<dd><p>Reads the potential part of the namelist</p>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/parameters_module/grid_setup">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">grid_setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#f/parameters_module/grid_setup" title="Link to this definition"></a></dt>
+<dd><p>Reads the integration grid part of the namelist</p>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/parameters_module/dynamics_setup">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">parameters_module/</span></span><span class="sig-name descname"><span class="pre">dynamics_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">coalson</span></em>, <em class="sig-param"><span class="pre">scaling</span></em>, <em class="sig-param"><span class="pre">frozen</span></em>, <em class="sig-param"><span class="pre">stationary</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/parameters_module/dynamics_setup" title="Link to this definition"></a></dt>
+<dd><p>Sets up the dynamics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coalson</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>scaling</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>frozen</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>stationary</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="potential">
+<h3>Potential<a class="headerlink" href="#potential" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/potential_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/potential_module/vmat" title="f/potential_module/vmat"><code class="xref f f-var docutils literal notranslate"><span class="pre">vmat</span></code></a></p>
+</dd>
+<dt class="field-even">Routines<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#f/potential_module/matrix_pot" title="f/potential_module/matrix_pot"><code class="xref f f-func docutils literal notranslate"><span class="pre">matrix_pot()</span></code></a>, <a class="reference internal" href="#f/potential_module/write_potential2d" title="f/potential_module/write_potential2d"><code class="xref f f-func docutils literal notranslate"><span class="pre">write_potential2d()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Variables</p>
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/potential_module/vmat">
+<span class="sig-prename descclassname"><span class="pre">potential_module/</span></span><span class="sig-name descname"><span class="pre">vmat</span></span><a class="headerlink" href="#f/potential_module/vmat" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real(nv, nv)</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/potential_module/matrix_pot">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">potential_module/</span></span><span class="sig-name descname"><span class="pre">matrix_pot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#f/potential_module/matrix_pot" title="Link to this definition"></a></dt>
+<dd><p>Builds the bath potential matrix</p>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/potential_module/write_potential2d">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">potential_module/</span></span><span class="sig-name descname"><span class="pre">write_potential2d</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#f/potential_module/write_potential2d" title="Link to this definition"></a></dt>
+<dd><p>Writes the 2D potential to be plotted</p>
+</dd></dl>
+
+</section>
+<section id="inversion">
+<h3>Inversion<a class="headerlink" href="#inversion" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/inversion_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/inversion_module/inv2d" title="f/inversion_module/inv2d"><code class="xref f f-func docutils literal notranslate"><span class="pre">inv2d()</span></code></a>, <a class="reference internal" href="#f/inversion_module/invgen" title="f/inversion_module/invgen"><code class="xref f f-func docutils literal notranslate"><span class="pre">invgen()</span></code></a>, <a class="reference internal" href="#f/inversion_module/invgen_real" title="f/inversion_module/invgen_real"><code class="xref f f-func docutils literal notranslate"><span class="pre">invgen_real()</span></code></a>, <a class="reference internal" href="#f/inversion_module/linsys" title="f/inversion_module/linsys"><code class="xref f f-func docutils literal notranslate"><span class="pre">linsys()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/inversion_module/inv2d">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">inversion_module/</span></span><span class="sig-name descname"><span class="pre">inv2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">a</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/inversion_module/inv2d" title="Link to this definition"></a></dt>
+<dd><p>Inverts a 2D matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a</strong> (2, 2)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Result<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>inva</strong> (2, 2)<em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/inversion_module/invgen">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">inversion_module/</span></span><span class="sig-name descname"><span class="pre">invgen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">npar</span></em>, <em class="sig-param"><span class="pre">a</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/inversion_module/invgen" title="Link to this definition"></a></dt>
+<dd><p>Returns the inverse of a matrix calculated by finding the LU
+decomposition.  Depends on LAPACK.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>npar</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em> – work array for LAPACK</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>a</strong> (npar, npar)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ainv</strong> (npar, npar)<em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/inversion_module/linsys">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">inversion_module/</span></span><span class="sig-name descname"><span class="pre">linsys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">npar</span></em>, <em class="sig-param"><span class="pre">a</span></em>, <em class="sig-param"><span class="pre">b</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/inversion_module/linsys" title="Link to this definition"></a></dt>
+<dd><p>Solve the linear system Ax=B by using the LU
+decomposition.  Depends on LAPACK.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>npar</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em> – pivot indices</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>a</strong> (npar, npar)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>b</strong> (npar)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>xout</strong> (npar)<em> [</em><em>complex</em><em>]</em> – work array for LAPACK</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/inversion_module/invgen_real">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">inversion_module/</span></span><span class="sig-name descname"><span class="pre">invgen_real</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">npar</span></em>, <em class="sig-param"><span class="pre">a</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/inversion_module/invgen_real" title="Link to this definition"></a></dt>
+<dd><p>Returns the inverse of a matrix calculated by finding the LU
+decomposition.  Depends on LAPACK.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>npar</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em> – work array for LAPACK</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>a</strong> (npar, npar)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ainv</strong> (npar, npar)<em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="basis-set">
+<h3>Basis Set<a class="headerlink" href="#basis-set" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/basisset_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/basisset_module/mherm" title="f/basisset_module/mherm"><code class="xref f f-var docutils literal notranslate"><span class="pre">mherm</span></code></a></p>
+</dd>
+<dt class="field-even">Routines<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#f/basisset_module/factorial" title="f/basisset_module/factorial"><code class="xref f f-func docutils literal notranslate"><span class="pre">factorial()</span></code></a>, <a class="reference internal" href="#f/basisset_module/fun_hmat" title="f/basisset_module/fun_hmat"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_hmat()</span></code></a>, <a class="reference internal" href="#f/basisset_module/fun_hmatshift" title="f/basisset_module/fun_hmatshift"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_hmatshift()</span></code></a>, <a class="reference internal" href="#f/basisset_module/genhermmat" title="f/basisset_module/genhermmat"><code class="xref f f-func docutils literal notranslate"><span class="pre">genhermmat()</span></code></a>, <a class="reference internal" href="#f/basisset_module/herm_pol" title="f/basisset_module/herm_pol"><code class="xref f f-func docutils literal notranslate"><span class="pre">herm_pol()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Variables</p>
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/basisset_module/mherm">
+<span class="sig-prename descclassname"><span class="pre">basisset_module/</span></span><span class="sig-name descname"><span class="pre">mherm</span></span><a class="headerlink" href="#f/basisset_module/mherm" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real(nh, max_x)</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/basisset_module/factorial">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">basisset_module/</span></span><span class="sig-name descname"><span class="pre">factorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">n</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/basisset_module/factorial" title="Link to this definition"></a></dt>
+<dd><p>Computes the factorial of a number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Result<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fact</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/basisset_module/genhermmat">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">basisset_module/</span></span><span class="sig-name descname"><span class="pre">genhermmat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#f/basisset_module/genhermmat" title="Link to this definition"></a></dt>
+<dd><p>Generates the matrix of Hermite polynomials coefficients</p>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/basisset_module/herm_pol">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">basisset_module/</span></span><span class="sig-name descname"><span class="pre">herm_pol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">npol</span></em>, <em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">alpha</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/basisset_module/herm_pol" title="Link to this definition"></a></dt>
+<dd><p>Evaluates the Hermite polynomial value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>npol</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>q</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>alpha</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Result<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>hofx</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/basisset_module/fun_hmat">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">basisset_module/</span></span><span class="sig-name descname"><span class="pre">fun_hmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">alpha</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/basisset_module/fun_hmat" title="Link to this definition"></a></dt>
+<dd><p>Computes the Hermite polynomials product matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>q</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>alpha</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Result<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>hmat</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/basisset_module/fun_hmatshift">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">basisset_module/</span></span><span class="sig-name descname"><span class="pre">fun_hmatshift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">qi</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">alphai</span></em>, <em class="sig-param"><span class="pre">alphaj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/basisset_module/fun_hmatshift" title="Link to this definition"></a></dt>
+<dd><p>Computes the Hermite polynomials product matrix when
+one polynomial is shifted</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qi</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qj</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>alphai</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>alphaj</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Result<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>hmats</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="matrix">
+<h3>Matrix<a class="headerlink" href="#matrix" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/matrix_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/matrix_module/det_cmplx" title="f/matrix_module/det_cmplx"><code class="xref f f-func docutils literal notranslate"><span class="pre">det_cmplx()</span></code></a>, <a class="reference internal" href="#f/matrix_module/determinant" title="f/matrix_module/determinant"><code class="xref f f-func docutils literal notranslate"><span class="pre">determinant()</span></code></a>, <a class="reference internal" href="#f/matrix_module/diagonalization" title="f/matrix_module/diagonalization"><code class="xref f f-func docutils literal notranslate"><span class="pre">diagonalization()</span></code></a>, <a class="reference internal" href="#f/matrix_module/extracta" title="f/matrix_module/extracta"><code class="xref f f-func docutils literal notranslate"><span class="pre">extracta()</span></code></a>, <a class="reference internal" href="#f/matrix_module/extracttildea" title="f/matrix_module/extracttildea"><code class="xref f f-func docutils literal notranslate"><span class="pre">extracttildea()</span></code></a>, <a class="reference internal" href="#f/matrix_module/momenta" title="f/matrix_module/momenta"><code class="xref f f-func docutils literal notranslate"><span class="pre">momenta()</span></code></a>, <a class="reference internal" href="#f/matrix_module/trace" title="f/matrix_module/trace"><code class="xref f f-func docutils literal notranslate"><span class="pre">trace()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/matrix_module/diagonalization">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">matrix_module/</span></span><span class="sig-name descname"><span class="pre">diagonalization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">amat</span></em>, <em class="sig-param"><span class="pre">lambdamat</span></em>, <em class="sig-param"><span class="pre">tmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/matrix_module/diagonalization" title="Link to this definition"></a></dt>
+<dd><p>Diagonalizes a matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em> – pivot indices</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>amat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>lambdamat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>tmat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/matrix_module/momenta">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">matrix_module/</span></span><span class="sig-name descname"><span class="pre">momenta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">lambdamat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/matrix_module/momenta" title="Link to this definition"></a></dt>
+<dd><p>Computes the momenta of a factorized central normal distribution
+Each column of MomMat contains the i-th component momenta</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em> – pivot indices</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>lambdamat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mommat</strong> (<a class="reference internal" href="#f/parameters_module/maxorder" title="f/parameters_module/maxorder">maxorder</a>, nd)<em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/matrix_module/extracta">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">matrix_module/</span></span><span class="sig-name descname"><span class="pre">extracta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">bmat</span></em>, <em class="sig-param"><span class="pre">amat</span></em>, <em class="sig-param"><span class="pre">avec</span></em>, <em class="sig-param"><span class="pre">a</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/matrix_module/extracta" title="Link to this definition"></a></dt>
+<dd><p>Extract bath width matrix and correlation vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(bmat, 0)</em><em>]</em> – pivot indices</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>bmat</strong> (1 + nd, 1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>amat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>avec</strong> (nd)<em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>a</strong><em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/matrix_module/determinant">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">matrix_module/</span></span><span class="sig-name descname"><span class="pre">determinant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ndim</span></em>, <em class="sig-param"><span class="pre">bmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/matrix_module/determinant" title="Link to this definition"></a></dt>
+<dd><p>Computes the determinant of a matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ndim</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bmat</strong> (ndim, ndim)<em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Result<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>bdet</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/matrix_module/extracttildea">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">matrix_module/</span></span><span class="sig-name descname"><span class="pre">extracttildea</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">tildebmat</span></em>, <em class="sig-param"><span class="pre">tildeamat</span></em>, <em class="sig-param"><span class="pre">tildeavec</span></em>, <em class="sig-param"><span class="pre">tildea</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/matrix_module/extracttildea" title="Link to this definition"></a></dt>
+<dd><p>Extract bath width matrix and correlation vector for a complex
+width</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(tildebmat, 0)</em><em>]</em> – pivot indices</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>tildebmat</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tildeamat</strong> (nd, nd)<em> [</em><em>complex</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>tildeavec</strong> (nd)<em> [</em><em>complex</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>tildea</strong><em> [</em><em>complex</em><em>, </em><em>out</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/matrix_module/trace">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">matrix_module/</span></span><span class="sig-name descname"><span class="pre">trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">mat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/matrix_module/trace" title="Link to this definition"></a></dt>
+<dd><p>Computes the trace of a generic matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em> – pivot indices</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>mat</strong> (nd, nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em> – <p>’</p>
+</p>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tracemat</strong><em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/matrix_module/det_cmplx">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">matrix_module/</span></span><span class="sig-name descname"><span class="pre">det_cmplx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">amat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/matrix_module/det_cmplx" title="Link to this definition"></a></dt>
+<dd><p>Diagonalizes a complex matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em> – pivot indices</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>amat</strong> (nd, nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>detamat</strong><em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="integrals">
+<h3>Integrals<a class="headerlink" href="#integrals" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/integrals_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/integrals_module/fun_ninj" title="f/integrals_module/fun_ninj"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_ninj()</span></code></a>, <a class="reference internal" href="#f/integrals_module/fun_nsq" title="f/integrals_module/fun_nsq"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_nsq()</span></code></a>, <a class="reference internal" href="#f/integrals_module/fun_sb" title="f/integrals_module/fun_sb"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_sb()</span></code></a>, <a class="reference internal" href="#f/integrals_module/int_pmat" title="f/integrals_module/int_pmat"><code class="xref f f-func docutils literal notranslate"><span class="pre">int_pmat()</span></code></a>, <a class="reference internal" href="#f/integrals_module/int_taumat" title="f/integrals_module/int_taumat"><code class="xref f f-func docutils literal notranslate"><span class="pre">int_taumat()</span></code></a>, <a class="reference internal" href="#f/integrals_module/int_xnmat" title="f/integrals_module/int_xnmat"><code class="xref f f-func docutils literal notranslate"><span class="pre">int_xnmat()</span></code></a>, <a class="reference internal" href="#f/integrals_module/int_y0" title="f/integrals_module/int_y0"><code class="xref f f-func docutils literal notranslate"><span class="pre">int_y0()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/inversion_module" title="f/inversion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">inversion_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/integrals_module/int_y0">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">integrals_module/</span></span><span class="sig-name descname"><span class="pre">int_y0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">lambdamat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/integrals_module/int_y0" title="Link to this definition"></a></dt>
+<dd><p>Computes Y0 integral</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>lambdamat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>y0</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/integrals_module/int_xnmat">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">integrals_module/</span></span><span class="sig-name descname"><span class="pre">int_xnmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">pow</span></em>, <em class="sig-param"><span class="pre">a</span></em>, <em class="sig-param"><span class="pre">avec</span></em>, <em class="sig-param"><span class="pre">amat</span></em>, <em class="sig-param"><span class="pre">q</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/integrals_module/int_xnmat" title="Link to this definition"></a></dt>
+<dd><p>Computes the expectation value of x^n</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>pow</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>a</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>avec</strong> (nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>amat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>q</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>xnmat</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/integrals_module/fun_nsq">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">integrals_module/</span></span><span class="sig-name descname"><span class="pre">fun_nsq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ndim</span></em>, <em class="sig-param"><span class="pre">bmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/integrals_module/fun_nsq" title="Link to this definition"></a></dt>
+<dd><p>Computes normalization factor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ndim</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>bmat</strong> (ndim, ndim)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nsq</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/integrals_module/fun_ninj">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">integrals_module/</span></span><span class="sig-name descname"><span class="pre">fun_ninj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">ndim</span></em>, <em class="sig-param"><span class="pre">bimat</span></em>, <em class="sig-param"><span class="pre">bjmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/integrals_module/fun_ninj" title="Link to this definition"></a></dt>
+<dd><p>Computes the normalization factor for the time-shifted overlap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ndim</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>bimat</strong> (ndim, ndim)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bjmat</strong> (ndim, ndim)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ninj</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/integrals_module/fun_sb">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">integrals_module/</span></span><span class="sig-name descname"><span class="pre">fun_sb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">x</span></em>, <em class="sig-param"><span class="pre">qi</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">ppi</span></em>, <em class="sig-param"><span class="pre">pj</span></em>, <em class="sig-param"><span class="pre">bimat</span></em>, <em class="sig-param"><span class="pre">bjmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/integrals_module/fun_sb" title="Link to this definition"></a></dt>
+<dd><p>Computes the exponential function in the time-shifted overlap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qi, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>x</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qi</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qj</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>ppi</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pj</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bimat</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bjmat</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sb</strong><em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/integrals_module/int_taumat">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">integrals_module/</span></span><span class="sig-name descname"><span class="pre">int_taumat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">qi</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">ppi</span></em>, <em class="sig-param"><span class="pre">pj</span></em>, <em class="sig-param"><span class="pre">bimat</span></em>, <em class="sig-param"><span class="pre">bjmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/integrals_module/int_taumat" title="Link to this definition"></a></dt>
+<dd><p>Computes the time-shifed overlap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qi, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qi</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qj</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>ppi</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pj</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bimat</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bjmat</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>taumat</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/integrals_module/int_pmat">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">integrals_module/</span></span><span class="sig-name descname"><span class="pre">int_pmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">bmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/integrals_module/int_pmat" title="Link to this definition"></a></dt>
+<dd><p>Computes reaction probability (x&gt;0)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(bmat, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>q</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bmat</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pmat</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="quadratic">
+<h3>Quadratic<a class="headerlink" href="#quadratic" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/quadratic_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/quadratic_module/fun_qru" title="f/quadratic_module/fun_qru"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_qru()</span></code></a>, <a class="reference internal" href="#f/quadratic_module/fun_qvq" title="f/quadratic_module/fun_qvq"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_qvq()</span></code></a>, <a class="reference internal" href="#f/quadratic_module/fun_uwu" title="f/quadratic_module/fun_uwu"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_uwu()</span></code></a>, <a class="reference internal" href="#f/quadratic_module/fun_uzq" title="f/quadratic_module/fun_uzq"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_uzq()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/potential_module" title="f/potential_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">potential_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/quadratic_module/fun_qvq">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">quadratic_module/</span></span><span class="sig-name descname"><span class="pre">fun_qvq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">q</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/quadratic_module/fun_qvq" title="Link to this definition"></a></dt>
+<dd><p>Computes the qVq quadratic form</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>q</strong> (nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qvq</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/quadratic_module/fun_uwu">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">quadratic_module/</span></span><span class="sig-name descname"><span class="pre">fun_uwu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">tmat</span></em>, <em class="sig-param"><span class="pre">mommat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/quadratic_module/fun_uwu" title="Link to this definition"></a></dt>
+<dd><p>Computes the uTVTu quadratic form</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>tmat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>mommat</strong> (<a class="reference internal" href="#f/parameters_module/maxorder" title="f/parameters_module/maxorder">maxorder</a>, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>uwu</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/quadratic_module/fun_uzq">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">quadratic_module/</span></span><span class="sig-name descname"><span class="pre">fun_uzq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">tmat</span></em>, <em class="sig-param"><span class="pre">mommat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/quadratic_module/fun_uzq" title="Link to this definition"></a></dt>
+<dd><p>Legacy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>q</strong> (nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tmat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>mommat</strong> (<a class="reference internal" href="#f/parameters_module/maxorder" title="f/parameters_module/maxorder">maxorder</a>, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>uzq</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/quadratic_module/fun_qru">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">quadratic_module/</span></span><span class="sig-name descname"><span class="pre">fun_qru</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">tmat</span></em>, <em class="sig-param"><span class="pre">mommat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/quadratic_module/fun_qru" title="Link to this definition"></a></dt>
+<dd><p>Legacy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>q</strong> (nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tmat</strong> (nd, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>mommat</strong> (<a class="reference internal" href="#f/parameters_module/maxorder" title="f/parameters_module/maxorder">maxorder</a>, nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qru</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="effectivepot">
+<h3>Effectivepot<a class="headerlink" href="#effectivepot" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/effectivepot_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/effectivepot_module/fun_v0" title="f/effectivepot_module/fun_v0"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_v0()</span></code></a>, <a class="reference internal" href="#f/effectivepot_module/fun_v1" title="f/effectivepot_module/fun_v1"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_v1()</span></code></a>, <a class="reference internal" href="#f/effectivepot_module/fun_v2" title="f/effectivepot_module/fun_v2"><code class="xref f f-func docutils literal notranslate"><span class="pre">fun_v2()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/potential_module" title="f/potential_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">potential_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/integrals_module" title="f/integrals_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">integrals_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/inversion_module" title="f/inversion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">inversion_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/quadratic_module" title="f/quadratic_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">quadratic_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/effectivepot_module/fun_v0">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">effectivepot_module/</span></span><span class="sig-name descname"><span class="pre">fun_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">qtot</span></em>, <em class="sig-param"><span class="pre">cvec</span></em>, <em class="sig-param"><span class="pre">bmat</span></em>, <em class="sig-param"><span class="pre">y0</span></em>, <em class="sig-param"><span class="pre">x4</span></em>, <em class="sig-param"><span class="pre">x2</span></em>, <em class="sig-param"><span class="pre">x1</span></em>, <em class="sig-param"><span class="pre">x0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/effectivepot_module/fun_v0" title="Link to this definition"></a></dt>
+<dd><p>Computes the effective potential <span class="math notranslate nohighlight">\(V_0 = \langle V \rangle\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qtot, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qtot</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bmat</strong> (1 + nd, 1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>y0</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x4</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x2</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x1</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x0</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v0mat</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/effectivepot_module/fun_v1">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">effectivepot_module/</span></span><span class="sig-name descname"><span class="pre">fun_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">qtot</span></em>, <em class="sig-param"><span class="pre">cvec</span></em>, <em class="sig-param"><span class="pre">bmat</span></em>, <em class="sig-param"><span class="pre">y0</span></em>, <em class="sig-param"><span class="pre">x3</span></em>, <em class="sig-param"><span class="pre">x2</span></em>, <em class="sig-param"><span class="pre">x1</span></em>, <em class="sig-param"><span class="pre">x0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/effectivepot_module/fun_v1" title="Link to this definition"></a></dt>
+<dd><p>Computes the effective gradient <span class="math notranslate nohighlight">\(\mathbf{V}_1
+= \langle \nabla V \rangle\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qtot, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qtot</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bmat</strong> (1 + nd, 1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>y0</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x3</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x2</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x1</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x0</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v1</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/effectivepot_module/fun_v2">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">effectivepot_module/</span></span><span class="sig-name descname"><span class="pre">fun_v2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">qtot</span></em>, <em class="sig-param"><span class="pre">cvec</span></em>, <em class="sig-param"><span class="pre">bmat</span></em>, <em class="sig-param"><span class="pre">y0</span></em>, <em class="sig-param"><span class="pre">x2</span></em>, <em class="sig-param"><span class="pre">x0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/effectivepot_module/fun_v2" title="Link to this definition"></a></dt>
+<dd><p>Computes the effective Hessian <span class="math notranslate nohighlight">\(\mathbb{V}_2 =
+\langle \nabla \nabla^{T} V \rangle\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qtot, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qtot</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bmat</strong> (1 + nd, 1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>y0</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x2</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x0</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>v2</strong> (1 + nd, 1 + nd)<em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="normalization">
+<h3>Normalization<a class="headerlink" href="#normalization" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/normalization_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/normalization_module/normalization" title="f/normalization_module/normalization"><code class="xref f f-func docutils literal notranslate"><span class="pre">normalization()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/integrals_module" title="f/integrals_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">integrals_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/normalization_module/normalization">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">normalization_module/</span></span><span class="sig-name descname"><span class="pre">normalization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">cvec</span></em>, <em class="sig-param"><span class="pre">bmat</span></em>, <em class="sig-param"><span class="pre">s00m</span></em>, <em class="sig-param"><span class="pre">nout</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/normalization_module/normalization" title="Link to this definition"></a></dt>
+<dd><p>Computes normalization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(bmat, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>q</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bmat</strong> (1 + nd, 1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>s00m</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>nout</strong><em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="eofmotion">
+<h3>Eofmotion<a class="headerlink" href="#eofmotion" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/eofmotion_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/eofmotion_module/invmassmat" title="f/eofmotion_module/invmassmat"><code class="xref f f-var docutils literal notranslate"><span class="pre">invmassmat</span></code></a></p>
+</dd>
+<dt class="field-even">Routines<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#f/eofmotion_module/karplustimeder" title="f/eofmotion_module/karplustimeder"><code class="xref f f-func docutils literal notranslate"><span class="pre">karplustimeder()</span></code></a>, <a class="reference internal" href="#f/eofmotion_module/massesmat" title="f/eofmotion_module/massesmat"><code class="xref f f-func docutils literal notranslate"><span class="pre">massesmat()</span></code></a>, <a class="reference internal" href="#f/eofmotion_module/pece_param" title="f/eofmotion_module/pece_param"><code class="xref f f-func docutils literal notranslate"><span class="pre">pece_param()</span></code></a>, <a class="reference internal" href="#f/eofmotion_module/rungekutta" title="f/eofmotion_module/rungekutta"><code class="xref f f-func docutils literal notranslate"><span class="pre">rungekutta()</span></code></a>, <a class="reference internal" href="#f/eofmotion_module/scpece_param" title="f/eofmotion_module/scpece_param"><code class="xref f f-func docutils literal notranslate"><span class="pre">scpece_param()</span></code></a>, <a class="reference internal" href="#f/eofmotion_module/scprop" title="f/eofmotion_module/scprop"><code class="xref f f-func docutils literal notranslate"><span class="pre">scprop()</span></code></a>, <a class="reference internal" href="#f/eofmotion_module/scprop_der" title="f/eofmotion_module/scprop_der"><code class="xref f f-func docutils literal notranslate"><span class="pre">scprop_der()</span></code></a>, <a class="reference internal" href="#f/eofmotion_module/vtvprop" title="f/eofmotion_module/vtvprop"><code class="xref f f-func docutils literal notranslate"><span class="pre">vtvprop()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/potential_module" title="f/potential_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">potential_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/effectivepot_module" title="f/effectivepot_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">effectivepot_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/integrals_module" title="f/integrals_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">integrals_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/inversion_module" title="f/inversion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">inversion_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Variables</p>
+<dl class="f variable">
+<dt class="sig sig-object f" id="f/eofmotion_module/invmassmat">
+<span class="sig-prename descclassname"><span class="pre">eofmotion_module/</span></span><span class="sig-name descname"><span class="pre">invmassmat</span></span><a class="headerlink" href="#f/eofmotion_module/invmassmat" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>real(1 + nv, 1 + nv)</p>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><p>public</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/eofmotion_module/massesmat">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">eofmotion_module/</span></span><span class="sig-name descname"><span class="pre">massesmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">masses</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/eofmotion_module/massesmat" title="Link to this definition"></a></dt>
+<dd><p>Generates Wilson G matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>masses</strong> (1 + <a class="reference internal" href="#f/parameters_module/nv" title="f/parameters_module/nv">nv</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/eofmotion_module/karplustimeder">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">eofmotion_module/</span></span><span class="sig-name descname"><span class="pre">karplustimeder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">cvec</span></em>, <em class="sig-param"><span class="pre">qtot</span></em>, <em class="sig-param"><span class="pre">ptot</span></em>, <em class="sig-param"><span class="pre">bcmplx</span></em>, <em class="sig-param"><span class="pre">dotq</span></em>, <em class="sig-param"><span class="pre">dotp</span></em>, <em class="sig-param"><span class="pre">dotb</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/eofmotion_module/karplustimeder" title="Link to this definition"></a></dt>
+<dd><p>Computes the Coalson Karplus VGWP equations of motion</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qtot, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qtot</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>ptot</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bcmplx</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>dotq</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>dotp</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>dotb</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>out</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/eofmotion_module/rungekutta">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">eofmotion_module/</span></span><span class="sig-name descname"><span class="pre">rungekutta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">cj</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">pj</span></em>, <em class="sig-param"><span class="pre">bj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/eofmotion_module/rungekutta" title="Link to this definition"></a></dt>
+<dd><p>Does one Runge-Kutta 4 step</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qj, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>h</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cj</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>pj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>bj</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/eofmotion_module/scprop">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">eofmotion_module/</span></span><span class="sig-name descname"><span class="pre">scprop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">cj</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">pj</span></em>, <em class="sig-param"><span class="pre">bj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/eofmotion_module/scprop" title="Link to this definition"></a></dt>
+<dd><p>Does one self-consistent progator step</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qj, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>h</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cj</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>pj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>bj</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/eofmotion_module/vtvprop">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">eofmotion_module/</span></span><span class="sig-name descname"><span class="pre">vtvprop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">cj</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">pj</span></em>, <em class="sig-param"><span class="pre">bj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/eofmotion_module/vtvprop" title="Link to this definition"></a></dt>
+<dd><p>computes one step of VTV integrator, see Vanicek2023</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qj, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>h</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cj</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>pj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>bj</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/eofmotion_module/scprop_der">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">eofmotion_module/</span></span><span class="sig-name descname"><span class="pre">scprop_der</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">cj</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">pj</span></em>, <em class="sig-param"><span class="pre">bj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/eofmotion_module/scprop_der" title="Link to this definition"></a></dt>
+<dd><p>Does one self-consistent progator step with derivatives
+convergence</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qj, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>h</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cj</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>pj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>bj</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/eofmotion_module/pece_param">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">eofmotion_module/</span></span><span class="sig-name descname"><span class="pre">pece_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">cj</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">pj</span></em>, <em class="sig-param"><span class="pre">bj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/eofmotion_module/pece_param" title="Link to this definition"></a></dt>
+<dd><p>Does one PECE progator step for the parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qj, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>h</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cj</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>pj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>bj</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/eofmotion_module/scpece_param">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">eofmotion_module/</span></span><span class="sig-name descname"><span class="pre">scpece_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">cj</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">pj</span></em>, <em class="sig-param"><span class="pre">bj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/eofmotion_module/scpece_param" title="Link to this definition"></a></dt>
+<dd><p>Does a self-consisten PECE progator step for the parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qj, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>h</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cj</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>pj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>bj</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="kinetic">
+<h3>Kinetic<a class="headerlink" href="#kinetic" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/kinetic_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/kinetic_module/der_pre" title="f/kinetic_module/der_pre"><code class="xref f f-func docutils literal notranslate"><span class="pre">der_pre()</span></code></a>, <a class="reference internal" href="#f/kinetic_module/kin_energy" title="f/kinetic_module/kin_energy"><code class="xref f f-func docutils literal notranslate"><span class="pre">kin_energy()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/eofmotion_module" title="f/eofmotion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">eofmotion_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/integrals_module" title="f/integrals_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">integrals_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/inversion_module" title="f/inversion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">inversion_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/kinetic_module/der_pre">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">kinetic_module/</span></span><span class="sig-name descname"><span class="pre">der_pre</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">indx</span></em>, <em class="sig-param"><span class="pre">order</span></em>, <em class="sig-param"><span class="pre">alpha</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/kinetic_module/der_pre" title="Link to this definition"></a></dt>
+<dd><p>Computes the Hermite polynomial derivative prefactor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indx</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>order</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>alpha</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Result<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>pre</strong><em> [</em><em>real</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/kinetic_module/kin_energy">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">kinetic_module/</span></span><span class="sig-name descname"><span class="pre">kin_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">q</span></em>, <em class="sig-param"><span class="pre">p</span></em>, <em class="sig-param"><span class="pre">qvec</span></em>, <em class="sig-param"><span class="pre">pvec</span></em>, <em class="sig-param"><span class="pre">tildebmat</span></em>, <em class="sig-param"><span class="pre">y0</span></em>, <em class="sig-param"><span class="pre">x2</span></em>, <em class="sig-param"><span class="pre">x1</span></em>, <em class="sig-param"><span class="pre">x0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/kinetic_module/kin_energy" title="Link to this definition"></a></dt>
+<dd><p>Computes total kynetic energy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>q</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>p</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qvec</strong> (nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pvec</strong> (nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tildebmat</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>y0</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x2</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x1</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>x0</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>k00</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em> – Complex for debugging</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="observable">
+<h3>Observable<a class="headerlink" href="#observable" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/observable_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/observable_module/energy" title="f/observable_module/energy"><code class="xref f f-func docutils literal notranslate"><span class="pre">energy()</span></code></a>, <a class="reference internal" href="#f/observable_module/plot_wfn" title="f/observable_module/plot_wfn"><code class="xref f f-func docutils literal notranslate"><span class="pre">plot_wfn()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/integrals_module" title="f/integrals_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">integrals_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/kinetic_module" title="f/kinetic_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">kinetic_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/effectivepot_module" title="f/effectivepot_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">effectivepot_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/inversion_module" title="f/inversion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">inversion_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/observable_module/energy">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">observable_module/</span></span><span class="sig-name descname"><span class="pre">energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">qtot</span></em>, <em class="sig-param"><span class="pre">ptot</span></em>, <em class="sig-param"><span class="pre">cvec</span></em>, <em class="sig-param"><span class="pre">tildebmat</span></em>, <em class="sig-param"><span class="pre">h00m</span></em>, <em class="sig-param"><span class="pre">hout</span></em>, <em class="sig-param"><span class="pre">mx</span></em>, <em class="sig-param"><span class="pre">mx2</span></em>, <em class="sig-param"><span class="pre">my</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/observable_module/energy" title="Link to this definition"></a></dt>
+<dd><p>Computes the Hamiltonian matrix and variables momenta</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qtot, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qtot</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>ptot</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tildebmat</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>h00m</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>hout</strong><em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>mx</strong><em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>mx2</strong><em> [</em><em>real</em><em>, </em><em>out</em><em>]</em></p></li>
+<li><p><strong>my</strong> (nd)<em> [</em><em>real</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/observable_module/plot_wfn">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">observable_module/</span></span><span class="sig-name descname"><span class="pre">plot_wfn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">qtot</span></em>, <em class="sig-param"><span class="pre">ptot</span></em>, <em class="sig-param"><span class="pre">cvec</span></em>, <em class="sig-param"><span class="pre">tildebmat</span></em>, <em class="sig-param"><span class="pre">norm</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/observable_module/plot_wfn" title="Link to this definition"></a></dt>
+<dd><p>Prints the wavefunction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qtot, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qtot</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>ptot</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tildebmat</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>norm</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="bot">
+<h3>BOT<a class="headerlink" href="#bot" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/bot_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/bot_module/c_static" title="f/bot_module/c_static"><code class="xref f f-func docutils literal notranslate"><span class="pre">c_static()</span></code></a>, <a class="reference internal" href="#f/bot_module/c_update" title="f/bot_module/c_update"><code class="xref f f-func docutils literal notranslate"><span class="pre">c_update()</span></code></a>, <a class="reference internal" href="#f/bot_module/c_update_fb" title="f/bot_module/c_update_fb"><code class="xref f f-func docutils literal notranslate"><span class="pre">c_update_fb()</span></code></a>, <a class="reference internal" href="#f/bot_module/c_update_fbs" title="f/bot_module/c_update_fbs"><code class="xref f f-func docutils literal notranslate"><span class="pre">c_update_fbs()</span></code></a>, <a class="reference internal" href="#f/bot_module/c_update_full" title="f/bot_module/c_update_full"><code class="xref f f-func docutils literal notranslate"><span class="pre">c_update_full()</span></code></a>, <a class="reference internal" href="#f/bot_module/c_update_full2" title="f/bot_module/c_update_full2"><code class="xref f f-func docutils literal notranslate"><span class="pre">c_update_full2()</span></code></a>, <a class="reference internal" href="#f/bot_module/pece_coef" title="f/bot_module/pece_coef"><code class="xref f f-func docutils literal notranslate"><span class="pre">pece_coef()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/kinetic_module" title="f/kinetic_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">kinetic_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/effectivepot_module" title="f/effectivepot_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">effectivepot_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/integrals_module" title="f/integrals_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">integrals_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/inversion_module" title="f/inversion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">inversion_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/observable_module" title="f/observable_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">observable_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/eofmotion_module" title="f/eofmotion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">eofmotion_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/bot_module/c_static">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">bot_module/</span></span><span class="sig-name descname"><span class="pre">c_static</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">cvec</span></em>, <em class="sig-param"><span class="pre">s00m</span></em>, <em class="sig-param"><span class="pre">h00m</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/bot_module/c_static" title="Link to this definition"></a></dt>
+<dd><p>Static update of the coefficients</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>h</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em> – ver 1</p></li>
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>s00m</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>h00m</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>, <a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-even">Result<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>csout</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/bot_module/c_update">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">bot_module/</span></span><span class="sig-name descname"><span class="pre">c_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">qb</span></em>, <em class="sig-param"><span class="pre">pb</span></em>, <em class="sig-param"><span class="pre">qk</span></em>, <em class="sig-param"><span class="pre">pk</span></em>, <em class="sig-param"><span class="pre">c</span></em>, <em class="sig-param"><span class="pre">bb</span></em>, <em class="sig-param"><span class="pre">bk</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/bot_module/c_update" title="Link to this definition"></a></dt>
+<dd><p>Projection of the coefficients on the time-evolved basis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qb, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qb</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pb</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qk</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pk</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>c</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bb</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bk</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cout</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/bot_module/c_update_fb">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">bot_module/</span></span><span class="sig-name descname"><span class="pre">c_update_fb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">qb</span></em>, <em class="sig-param"><span class="pre">pb</span></em>, <em class="sig-param"><span class="pre">qk</span></em>, <em class="sig-param"><span class="pre">pk</span></em>, <em class="sig-param"><span class="pre">c</span></em>, <em class="sig-param"><span class="pre">bb</span></em>, <em class="sig-param"><span class="pre">bk</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/bot_module/c_update_fb" title="Link to this definition"></a></dt>
+<dd><p>Updates the coefficients with forward-backward scheme</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qb, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qb</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pb</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qk</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pk</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>c</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bb</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bk</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cout</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/bot_module/c_update_fbs">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">bot_module/</span></span><span class="sig-name descname"><span class="pre">c_update_fbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">qb</span></em>, <em class="sig-param"><span class="pre">pb</span></em>, <em class="sig-param"><span class="pre">qk</span></em>, <em class="sig-param"><span class="pre">pk</span></em>, <em class="sig-param"><span class="pre">c</span></em>, <em class="sig-param"><span class="pre">bb</span></em>, <em class="sig-param"><span class="pre">bk</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/bot_module/c_update_fbs" title="Link to this definition"></a></dt>
+<dd><p>Updates the coefficients with forward-backwards Schroedinger
+scheme</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qb, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qb</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pb</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qk</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pk</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>c</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bb</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bk</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cout</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/bot_module/c_update_full">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">bot_module/</span></span><span class="sig-name descname"><span class="pre">c_update_full</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">q0</span></em>, <em class="sig-param"><span class="pre">qt</span></em>, <em class="sig-param"><span class="pre">tq</span></em>, <em class="sig-param"><span class="pre">p0</span></em>, <em class="sig-param"><span class="pre">pt</span></em>, <em class="sig-param"><span class="pre">tp</span></em>, <em class="sig-param"><span class="pre">b0</span></em>, <em class="sig-param"><span class="pre">bt</span></em>, <em class="sig-param"><span class="pre">tb</span></em>, <em class="sig-param"><span class="pre">c0</span></em>, <em class="sig-param"><span class="pre">tc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/bot_module/c_update_full" title="Link to this definition"></a></dt>
+<dd><p>Computes finite-differences time-dependent Schroedinger
+equation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(q0, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>h</strong><em> [</em><em>real</em><em>]</em> – ver 1</p></li>
+<li><p><strong>q0</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qt</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tq</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>p0</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pt</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tp</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>b0</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bt</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tb</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>c0</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tc</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cout</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/bot_module/c_update_full2">
+<span class="property"><span class="pre">function</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">bot_module/</span></span><span class="sig-name descname"><span class="pre">c_update_full2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">q0</span></em>, <em class="sig-param"><span class="pre">qt</span></em>, <em class="sig-param"><span class="pre">tq</span></em>, <em class="sig-param"><span class="pre">p0</span></em>, <em class="sig-param"><span class="pre">pt</span></em>, <em class="sig-param"><span class="pre">tp</span></em>, <em class="sig-param"><span class="pre">b0</span></em>, <em class="sig-param"><span class="pre">bt</span></em>, <em class="sig-param"><span class="pre">tb</span></em>, <em class="sig-param"><span class="pre">c0</span></em>, <em class="sig-param"><span class="pre">tc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/bot_module/c_update_full2" title="Link to this definition"></a></dt>
+<dd><p>Computes mid-point-like time-dependent Schroedinger
+equation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(q0, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>h</strong><em> [</em><em>real</em><em>]</em> – ver 1</p></li>
+<li><p><strong>q0</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qt</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tq</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>p0</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>pt</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tp</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>b0</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bt</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tb</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>c0</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>tc</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+<dt class="field-odd">Result<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cout</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/bot_module/pece_coef">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">bot_module/</span></span><span class="sig-name descname"><span class="pre">pece_coef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">cj</span></em>, <em class="sig-param"><span class="pre">qj</span></em>, <em class="sig-param"><span class="pre">pj</span></em>, <em class="sig-param"><span class="pre">bj</span></em>, <em class="sig-param"><span class="pre">tq</span></em>, <em class="sig-param"><span class="pre">tp</span></em>, <em class="sig-param"><span class="pre">tb</span></em>, <em class="sig-param"><span class="pre">tc</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/bot_module/pece_coef" title="Link to this definition"></a></dt>
+<dd><p>Does one self-consistent propagator step with derivatives conv</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qj, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>h</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>cj</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p></li>
+<li><p><strong>qj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>pj</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>bj</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>]</em></p></li>
+<li><p><strong>tq</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>tp</strong> (1 + nd)<em> [</em><em>real</em><em>]</em></p></li>
+<li><p><strong>tb</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>]</em></p></li>
+<li><p><strong>tc</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="evolution">
+<h3>Evolution<a class="headerlink" href="#evolution" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/evolution_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/evolution_module/bot_evo" title="f/evolution_module/bot_evo"><code class="xref f f-func docutils literal notranslate"><span class="pre">bot_evo()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/normalization_module" title="f/normalization_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">normalization_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/observable_module" title="f/observable_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">observable_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/bot_module" title="f/bot_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">bot_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/eofmotion_module" title="f/eofmotion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">eofmotion_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/integrals_module" title="f/integrals_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">integrals_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/inversion_module" title="f/inversion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">inversion_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/effectivepot_module" title="f/effectivepot_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">effectivepot_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/evolution_module/bot_evo">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">evolution_module/</span></span><span class="sig-name descname"><span class="pre">bot_evo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">trj</span></em>, <em class="sig-param"><span class="pre">q0</span></em>, <em class="sig-param"><span class="pre">p0</span></em>, <em class="sig-param"><span class="pre">c0</span></em>, <em class="sig-param"><span class="pre">bcmplx</span></em>, <em class="sig-param"><span class="pre">qeq</span></em>, <em class="sig-param"><span class="pre">peq</span></em>, <em class="sig-param"><span class="pre">ceq</span></em>, <em class="sig-param"><span class="pre">beq</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/evolution_module/bot_evo" title="Link to this definition"></a></dt>
+<dd><p>Performs the dynamics, print the output “e ti fa pure il
+caffe”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(q0, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>trj</strong> (5)<em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>q0</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>p0</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>c0</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>bcmplx</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>qeq</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>peq</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>ceq</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>beq</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="check">
+<h3>Check<a class="headerlink" href="#check" title="Link to this heading"></a></h3>
+<p class="rubric" id="f/check_module">Quick access</p>
+<dl class="field-list simple">
+<dt class="field-odd">Routines<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#f/check_module/check_amat" title="f/check_module/check_amat"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_amat()</span></code></a>, <a class="reference internal" href="#f/check_module/check_diagonalization" title="f/check_module/check_diagonalization"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_diagonalization()</span></code></a>, <a class="reference internal" href="#f/check_module/check_hermmat" title="f/check_module/check_hermmat"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_hermmat()</span></code></a>, <a class="reference internal" href="#f/check_module/check_ksnum" title="f/check_module/check_ksnum"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_ksnum()</span></code></a>, <a class="reference internal" href="#f/check_module/check_momenta" title="f/check_module/check_momenta"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_momenta()</span></code></a>, <a class="reference internal" href="#f/check_module/check_norm" title="f/check_module/check_norm"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_norm()</span></code></a>, <a class="reference internal" href="#f/check_module/check_projection" title="f/check_module/check_projection"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_projection()</span></code></a>, <a class="reference internal" href="#f/check_module/check_shiftedoverlap" title="f/check_module/check_shiftedoverlap"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_shiftedoverlap()</span></code></a>, <a class="reference internal" href="#f/check_module/check_v0" title="f/check_module/check_v0"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_v0()</span></code></a>, <a class="reference internal" href="#f/check_module/check_vmat" title="f/check_module/check_vmat"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_vmat()</span></code></a>, <a class="reference internal" href="#f/check_module/check_xnmat" title="f/check_module/check_xnmat"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_xnmat()</span></code></a>, <a class="reference internal" href="#f/check_module/check_y0" title="f/check_module/check_y0"><code class="xref f f-func docutils literal notranslate"><span class="pre">check_y0()</span></code></a>, <a class="reference internal" href="#f/check_module/coherent_calc" title="f/check_module/coherent_calc"><code class="xref f f-func docutils literal notranslate"><span class="pre">coherent_calc()</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Used modules</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#f/constants" title="f/constants"><code class="xref f f-mod docutils literal notranslate"><span class="pre">constants</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/parameters_module" title="f/parameters_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">parameters_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/matrix_module" title="f/matrix_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">matrix_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/potential_module" title="f/potential_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">potential_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/basisset_module" title="f/basisset_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">basisset_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/integrals_module" title="f/integrals_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">integrals_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/effectivepot_module" title="f/effectivepot_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">effectivepot_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/normalization_module" title="f/normalization_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">normalization_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/kinetic_module" title="f/kinetic_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">kinetic_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/bot_module" title="f/bot_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">bot_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/observable_module" title="f/observable_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">observable_module</span></code></a></p></li>
+<li><p><a class="reference internal" href="#f/inversion_module" title="f/inversion_module"><code class="xref f f-mod docutils literal notranslate"><span class="pre">inversion_module</span></code></a></p></li>
+</ul>
+<p class="rubric">Subroutines and functions</p>
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_diagonalization">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_diagonalization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_diagonalization" title="Link to this definition"></a></dt>
+<dd><p>Checks diagonalization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>]</em> – This way I know if something is wrong</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_momenta">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_momenta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_momenta" title="Link to this definition"></a></dt>
+<dd><p>Checks momenta</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>]</em> – This way I know if something is wrong</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_amat">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_amat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_amat" title="Link to this definition"></a></dt>
+<dd><p>Checks matrix extraction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>]</em> – This way I know if something is wrong</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_vmat">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_vmat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_vmat" title="Link to this definition"></a></dt>
+<dd><p>Checks matrix potential</p>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_hermmat">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_hermmat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_hermmat" title="Link to this definition"></a></dt>
+<dd><p>Checks Hermite matrix</p>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_y0">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_y0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_y0" title="Link to this definition"></a></dt>
+<dd><p>Checks Y0 integral</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>]</em> – This way I know if something is wrong</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_xnmat">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_xnmat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_xnmat" title="Link to this definition"></a></dt>
+<dd><p>Checks <span class="math notranslate nohighlight">\(\langle x^n \rangle\)</span>
+nd: dimensions of the bath matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em> – This way I know if something is wrong</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_v0">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_v0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">cvec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_v0" title="Link to this definition"></a></dt>
+<dd><p>Checks <span class="math notranslate nohighlight">\(V_0\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em> – This way I know if something is wrong</p></li>
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_norm">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">cvec</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_norm" title="Link to this definition"></a></dt>
+<dd><p>Checks normalization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nd</strong><em> [</em><em>integer</em><em>]</em></p></li>
+<li><p><strong>cvec</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_shiftedoverlap">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_shiftedoverlap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_shiftedoverlap" title="Link to this definition"></a></dt>
+<dd><p>Check shifted overlap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_ksnum">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_ksnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_ksnum" title="Link to this definition"></a></dt>
+<dd><p>Checks kinetic energy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/coherent_calc">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">coherent_calc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nd</span></em>, <em class="sig-param"><span class="pre">trj</span></em>, <em class="sig-param"><span class="pre">q0</span></em>, <em class="sig-param"><span class="pre">p0</span></em>, <em class="sig-param"><span class="pre">masses</span></em>, <em class="sig-param"><span class="pre">c0</span></em>, <em class="sig-param"><span class="pre">bcmplx</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/coherent_calc" title="Link to this definition"></a></dt>
+<dd><p>Computes the dynamics of a coherent state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nd</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(q0, 0)</em><em>]</em></p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>trj</strong> (3)<em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>q0</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em> – equilibrium centers vector</p></li>
+<li><p><strong>p0</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em> – equilibrium momenta vector</p></li>
+<li><p><strong>masses</strong> (1 + nd)<em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>c0</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em> – equilibrium coefficient vector</p></li>
+<li><p><strong>bcmplx</strong> (1 + nd, 1 + nd)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em> – initial width matrix</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object f" id="f/check_module/check_projection">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">check_projection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">nv</span></em>, <em class="sig-param"><span class="pre">qeq</span></em>, <em class="sig-param"><span class="pre">peq</span></em>, <em class="sig-param"><span class="pre">ceq</span></em>, <em class="sig-param"><span class="pre">bcmplx</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/check_projection" title="Link to this definition"></a></dt>
+<dd><p>Checks projection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nv</strong><em> [</em><em>integer</em><em>, </em><em>in,optional,default=-1 + shape(qeq, 0)</em><em>]</em> – equilibrium centers vector</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>qeq</strong> (1 + <a class="reference internal" href="#f/parameters_module/nv" title="f/parameters_module/nv">nv</a>)<em> [</em><em>real</em><em>]</em> – inital centers vector</p></li>
+<li><p><strong>peq</strong> (1 + <a class="reference internal" href="#f/parameters_module/nv" title="f/parameters_module/nv">nv</a>)<em> [</em><em>real</em><em>]</em> – initial momenta vector</p></li>
+<li><p><strong>ceq</strong> (<a class="reference internal" href="#f/parameters_module/nh" title="f/parameters_module/nh">nh</a>)<em> [</em><em>complex</em><em>]</em> – initial coefficient vector</p></li>
+<li><p><strong>bcmplx</strong> (1 + <a class="reference internal" href="#f/parameters_module/nv" title="f/parameters_module/nv">nv</a>, 1 + <a class="reference internal" href="#f/parameters_module/nv" title="f/parameters_module/nv">nv</a>)<em> [</em><em>complex</em><em>, </em><em>in</em><em>]</em> – initial width matrix</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="prints">
+<h3>Prints<a class="headerlink" href="#prints" title="Link to this heading"></a></h3>
+<dl>
+<dt class="sig sig-object f" id="f/check_module/print_banners">
+<span class="property"><span class="pre">subroutine</span>&#160; </span><span class="sig-prename descclassname"><span class="pre">check_module/</span></span><span class="sig-name descname"><span class="pre">print_banners</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">first</span></em>, <em class="sig-param"><span class="pre">last</span></em>, <em class="sig-param"><span class="pre">nstep</span></em>, <em class="sig-param"><span class="pre">h</span></em>, <em class="sig-param"><span class="pre">n</span></em><span class="sig-paren">)</span><a class="headerlink" href="#f/check_module/print_banners" title="Link to this definition"></a></dt>
+<dd><p>Prints banners</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>first</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>last</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>nstep</strong><em> [</em><em>integer</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>h</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+<li><p><strong>n</strong><em> [</em><em>real</em><em>, </em><em>in</em><em>]</em></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="README.html" class="btn btn-neutral float-left" title="DOUBLEWELL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Acknowledgements.html" class="btn btn-neutral float-right" title="Acknowledgements and Contacts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Giacomo Botti, Sophya Garashchuk.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
