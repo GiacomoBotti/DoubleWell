@@ -6,7 +6,7 @@
 DoubleWell documentation
 ========================
 
-.. image:: well.svg
+.. image:: TOC_website.svg
    :width: 60% 
    :align: center
 
@@ -21,6 +21,12 @@ DoubleWell documentation
 DoubleWell Files
 ==========================================
 
-You find the repository `here <https://github.com/giacomande95-oss/dragonball-vispec.git>`_
+You find the repository `here <https://>`_
 
-Read the paper `here <https://doi.org/10.1063/5.0297591>`_
+The paper is submitted
+
+License
+========
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE)
+for details.

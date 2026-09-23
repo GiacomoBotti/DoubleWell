@@ -100,7 +100,7 @@
        open(unit=327,file="correlation_BOT.dat",status="unknown")
        open(unit=328,file="reaction_BOT.dat",status="unknown")
        open(unit=329,file="crosscorr_BOT.dat",status="unknown")
-       open(unit=330,file="momenta_BOT.dat",status="unknown")
+       open(unit=330,file="moments_BOT.dat",status="unknown")
 
        h = dfloat(last-first)/dfloat(nstep)
        back = -h/trj(5)
