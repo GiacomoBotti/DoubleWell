@@ -24,6 +24,8 @@
 !.....EFFECTIVE POTENTIAL V0 = <V>......................................
 
       function fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X2,X1,X0) result(V0mat)
+      ! Computes the effective potential :math:`V_0 = \langle V \rangle` 
+
       ! nd: bath dimensions
       ! qtot: total Gaussian center vector (x&y)
       ! cvec: vector of the coefficients
@@ -156,6 +158,9 @@
 !.....EFFECTIVE POTENTIAL V1 = <nabla V>................................
 
       function fun_V1(nd,qtot,cvec,Bmat,Y0,X3,X2,X1,X0) result(V1)
+      ! Computes the effective gradient :math:`\mathbf{V}_1 
+      ! = \langle \nabla V \rangle`
+
       ! nd: bath dimensions
       ! qtot: total Gaussian center vector (x&y)
       ! cvec: vector of the coefficients
@@ -231,6 +236,9 @@
 !.....EFFECTIVE POTENTIAL V2= <nabla otimes nabla V>....................
 
       function fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X0) result(V2)
+      ! Computes the effective Hessian :math:`\mathbb{V}_2 = 
+      ! \langle \nabla \nabla^{T} V \rangle`
+
       ! nd: bath dimensions
       ! qtot: total Gaussian center vector (x&y)
       ! cvec: vector of the coefficients

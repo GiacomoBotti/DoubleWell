@@ -24,6 +24,7 @@
 !.....Check Diagonalization.............................................
 
       subroutine check_diagonalization(nd)
+      ! Checks diagonalization
 
        integer :: i,j,nd
        real*8 :: harvest
@@ -77,8 +78,9 @@
 !.....Check Momenta.....................................................
 
       subroutine check_momenta(nd)
-      ! nd: dimensions of the matrix
+      ! Checks momenta
 
+      ! nd: dimensions of the matrix
        integer :: i,nd
        real*8, dimension(nd,nd) :: DiagMat
        real*8, dimension(maxorder,nd) :: OutMat
@@ -106,8 +108,9 @@
 !.....Check extractA....................................................
 
       subroutine check_Amat(nd)
-      ! nd : dimension of the matrix
+      ! Checks matrix extraction
 
+      ! nd : dimension of the matrix
        integer :: i,j,nd
        real*8 :: harvest
        real*8, dimension(nd+1,nd+1) :: RndMat
@@ -153,6 +156,7 @@
 !.....Check Vmat........................................................
 
       subroutine check_vmat()
+      ! Checks matrix potential
       
        integer :: i
 
@@ -167,6 +171,7 @@
 !.....Check HermMat.....................................................
 
       subroutine check_hermmat()
+      ! Checks Hermite matrix
       
        integer :: i,j,k,l
        real*8 :: H
@@ -224,8 +229,9 @@
 !.....Check Y0..........................................................
 
       subroutine check_Y0(nd)
-      ! nd: dimensions of the matrix
+      ! Checks Y0 integral
 
+      ! nd: dimensions of the matrix
        integer :: i,nd
        real*8 :: Y0
        real*8, dimension(nd,nd) :: DiagMat
@@ -251,6 +257,7 @@
 !.....Check XnMat.......................................................
 
       subroutine check_XnMat(nd)
+      ! Checks :math:`\langle x^n \rangle`
       !nd: dimensions of the bath matrix
        integer, intent(in) :: nd
 
@@ -356,6 +363,8 @@
 !.....Check V0..........................................................
 
       subroutine check_V0(nd,cvec)
+      ! Checks :math:`V_0`
+
       ! nd: dimensions of the bath 
       ! cvec: vector of the coefficients
        integer, intent(in) :: nd
@@ -429,6 +438,8 @@
 !.....Check Normalization...............................................
 
       subroutine check_norm(nd,cvec)
+      ! Checks normalization
+
       ! nd: bath dimensions
       ! cvec: vector of the coefficients
        integer :: nd
@@ -469,6 +480,8 @@
 !.....Check shifted overlap.............................................
 
       subroutine check_shiftedoverlap(nd)
+      ! Check shifted overlap
+
       ! nd: dimension of y
        integer, intent(in) :: nd
 
@@ -609,6 +622,8 @@
 !.....Check SG maple....................................................
 !.....maple file: TGWP-K-and-S-numeric_GB.mw............................
       subroutine check_KSnum(nd)
+      ! Checks kinetic energy
+
       ! nd: dimension of y
        integer, intent(in) :: nd
 
@@ -753,6 +768,8 @@
 !.....Coherent dynamics calculator......................................
 
       subroutine coherent_calc(nd,trj,q0,p0,masses,c0,Bcmplx)
+      ! Computes the dynamics of a coherent state
+
       ! nd: bath dimension
       ! trj : trajectory parameters (first step, last step, nstep)
       ! q0 : initial gaussian center (x&y)
@@ -911,6 +928,7 @@
 !.....Check projection scheme...........................................
 
       subroutine check_projection(nv,qeq,peq,ceq,Bcmplx)
+      ! Checks projection
        integer, intent(in) :: nv 
        real*8,dimension(nv+1) :: qeq !inital centers vector
        real*8,dimension(nv+1) :: peq !initial momenta vector

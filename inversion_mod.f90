@@ -14,6 +14,8 @@
 !.....Inversion for a <2,2> matrix......................................
 
       function inv2D(A) result(invA)
+      ! Inverts a 2D matrix
+
       ! A : <2,2> matrix
         implicit none
         complex*16, intent(in), dimension(2,2) :: A
@@ -37,9 +39,9 @@
       end function
 
 !.....Inversion for a general COMPLEX matrix............................
-! Returns the inverse of a matrix calculated by finding the LU
-! decomposition.  Depends on LAPACK.
       function invgen(npar,A) result(Ainv)
+      ! Returns the inverse of a matrix calculated by finding the LU
+      ! decomposition.  Depends on LAPACK.
         implicit none
         integer, intent(in) :: npar
         complex*16, dimension(npar,npar), intent(in) :: A
@@ -77,9 +79,9 @@
       end function 
 
 !.....Linear system for a general matrix................................
-! Solve the linear system Ax=B by using the LU
-! decomposition.  Depends on LAPACK.
       function linsys(npar,A,B) result(xout)
+      ! Solve the linear system Ax=B by using the LU
+      ! decomposition.  Depends on LAPACK.
         implicit none
         integer, intent(in) :: npar
         complex*16, dimension(npar,npar), intent(in) :: A
@@ -120,9 +122,9 @@
       end function 
 
 !.....Inversion for a general REAL matrix..............................
-! Returns the inverse of a matrix calculated by finding the LU
-! decomposition.  Depends on LAPACK.
       function invgen_real(npar,A) result(Ainv)
+      ! Returns the inverse of a matrix calculated by finding the LU
+      ! decomposition.  Depends on LAPACK.
         implicit none
         integer, intent(in) :: npar
         real*8, dimension(npar,npar), intent(in) :: A

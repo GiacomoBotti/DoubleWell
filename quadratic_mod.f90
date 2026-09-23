@@ -19,11 +19,12 @@
 !.....qVq...............................................................
 
       function fun_qVq(nd,q) result(qVq)
+      ! Computes the qVq quadratic form
+
       ! nd: dimensions
       ! Vmat: potential matrix
       ! q: gaussian variational center vector
       ! qVq: result (x gaussian normalization...)
-
        integer,intent(in) :: nd
        real*8, dimension(nd), intent(in) :: q
 
@@ -38,11 +39,12 @@
 !.....uWu=uTVTu.........................................................
 
       function fun_uWu(nd,Tmat,MomMat) result(uWu)
+      ! Computes the uTVTu quadratic form
+
       ! nd: dimensions
       ! Tmat: eigenvector matrix
       ! MomMat: matrix of the momenta
       ! uWu: polynomial of the momenta
-       
        integer,intent(in) :: nd
        real*8, dimension(nd,nd), intent(in) :: Tmat
        real*8, dimension(maxorder,nd), intent(in) :: MomMat 
@@ -73,12 +75,13 @@
 !.....uZQ=uTVQ..........................................................
 
       function fun_uZQ(nd,q,Tmat,MomMat) result(uZQ)
+      ! Legacy
+
       ! nd: dimensions
       ! q: gaussian variational center vector
       ! Tmat: eigenvector matrix
       ! MomMat: matrix of the momenta
       ! uZQ: polynomial of the momenta
-       
        integer,intent(in) :: nd
        real*8, dimension(nd), intent(in) :: q
        real*8, dimension(nd,nd), intent(in) :: Tmat
@@ -103,12 +106,13 @@
 !.....QRu=QVTu..........................................................
 
       function fun_QRu(nd,q,Tmat,MomMat) result(QRu)
+      ! Legacy
+
       ! nd: dimensions
       ! q: gaussian variational center vector
       ! Tmat: eigenvector matrix
       ! MomMat: matrix of the momenta
       ! QRu: polynomial of the momenta
-       
        integer,intent(in) :: nd
        real*8, dimension(nd), intent(in) :: q
        real*8, dimension(nd,nd), intent(in) :: Tmat

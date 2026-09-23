@@ -19,6 +19,8 @@
 !.....Normalization.....................................................
 
       subroutine normalization(nd,q,cvec,Bmat,S00M,Nout)
+      ! Computes normalization
+
       ! nd: dimension of the bath
       ! q: center of the well gaussian
       ! cvec: vector of the coefficients

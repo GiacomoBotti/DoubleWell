@@ -27,6 +27,9 @@
 !......BOT evolution....................................................
 
        subroutine bot_evo(nd,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq,Beq)
+       ! Performs the dynamics, print the output "e ti fa pure il 
+       ! caffe"
+
        ! nd: bath dimension
        ! trj : trajectory parameters (first step, last step, nstep)
        ! q0 : initial gaussian center (x&y)
@@ -97,7 +100,7 @@
        open(unit=327,file="correlation_BOT.dat",status="unknown")
        open(unit=328,file="reaction_BOT.dat",status="unknown")
        open(unit=329,file="crosscorr_BOT.dat",status="unknown")
-       open(unit=330,file="momenta_BOT.dat",status="unknown")
+       open(unit=330,file="moments_BOT.dat",status="unknown")
 
        h = dfloat(last-first)/dfloat(nstep)
        back = -h/trj(5)

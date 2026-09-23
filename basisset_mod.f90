@@ -21,6 +21,8 @@
 !.....Factorial of a number.............................................
 
       function factorial(n) result(fact)
+      ! Computes the factorial of a number
+
       ! n: input number
       ! fact: factorial of n
        implicit none
@@ -38,6 +40,8 @@
 !.....Matrix of Hermite polynomials coefficients........................ 
   
       subroutine GenHermMat()
+      ! Generates the matrix of Hermite polynomials coefficients
+
       ! Mherm: matrix of hermite polynomials coefficients
        integer :: i,j
 
@@ -66,6 +70,8 @@
 !.....Hermite Polynomial................................................
      
       function herm_pol(npol,x,q,alpha) result(Hofx)
+      ! Evaluates the Hermite polynomial value
+
       ! npol: order of the polynomial, from 1 to nh
       ! x: variable of the polynomial
       ! q: variable of the polynomial
@@ -99,6 +105,8 @@
 !.....Matrix of Hermite Polynomial Products.............................
      
       function fun_Hmat(x,q,alpha) result(Hmat)
+      ! Computes the Hermite polynomials product matrix
+
       ! x: variable of the polynomial
       ! q: variable of the polynomial
       ! alpha: x coord gaussian width (REAL)
@@ -124,6 +132,9 @@
 !.....Matrix of Hermite Polynomial Products (Shifted)...................
      
       function fun_HmatShift(x,qi,qj,alphai,alphaj) result(HmatS)
+      ! Computes the Hermite polynomials product matrix when
+      ! one polynomial is shifted
+
       ! x: variable of the polynomial
       ! qi: variable of the polynomial
       ! qj: variable of the polynomial

@@ -22,6 +22,8 @@
 !......Derivative prefactor.............................................
        
        function der_pre(indx,order,alpha) result(pre)
+       ! Computes the Hermite polynomial derivative prefactor 
+
        ! indx: index of derived polynomial, as in Hmat
        ! order: order of the derivative
        ! alpha: gaussian width along the x coord (REAL)
@@ -49,6 +51,8 @@
 
        function Kbath(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0) &
                 &result(intKb)
+       ! Computes the bath kynetic energy
+
        ! nd : dimensions of the bath
        ! q : active mode position
        ! p : active mode momentum
@@ -192,6 +196,8 @@
 !......K active.........................................................
 
        function Kact(nd,q,p,qvec,tildeBmat,Y0,X2,X1,X0) result(intKa)
+       ! Computes the active mode kynetic energy
+
        ! nd : dimensions of the bath
        ! q : active mode position
        ! p : active mode momentum
@@ -334,6 +340,8 @@
 
        function kin_energy(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0) &
                 & result(K00)
+       ! Computes total kynetic energy
+
        ! nd : dimensions of the bath
        ! q : active mode position
        ! p : active mode momentum

@@ -1,4 +1,5 @@
       subroutine print_banners(first,last,nstep,h,N)
+      ! Prints banners
        implicit none
  
        integer, intent(in) :: first,last,nstep
