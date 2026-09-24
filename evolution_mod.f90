@@ -27,7 +27,7 @@
 !......BOT evolution....................................................
 
        subroutine bot_evo(nd,trj,q0,p0,c0,Bcmplx,qeq,peq,ceq,Beq)
-       ! Performs the dynamics, print the output "e ti fa pure il 
+       ! Performs the dynamics, prints the output "e ti fa pure il 
        ! caffe"
 
        ! nd: bath dimension

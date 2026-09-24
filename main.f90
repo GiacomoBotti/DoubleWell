@@ -1,6 +1,6 @@
 !***********************************************************************!
-! Fortran code to evolve a multiconfigurational wavefunction using      !
-! McLachlan variational principle, applied to a double well             !
+! Fortran code to evolve the Augmented Correlated Gaussian on a quartic !
+! potential coupled with a chain of harmonic oscillators                !
 !***********************************************************************!
 
       program doublewell
