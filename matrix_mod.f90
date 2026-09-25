@@ -129,7 +129,7 @@
       ! Bmat: matrix
       ! Bidet: I miss it
        integer, intent(in) :: ndim
-       real*8, dimension(ndim,ndim), intent(out) :: Bmat
+       real*8, dimension(ndim,ndim), intent(in) :: Bmat
 
        integer :: i
        real*8 :: Bdet
