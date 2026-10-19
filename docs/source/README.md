@@ -411,7 +411,7 @@ The main evolution writes a set of plain-text files.
 | `correlation_BOT.dat` | Autocorrelation function: real part, imaginary part, squared modulus, and modulus. |
 | `reaction_BOT.dat` | Reaction-probability observable. |
 | `crosscorr_BOT.dat` | Cross correlation with the reflected reference state. |
-| `momenta_BOT.dat` | Active-coordinate and bath coordinate moments. |
+| `moments_BOT.dat` | Active-coordinate and bath coordinate moments. |
 | `wfx_BOT.dat` | Wavefunction representation along the active coordinate. |
 | `wfy_BOT.dat` | Wavefunction representation along the bath coordinate/grid used by `plot_wfn`. |
 
@@ -454,7 +454,7 @@ The reference state is the initial propagated wavefunction.
 
 The cross correlation is evaluated against a reflected equilibrium reference obtained by changing the sign of the equilibrium coordinate vector.
 
-### `momenta_BOT.dat`
+### `moments_BOT.dat`
 
 The moment output contains the active-coordinate first moment, its variance-like quantity, and the corresponding bath-coordinate moments evaluated by the observable routines.
 
@@ -491,7 +491,7 @@ phase_BOT.dat
 correlation_BOT.dat
 reaction_BOT.dat
 crosscorr_BOT.dat
-momenta_BOT.dat
+moments_BOT.dat
 wfx_BOT.dat
 wfy_BOT.dat
 ```
@@ -524,3 +524,7 @@ The corresponding calls are present but commented out in `main.f90`. They can be
 - `banner.txt` is required by the startup command `cat banner.txt`.
 - The current production evolution path in `evolution_mod.f90` uses `pece_coef`; alternative propagators are retained in the source as commented calls.
 - BLAS and LAPACK are required for the linear-algebra routines used throughout the code.
+
+## License
+
+This project is licensed under the GPL-3.0 License. See [LICENSE](LICENSE) for details.

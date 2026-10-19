@@ -1,21 +1,3 @@
-# Giacomo Botti
-butta
-/OLD/
-*.dat
-*.agr
-*.eps
-fort.*
-/USELESS/
-/2CHO_*/
-/PLOT_*/
-/Batista_coupled/
-/Propagation_Error/
-log*
-/TEST/
-*.png
-*.zip
-*.old
-
 # Prerequisites
 *.d
 
