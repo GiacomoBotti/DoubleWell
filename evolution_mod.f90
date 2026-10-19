@@ -232,7 +232,7 @@
        do k = 1,nprint
        frac = real(k) / real(nprint)
        pos = int(bar_width * frac)
-       if (mod(k, nprint/100) == 0 .or. j == nprint) then
+       if (mod(k, max(1,nprint/100)) == 0 .or. j == nprint) then
        bar = repeat('#', pos) // repeat('-', bar_width - pos)
        end if
        !if (k.eq.nprint/2) then

@@ -8,7 +8,7 @@
       save
 
       ! Bath potential matrix dimensions
-      integer,parameter,public :: nv = 1
+      integer,parameter,public :: nv = 2
       !Number of Hermite polynomials
       integer,parameter,public :: nh = 13
       !Maximum order of x for the Hermite pol. in database
