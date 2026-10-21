@@ -8,7 +8,7 @@
       save
 
       ! Bath potential matrix dimensions
-      integer,parameter,public :: nv = 2
+      integer,parameter,public :: nv = 3
       !Number of Hermite polynomials
       integer,parameter,public :: nh = 13
       !Maximum order of x for the Hermite pol. in database
@@ -35,6 +35,10 @@
       real*8, public :: lwb=-12.d0
       real*8, public :: hgb=12.d0
       integer*8, public :: gstep=500
+
+      ! Gauss-Hermite quadrature
+      integer, parameter, public :: ngh = 20
+      real*8, dimension(ngh), public :: gh_nodes,gh_weights
 
       contains 
 
@@ -147,5 +151,52 @@
        end if
 
       end subroutine
-      
+
+!......Gauss-Hermite quadrature.......................................
+
+       subroutine gauss_hermite(n, nodes, weights)
+       ! Computes Gauss-Hermite nodes and weights
+       ! for integrals with weight exp(-x**2)
+
+       ! n: number of quadrature nodes
+       ! nodes: Gauss-Hermite nodes
+       ! weights: Gauss-Hermite weights
+
+       implicit none
+
+       integer, intent(in) :: n
+       real*8, dimension(n), intent(out) :: nodes,weights
+
+       integer :: i,info
+       real*8 :: pi
+       real*8, dimension(n) :: d,e
+       real*8, dimension(n,n) :: z
+       real*8, dimension(max(1,2*n-2)) :: work
+
+       pi = acos(-1.d0)
+
+       ! Jacobi matrix
+       d(:) = 0.d0
+       e(:) = 0.d0
+
+       do i = 1,n-1
+          e(i) = sqrt(dfloat(i)/2.d0)
+       end do
+
+       ! Diagonalize the Jacobi matrix
+       call dstev('V',n,d,e,z,n,work,info)
+
+       if (info.ne.0) then
+          write(*,*) 'Error in Gauss-Hermite quadrature:',info
+          stop
+       end if
+
+       ! Eigenvalues are the nodes
+       nodes(:) = d(:)
+
+       ! Weights from the first eigenvector components
+       weights(:) = sqrt(pi)*z(1,:)**2
+
+       end subroutine
+
       end module 

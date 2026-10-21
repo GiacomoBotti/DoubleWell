@@ -1,5 +1,6 @@
 fc=gfortran
 myflgs = -fno-automatic -O3 -ftree-vectorize -fcheck=bounds -ffast-math
+#myflgs = -O3 -march=native -ffast-math -funroll-loops
 lib = -llapack -lblas
 
 obj= constants.o parameters_mod.o inversion_mod.o basisset_mod.o potential_mod.o matrix_mod.o\

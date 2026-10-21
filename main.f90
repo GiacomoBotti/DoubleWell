@@ -128,6 +128,10 @@
         write(*,*) qeq(i), peq(i)
       end do
 
+!.....Gauss-Hermite Quadrature Setup....................................
+
+      call gauss_hermite(ngh,gh_nodes,gh_weights)
+
 !.....Basis Projection..................................................
 
       ! Boring defaults
@@ -207,8 +211,12 @@
 !      call check_KSnum(nv)
 !.....Check projection..................................................
 !      call check_projection(nv,qeq,peq,ceq,Bcmplx)
+!.....Check nodes.......................................................
+      call check_gauss_hermite 
+!.....Check GH integral.................................................
+      call check_XnMat_GH() 
 !.....Evolution.........................................................
-!      stop
+      stop
 
       close(2222)
       write(*,*) "WE ARE RUNNING"

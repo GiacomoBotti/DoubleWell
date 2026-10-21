@@ -1021,4 +1021,231 @@
        close(2002)
       end subroutine
 
+!......Check Gauss-Hermite quadrature.................................
+
+       subroutine check_gauss_hermite()
+       ! Checks Gauss-Hermite nodes, weights and moments
+
+       integer, parameter :: n = 3
+       integer :: i
+       real*8 :: pi,tol
+       real*8 :: m0,m2,m4
+       real*8 :: err_nodes,err_weights
+       real*8, dimension(n) :: nodes,weights
+       real*8, dimension(n) :: exact_nodes,exact_weights
+
+       pi = acos(-1.d0)
+       tol = 1.d-12
+
+       ! Analytical nodes and weights
+       exact_nodes = (/ -sqrt(1.5d0),0.d0,sqrt(1.5d0) /)
+       exact_weights = sqrt(pi)*(/ 1.d0/6.d0, &
+                                  2.d0/3.d0, &
+                                  1.d0/6.d0 /)
+
+       ! Compute Gauss-Hermite quadrature
+       call gauss_hermite(n,nodes,weights)
+
+       ! Compare nodes and weights
+       write(*,*) "Gauss-Hermite quadrature: N = ",n
+       write(*,*)
+       write(*,*) "Nodes:"
+       do i = 1,n
+          write(*,'(I4,3ES22.12)') i,nodes(i), &
+                                  exact_nodes(i), &
+                                  nodes(i)-exact_nodes(i)
+       end do
+
+       write(*,*)
+       write(*,*) "Weights:"
+       do i = 1,n
+          write(*,'(I4,3ES22.12)') i,weights(i), &
+                                  exact_weights(i), &
+                                  weights(i)-exact_weights(i)
+       end do
+
+       ! Maximum errors
+       err_nodes = maxval(abs(nodes-exact_nodes))
+       err_weights = maxval(abs(weights-exact_weights))
+
+       ! Gaussian moments
+       m0 = sum(weights)
+       m2 = sum(weights*nodes**2)
+       m4 = sum(weights*nodes**4)
+
+       write(*,*)
+       write(*,*) "Gaussian moments:"
+       write(*,'(A,2ES22.12)') " M0: ",m0,sqrt(pi)
+       write(*,'(A,2ES22.12)') " M2: ",m2,sqrt(pi)/2.d0
+       write(*,'(A,2ES22.12)') " M4: ",m4,3.d0*sqrt(pi)/4.d0
+
+       write(*,*)
+       write(*,*) "Maximum node error:   ",err_nodes
+       write(*,*) "Maximum weight error: ",err_weights
+
+       ! Final check
+       if (err_nodes.gt.tol.or.err_weights.gt.tol.or. &
+           abs(m0-sqrt(pi)).gt.tol.or. &
+           abs(m2-sqrt(pi)/2.d0).gt.tol.or. &
+           abs(m4-3.d0*sqrt(pi)/4.d0).gt.tol) then
+
+          write(*,*) "Gauss-Hermite quadrature: FAILED"
+          stop 1
+
+       else
+
+          write(*,*) "Gauss-Hermite quadrature: PASSED"
+
+       end if
+
+       end subroutine
+
+!......Check Gauss-Hermite integrals.................................
+
+       subroutine check_XnMat_GH()
+       ! Compares Cavalieri-Simpson and Gauss-Hermite integrals
+       ! for three different Gaussian configurations
+
+       implicit none
+
+       integer, parameter :: nd = 2
+       integer, parameter :: ntest = 3
+       integer, parameter :: nrepeat = 100
+
+       integer :: i,j,k,pow
+       real*8 :: a,q,beta
+       real*8 :: t0,t1,time_CS,time_GH
+       real*8 :: err_abs,err_rel,denom
+       real*8 :: speedup
+       real*8, dimension(nd) :: avec
+       real*8, dimension(nd,nd) :: Amat
+       real*8, dimension(nh,nh) :: Xmat_CS,Xmat_GH
+
+       ! Initialize quadrature
+       call gauss_hermite(ngh,gh_nodes,gh_weights)
+
+       write(*,*)
+       write(*,*) "=============================================="
+       write(*,*) "     GAUSS-HERMITE INTEGRAL COMPARISON"
+       write(*,*) "=============================================="
+       write(*,*) "Number of Hermite polynomials:",nh
+       write(*,*) "Gauss-Hermite nodes:",ngh
+       write(*,*) "Cavalieri-Simpson steps:",gstep
+       write(*,*) "Timing repetitions:",nrepeat
+
+       do k = 1,ntest
+
+          ! TEST PARAMETERS
+          Amat(:,:) = 0.d0
+          Amat(1,1) = 1.d0
+          Amat(2,2) = 1.d0
+
+          select case(k)
+
+          case(1)
+             q = 0.d0
+             a = 1.d0
+             avec = (/ 0.d0,0.d0 /)
+             pow = 0
+
+          case(2)
+             q = 1.5d0
+             a = 1.5d0
+             avec = (/ 0.2d0,0.1d0 /)
+             pow = 2
+
+          case(3)
+             q = -2.d0
+             a = 0.8d0
+             avec = (/ 0.1d0,0.2d0 /)
+             pow = 4
+
+          end select
+
+          beta = a-dot_product(avec,avec)
+
+          write(*,*)
+          write(*,*) "----------------------------------------------"
+          write(*,*) "TEST ",k
+          write(*,*) "----------------------------------------------"
+          write(*,*) "q    =",q
+          write(*,*) "a    =",a
+          write(*,*) "beta =",beta
+          write(*,*) "pow  =",pow
+
+          ! Cavalieri-Simpson timing
+          call cpu_time(t0)
+
+          do i = 1,nrepeat
+             Xmat_CS = int_XnMat(nd,pow,a,avec,Amat,q)
+          end do
+
+          call cpu_time(t1)
+          time_CS = (t1-t0)/dfloat(nrepeat)
+
+          ! Gauss-Hermite timing
+          call cpu_time(t0)
+
+          do i = 1,nrepeat
+             Xmat_GH = int_XnMat_GH(nd,pow,a,avec,Amat,q)
+          end do
+
+          call cpu_time(t1)
+          time_GH = (t1-t0)/dfloat(nrepeat)
+
+          ! Error analysis
+          err_abs = maxval(abs(Xmat_CS-Xmat_GH))
+
+          denom = maxval(abs(Xmat_GH))
+
+          if (denom.gt.1.d-14) then
+             err_rel = err_abs/denom
+          else
+             err_rel = 0.d0
+          end if
+
+          ! Print matrix comparison
+          write(*,*)
+          write(*,*) "Matrix elements:"
+          write(*,*) "  i   j          CS", &
+                     "              GH", &
+                     "          Difference"
+
+          do i = 1,nh
+             do j = 1,nh
+
+                write(*,'(2I4,3ES18.8)') i,j, &
+                     Xmat_CS(i,j), &
+                     Xmat_GH(i,j), &
+                     Xmat_CS(i,j)-Xmat_GH(i,j)
+
+             end do
+          end do
+
+          ! Print errors
+          write(*,*)
+          write(*,*) "Maximum absolute error:",err_abs
+          write(*,*) "Relative matrix error:",err_rel
+
+          ! Print timing
+          write(*,*)
+          write(*,*) "Average CPU time per integral:"
+          write(*,'(A,ES14.6,A)') " CS: ",time_CS," s"
+          write(*,'(A,ES14.6,A)') " GH: ",time_GH," s"
+
+          if (time_GH.gt.0.d0) then
+             speedup = time_CS/time_GH
+             write(*,'(A,F12.3,A)') &
+                  " Speedup: ",speedup," x"
+          end if
+
+       end do
+
+       write(*,*)
+       write(*,*) "=============================================="
+       write(*,*) "        END OF INTEGRAL COMPARISON"
+       write(*,*) "=============================================="
+
+       end subroutine
+
       end module

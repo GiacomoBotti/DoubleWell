@@ -15,7 +15,7 @@
 
        private
        public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat
-       public :: int_PMat
+       public :: int_PMat,gauss_hermite,int_XnMat_GH
 
        contains
 
@@ -462,5 +462,60 @@
 !        write(*,*) "Xn11:", XnMat(1,1)
      
        end function
+
+!......Xnij integral (Gauss-Hermite)..................................
+
+       function int_XnMat_GH(nd,pow,a,avec,Amat,q) result(XnMat)
+       ! Computes the expectation value of x^n
+       ! using Gauss-Hermite quadrature
+
+       ! nd: dimension of y
+       ! pow: power of x
+       ! a: x gaussian width
+       ! avec: xy gaussian width vector
+       ! Amat: y gaussian width matrix
+       ! q: x variational parameter
+       ! XnMat: matrix of integrals
+
+       integer, intent(in) :: nd,pow
+       real*8, intent(in) :: a,q
+       real*8, dimension(nd), intent(in) :: avec
+       real*8, dimension(nd,nd), intent(in) :: Amat
+
+       integer :: i
+       real*8 :: x,beta
+       real*8, dimension(nd) :: vec1
+       real*8, dimension(nd,nd) :: invA
+       real*8, dimension(nh,nh) :: XnMat,Hmat
+
+       ! Effective Gaussian width
+       invA = invgen_real(nd,Amat)
+       vec1 = matmul(invA,avec)
+       beta = a-dot_product(avec,vec1)
+
+       !if (beta.le.0.d0) then
+       !   write(*,*) "Error: nonpositive Gaussian width",beta
+       !   stop
+       !end if
+
+       ! Gauss-Hermite integration
+       XnMat(:,:) = 0.d0
+
+       do i = 1,ngh
+          x = q + gh_nodes(i)/sqrt(beta)
+
+          Hmat = fun_Hmat(x,q,a)
+
+          XnMat = XnMat + gh_weights(i)*Hmat*x**pow
+       end do
+
+       XnMat = XnMat/sqrt(beta)
+
+       where (abs(XnMat).le.1.d-15)
+          XnMat = 0.d0
+       end where
+
+       end function
+
        end module
-     
+      
