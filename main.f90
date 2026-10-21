@@ -212,11 +212,11 @@
 !.....Check projection..................................................
 !      call check_projection(nv,qeq,peq,ceq,Bcmplx)
 !.....Check nodes.......................................................
-      call check_gauss_hermite 
+!      call check_gauss_hermite 
 !.....Check GH integral.................................................
-      call check_XnMat_GH() 
+!      call check_XnMat_GH() 
 !.....Evolution.........................................................
-      stop
+!      stop
 
       close(2222)
       write(*,*) "WE ARE RUNNING"

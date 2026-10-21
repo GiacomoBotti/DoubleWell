@@ -1177,7 +1177,7 @@
           call cpu_time(t0)
 
           do i = 1,nrepeat
-             Xmat_CS = int_XnMat(nd,pow,a,avec,Amat,q)
+             Xmat_CS = int_XnMat_CS(nd,pow,a,avec,Amat,q)
           end do
 
           call cpu_time(t1)
@@ -1187,7 +1187,7 @@
           call cpu_time(t0)
 
           do i = 1,nrepeat
-             Xmat_GH = int_XnMat_GH(nd,pow,a,avec,Amat,q)
+             Xmat_GH = int_XnMat(nd,pow,a,avec,Amat,q)
           end do
 
           call cpu_time(t1)

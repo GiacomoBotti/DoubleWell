@@ -15,7 +15,7 @@
 
        private
        public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat
-       public :: int_PMat,gauss_hermite,int_XnMat_GH
+       public :: int_PMat,gauss_hermite,int_XnMat_CS
 
        contains
 
@@ -77,7 +77,7 @@
 
 !......Xnij integral....................................................
 
-       function int_XnMat(nd,pow,a,avec,Amat,q) result(XnMat)
+       function int_XnMat_CS(nd,pow,a,avec,Amat,q) result(XnMat)
        ! Computes the expectation value of x^n
 
        ! nd: dimension of y
@@ -465,7 +465,7 @@
 
 !......Xnij integral (Gauss-Hermite)..................................
 
-       function int_XnMat_GH(nd,pow,a,avec,Amat,q) result(XnMat)
+       function int_XnMat(nd,pow,a,avec,Amat,q) result(XnMat)
        ! Computes the expectation value of x^n
        ! using Gauss-Hermite quadrature
 
