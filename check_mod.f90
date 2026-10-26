@@ -1248,4 +1248,491 @@
 
        end subroutine
 
+!......Check Sb quadratic coefficients................................
+
+       subroutine check_Sb_coefficients()
+       ! Compares direct Sb with its quadratic representation
+       ! for three different Gaussian configurations
+
+       implicit none
+
+       integer, parameter :: nd = 2
+       integer, parameter :: ntest = 3
+       integer, parameter :: nx = 5
+
+       integer :: i,j,k
+       real*8 :: x,err_abs,err_rel,max_abs,max_rel,tol
+       real*8, dimension(nx) :: xgrid
+       real*8, dimension(nd+1) :: qi,qj,ppi,pj
+       complex*16 :: Ccoef,Dcoef,Ecoef
+       complex*16 :: Sb_direct,Sb_poly
+       complex*16, dimension(nd+1,nd+1) :: Bimat,Bjmat
+
+       tol = 1.d-12
+       xgrid = (/ -2.d0,-1.d0,0.d0,1.d0,2.d0 /)
+
+       write(*,*)
+       write(*,*) "=============================================="
+       write(*,*) "       SB QUADRATIC COEFFICIENT CHECK"
+       write(*,*) "=============================================="
+
+       do k = 1,ntest
+
+          ! Initialize parameters
+          qi(:) = 0.d0
+          qj(:) = 0.d0
+          ppi(:) = 0.d0
+          pj(:) = 0.d0
+
+          Bimat(:,:) = (0.d0,0.d0)
+          Bjmat(:,:) = (0.d0,0.d0)
+
+          do i = 1,nd+1
+             Bimat(i,i) = (1.d0,0.d0)
+             Bjmat(i,i) = (1.d0,0.d0)
+          end do
+
+          select case(k)
+
+          case(1)
+             ! Identical real Gaussians
+             qi = (/ 0.d0,0.d0,0.d0 /)
+             qj = qi
+
+          case(2)
+             ! Displaced Gaussians with different momenta
+             qi = (/ -1.d0,0.2d0,-0.1d0 /)
+             qj = (/  1.d0,-0.3d0,0.4d0 /)
+
+             ppi = (/ 0.5d0,0.2d0,-0.1d0 /)
+             pj  = (/ -0.3d0,0.1d0,0.4d0 /)
+
+          case(3)
+             ! Complex widths and active-bath correlations
+             qi = (/ -0.8d0,0.3d0,-0.2d0 /)
+             qj = (/  0.7d0,-0.4d0,0.5d0 /)
+
+             ppi = (/ 0.6d0,-0.2d0,0.3d0 /)
+             pj  = (/ -0.4d0,0.5d0,-0.1d0 /)
+
+             Bimat(1,1) = (1.2d0,0.3d0)
+             Bimat(2,2) = (1.1d0,0.2d0)
+             Bimat(3,3) = (0.9d0,-0.1d0)
+
+             Bjmat(1,1) = (0.8d0,-0.2d0)
+             Bjmat(2,2) = (1.3d0,0.1d0)
+             Bjmat(3,3) = (1.2d0,0.2d0)
+
+             Bimat(1,2) = (0.1d0,0.05d0)
+             Bimat(2,1) = Bimat(1,2)
+
+             Bimat(1,3) = (-0.08d0,0.03d0)
+             Bimat(3,1) = Bimat(1,3)
+
+             Bjmat(1,2) = (0.12d0,-0.04d0)
+             Bjmat(2,1) = Bjmat(1,2)
+
+             Bjmat(1,3) = (0.06d0,0.02d0)
+             Bjmat(3,1) = Bjmat(1,3)
+
+             Bimat(2,3) = (0.04d0,0.02d0)
+             Bimat(3,2) = Bimat(2,3)
+
+             Bjmat(2,3) = (-0.03d0,0.01d0)
+             Bjmat(3,2) = Bjmat(2,3)
+
+          end select
+
+          ! Compute quadratic coefficients
+          call fun_Sb_coeff(nd,qi,qj,ppi,pj, &
+                                   Bimat,Bjmat, &
+                                   Ccoef,Dcoef,Ecoef)
+
+          max_abs = 0.d0
+          max_rel = 0.d0
+
+          write(*,*)
+          write(*,*) "----------------------------------------------"
+          write(*,*) "TEST ",k
+          write(*,*) "----------------------------------------------"
+
+          write(*,*) "C = ",Ccoef
+          write(*,*) "D = ",Dcoef
+          write(*,*) "E = ",Ecoef
+
+          do j = 1,nx
+
+             x = xgrid(j)
+
+             ! Original function
+             Sb_direct = fun_Sb(nd,x,qi,qj,ppi,pj, &
+                                Bimat,Bjmat)
+
+             ! Quadratic representation
+             Sb_poly = exp(-Ccoef*x**2+Dcoef*x+Ecoef)
+
+             err_abs = abs(Sb_direct-Sb_poly)
+             err_rel = err_abs/max(abs(Sb_direct),1.d-14)
+
+             max_abs = max(max_abs,err_abs)
+             max_rel = max(max_rel,err_rel)
+
+             write(*,*)
+             write(*,'(A,F8.3)') " x = ",x
+
+             write(*,'(A,2ES22.12)') &
+                  " Direct: ",dble(Sb_direct),aimag(Sb_direct)
+
+             write(*,'(A,2ES22.12)') &
+                  " Poly:   ",dble(Sb_poly),aimag(Sb_poly)
+
+             write(*,'(A,2ES22.12)') &
+                  " Diff:   ",dble(Sb_direct-Sb_poly), &
+                              aimag(Sb_direct-Sb_poly)
+
+          end do
+
+          write(*,*)
+          write(*,*) "Maximum absolute error:",max_abs
+          write(*,*) "Maximum relative error:",max_rel
+
+          if (max_rel.le.tol) then
+             write(*,*) "TEST PASSED"
+          else
+             write(*,*) "TEST FAILED"
+          end if
+
+       end do
+
+       write(*,*)
+       write(*,*) "=============================================="
+       write(*,*) "          END OF SB COEFFICIENT CHECK"
+       write(*,*) "=============================================="
+
+       end subroutine
+
+!......Check Gauss-Hermite TauMat....................................
+
+       subroutine check_TauMat_GH()
+       ! Compares Cavalieri-Simpson and Gauss-Hermite TauMat
+       ! for three different Gaussian configurations
+
+       implicit none
+
+       integer, parameter :: nd = 2
+       integer, parameter :: ntest = 3
+       integer, parameter :: nrepeat = 100
+
+       integer :: i,j,k
+       real*8 :: t0,t1,time_CS,time_GH
+       real*8 :: err_abs,err_rel,denom,speedup
+       real*8, dimension(nd+1) :: qi,qj,ppi,pj
+       complex*16, dimension(nd+1,nd+1) :: Bimat,Bjmat
+       complex*16, dimension(nh,nh) :: Tau_CS,Tau_GH
+
+       ! Initialize quadrature
+       call gauss_hermite(ngh,gh_nodes,gh_weights)
+
+       write(*,*)
+       write(*,*) "=============================================="
+       write(*,*) "       GAUSS-HERMITE TAUMAT COMPARISON"
+       write(*,*) "=============================================="
+       write(*,*) "Number of Hermite polynomials:",nh
+       write(*,*) "Gauss-Hermite nodes:",ngh
+       write(*,*) "Cavalieri-Simpson steps:",gstep
+       write(*,*) "Timing repetitions:",nrepeat
+
+       do k = 1,ntest
+
+          ! Initialize parameters
+          qi(:) = 0.d0
+          qj(:) = 0.d0
+          ppi(:) = 0.d0
+          pj(:) = 0.d0
+
+          Bimat(:,:) = (0.d0,0.d0)
+          Bjmat(:,:) = (0.d0,0.d0)
+
+          do i = 1,nd+1
+             Bimat(i,i) = (1.d0,0.d0)
+             Bjmat(i,i) = (1.d0,0.d0)
+          end do
+
+          select case(k)
+
+          case(1)
+             ! Identical real Gaussians
+             qi = (/ 0.d0,0.d0,0.d0 /)
+             qj = qi
+
+          case(2)
+             ! Displaced Gaussians with different momenta
+             qi = (/ -1.d0,0.2d0,-0.1d0 /)
+             qj = (/  1.d0,-0.3d0,0.4d0 /)
+
+             ppi = (/ 0.5d0,0.2d0,-0.1d0 /)
+             pj  = (/ -0.3d0,0.1d0,0.4d0 /)
+
+          case(3)
+             ! Complex widths and active-bath correlations
+             qi = (/ -0.8d0,0.3d0,-0.2d0 /)
+             qj = (/  0.7d0,-0.4d0,0.5d0 /)
+
+             ppi = (/ 0.6d0,-0.2d0,0.3d0 /)
+             pj  = (/ -0.4d0,0.5d0,-0.1d0 /)
+
+             Bimat(1,1) = (1.2d0,0.3d0)
+             Bimat(2,2) = (1.1d0,0.2d0)
+             Bimat(3,3) = (0.9d0,-0.1d0)
+
+             Bjmat(1,1) = (0.8d0,-0.2d0)
+             Bjmat(2,2) = (1.3d0,0.1d0)
+             Bjmat(3,3) = (1.2d0,0.2d0)
+
+             Bimat(1,2) = (0.1d0,0.05d0)
+             Bimat(2,1) = Bimat(1,2)
+
+             Bimat(1,3) = (-0.08d0,0.03d0)
+             Bimat(3,1) = Bimat(1,3)
+
+             Bjmat(1,2) = (0.12d0,-0.04d0)
+             Bjmat(2,1) = Bjmat(1,2)
+
+             Bjmat(1,3) = (0.06d0,0.02d0)
+             Bjmat(3,1) = Bjmat(1,3)
+
+             Bimat(2,3) = (0.04d0,0.02d0)
+             Bimat(3,2) = Bimat(2,3)
+
+             Bjmat(2,3) = (-0.03d0,0.01d0)
+             Bjmat(3,2) = Bjmat(2,3)
+
+          end select
+
+          ! Warm-up calls
+          Tau_CS = int_TauMat_CS(nd,qi,qj,ppi,pj,Bimat,Bjmat)
+          Tau_GH = int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat)
+
+          ! Cavalieri-Simpson timing
+          call cpu_time(t0)
+
+          do i = 1,nrepeat
+             Tau_CS = int_TauMat_CS(nd,qi,qj,ppi,pj,Bimat,Bjmat)
+          end do
+
+          call cpu_time(t1)
+          time_CS = (t1-t0)/dble(nrepeat)
+
+          ! Gauss-Hermite timing
+          call cpu_time(t0)
+
+          do i = 1,nrepeat
+             Tau_GH = int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat)
+          end do
+
+          call cpu_time(t1)
+          time_GH = (t1-t0)/dble(nrepeat)
+
+          ! Error analysis
+          err_abs = maxval(abs(Tau_CS-Tau_GH))
+          denom = maxval(abs(Tau_CS))
+
+          if (denom.gt.1.d-14) then
+             err_rel = err_abs/denom
+          else
+             err_rel = 0.d0
+          end if
+
+          ! Print comparison
+          write(*,*)
+          write(*,*) "----------------------------------------------"
+          write(*,*) "TEST ",k
+          write(*,*) "----------------------------------------------"
+
+          write(*,*) "Matrix elements:"
+          write(*,*) " i   j       CS (Re,Im)        GH (Re,Im)"
+
+          do i = 1,nh
+             do j = 1,nh
+
+                write(*,'(2I4,4ES18.8)') i,j, &
+                     dble(Tau_CS(i,j)),aimag(Tau_CS(i,j)), &
+                     dble(Tau_GH(i,j)),aimag(Tau_GH(i,j))
+
+             end do
+          end do
+
+          write(*,*)
+          write(*,*) "Maximum absolute error:",err_abs
+          write(*,*) "Relative matrix error:",err_rel
+
+          write(*,*)
+          write(*,*) "Average CPU time per integral:"
+          write(*,'(A,ES14.6,A)') " CS: ",time_CS," s"
+          write(*,'(A,ES14.6,A)') " GH: ",time_GH," s"
+
+          if (time_GH.gt.0.d0) then
+             speedup = time_CS/time_GH
+             write(*,'(A,F12.3,A)') " Speedup: ",speedup," x"
+          end if
+
+       end do
+
+       write(*,*)
+       write(*,*) "=============================================="
+       write(*,*) "          END OF TAUMAT COMPARISON"
+       write(*,*) "=============================================="
+
+       end subroutine
+
+!......Check optimized PMat.........................................
+
+       subroutine check_PMat()
+       ! Compares original and optimized Cavalieri-Simpson PMat
+       ! for three Gaussian configurations
+
+        implicit none
+
+        integer, parameter :: nd = 2
+        integer, parameter :: ntest = 3
+        integer, parameter :: nrepeat = 100
+
+        integer :: i,j,k
+        real*8 :: q,t0,t1,time_og,time_new
+        real*8 :: err_abs,err_rel,denom,speedup
+        complex*16, dimension(nd+1,nd+1) :: Bmat
+        real*8, dimension(nh,nh) :: P_og,P_new
+
+        write(*,*)
+        write(*,*) "=============================================="
+        write(*,*) "       REACTION PROBABILITY COMPARISON"
+        write(*,*) "=============================================="
+        write(*,*) "Number of Hermite polynomials:",nh
+        write(*,*) "Cavalieri-Simpson steps:",gstep
+        write(*,*) "Timing repetitions:",nrepeat
+
+        do k = 1,ntest
+
+           ! Initialize parameters
+           q = 0.d0
+           Bmat(:,:) = (0.d0,0.d0)
+
+           do i = 1,nd+1
+              Bmat(i,i) = (1.d0,0.d0)
+           end do
+
+           select case(k)
+
+           case(1)
+              ! Gaussian centered at reaction boundary
+              q = 0.d0
+
+           case(2)
+              ! Displaced Gaussian
+              q = 1.5d0
+
+              Bmat(1,1) = (1.5d0,0.2d0)
+              Bmat(2,2) = (1.2d0,0.1d0)
+              Bmat(3,3) = (0.9d0,-0.1d0)
+
+              Bmat(1,2) = (0.2d0,0.05d0)
+              Bmat(2,1) = Bmat(1,2)
+
+              Bmat(1,3) = (-0.1d0,0.03d0)
+              Bmat(3,1) = Bmat(1,3)
+
+           case(3)
+              ! Negative center and correlated Gaussian
+              q = -2.d0
+
+              Bmat(1,1) = (0.8d0,0.3d0)
+              Bmat(2,2) = (1.1d0,0.2d0)
+              Bmat(3,3) = (0.9d0,-0.1d0)
+
+              Bmat(1,2) = (0.25d0,0.05d0)
+              Bmat(2,1) = Bmat(1,2)
+
+              Bmat(1,3) = (-0.15d0,0.03d0)
+              Bmat(3,1) = Bmat(1,3)
+
+              Bmat(2,3) = (0.1d0,0.02d0)
+              Bmat(3,2) = Bmat(2,3)
+
+           end select
+
+           ! Warm-up calls
+           P_og = int_PMat_og(nd,q,Bmat)
+           P_new = int_PMat(nd,q,Bmat)
+
+           ! Original CS timing
+           call cpu_time(t0)
+
+           do i = 1,nrepeat
+              P_og = int_PMat_og(nd,q,Bmat)
+           end do
+
+           call cpu_time(t1)
+           time_og = (t1-t0)/dble(nrepeat)
+
+           ! Optimized CS timing
+           call cpu_time(t0)
+
+           do i = 1,nrepeat
+              P_new = int_PMat(nd,q,Bmat)
+           end do
+
+           call cpu_time(t1)
+           time_new = (t1-t0)/dble(nrepeat)
+
+           ! Error analysis
+           err_abs = maxval(abs(P_og-P_new))
+           denom = maxval(abs(P_og))
+
+           if (denom.gt.1.d-14) then
+              err_rel = err_abs/denom
+           else
+              err_rel = 0.d0
+           end if
+
+           write(*,*)
+           write(*,*) "----------------------------------------------"
+           write(*,*) "TEST ",k
+           write(*,*) "----------------------------------------------"
+           write(*,*) "q = ",q
+
+           write(*,*)
+           write(*,*) "Matrix elements:"
+           write(*,*) " i   j          Original          Optimized"
+           write(*,*) "                  Difference"
+
+           do i = 1,nh
+              do j = 1,nh
+                 write(*,'(2I4,3ES20.10)') i,j, &
+                      P_og(i,j),P_new(i,j),P_og(i,j)-P_new(i,j)
+              end do
+           end do
+
+           write(*,*)
+           write(*,*) "Maximum absolute error:",err_abs
+           write(*,*) "Relative matrix error:",err_rel
+
+           write(*,*)
+           write(*,*) "Average CPU time per integral:"
+           write(*,'(A,ES14.6,A)') " Original:  ",time_og," s"
+           write(*,'(A,ES14.6,A)') " Optimized: ",time_new," s"
+
+           if (time_new.gt.0.d0) then
+              speedup = time_og/time_new
+              write(*,'(A,F12.3,A)') " Speedup: ",speedup," x"
+           end if
+
+        end do
+
+        write(*,*)
+        write(*,*) "=============================================="
+        write(*,*) "          END OF PMAT COMPARISON"
+        write(*,*) "=============================================="
+
+       end subroutine
+
       end module

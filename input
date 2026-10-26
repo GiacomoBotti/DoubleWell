@@ -28,8 +28,8 @@
     p0(1) = 0.d0
 /
 &grid
-    lwb = -10.d0
-    hgb = 10.d0
+    lwb = -12.d0
+    hgb = 12.d0
     gstep = 1024!000
 /
 &scaling_factors

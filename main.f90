@@ -177,6 +177,7 @@
       write(*,*) "Basis dimension: ", nh
       write(*,*) "Bath dimension: ", nv
       write(*,*) "Grid from: ",lwb," to ",hgb," with ",gstep," steps"
+      write(*,*) "Using :", ngh, " GH nodes"
       write(*,*) "+---------------------------------------------------+"
 
 !.....Print initial wavefunctions
@@ -215,6 +216,12 @@
 !      call check_gauss_hermite 
 !.....Check GH integral.................................................
 !      call check_XnMat_GH() 
+!.....Check Sb coefficients.............................................
+!      call check_Sb_coefficients()
+!.....Check real GH for TauMat..........................................
+!      call check_TauMat_GH()
+!.....Check optimized PMat
+!      call check_PMat()
 !.....Evolution.........................................................
 !      stop
 

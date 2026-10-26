@@ -10,7 +10,7 @@
       ! Bath potential matrix dimensions
       integer,parameter,public :: nv = 1
       !Number of Hermite polynomials
-      integer,parameter,public :: nh = 9 
+      integer,parameter,public :: nh = 13
       !Maximum order of x for the Hermite pol. in database
       integer, parameter, public :: max_x = nh+1  
       !Maximum order of y momenta
@@ -37,7 +37,7 @@
       integer*8, public :: gstep=500
 
       ! Gauss-Hermite quadrature
-      integer, parameter, public :: ngh = 20
+      integer, parameter, public :: ngh = 40
       real*8, dimension(ngh), public :: gh_nodes,gh_weights
 
       contains 

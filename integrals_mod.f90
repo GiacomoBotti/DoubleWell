@@ -15,7 +15,8 @@
 
        private
        public :: int_Y0,int_XnMat,fun_Nsq,fun_NiNj,fun_Sb,int_TauMat
-       public :: int_PMat,gauss_hermite,int_XnMat_CS
+       public :: int_PMat,gauss_hermite,int_XnMat_CS,fun_Sb_coeff
+       public :: int_TauMat_CS,int_PMat_og
 
        contains
 
@@ -307,92 +308,105 @@
 
        end function
 
-!......Time-shifted overlap.............................................
+!......Time-shifted overlap (optimized CS)............................
 
-       function int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat) result(TauMat)
-       ! Computes the time-shifed overlap
+      function int_TauMat_CS(nd,qi,qj,ppi,pj,Bimat,Bjmat) result(TauMat)
+       ! Computes the time-shifted overlap using Cavalieri-Simpson
+       ! with precomputed Gaussian coefficients
 
        ! nd: bath dimensions
-       ! x: active mode coordinate
-       ! qi: total gaussian center vector (bra)
-       ! qj: total gaussian center vector (ket)
-       ! ppi: total gaussian momenta vector (bra)
-       ! pj: total gaussian momenta vector (ket)
-       ! Bimat: complex gaussian width matrix (bra)
-       ! Bjmat: complex gaussian width matrix (ket)
-        integer, intent(in) :: nd
-        real*8, dimension(nd+1), intent(in) :: qi,qj,ppi,pj
-        complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
+       ! qi,qj: Gaussian center vectors
+       ! ppi,pj: Gaussian momentum vectors
+       ! Bimat,Bjmat: complex Gaussian width matrices
+       ! TauMat: time-shifted overlap matrix
 
-        integer :: i
-        real*8 :: x,h,NiNj,ralphai,ralphaj
-        complex*16 :: Sb,norm,alphai,alphaj,detAtot
-        real*8, dimension(nh,nh) :: HiHjmat
-        complex*16, dimension(nh,nh) :: integral,integrand,s,TauMat
-        complex*16, dimension(nd) :: aveci,avecj 
-        complex*16, dimension(nd,nd) :: Atot,Ai,Aj 
+       integer, intent(in) :: nd
+       real*8, dimension(nd+1), intent(in) :: qi,qj,ppi,pj
+       complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
 
-        NiNj = fun_NiNj(nd+1,real(Bimat),real(Bjmat))
+       integer :: i
+       real*8 :: x,h,NiNj,ralphai,ralphaj
+       complex*16 :: Sb,norm,alphai,alphaj,detAtot
+       complex*16 :: Cc,Dc,Ec
+       real*8, dimension(nh,nh) :: HiHjmat
+       complex*16, dimension(nh,nh) :: integral,integrand,s,TauMat
+       complex*16, dimension(nd) :: aveci,avecj
+       complex*16, dimension(nd,nd) :: Atot,Ai,Aj
 
-        call extracttildeA(nd,Bimat,Ai,aveci,alphai) 
-        call extracttildeA(nd,Bjmat,Aj,avecj,alphaj) 
-        ralphai = real(alphai)
-        ralphaj = real(alphaj)
-        Atot = Aj + transpose(dconjg(Ai))
-        detAtot = det_cmplx(nd,Atot)
-!        write(*,*) "detAtot: ", detAtot
-        norm = zsqrt(((2*pi)**nd)/detAtot)
+       ! Gaussian normalization
+       NiNj = fun_NiNj(nd+1,real(Bimat,kind=8), &
+                      real(Bjmat,kind=8))
 
-        h = (hgb-lwb)/dfloat(gstep)
- 
-        ! Compute integral in boundaries
-        integral(:,:) = 0.d0
-        ! Lower bound
-        x = lwb
-        Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-        HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
-        integral=Sb*HiHjmat
-        ! Higher bound
-        x = hgb
-        Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-        HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
-        integral=integral+Sb*HiHjmat
-        ! First step
-        x = lwb+h
-        Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-        HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
-        integral=integral+Sb*HiHjmat
+       call extracttildeA(nd,Bimat,Ai,aveci,alphai)
+       call extracttildeA(nd,Bjmat,Aj,avecj,alphaj)
 
-        s(:,:) = 0.d0
-        do i = 2, gstep-2, 2 !only even
-           x = lwb + i*h
-           Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-           HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
-           integrand=Sb*HiHjmat
-           s = s + 2.d0*integrand ! even
-           x = x + h
-           Sb=fun_Sb(nd,x,qi,qj,ppi,pj,Bimat,Bjmat)
-           HiHjmat=fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
-           integrand=Sb*HiHjmat
-           s = s + 4.d0*integrand ! odd
-        end do
+       ralphai = real(alphai,kind=8)
+       ralphaj = real(alphaj,kind=8)
 
-        integral = (integral + s)*h/3.d0
- 
-        TauMat = integral*NiNj*norm
+       Atot = Aj + transpose(dconjg(Ai))
+       detAtot = det_cmplx(nd,Atot)
 
-        where (abs(TauMat).le.1d-15)
-           TauMat = complex(0.d0,0.d0)
-        end where
+       norm = zsqrt(((2*pi)**nd)/detAtot)
 
-!        write(*,*) "power:", pow
-!        write(*,*) "Xn11:", XnMat(1,1)
-     
+       ! Gaussian coefficients
+       call fun_Sb_coeff(nd,qi,qj,ppi,pj,Bimat,Bjmat,Cc,Dc,Ec)
+
+       ! Cavalieri-Simpson integration
+       h = (hgb-lwb)/dfloat(gstep)
+
+       integral(:,:) = (0.d0,0.d0)
+
+       ! Lower bound
+       x = lwb
+       Sb = exp(-Cc*x**2+Dc*x+Ec)
+       HiHjmat = fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
+       integral = Sb*HiHjmat
+
+       ! Higher bound
+       x = hgb
+       Sb = exp(-Cc*x**2+Dc*x+Ec)
+       HiHjmat = fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
+       integral = integral + Sb*HiHjmat
+
+       ! First step
+       x = lwb+h
+       Sb = exp(-Cc*x**2+Dc*x+Ec)
+       HiHjmat = fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
+       integral = integral + 4.d0*Sb*HiHjmat
+
+       s(:,:) = (0.d0,0.d0)
+
+       do i = 2,gstep-2,2
+
+          ! Even point
+          x = lwb+i*h
+          Sb = exp(-Cc*x**2+Dc*x+Ec)
+          HiHjmat = fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
+          integrand = Sb*HiHjmat
+          s = s + 2.d0*integrand
+
+          ! Odd point
+          x = x+h
+          Sb = exp(-Cc*x**2+Dc*x+Ec)
+          HiHjmat = fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
+          integrand = Sb*HiHjmat
+          s = s + 4.d0*integrand
+
+       end do
+
+       integral = (integral+s)*h/3.d0
+
+       TauMat = integral*NiNj*norm
+
+       where (abs(TauMat).le.1.d-15)
+          TauMat = (0.d0,0.d0)
+       end where
+
        end function
 
 !......Batista reaction probability.....................................
 
-       function int_PMat(nd,q,Bmat) result(PMat)
+       function int_PMat_og(nd,q,Bmat) result(PMat)
        ! Computes reaction probability (x>0)
 
        ! nd: dimension of y
@@ -438,7 +452,7 @@
         x = zero+h
         Gx=fun_Gx(nd,a,avec,Amat,x,q)
         Hmat=fun_Hmat(x,q,a)
-        integral=integral+Gx*Hmat
+        integral=integral+4.d0*Gx*Hmat
 
         s(:,:) = 0.d0
         do i = 2, gstep-2, 2 !only even
@@ -514,6 +528,242 @@
        where (abs(XnMat).le.1.d-15)
           XnMat = 0.d0
        end where
+
+       end function
+
+!......Sb quadratic coefficients......................................
+
+       subroutine fun_Sb_coeff(nd,qi,qj,ppi,pj,Bimat,Bjmat,Cc,Dc,Ec)
+       ! Computes coefficients of Sb(x)=exp(-C*x**2+D*x+E)
+
+       ! nd: bath dimensions
+       ! qi,qj: Gaussian center vectors
+       ! ppi,pj: Gaussian momentum vectors
+       ! Bimat,Bjmat: complex Gaussian width matrices
+       ! Ccoef,Dcoef,Ecoef: quadratic exponent coefficients
+
+       integer, intent(in) :: nd
+       real*8, dimension(nd+1), intent(in) :: qi,qj,ppi,pj
+       complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
+       complex*16, intent(out) :: Cc,Dc,Ec
+
+       complex*16 :: alphai,alphaj,ei,ej
+       complex*16, dimension(nd) :: aveci,avecj
+       complex*16, dimension(nd) :: uvec,vvec,qiAi,qjAj
+       complex*16, dimension(nd) :: Mu,Mv
+       complex*16, dimension(nd,nd) :: Ai,Aj,Atot,invAtot
+
+       ! Extract Gaussian width blocks
+       call extracttildeA(nd,Bimat,Ai,aveci,alphai)
+       call extracttildeA(nd,Bjmat,Aj,avecj,alphaj)
+
+       Atot = Aj + transpose(dconjg(Ai))
+       invAtot = invgen(nd,Atot)
+
+       qiAi = matmul(transpose(dconjg(Ai)),qi(2:nd+1))
+       qjAj = matmul(Aj,qj(2:nd+1))
+
+       ! g(x) = vvec - x*uvec
+       uvec = dconjg(aveci) + avecj
+
+       vvec = qi(1)*dconjg(aveci) + qj(1)*avecj &
+            - iu*ppi(2:nd+1) + iu*pj(2:nd+1) &
+            + qiAi + qjAj
+
+       Mu = matmul(invAtot,uvec)
+       Mv = matmul(invAtot,vvec)
+
+       ! Constant contributions from bra and ket
+       ei = -0.5d0*dconjg(alphai)*qi(1)**2 &
+            + iu*ppi(1)*qi(1) &
+            - 0.5d0*dot_product(qi(2:nd+1),qiAi) &
+            - qi(1)*dot_product(qi(2:nd+1),dconjg(aveci)) &
+            + iu*dot_product(qi(2:nd+1),ppi(2:nd+1))
+
+       ej = -0.5d0*alphaj*qj(1)**2 &
+            - iu*pj(1)*qj(1) &
+            - 0.5d0*dot_product(qj(2:nd+1),qjAj) &
+            - qj(1)*dot_product(qj(2:nd+1),avecj) &
+            - iu*dot_product(qj(2:nd+1),pj(2:nd+1))
+
+       ! Quadratic coefficient
+       Cc = 0.5d0*(dconjg(alphai)+alphaj &
+                     - dot_product(dconjg(uvec),Mu))
+
+       ! Linear coefficient
+       Dc = -dot_product(dconjg(uvec),Mv) &
+               + dconjg(alphai)*qi(1) + alphaj*qj(1) &
+               + iu*(pj(1)-ppi(1)) &
+               + dot_product(qi(2:nd+1),dconjg(aveci)) &
+               + dot_product(qj(2:nd+1),avecj)
+
+       ! Constant coefficient
+       Ec = 0.5d0*dot_product(dconjg(vvec),Mv) + ei + ej
+
+       end subroutine
+
+!......Time-shifted overlap (Gauss-Hermite)..........................
+
+      function int_TauMat(nd,qi,qj,ppi,pj,Bimat,Bjmat) result(TauMat)
+       ! Computes the time-shifted overlap using real Gauss-Hermite
+       ! quadrature
+
+       ! nd: bath dimensions
+       ! qi,qj: Gaussian center vectors
+       ! ppi,pj: Gaussian momentum vectors
+       ! Bimat,Bjmat: complex Gaussian width matrices
+       ! TauMat: time-shifted overlap matrix
+
+       integer, intent(in) :: nd
+       real*8, dimension(nd+1), intent(in) :: qi,qj,ppi,pj
+       complex*16, dimension(nd+1,nd+1), intent(in) :: Bimat,Bjmat
+
+       integer :: k
+       real*8 :: x,c,d,mu,phase,fac,NiNj,ralphai,ralphaj
+       complex*16 :: Cc,Dc,Ec,norm,alphai,alphaj,detAtot,Sb
+       real*8, dimension(nh,nh) :: HiHjmat
+       complex*16, dimension(nh,nh) :: TauMat
+       complex*16, dimension(nd) :: aveci,avecj
+       complex*16, dimension(nd,nd) :: Atot,Ai,Aj
+
+       ! Gaussian normalization
+       NiNj = fun_NiNj(nd+1,real(Bimat),real(Bjmat))
+
+       call extracttildeA(nd,Bimat,Ai,aveci,alphai)
+       call extracttildeA(nd,Bjmat,Aj,avecj,alphaj)
+
+       ralphai = real(alphai,kind=8)
+       ralphaj = real(alphaj,kind=8)
+
+       Atot = Aj + transpose(dconjg(Ai))
+       detAtot = det_cmplx(nd,Atot)
+
+       norm = zsqrt(((2*pi)**nd)/detAtot)
+
+       ! Quadratic Gaussian coefficients
+       call fun_Sb_coeff(nd,qi,qj,ppi,pj,Bimat,Bjmat,Cc,Dc,Ec)
+
+       ! Real Gaussian envelope
+       c = real(Cc,kind=8)
+       d = real(Dc,kind=8)
+
+       if (c.le.0.d0) then
+          write(*,*) "Error: nonpositive Gaussian width in TauMat"
+          write(*,*) "c = ",c
+          stop
+       end if
+
+       mu = d/(2.d0*c)
+
+       ! Gaussian prefactor and Jacobian
+       fac = exp(real(Ec,kind=8)+d**2/(4.d0*c))/sqrt(c)
+
+       ! Gauss-Hermite integration
+       TauMat(:,:) = (0.d0,0.d0)
+
+       do k = 1,ngh
+
+          x = mu + gh_nodes(k)/sqrt(c)
+
+          ! Residual complex phase
+          phase = -aimag(Cc)*x**2 + aimag(Dc)*x + aimag(Ec)
+
+          Sb = exp(iu*phase)
+
+          ! Hermite polynomial products
+          HiHjmat = fun_HmatShift(x,qi(1),qj(1),ralphai,ralphaj)
+
+          TauMat = TauMat + gh_weights(k)*Sb*HiHjmat
+
+       end do
+
+       TauMat = TauMat*fac*NiNj*norm
+
+       where (abs(TauMat).le.1.d-15)
+          TauMat = (0.d0,0.d0)
+       end where
+
+       end function
+
+!......PMat integral (optimized CS).................................
+
+       function int_PMat(nd,q,Bmat) result(PMat)
+       ! Computes reaction probability (x>0)
+
+       ! nd: dimension of y
+       ! q: x variational parameter
+       ! Bmat: complex gaussian width
+       ! PMat: reaction probability
+
+        integer, intent(in) :: nd
+        real*8, intent(in) :: q
+        complex*16, dimension(nd+1,nd+1), intent(in) :: Bmat
+
+        integer :: i
+        real*8 :: x,Gx,h,a,zero,Nsq,Y0,beta
+        real*8, dimension(nd) :: avec,vec1
+        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat,invA
+        real*8, dimension(nh,nh) :: integral,integrand,s,Hmat,PMat
+
+        Nsq=fun_Nsq(nd+1,real(Bmat,kind=8))
+        call extractA(nd,real(Bmat,kind=8),Amat,avec,a)
+        call diagonalization(nd,Amat,LambdaMat,Tmat)
+        Y0=int_Y0(nd,LambdaMat)
+
+        ! Effective Gaussian width
+        invA=invgen_real(nd,Amat)
+        vec1=matmul(invA,avec)
+        beta=a-dot_product(avec,vec1)
+
+        if (beta.le.0.d0) then
+           write(*,*) "Error: nonpositive beta in int_PMat"
+           write(*,*) "beta = ",beta
+           stop
+        end if
+
+        zero = 0.d0
+
+        h = (hgb-zero)/dfloat(gstep)
+
+        ! Compute integral in boundaries
+        integral(:,:) = 0.d0
+
+        ! Lower bound
+        x = zero
+        Gx=exp(-beta*(x-q)**2)
+        Hmat=fun_Hmat(x,q,a)
+        integral=Gx*Hmat
+
+        ! Higher bound
+        x = hgb
+        Gx=exp(-beta*(x-q)**2)
+        Hmat=fun_Hmat(x,q,a)
+        integral=integral+Gx*Hmat
+
+        ! First step
+        x = zero+h
+        Gx=exp(-beta*(x-q)**2)
+        Hmat=fun_Hmat(x,q,a)
+        integral=integral+4.d0*Gx*Hmat
+
+        s(:,:) = 0.d0
+        do i = 2, gstep-2, 2 !only even
+           x = zero + i*h
+           Gx=exp(-beta*(x-q)**2)
+           Hmat=fun_Hmat(x,q,a)
+           integrand = Gx*Hmat
+           s = s + 2.d0*integrand ! even
+
+           x = x + h
+           Gx=exp(-beta*(x-q)**2)
+           Hmat=fun_Hmat(x,q,a)
+           integrand = Gx*Hmat
+           s = s + 4.d0*integrand ! odd
+        end do
+
+        integral = (integral + s)*h/3.d0
+
+        PMat = Nsq*Y0*integral
 
        end function
 
