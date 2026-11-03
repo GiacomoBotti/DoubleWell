@@ -771,7 +771,7 @@
           ! <f(0)|f(t)> at lambda hat
           Stc = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
           ! <f(t)|Hf(t)> at lambda hat
-          call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,Mx2,My)
+          !call energy(nd,qi,ppi,ci,Bi,Httc,E0,Mx,Mx2,My)
           ! --- finite differences
           summa = tS - Stc -2*h*iu*H00M
           ! --- midpoint-like
@@ -809,7 +809,7 @@
           ! <f(0)|f(t)> at lambda t
           St = int_TauMat(nd,qj,qi,pj,ppi,Bj,Bi)
           ! <f(t)|Hf(t)>
-          call energy(nd,qi,ppi,ci,Bi,Htt,E0,Mx,Mx2,My)
+          !call energy(nd,qi,ppi,ci,Bi,Htt,E0,Mx,Mx2,My)
           ! --- finite differences 
           summa = tS - St -2*h*iu*H00M
           ! --- midpoint-like
