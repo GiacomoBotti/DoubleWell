@@ -23,7 +23,7 @@
 
 !.....EFFECTIVE POTENTIAL V0 = <V>......................................
 
-      function fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X2,X1,X0) result(V0mat)
+      function fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X3,X2,X1,X0) result(V0mat)
       ! Computes the effective potential :math:`V_0 = \langle V \rangle` 
 
       ! nd: bath dimensions
@@ -35,7 +35,7 @@
        complex*16, dimension(nh), intent(in) :: cvec
        real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
        real*8, intent(in) :: Y0
-       real*8, dimension(nh,nh), intent(in) :: X4,X2,X1,X0
+       real*8, dimension(nh,nh), intent(in) :: X4,X3,X2,X1,X0
 
        integer :: i,j
        real*8 :: Nsq,a,q,aAVAa,qVAa,qVq,uWu
@@ -46,7 +46,7 @@
        real*8, dimension(nd,nd) :: invAainvAaMat,qqMat,qinvAa 
        real*8, dimension(maxorder,nd) :: MomMat
        real*8, dimension(nh) :: Xcvec, XYcvec, Ycvec
-       real*8, dimension(nh,nh) :: X4mat,X2mat,X1mat,X0mat
+       real*8, dimension(nh,nh) :: X4mat,X3mat,X2mat,X1mat,X0mat
        real*8, dimension(nh,nh) :: Xtot,XYtot,Ytot,lin,sqr
        real*8, dimension(nh,nh) :: V0mat,Vxmat,Vxymat,Vymat 
 
@@ -98,36 +98,21 @@
         Tr3 = trace(nd,VqiAa)
 !        write(111,*) "Tr3: ", Tr3
         ! Tr[AMA A-1]
-!        tAMtAiA = matmul(transpose(tAMtA),invA)
-!        Tr4 = trace(nd,tAMtAiA)
-!        write(111,*) "Tr4: ", Tr4
 
-       ! Integrals
-!       Y0=int_Y0(nd,LambdaMat)
-!       write(*,*) "Y0:", Y0
-!       X4mat=int_XnMat(nd,4,a,avec,Amat,q)
-!       write(*,*) "X4mat(3,3)", X4mat(3,3)
-!       X2mat=int_XnMat(nd,2,a,avec,Amat,q)
-!       write(*,*) "X2mat(3,3)", X2mat(3,3)
-!       X1mat=int_XnMat(nd,1,a,avec,Amat,q)
-!       write(*,*) "X1mat(3,3)", X1mat(3,3)
-!       X0mat=int_XnMat(nd,0,a,avec,Amat,q)
-!       write(*,*) "X0mat(3,3)", X0mat(3,3)
        X4mat=X4
+       X3mat=X3
        X2mat=X2
        X1mat=X1
        X0mat=X0
        lin=X1mat-q*X0mat
        sqr=X2mat-2*q*X1mat+q*q*X0mat
 
-!       write(324,*) "X4mat in"
-!       write(324,*) X4mat(1,1)
-!       write(324,*) X4mat(1,1)*Nsq*Y0/16/eta_const
-!       write(324,*) Nsq, Y0
 
        ! Total Hermite Matrices
 !       write(*,*) eta_const
-       Xtot=(X4mat/16.d0/eta_const)+sigma_const*X2mat/2.d0      
+       write(*,*) rho_const
+       Xtot=(X4mat/16.d0/eta_const)+rho_const*X3mat&
+             +sigma_const*X2mat/2.d0      
 !       Xcvec=matmul(Xtot,cvec)
        XYtot=(qvec(1) +q*Aa(1))*X1mat - Aa(1)*X2mat
 !       XYcvec=matmul(XYtot,cvec)
@@ -175,11 +160,11 @@
        real*8, dimension(nd+1) :: V1
 
        integer :: i
-       real*8 :: Nsq,a,q,cX3c,cX1c,cX0c
+       real*8 :: Nsq,a,q,cX3c,cX2c,cX1c,cX0c
        real*8 :: dxV, dy1V
        real*8, dimension(nd) :: avec,qvec,Aa,VAa,Vq,VVAa,V1prime
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat,invA
-       complex*16, dimension(nh) :: X3c, X1c, X0c 
+       complex*16, dimension(nh) :: X3c,X2c,X1c, X0c 
 !       real*8, dimension(nh,nh) :: X3mat,X2mat,X1mat,X0mat
 
 !       write(111,*) "GRADIENT"
@@ -213,13 +198,16 @@
 
        ! Total Hermite Matrices
        X3c=matmul(X3,cvec)
+       X2c=matmul(X2,cvec)
        X1c=matmul(X1,cvec)
        X0c=matmul(X0,cvec)
        cX3c=dot_product(cvec,X3c)
+       cX2c=dot_product(cvec,X2c)
        cX1c=dot_product(cvec,X1c)
        cX0c=dot_product(cvec,X0c)
        dxV=(cX3c/(4.d0*eta_const)+(sigma_const-gamma_const*Aa(1))*cX1c+&
-             &gamma_const*(qvec(1)+Aa(1)*q)*cX0c)*Nsq*Y0
+             &gamma_const*(qvec(1)+Aa(1)*q)*cX0c+3.d0*rho_const*cX2c)&
+             &*Nsq*Y0
 
        V1prime=2*Nsq*Y0*(cX0c*(Vq+q*VAa)-cX1c*VAa)
 
@@ -235,7 +223,7 @@
 
 !.....EFFECTIVE POTENTIAL V2= <nabla otimes nabla V>....................
 
-      function fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X0) result(V2)
+      function fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X1,X0) result(V2)
       ! Computes the effective Hessian :math:`\mathbb{V}_2 = 
       ! \langle \nabla \nabla^{T} V \rangle`
 
@@ -248,17 +236,16 @@
        complex*16, dimension(nh), intent(in) :: cvec
        real*8, dimension(nd+1,nd+1), intent(in) :: Bmat
        real*8, intent(in) :: Y0
-       real*8, dimension(nh,nh), intent(in) :: X2,X0
+       real*8, dimension(nh,nh), intent(in) :: X2,X1,X0
 
        real*8, dimension(nd+1,nd+1) :: V2
 
        integer :: i
-       real*8 :: Nsq,a,q,cX2c,cX0c
+       real*8 :: Nsq,a,q,cX2c,cX1c,cX0c
        real*8 :: dxV, dy1V
        real*8, dimension(nd) :: avec,qvec,Aa,VAa,Vq,VVAa,V1prime
        real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat,invA
-       complex*16, dimension(nh) :: X2c, X0c 
-       !real*8, dimension(nh,nh) :: X2mat,X0mat
+       complex*16, dimension(nh) :: X2c,X1c, X0c 
 
        ! Unreavel qtot
        q = qtot(1)
@@ -269,44 +256,22 @@
 
        ! Matrix work 
        call extractA(nd,Bmat,Amat,avec,a)
-       !call diagonalization(nd,Amat,LambdaMat,Tmat)
-       !invA = invgen_real(nd,Amat)
-
-       !Aa = matmul(invA,avec)
-       !VAa = matmul(Vmat,Aa)
-       !VVAa = matmul(Vmat,VAa)
-
-       !Vq = matmul(Vmat,qvec)
-
-!       write(*,*) Aa(:) 
-!       write(*,*) Vq(:)
-!       write(*,*) VVAa(:)
-
-       ! Integrals
-!       Y0=int_Y0(nd,LambdaMat)
-!       write(*,*) "Y0:", Y0
-!       X2mat=int_XnMat(nd,2,a,avec,Amat,q)
-!       write(*,*) "X2mat(3,3)", X2mat(3,3)
-!       X0mat=int_XnMat(nd,0,a,avec,Amat,q)
-!       write(*,*) "X0mat(3,3)", X0mat(3,3)
 
        ! Total Hermite Matrices
        X2c=matmul(X2,cvec)
+       X1c=matmul(X1,cvec)
        X0c=matmul(X0,cvec)
        cX2c=dot_product(cvec,X2c)
+       cX1c=dot_product(cvec,X1c)
        cX0c=dot_product(cvec,X0c)
 
        V2(:,:) = 0.d0
 
-       V2(1,1) = Nsq*Y0*(3.d0*cX2c/(4.d0*eta_const)+sigma_const*cX0c)
+       V2(1,1) = Nsq*Y0*(3.d0*cX2c/(4.d0*eta_const)+sigma_const*cX0c+&
+                 6.d0*rho_const*cX1c)
        V2(1,2) = gamma_const*Nsq*Y0*cX0c
        V2(2,1) = V2(1,2) 
        V2(2:nd+1,2:nd+1) = 2.d0*Nsq*Y0*cX0c*Vmat
-
-       !write(1111,*) "V2"
-       !do i = 1,nd+1
-       !   write(1111,*) V2(i,:)
-       !end do
 
       end function
      

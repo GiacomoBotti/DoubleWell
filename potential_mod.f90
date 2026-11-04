@@ -62,7 +62,7 @@
          do j = 1, 101
            x = lwb + (j-1)*grid
            V = x**4/16.d0/eta_const+sigma_const*x**2/2.d0 &
-             &+ gamma_const*x*y +&
+             &+rho_const*x**3 + gamma_const*x*y +&
              & kappa_const(1)*y**2/2.d0 
            write(999,'(3ES24.16)') x, y, V
          end do

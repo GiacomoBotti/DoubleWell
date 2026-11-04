@@ -211,6 +211,7 @@
 
        write(*,*) "Backpropagating for ",trj(5)," steps"
        do j = 1,trj(5)
+         write(*,*) "Step: ",j
          time = time + back
          !write(*,*) time
          ci = c_static(nd,back,ci,S00M,H00M)

@@ -74,7 +74,7 @@
          !write(324,*) X4(1,1)
 
          T00M = kin_energy(nd,q,p,qvec,pvec,tildeBmat,Y0,X2,X1,X0)
-         V00M = fun_V0(nd,qtot,cvec,real(tildeBmat),Y0,X4,X2,X1,X0) 
+         V00M = fun_V0(nd,qtot,cvec,real(tildeBmat),Y0,X4,X3,X2,X1,X0) 
          H00M = T00M + V00M
    
          Tc = matmul(T00M,cvec)

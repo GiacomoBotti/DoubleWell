@@ -22,6 +22,8 @@
       real*8, dimension(nv), public  :: bath_const  
       ! Eta: quartic constant
       real*8, public  :: eta_const = 1.3544d0 
+      ! Rho: active coordinate cubic constant
+      real*8, public  :: rho_const = 1.d0
       ! Sigma: active coordinate quadratic constant
       real*8, public  :: sigma_const = -1.d0
       ! Kappa: bath coordinates quadratic constant 
@@ -49,7 +51,7 @@
       
 
       namelist /pot_param/ eta_const,sigma_const,gamma_const,&
-                           kappa_const,bath_const
+                           kappa_const,bath_const,rho_const
 
        bath_const(:) = 0.1d0
        bath_const(nv) = 0.d0

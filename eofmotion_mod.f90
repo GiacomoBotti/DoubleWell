@@ -97,7 +97,7 @@
        V1 = fun_V1(nd,qtot,cwork,Bmat,Y0,X3,X2,X1,X0)
        dotp = - V1
 
-       V2 = fun_V2(nd,qtot,cwork,Bmat,Y0,X2,X0)
+       V2 = fun_V2(nd,qtot,cwork,Bmat,Y0,X2,X1,X0)
        MB=matmul(invMassMat,Bcmplx)              
        ! confirmed with debug_karplus_width.mw
        dotB = -(0.d0,1.d0)*matmul(Bcmplx,MB) + (0.d0,1.d0)*V2
@@ -242,7 +242,7 @@
        X0=int_XnMat(nd,0,a,avec,Amat,qj(1))
        ! KARPLUS
        V1 = fun_V1(nd,qj,cwork,dreal(Bj),Y0,X3,X2,X1,X0)
-       V2 = fun_V2(nd,qj,cwork,dreal(Bj),Y0,X2,X0)
+       V2 = fun_V2(nd,qj,cwork,dreal(Bj),Y0,X2,X1,X0)
        ! HELLER
        !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
        !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)
@@ -267,7 +267,7 @@
        X0=int_XnMat(nd,0,a,avec,Amat,qi(1))
        ! KARPLUS
        V1 = fun_V1(nd,qi,cwork,dreal(Bi),Y0,X3,X2,X1,X0)
-       V2 = fun_V2(nd,qi,cwork,dreal(Bi),Y0,X2,X0)
+       V2 = fun_V2(nd,qi,cwork,dreal(Bi),Y0,X2,X1,X0)
        ! HELLER
        !V1 =qj(1)**3/(4.d0*eta_const)+sigma_const*qj(1)+gamma_const*qj(2)
        !V2 = 3.d0*qj(1)**2/(4.d0*eta_const)+sigma_const*qj(1)

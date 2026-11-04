@@ -418,7 +418,7 @@
        write(*,*) "N squared: ", Nsq
 
        write(*,*) "------------------------------"
-       V0 = fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X2,X1,X0)
+       V0 = fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X3,X2,X1,X0)
        write(*,*) "V0(1,1) ", V0(1,1)
        
        write(*,*) "------------------------------"
@@ -427,7 +427,7 @@
        write(*,*) V1
 
        write(*,*) "------------------------------"
-       V2 = fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X0)
+       V2 = fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X1,X0)
        write(*,*) "V2: "
        do i = 1,nd+1
          write(*,*) V2(i,:)
@@ -1734,5 +1734,107 @@
         write(*,*) "=============================================="
 
        end subroutine
+
+!.....Check effective potential........................................
+
+      subroutine check_effective_potential()
+      ! Checks V0, V1 and V2 with a reproducible two-mode test
+
+       integer, parameter :: nd = 2
+       integer :: i,j
+       real*8 :: a,Y0,Nsq,Norm,oldrho
+       real*8, dimension(nd+1) :: qtot,V1,V1zero
+       real*8, dimension(nd+1,nd+1) :: Bmat,V2,V2zero
+       real*8, dimension(nd) :: avec
+       real*8, dimension(nd,nd) :: Amat,LambdaMat,Tmat
+       real*8, dimension(nh,nh) :: X0,X1,X2,X3,X4,V0,V0zero,S00
+       complex*16, dimension(nh) :: cvec
+       complex*16 :: contract
+
+       write(*,*) "To be used with"
+       write(*,*) "check_effective_potential.mpl"
+
+       if (nh.ne.5 .or. nv.ne.2) then
+          write(*,*) 'Set nh=5 and nv=2 for this check'
+          stop
+       end if
+
+       !call gauss_hermite(ngh,gh_nodes,gh_weights)
+       !call GenHermMat()
+       !call matrix_pot()
+       cvec(:) = (1.d0,0.d0)
+       qtot = [1.d0,2.d0,3.d0]
+       Bmat = reshape([1.d0,0.1d0,0.15d0, &
+                       0.1d0,2.d0,0.15d0, &
+                       0.15d0,0.15d0,3.d0], [3,3])
+
+       call extractA(nd,Bmat,Amat,avec,a)
+       call diagonalization(nd,Amat,LambdaMat,Tmat)
+       Y0 = int_Y0(nd,LambdaMat)
+       Nsq = fun_Nsq(nd+1,Bmat)
+       X0 = int_XnMat(nd,0,a,avec,Amat,qtot(1))
+       X1 = int_XnMat(nd,1,a,avec,Amat,qtot(1))
+       X2 = int_XnMat(nd,2,a,avec,Amat,qtot(1))
+       X3 = int_XnMat(nd,3,a,avec,Amat,qtot(1))
+       X4 = int_XnMat(nd,4,a,avec,Amat,qtot(1))
+
+       call normalization(nd,qtot(1),cvec,Bmat,S00,Norm)
+       V0 = fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X3,X2,X1,X0)
+       V1 = fun_V1(nd,qtot,cvec,Bmat,Y0,X3,X2,X1,X0)
+       V2 = fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X1,X0)
+
+       oldrho = rho_const
+       rho_const = 0.d0
+       V0zero = fun_V0(nd,qtot,cvec,Bmat,Y0,X4,X3,X2,X1,X0)
+       V1zero = fun_V1(nd,qtot,cvec,Bmat,Y0,X3,X2,X1,X0)
+       V2zero = fun_V2(nd,qtot,cvec,Bmat,Y0,X2,X1,X0)
+       rho_const = oldrho
+
+       write(*,*) 'CHECK EFFECTIVE POTENTIAL: nh=5, nd=2'
+       write(*,*) 'qtot:',qtot
+       write(*,*) 'Bmat:'
+       do i=1,nd+1
+          write(*,'(3ES24.15)') Bmat(i,:)
+       end do
+       write(*,*) 'eta,rho,sigma,gamma:', &
+          eta_const,rho_const,sigma_const,gamma_const
+       write(*,*) 'Vmat:'
+       do i=1,nd
+          write(*,'(2ES24.15)') Vmat(i,:)
+       end do
+       write(*,*) 'Nsq,Y0,Norm:',Nsq,Y0,Norm
+       write(*,*) 'S00:'
+       do i=1,nh
+          write(*,'(5ES24.15)') S00(i,:)
+       end do
+       write(*,*) 'V0:'
+       do i=1,nh
+          write(*,'(5ES24.15)') V0(i,:)
+       end do
+       write(*,*) 'V1:',V1
+       write(*,*) 'V2:'
+       do i=1,nd+1
+          write(*,'(3ES24.15)') V2(i,:)
+       end do
+       contract=dot_product(cvec,matmul(V0,cvec))
+       write(*,*) 'c^H V0 c:',contract
+       write(*,*) 'max V0 asymmetry:', &
+          maxval(abs(V0-transpose(V0)))
+       write(*,*) 'max V2 asymmetry:', &
+          maxval(abs(V2-transpose(V2)))
+       write(*,*) 'max cubic V0 residual:', &
+          maxval(abs(V0-V0zero-oldrho*Nsq*Y0*X3))
+       write(*,*) 'cubic V1 residual:', &
+          V1(1)-V1zero(1)-3.d0*oldrho*Nsq*Y0* &
+          dreal(dot_product(cvec,matmul(X2,cvec)))
+       write(*,*) 'cubic V2 residual:', &
+          V2(1,1)-V2zero(1,1)-6.d0*oldrho*Nsq*Y0* &
+          dreal(dot_product(cvec,matmul(X1,cvec)))
+       write(*,*) 'other cubic V1 residual:', &
+          maxval(abs(V1(2:)-V1zero(2:)))
+       write(*,*) 'other cubic V2 residual:', &
+          maxval(abs(V2(2:,:)-V2zero(2:,:)))
+
+      end subroutine
 
       end module

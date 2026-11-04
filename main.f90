@@ -62,6 +62,7 @@
 
       write(*,*) "Eta:   ", eta_const
       write(*,*) "Sigma: ", sigma_const
+      write(*,*) "Rho:   ", rho_const
       write(*,*) "Gamma: ", gamma_const
       write(*,*) "Kappa: ", kappa_const
       write(*,*) "Bath:  ", bath_const
@@ -220,8 +221,10 @@
 !      call check_Sb_coefficients()
 !.....Check real GH for TauMat..........................................
 !      call check_TauMat_GH()
-!.....Check optimized PMat
+!.....Check optimized PMat..............................................
 !      call check_PMat()
+!.....Check cubic effective potential...................................
+!      call check_effective_potential()
 !.....Evolution.........................................................
 !      stop
 
